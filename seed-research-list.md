@@ -30,8 +30,11 @@ https://github.com/ElizaWy/LPC/wiki/Style-Guide#color-palette
 All findings live in a phase-structured, visual Slate knowledge base under
 [`docs/`](docs/index.html) (built with the docs-presentation skill). It is organized by phase -
 `research/`, `design/`, `planning/`, `execution/` - so it scales from research through delivery. The
-research for every site above is under `docs/research/`. Serve the repo over HTTP and open
-`docs/index.html`:
+research for every site above is under `docs/research/`.
+
+**Live site:** https://prabinpebam.github.io/the-sprite-project/ (GitHub Pages, served from `/docs`).
+
+To run locally, serve the repo over HTTP and open `docs/index.html`:
 
 ```powershell
 python -m http.server 8080
