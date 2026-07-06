@@ -1,0 +1,236 @@
+<!-- Design: User scenarios, capabilities & task flows across all proposals. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Experience</p>
+  <h1 class="slate-hero__title">Scenarios, Capabilities &amp; Task Flows</h1>
+  <p class="slate-hero__summary">The proposed product told from the user's side - who uses it, everything they can do,
+     and the step-by-step flows that stitch the generators, tokens, editor, maps, and export together.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>This page synthesizes the whole <a href="overview.html">design</a> into experience terms: <strong>8 end-to-end
+     scenarios</strong> across personas, a <strong>consolidated "user can…" catalog</strong> spanning every
+     proposal, and <strong>detailed task flows</strong> for the key journeys - from "assemble a hero" to "build a
+     coherent, dynamically-lit scene and live-sync it into Godot." It is the connective tissue that shows the parts
+     working as one product.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Scope</p>
+  <p>Covers the proposals documented so far: the
+     <a href="generators/character-generator.html">character</a>,
+     <a href="generators/environment-generator.html">environment</a>, and
+     <a href="generators/structures-props.html">structures/props</a> generators; the
+     <a href="systems/composition-model.html">composition model</a>,
+     <a href="systems/token-coherence.html">token coherence</a>,
+     <a href="systems/manual-editing.html">manual editor</a>, and
+     <a href="systems/material-maps.html">material &amp; lighting maps</a>.</p>
+</div>
+
+<h2>Personas</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Jamie - the jammer</h3>
+    <p class="slate-card__body">Solo dev on a 48-hour clock. Needs a playable look <em>now</em>; polish is optional.
+       Values speed and defaults over control.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Sam - the solo indie</h3>
+    <p class="slate-card__body">Programmer building a full game without an artist. Needs a whole world -
+       characters, terrain, buildings - coherent and legally clean.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Rae - the pixel artist</h3>
+    <p class="slate-card__body">Comfortable in Aseprite. Wants generation for the boring 90% but full manual control
+       for the last 10%, without leaving the tool.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Alex - the automator</h3>
+    <p class="slate-card__body">Tech-lead/agent-builder. Wants to script generation, export, and engine sync in CI -
+       the coding parts, not the art direction.</p>
+  </article>
+</div>
+
+<h2>End-to-end scenarios</h2>
+
+<h3>1 · Jam hero in five minutes (Jamie)</h3>
+<p>Jamie opens the character generator, picks a body, stacks clothes, recolors via tokens, previews the walk,
+   exports a sheet with credits, and drops it into the engine - all before coffee cools.</p>
+
+<h3>2 · A whole coherent world (Sam)</h3>
+<p>Sam generates a cast of characters, paints a grass-and-dirt map with the environment generator, drops in houses
+   and props, applies one theme so everything matches, exports the lot with lighting maps, and ships attribution
+   automatically.</p>
+
+<h3>3 · Pirates and mounts (Sam)</h3>
+<p>Sam enables the Pirates pack and a horse mount pack, builds a mounted pirate captain (rider+mount compositing),
+   and gets a correctly layered, animated unit without hand-aligning anything.</p>
+
+<h3>4 · Off-catalog custom art (Rae)</h3>
+<p>Rae generates a base character, opens a frame in the in-app editor, hand-paints a unique helmet with
+   token-bound swatches, saves it into a pack, and reuses it - staying on-palette the whole time.</p>
+
+<h3>5 · Dynamically-lit night scene (Sam)</h3>
+<p>Sam builds a scene, relies on auto-generated normal/specular/emissive maps so torches and glowing runes light
+   sprites correctly, checks it under a movable preview light, and exports to Unity's 2D lighting slots.</p>
+
+<h3>6 · Retheme for a new biome (Sam)</h3>
+<p>Sam duplicates a summer forest, rebinds the foliage and ground tokens to an autumn/dusk theme, and the entire
+   project - characters, terrain, structures - recolors coherently in one move.</p>
+
+<h3>7 · Bulk NPC variants via CLI (Alex)</h3>
+<p>Alex writes a config listing 40 townsfolk recipes, runs the CLI in CI to batch-generate, export atlases, and
+   refresh credits headlessly - no GUI, no manual repetition.</p>
+
+<h3>8 · Live iteration into Godot (Rae + Alex)</h3>
+<p>With the live link pointed at a Godot project, every edit - a recolor, a new frame, a tweaked normal map -
+   appears in the running game instantly, turning iteration into a feedback loop.</p>
+
+<h2>Consolidated "user can…" catalog</h2>
+<p>Everything the proposed product lets a user do, grouped by area. This is the union of the per-proposal lists,
+   deduplicated into one reference.</p>
+
+<h3>Characters</h3>
+<ul>
+  <li>User can pick a body type and stack layers (body, head, hair, headwear, arms, torso, legs, feet, tools, weapons).</li>
+  <li>User can enable themed and community <strong>packs</strong> (e.g. pirates) as one-click add-ons.</li>
+  <li>User can build non-humanoid subjects: mounts, animals, and creatures.</li>
+  <li>User can compose rider + mount into one correctly layered, animated unit.</li>
+  <li>User can see per-animation coverage and which pack fills each slot.</li>
+  <li>User can register a custom pack of their own art that behaves like a built-in.</li>
+</ul>
+
+<h3>Environment &amp; terrain</h3>
+<ul>
+  <li>User can generate a seamless autotile set for any material (grass, dirt, sand, stone, wood, water) from one choice.</li>
+  <li>User can generate transition tiles between any two materials.</li>
+  <li>User can assemble a "biome" of materials that blend together.</li>
+  <li>User can control detail/scatter density and variation.</li>
+  <li>User can author animated terrain (water ripples, foam, waterfalls).</li>
+  <li>User can preview terrain by painting materials on a test map with live autotiling.</li>
+</ul>
+
+<h3>Structures &amp; props</h3>
+<ul>
+  <li>User can assemble buildings from parts (shell, roof, doors, windows, trim) that stay perspective-correct.</li>
+  <li>User can place and recolor props (furniture, clutter, nature) from packs.</li>
+  <li>User can set a footprint, anchor, and z-order so objects drop into a scene correctly.</li>
+  <li>User can give a prop an optional animation (flicker, sway).</li>
+</ul>
+
+<h3>Coherence (tokens)</h3>
+<ul>
+  <li>User can recolor any asset through shared palette tokens, always staying on-ramp.</li>
+  <li>User can retheme an entire project by rebinding tokens (summer→autumn, day→dusk).</li>
+  <li>User can define and reuse custom themes across projects.</li>
+  <li>User can override specific tokens on one asset without breaking the shared theme.</li>
+  <li>User can inspect which tokens an asset uses and where a token is used project-wide.</li>
+</ul>
+
+<h3>Manual edit &amp; create</h3>
+<ul>
+  <li>User can open any generated asset and edit its pixels or frames in-app.</li>
+  <li>User can create a brand-new asset from scratch on the project grid.</li>
+  <li>User can draw with token-bound swatches and stay on-palette automatically.</li>
+  <li>User can author or extend animations with onion-skinning.</li>
+  <li>User can save hand-made art into a pack for reuse in the generators.</li>
+  <li>User never has to leave the tool for routine pixel work.</li>
+</ul>
+
+<h3>Material &amp; lighting maps</h3>
+<ul>
+  <li>User can generate a coordinated map set (normal, specular, emissive, +optional) with any asset.</li>
+  <li>User can preview an asset under a movable light to judge the maps.</li>
+  <li>User can toggle which maps an asset produces (lean for unlit games).</li>
+  <li>User can hand-edit any map channel, aligned to the diffuse.</li>
+  <li>User can rely on maps staying in sync across frames, atlases, recolors, and scenes.</li>
+</ul>
+
+<h3>Compose, export &amp; automate</h3>
+<ul>
+  <li>User can place characters, terrain, and structures together in one scene with correct depth sorting.</li>
+  <li>User can export packed files (atlas + metadata) for the target engine.</li>
+  <li>User can live-link a project so edits auto-update in the running engine (e.g. Godot).</li>
+  <li>User can drive generation, export, and sync headlessly via the CLI/API for agents and CI.</li>
+  <li>User can get correct, merged credits across every asset and pack in the project.</li>
+  <li>User can save, reopen, and share a project (and reproduce any build).</li>
+</ul>
+
+<h2>Task flows</h2>
+<p>Step-by-step journeys that cross multiple proposals. Each is a concrete sequence a user follows.</p>
+
+<h3>Flow A · Assemble &amp; ship a character</h3>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Choose subject &amp; packs</p><p>Pick body type; enable any themed packs (e.g. pirates).</p></li>
+  <li class="slate-step"><p class="slate-step__title">Compose</p><p>Stack layers across slots; auto-match colors.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Theme</p><p>Recolor via tokens to fit the project palette.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Preview</p><p>Scrub animations; check coverage and pivots.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Maps</p><p>Generate normal/specular/emissive; check under a light.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Export</p><p>Send atlas + maps + credits to the engine (files or live link).</p></li>
+</ol>
+
+<h3>Flow B · Build a coherent, lit scene</h3>
+<ol class="slate-steps slate-steps--timeline">
+  <li class="slate-step"><p class="slate-step__title">Paint terrain</p><p>Choose a biome; paint materials with live autotiling and transitions.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Place structures &amp; props</p><p>Drop buildings and objects; they sort by anchor/z-order.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Add characters</p><p>Place the cast; preview animations in situ.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Unify the look</p><p>Apply one theme; tokens recolor everything on-palette.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Light it</p><p>Rely on generated maps; verify with a movable preview light.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Export together</p><p>Emit the scene's assets + maps + merged credits for the engine.</p></li>
+</ol>
+
+<h3>Flow C · Customize off-catalog (generate → edit → reuse)</h3>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Generate a base</p><p>Assemble the closest character/prop from packs.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Open the editor</p><p>Edit a frame/layer in-app with token swatches.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Create custom art</p><p>Hand-paint the new piece; palette-locked, style-assisted.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Author maps</p><p>Tweak or paint the normal/emissive for the new art.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Save to a pack</p><p>Register it so the generator can reuse it later.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Sync</p><p>Live-link updates the running game immediately.</p></li>
+</ol>
+
+<h3>Flow D · Retheme a whole project</h3>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Duplicate</p><p>Copy the project (e.g. summer forest).</p></li>
+  <li class="slate-step"><p class="slate-step__title">Rebind tokens</p><p>Point foliage/ground/water tokens at an autumn/dusk ramp set.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Verify</p><p>Everything - characters, terrain, structures - recolors coherently.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Export the variant</p><p>Ship the reskinned set alongside the original.</p></li>
+</ol>
+
+<h3>Flow E · Automate with the CLI (Alex)</h3>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Author a recipe</p><p>Describe variants/assets as a config/spec file.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Batch-generate</p><p>Run the CLI to produce every asset headlessly.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Export &amp; sync</p><p>Emit atlases + maps; deploy into the project via live link.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Refresh credits</p><p>Regenerate and validate merged attribution.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Run in CI</p><p>Wire the whole flow into a pipeline or agent.</p></li>
+</ol>
+
+<h2>How the flows touch each proposal</h2>
+<p>The matrix shows how each task flow exercises the underlying proposals - evidence the parts are designed to work
+   as one product, not in isolation.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Flow</th><th>Char</th><th>Env</th><th>Struct</th><th>Compose</th><th>Tokens</th><th>Editor</th><th>Maps</th><th>Export/CLI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>A · Character</td><td>●</td><td>-</td><td>-</td><td>-</td><td>●</td><td>○</td><td>●</td><td>●</td></tr>
+    <tr><td>B · Scene</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>○</td><td>●</td><td>●</td></tr>
+    <tr><td>C · Customize</td><td>●</td><td>○</td><td>○</td><td>○</td><td>●</td><td>●</td><td>●</td><td>●</td></tr>
+    <tr><td>D · Retheme</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>-</td><td>○</td><td>●</td></tr>
+    <tr><td>E · Automate</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>-</td><td>●</td><td>●</td></tr>
+  </tbody>
+</table>
+<p><span class="slate-badge slate-badge--success">●</span> central to the flow &nbsp;
+   <span class="slate-badge slate-badge--info">○</span> optional/partial &nbsp;
+   <span class="slate-badge">-</span> not involved</p>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why this matters</p>
+  <p>Every flow but the simplest touches several proposals - proof the value is in the <strong>connections</strong>.
+     A user rarely wants "just a generator"; they want to go from idea to a coherent, lit, engine-ready, correctly
+     attributed result. These scenarios and flows are the specification for that journey.</p>
+</div>
