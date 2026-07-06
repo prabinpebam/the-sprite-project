@@ -1,0 +1,108 @@
+<!-- The Sprite Project - Knowledge Base overview (site landing).
+     Body fragment. One H1. TL;DR first. Catalog components + inline SVG only.
+     This is the top of a phase-structured knowledge base: Research -> Design -> Planning -> Execution. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">The Sprite Project</p>
+  <h1 class="slate-hero__title">Project Knowledge Base</h1>
+  <p class="slate-hero__summary">One living workspace that carries the project from research through design, planning,
+     and execution - the ultimate tool for sprite and game-asset generation.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>This knowledge base is organized by <strong>phase</strong>, not by document type, so it scales as the project
+     grows. Today the <strong>Research</strong> phase is populated; <strong>Design</strong>,
+     <strong>Planning</strong>, and <strong>Execution</strong> are scaffolded and ready to fill. Each phase lives
+     in its own folder with its own overview and categorized pages.</p>
+</aside>
+
+<h2>How this knowledge base is organized</h2>
+<p>Content is grouped into four sequential phases. Each phase is a folder in the navigation; new pages drop into
+   the relevant phase and category without disturbing the rest.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 720 140" role="img" aria-labelledby="phase-title phase-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="phase-title">The four project phases</title>
+    <desc id="phase-desc">A left-to-right flow: Research feeds Design, Design feeds Planning, Planning feeds
+      Execution. Research is active; the others are scaffolded.</desc>
+    <g>
+      <rect x="10" y="45" width="150" height="50" rx="8" fill="#7C3AED"></rect>
+      <text x="85" y="68" font-size="14" text-anchor="middle" fill="#ffffff">Research</text>
+      <text x="85" y="85" font-size="10" text-anchor="middle" fill="#ffffff">active</text>
+    </g>
+    <polygon points="168,70 186,62 186,78" fill="currentColor" fill-opacity="0.5"></polygon>
+    <g>
+      <rect x="192" y="45" width="150" height="50" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2"></rect>
+      <text x="267" y="68" font-size="14" text-anchor="middle" fill="currentColor">Design</text>
+      <text x="267" y="85" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.7">planned</text>
+    </g>
+    <polygon points="350,70 368,62 368,78" fill="currentColor" fill-opacity="0.5"></polygon>
+    <g>
+      <rect x="374" y="45" width="150" height="50" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2"></rect>
+      <text x="449" y="68" font-size="14" text-anchor="middle" fill="currentColor">Planning</text>
+      <text x="449" y="85" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.7">planned</text>
+    </g>
+    <polygon points="532,70 550,62 550,78" fill="currentColor" fill-opacity="0.5"></polygon>
+    <g>
+      <rect x="556" y="45" width="150" height="50" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2"></rect>
+      <text x="631" y="68" font-size="14" text-anchor="middle" fill="currentColor">Execution</text>
+      <text x="631" y="85" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.7">planned</text>
+    </g>
+  </svg>
+  <figcaption>The project moves left to right; each phase builds on the last. Only Research is populated today.</figcaption>
+</figure>
+
+<h2>Phases</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card slate-card--interactive">
+    <a href="research/overview.html">
+      <h3 class="slate-card__title">1 · Research <span class="slate-badge slate-badge--success">Active</span></h3>
+      <p class="slate-card__body">The market, the LPC ecosystem, existing tools, art sources, and indie-developer
+         needs and problems. The evidence base for every later decision.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="design/overview.html">
+      <h3 class="slate-card__title">2 · Design <span class="slate-badge slate-badge--info">Planned</span></h3>
+      <p class="slate-card__body">Product vision, UX flows, the sprite/data model, style-system rules, and
+         architecture decisions - turning research into a shape.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="planning/overview.html">
+      <h3 class="slate-card__title">3 · Planning <span class="slate-badge slate-badge--info">Planned</span></h3>
+      <p class="slate-card__body">Roadmap, milestones, scope, and task breakdown - sequencing the build into
+         shippable increments.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="execution/overview.html">
+      <h3 class="slate-card__title">4 · Execution <span class="slate-badge slate-badge--info">Planned</span></h3>
+      <p class="slate-card__body">Implementation notes, decisions log, changelog, and progress - the record of
+         actually building it.</p>
+    </a>
+  </article>
+</div>
+
+<h2>Working conventions</h2>
+<dl class="slate-defs">
+  <dt>Structure</dt>
+  <dd>One folder per phase (<code>research/</code>, <code>design/</code>, <code>planning/</code>,
+     <code>execution/</code>); category subfolders inside each phase.</dd>
+  <dt>Entry point</dt>
+  <dd>Every phase has an <code>overview.html</code> that orients and links into its pages.</dd>
+  <dt>Navigation</dt>
+  <dd>The sidebar is generated from folder paths, so adding a page or category needs no code - just a manifest
+     entry.</dd>
+  <dt>Authoring</dt>
+  <dd>Pages are built with the docs-presentation (Slate) skill: body fragments, catalog components, visual-first.</dd>
+</dl>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Adding content</p>
+  <p>Drop a new page into the right phase/category folder and add one line to
+     <code>docs-manifest.json</code> with its <code>path</code>, <code>title</code>, and <code>order</code>. The
+     navigation, search, and table of contents update automatically.</p>
+</div>

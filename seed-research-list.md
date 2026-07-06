@@ -25,13 +25,15 @@ https://liberatedpixelcup.github.io/Universal-LPC-Spritesheet-Character-Generato
 https://kenney.nl/
 https://github.com/ElizaWy/LPC/wiki/Style-Guide#color-palette
 
-## Research output
+## Project knowledge base
 
-The findings for every site above are documented as a visual, navigable Slate site under
-[`research/`](research/index.html) (built with the docs-presentation skill). Serve the repo over HTTP
-and open `research/index.html`:
+All findings live in a phase-structured, visual Slate knowledge base under
+[`docs/`](docs/index.html) (built with the docs-presentation skill). It is organized by phase -
+`research/`, `design/`, `planning/`, `execution/` - so it scales from research through delivery. The
+research for every site above is under `docs/research/`. Serve the repo over HTTP and open
+`docs/index.html`:
 
 ```powershell
 python -m http.server 8080
-# then open http://localhost:8080/research/
+# then open http://localhost:8080/docs/
 ```
