@@ -17,8 +17,9 @@
      commissioned art. The pipeline spans five stages - <em>source → author → assemble/animate → integrate →
      ship</em> - and every stage leaks time: art skill gaps, style inconsistency, frame/pivot alignment, atlas
      packing, engine import quirks, and above all <strong>licensing/attribution confusion</strong>. A tool that
-     unifies sourcing, generation, animation, engine-ready export, and automatic license tracking would collapse
-     that pipeline into one place.</p>
+     unifies sourcing, generation, animation, engine-ready export, and automatic license tracking - and adds a
+     <strong>live link to the engine</strong> and a <strong>scriptable CLI for agentic automation</strong> -
+     would collapse that pipeline into one place.</p>
 </aside>
 
 <h2>The five-stage pipeline</h2>
@@ -166,6 +167,16 @@
        Phaser, etc.</p>
   </article>
   <article class="slate-card">
+    <h3 class="slate-card__title">Live link to the engine</h3>
+    <p class="slate-card__body">Edit an asset once and have it update automatically in the running game/project (e.g.
+       Godot) - no manual re-export, re-import, or re-slice on every tweak.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">CLI for agentic automation</h3>
+    <p class="slate-card__body">A scriptable command-line interface so coding agents and build pipelines can automate
+       the non-artistic steps - generate, export, sync, update credits - headlessly.</p>
+  </article>
+  <article class="slate-card">
     <h3 class="slate-card__title">Legal peace of mind</h3>
     <p class="slate-card__body">Know exactly what license each asset carries and generate correct attribution
        automatically.</p>
@@ -266,6 +277,85 @@
   </tbody>
 </table>
 
+<h2>Two high-leverage integration needs</h2>
+<p>Beyond the core pipeline, two capabilities repeatedly separate a "nice generator" from a tool that lives
+   inside a developer's real workflow. Both target the <em>Integrate</em> stage, where fragmentation hurts most.</p>
+
+<h3>Live asset linking (edit once, updates in the engine)</h3>
+<p>Today, every art tweak means re-export → re-import → re-slice → replay. That round-trip is friction on every
+   iteration. The need is a <strong>live link</strong>: an asset edited in the tool updates automatically in the
+   running project - e.g. writing directly into a Godot project's asset folder in the engine's native import
+   format, so Godot's own reimport-on-change picks it up instantly. This turns iteration from a chore into a
+   feedback loop.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 700 150" role="img" aria-labelledby="live-title live-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="live-title">Manual round-trip vs. live link</title>
+    <desc id="live-desc">Top row shows the manual loop: edit, export, import, slice, replay. Bottom row shows
+      the live link: edit, then it appears in-engine automatically.</desc>
+    <text x="0" y="26" font-size="12" fill="currentColor" fill-opacity="0.75">Today - manual round-trip</text>
+    <g font-size="11">
+      <rect x="0" y="36" width="86" height="26" rx="5" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="43" y="53" text-anchor="middle" fill="currentColor">Edit</text>
+      <text x="94" y="53" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+      <rect x="108" y="36" width="86" height="26" rx="5" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="151" y="53" text-anchor="middle" fill="currentColor">Export</text>
+      <text x="202" y="53" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+      <rect x="216" y="36" width="86" height="26" rx="5" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="259" y="53" text-anchor="middle" fill="currentColor">Import</text>
+      <text x="310" y="53" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+      <rect x="324" y="36" width="86" height="26" rx="5" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="367" y="53" text-anchor="middle" fill="currentColor">Slice</text>
+      <text x="418" y="53" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+      <rect x="432" y="36" width="86" height="26" rx="5" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="475" y="53" text-anchor="middle" fill="currentColor">Replay</text>
+    </g>
+    <text x="0" y="104" font-size="12" fill="currentColor" fill-opacity="0.75">With a live link</text>
+    <g font-size="11">
+      <rect x="0" y="114" width="86" height="26" rx="5" fill="#7C3AED"></rect>
+      <text x="43" y="131" text-anchor="middle" fill="#ffffff">Edit</text>
+      <text x="94" y="131" fill="#7C3AED">&#8594;</text>
+      <rect x="108" y="114" width="240" height="26" rx="5" fill="#7C3AED" fill-opacity="0.18" stroke="#7C3AED"></rect>
+      <text x="228" y="131" text-anchor="middle" fill="currentColor">appears in-engine automatically</text>
+    </g>
+  </svg>
+  <figcaption>A live link collapses the five-step manual round-trip into a single edit that propagates to the
+     running engine.</figcaption>
+</figure>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">How this could work per engine</p>
+  <p>Godot watches its project directory and reimports changed resources, so writing sprites/atlases (plus
+     <code>.import</code> settings) straight into the project makes edits appear live. Similar hooks exist
+     elsewhere - Unity's asset database reimport on file change, or file-watch plugins - so the pattern
+     generalizes into a per-engine "live target."</p>
+</div>
+
+<h3>A CLI for agentic automation (coding, not art)</h3>
+<p>The artistic act stays human/interactive, but the <strong>plumbing around it is highly automatable</strong>.
+   A first-class command-line interface lets coding agents and CI pipelines script the non-artistic steps -
+   generating variants, exporting atlases, syncing to an engine, and refreshing credits - without a GUI. This is
+   about <em>coding automation</em>, not generating art unattended.</p>
+<table>
+  <thead>
+    <tr><th>Automatable via CLI (coding)</th><th>Stays interactive (artistic)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Batch-generate character variants from a config/spec</td><td>Choosing the look, palette, and silhouette</td></tr>
+    <tr><td>Export atlases + metadata for a target engine</td><td>Judging animation feel and timing</td></tr>
+    <tr><td>Sync/deploy assets into a project (live link)</td><td>Hand-tuning individual frames</td></tr>
+    <tr><td>Regenerate and validate credits/licenses</td><td>Creative direction and style decisions</td></tr>
+    <tr><td>Run in CI or be driven by an agent headlessly</td><td>-</td></tr>
+  </tbody>
+</table>
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why a CLI matters now</p>
+  <p>Precedent exists in the ecosystem: Aseprite ships a CLI and Lua scripting, and <code>lpcg</code> is a
+     headless generator. Exposing the pipeline as a scriptable CLI/API makes the tool a building block that
+     agents and automated builds can orchestrate - a meaningful differentiator for developer-centric workflows.</p>
+</div>
+
 <h2>The gap - and the opportunity</h2>
 <p>The stack is <strong>fragmented</strong>: a generator here, an editor there, a packer, an engine importer, and a
    spreadsheet of credits. No single tool owns the path from "I need a character" to "engine-ready, correctly
@@ -278,6 +368,7 @@
       <li>Recolor and restyle by hand to match</li>
       <li>Animate frame-by-frame or wrestle a rig</li>
       <li>Pack + export + re-slice per engine</li>
+      <li>Re-export and re-import on every art tweak</li>
       <li>Manually assemble attribution, hope it's correct</li>
     </ul>
   </div>
@@ -288,6 +379,8 @@
       <li>One palette + auto-recolor keeps everything on-style</li>
       <li>Prebuilt, extensible animation sets across directions</li>
       <li>One-click engine-ready export (atlas + metadata)</li>
+      <li>Live link: edits update in the running engine automatically</li>
+      <li>Scriptable CLI so agents/CI automate the coding steps</li>
       <li>License tracked per layer; credits generated automatically</li>
     </ul>
   </div>
@@ -316,6 +409,16 @@
     <h3 class="slate-card__title">Engine-ready export</h3>
     <p class="slate-card__body">Atlases + metadata for Unity, Godot, GameMaker, Phaser, Unreal Paper2D; correct
        pivots, trimmed frames, pixel-perfect import presets.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Live engine linking</h3>
+    <p class="slate-card__body">Write assets straight into a project in the engine's native format so edits
+       auto-update in the running game (Godot reimport, Unity asset DB, file-watch) - no manual round-trip.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Scriptable CLI / API</h3>
+    <p class="slate-card__body">Headless commands for generate, export, sync, and credits so coding agents and CI
+       can automate the non-artistic pipeline. Artistic choices stay interactive.</p>
   </article>
   <article class="slate-card">
     <h3 class="slate-card__title">License automation</h3>
