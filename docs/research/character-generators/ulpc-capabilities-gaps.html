@@ -1,0 +1,342 @@
+<!-- ULPC Generator - Capabilities & Gap Analysis. Body fragment, one H1, TL;DR first.
+     Builds on research/character-generators/ulpc-generator.html and benchmarks against
+     research/market-research/indie-sprite-pipeline.html. Facts trace to those pages' sources. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Phase 1 · Research · Baseline analysis</p>
+  <h1 class="slate-hero__title">ULPC Generator - Capabilities &amp; Gaps</h1>
+  <p class="slate-hero__summary">Taking the Universal LPC Spritesheet Generator as the starting point: what it lets
+     users do today, and where it falls short of the full set of indie-developer needs.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>The Universal LPC Generator is excellent at exactly one stage of the pipeline - <strong>authoring a modular,
+     recolored, animated character and exporting it with correct credits</strong>. Benchmarked against the full
+     indie sprite pipeline, it leaves large gaps: it is characters-only, its style is locked to LPC, it has no
+     animation authoring, no engine-native/live integration, no CLI/automation, no persistent project, and only a
+     manual export handoff. Those gaps define the opportunity space for this project.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Context</p>
+  <p>This page deep-dives the tool profiled in <a href="ulpc-generator.html">Universal LPC Generator</a> and
+     benchmarks it against the needs in <a href="../market-research/indie-sprite-pipeline.html">The Indie 2D
+     Sprite Pipeline</a>.</p>
+</div>
+
+<h2>User needs it addresses today</h2>
+<p>The generator squarely serves a specific slice of the "author a character" job.</p>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Get a character without drawing</h3>
+    <p class="slate-card__body">Assemble a complete character from prebuilt LPC art - no pixel-art skill required.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Customize modularly</h3>
+    <p class="slate-card__body">Swap body, head, hair, headwear, arms, torso, legs, feet, tools, and weapons across
+       body types (male, female, teen, child, muscular, pregnant).</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Recolor freely</h3>
+    <p class="slate-card__body">Real-time, GPU-accelerated palette recoloring so a look can be tuned instantly.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">See it animated before committing</h3>
+    <p class="slate-card__body">Live animation preview with documented frame cycles, plus a full-sheet preview.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Get usable output</h3>
+    <p class="slate-card__body">Download a spritesheet PNG and ZIP splits (by animation, item, or frame) ready to drop
+       into a project.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Stay legally safe</h3>
+    <p class="slate-card__body">Export a precise CREDITS file (CSV/TXT) and filter items by license so attribution is
+       correct and store-safe.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Save &amp; resume a build</h3>
+    <p class="slate-card__body">Export/import selections as JSON to reopen a character later or share the exact recipe.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Constrain to what they need</h3>
+    <p class="slate-card__body">Filter available items by animation so only relevant assets show.</p>
+  </article>
+</div>
+
+<h2>User scenarios</h2>
+<ol class="slate-steps">
+  <li class="slate-step">
+    <p class="slate-step__title">Jam prototyping</p>
+    <p>A solo dev under a jam clock needs a walking hero in minutes - assemble, recolor, download, drop in.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Placeholder-to-ship characters</p>
+    <p>A programmer without an artist needs "good enough" NPCs and enemies for a whole game, with legal cover.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">NPC variety at scale</p>
+    <p>Generate many visually distinct townsfolk by varying layers and palettes from one base.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Design exploration</p>
+    <p>Try outfits/gear combinations quickly to lock a character's visual identity before building around it.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Reproducible handoff</p>
+    <p>Save the JSON recipe alongside the PNG so the exact character can be regenerated or credited later.</p>
+  </li>
+</ol>
+
+<h2>Exhaustive "user can…" statements</h2>
+<p>Everything the generator lets a user do today, grouped by area.</p>
+
+<h3>Compose</h3>
+<ul>
+  <li>User can pick a body type (male, female, teen, child, muscular, pregnant).</li>
+  <li>User can select and stack layers: body, head, hair, headwear, arms, torso, legs, feet, tools, weapons.</li>
+  <li>User can add oversize weapon/tool layers that exceed the base frame.</li>
+  <li>User can auto-match heads/ears and other items to body color.</li>
+  <li>User can reset all selections or expand/collapse the item list.</li>
+</ul>
+<h3>Color</h3>
+<ul>
+  <li>User can recolor supported layers via palette swapping in real time.</li>
+  <li>User can preview recolors instantly thanks to GPU/WebGL rendering (with a CPU fallback).</li>
+</ul>
+<h3>Preview</h3>
+<ul>
+  <li>User can play a live animation preview and read its frame cycle.</li>
+  <li>User can view the full assembled spritesheet and zoom it.</li>
+</ul>
+<h3>Filter</h3>
+<ul>
+  <li>User can filter available items by license.</li>
+  <li>User can filter items by animation so only relevant assets appear.</li>
+  <li>User can search items by name.</li>
+</ul>
+<h3>Export</h3>
+<ul>
+  <li>User can download the spritesheet as a PNG.</li>
+  <li>User can download ZIPs split by animation, by item, by animation+item, or by animation+frame.</li>
+  <li>User can download a CREDITS file as CSV or TXT for exactly the layers used.</li>
+  <li>User can export the current selection to JSON (clipboard/file) and import it back to restore a build.</li>
+</ul>
+<h3>Reuse</h3>
+<ul>
+  <li>User can deep-link a configuration via URL parameters to share or reopen it.</li>
+  <li>User can consult community plugins to consume output in Godot and RPG Maker MZ.</li>
+</ul>
+
+<h2>Task flows it serves today</h2>
+<ol class="slate-steps slate-steps--timeline">
+  <li class="slate-step">
+    <p class="slate-step__title">Assemble</p>
+    <p>Choose body type → stack layers across categories → auto-match colors.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Refine</p>
+    <p>Recolor palettes in real time → scrub the animation preview → adjust until it reads right.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Constrain</p>
+    <p>Apply license and animation filters so the character only uses assets that fit the project's terms/needs.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Export</p>
+    <p>Download the sheet (PNG) and the split ZIPs; grab the matching CREDITS file.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Preserve</p>
+    <p>Export selections to JSON (and/or copy the URL) to reproduce or share the exact build.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Integrate (out of tool)</p>
+    <p>Manually import the sheet into the engine, slice it, wire animations, and paste credits.</p>
+  </li>
+</ol>
+
+<h2>Benchmark: coverage of the full indie need set</h2>
+<p>Mapping the generator against the end-to-end pipeline shows it owns the middle "author" stage well and leaves
+   the surrounding stages - and several cross-cutting needs - unaddressed.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 720 470" role="img" aria-labelledby="cov-title cov-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="cov-title">ULPC coverage of indie sprite needs</title>
+    <desc id="cov-desc">Bars showing how fully the generator covers each need: modular characters, recolor,
+      animation preview, and license/credits are largely covered; export is partial; sourcing breadth, style
+      flexibility, animation authoring, engine integration, live link, CLI automation, and project persistence
+      are largely uncovered.</desc>
+    <!-- scale: 460px = full -->
+    <g font-size="12">
+      <text x="0" y="24" fill="currentColor">Modular characters</text>
+      <rect x="250" y="12" width="450" height="18" rx="3" fill="#16A34A"></rect>
+      <text x="0" y="52" fill="currentColor">Real-time recolor</text>
+      <rect x="250" y="40" width="440" height="18" rx="3" fill="#16A34A"></rect>
+      <text x="0" y="80" fill="currentColor">License / credits</text>
+      <rect x="250" y="68" width="430" height="18" rx="3" fill="#16A34A"></rect>
+      <text x="0" y="108" fill="currentColor">Animation preview</text>
+      <rect x="250" y="96" width="360" height="18" rx="3" fill="#65A30D"></rect>
+      <text x="0" y="136" fill="currentColor">Reproducible build (JSON)</text>
+      <rect x="250" y="124" width="330" height="18" rx="3" fill="#65A30D"></rect>
+      <text x="0" y="164" fill="currentColor">Export to files</text>
+      <rect x="250" y="152" width="250" height="18" rx="3" fill="#CA8A04"></rect>
+      <text x="0" y="192" fill="currentColor">Sourcing breadth (non-LPC)</text>
+      <rect x="250" y="180" width="70" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="220" fill="currentColor">Style flexibility</text>
+      <rect x="250" y="208" width="40" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="248" fill="currentColor">Animation authoring</text>
+      <rect x="250" y="236" width="30" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="276" fill="currentColor">Non-character assets</text>
+      <rect x="250" y="264" width="20" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="304" fill="currentColor">Engine-native import</text>
+      <rect x="250" y="292" width="30" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="332" fill="currentColor">Live link to engine</text>
+      <rect x="250" y="320" width="8" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="360" fill="currentColor">CLI / automation</text>
+      <rect x="250" y="348" width="8" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="388" fill="currentColor">Persistent project</text>
+      <rect x="250" y="376" width="20" height="18" rx="3" fill="#DC2626"></rect>
+      <text x="0" y="416" fill="currentColor">Collaboration</text>
+      <rect x="250" y="404" width="8" height="18" rx="3" fill="#DC2626"></rect>
+    </g>
+    <line x1="250" y1="6" x2="250" y2="428" stroke="currentColor" stroke-opacity="0.25"></line>
+    <g font-size="11" fill="currentColor" fill-opacity="0.7">
+      <text x="250" y="452">none</text>
+      <text x="690" y="452" text-anchor="end">full</text>
+    </g>
+  </svg>
+  <figcaption>Qualitative coverage of indie sprite-pipeline needs by the Universal LPC Generator - strong on
+     modular authoring, recolor, and licensing; weak-to-absent on breadth, animation authoring, integration, and
+     automation.</figcaption>
+</figure>
+<details class="slate-figure-data">
+  <summary>Data</summary>
+  <table>
+    <thead><tr><th>Need</th><th>Coverage</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Modular characters</td><td>Full</td><td>Core strength: layered, multi-body-type composition.</td></tr>
+      <tr><td>Real-time recolor</td><td>Full</td><td>WebGL palette swapping with CPU fallback.</td></tr>
+      <tr><td>License / credits</td><td>Full</td><td>Per-layer license filter + exact CREDITS export.</td></tr>
+      <tr><td>Animation preview</td><td>High</td><td>Preview + frame cycles, but preview only - not authoring.</td></tr>
+      <tr><td>Reproducible build</td><td>High</td><td>JSON export/import and URL deep-links.</td></tr>
+      <tr><td>Export to files</td><td>Partial</td><td>PNG + ZIP splits + credits, but generic files, not engine-native.</td></tr>
+      <tr><td>Sourcing breadth</td><td>Low</td><td>LPC corpus only; no non-LPC packs or marketplaces.</td></tr>
+      <tr><td>Style flexibility</td><td>Low</td><td>Locked to the LPC style/grid/palette.</td></tr>
+      <tr><td>Animation authoring</td><td>None</td><td>Cannot create/edit animations or add new ones.</td></tr>
+      <tr><td>Non-character assets</td><td>None</td><td>Characters only - no tiles, props, FX, UI.</td></tr>
+      <tr><td>Engine-native import</td><td>None</td><td>No Godot/Unity-native resources; manual slicing required.</td></tr>
+      <tr><td>Live link to engine</td><td>None</td><td>No auto-update into a running project.</td></tr>
+      <tr><td>CLI / automation</td><td>None</td><td>GUI only; not scriptable for agents/CI.</td></tr>
+      <tr><td>Persistent project</td><td>None</td><td>No accounts/projects; state lives in a JSON file/URL.</td></tr>
+      <tr><td>Collaboration</td><td>None</td><td>No sharing/versioning beyond a copied file or link.</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<h2>Gaps, challenges, and user problems</h2>
+<p>Where the generator stops short of the exhaustive need set at this stage of development.</p>
+
+<h3>Scope gaps</h3>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Characters only</h3>
+    <p class="slate-card__body">No tilesets, props, environment art, FX, or UI - a game needs far more than a
+       character, so users still juggle other tools/sources.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">One locked style</h3>
+    <p class="slate-card__body">Everything is LPC 64x64. Teams wanting a different resolution, perspective, or art
+       direction can't use it at all.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">No animation authoring</h3>
+    <p class="slate-card__body">Users are limited to the animations LPC already provides; they can't create new
+       moves, timings, or directions.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">No custom art blending</h3>
+    <p class="slate-card__body">Bringing in a hand-drawn layer or a non-LPC pack and having it fit the system isn't
+       supported.</p>
+  </article>
+</div>
+
+<h3>Integration gaps</h3>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Manual engine handoff</h3>
+    <p class="slate-card__body">Output is generic PNG/ZIP; users still import, slice, set pivots, and wire animation
+       state machines by hand - per engine.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">No live link</h3>
+    <p class="slate-card__body">Every tweak means re-export and re-import; there's no auto-update into a running Godot/
+       Unity project.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">No CLI / API</h3>
+    <p class="slate-card__body">It's GUI-only, so agents, scripts, and CI can't automate generation, export, or
+       credit refresh.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Plugins are third-party</h3>
+    <p class="slate-card__body">Engine consumption relies on community plugins of varying maturity, not a first-party
+       path.</p>
+  </article>
+</div>
+
+<h3>Workflow &amp; scale gaps</h3>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">No persistent project</h3>
+    <p class="slate-card__body">State lives in a JSON file or URL; there's no cloud project, history, or asset
+       library across sessions.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Weak at bulk generation</h3>
+    <p class="slate-card__body">Producing dozens of NPC variants is manual and repetitive - no batch/parametric
+       generation.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">No collaboration</h3>
+    <p class="slate-card__body">No sharing, versioning, or team workflows beyond passing a file or link around.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Credits stay the user's burden</h3>
+    <p class="slate-card__body">The tool exports correct credits, but keeping them in sync in the shipped game - and
+       across many assets - is still manual.</p>
+  </article>
+</div>
+
+<h3>Usability challenges</h3>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Recall problem</h3>
+    <p class="slate-card__body">If users forget to export the JSON/URL, they can't easily return to a build - a known,
+       documented pain point.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">License nuance</h3>
+    <p class="slate-card__body">Mixed CC-BY-SA/GPL/OGA-BY/CC0 terms and DRM-store ambiguity still require the user to
+       understand licensing to stay safe.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Choice overload</h3>
+    <p class="slate-card__body">Deep item trees can overwhelm newcomers who just want a good default character fast.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Static, not game-aware</h3>
+    <p class="slate-card__body">It outputs art, not game-ready behavior; nothing understands the project it's destined
+       for.</p>
+  </article>
+</div>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Takeaway for this project</p>
+  <p>The generator is the right <em>nucleus</em> - modular composition, recolor, and licensing are solved and
+     worth adopting. The opportunity is to wrap that nucleus with what it lacks: <strong>broader assets and
+     styles, animation authoring, engine-native + live integration, a scriptable CLI, and a persistent,
+     collaborative project</strong> - turning a single-stage character tool into the end-to-end sprite pipeline.</p>
+</div>

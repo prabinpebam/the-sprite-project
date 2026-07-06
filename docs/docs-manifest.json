@@ -7,6 +7,7 @@
     { "path": "research/market-research/indie-sprite-pipeline.html", "title": "Indie 2D Sprite Pipeline", "order": 11, "badge": "new" },
     { "path": "research/context/lpc-foundations.html", "title": "LPC Foundations", "order": 12 },
     { "path": "research/character-generators/ulpc-generator.html", "title": "Universal LPC Generator", "order": 13, "badge": "flagship" },
+    { "path": "research/character-generators/ulpc-capabilities-gaps.html", "title": "ULPC - Capabilities & Gaps", "order": 13.5, "badge": "new" },
     { "path": "research/character-generators/vitruvian-studio.html", "title": "Vitruvian LPC Studio", "order": 14 },
     { "path": "research/developer-tooling/lpcg.html", "title": "lpcg (Rust lib + CLI)", "order": 15 },
     { "path": "research/developer-tooling/phaser-lpc-character.html", "title": "Phaser 3 LPC Character", "order": 16 },
