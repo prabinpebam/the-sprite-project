@@ -1,0 +1,135 @@
+<!-- Universal LPC Spritesheet Character Generator. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Character Generators</p>
+  <h1 class="slate-hero__title">Universal LPC Spritesheet Generator</h1>
+  <p class="slate-hero__summary">The flagship, community-maintained web app that composes LPC character
+     art into ready-to-use spritesheets - and the reference the whole ecosystem points back to.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Maintained under the <strong>LiberatedPixelCup</strong> organization, this browser-based generator
+     attempts to include <em>all</em> LPC character art to date. You pick body, hair, clothing, and gear
+     layers; it live-previews animations, recolors via GPU shaders, and exports a spritesheet plus a
+     precise credits file. At ~1,400 stars and 522 forks it is by far the most adopted project in this
+     research. The <strong>Gaurav0</strong> repo is an older fork of the same codebase.</p>
+</aside>
+
+<h2>What it is</h2>
+<dl class="slate-defs">
+  <dt>Type</dt>
+  <dd>Static web application (client-side spritesheet generator)</dd>
+  <dt>Home</dt>
+  <dd><a href="https://liberatedpixelcup.github.io/Universal-LPC-Spritesheet-Character-Generator/">liberatedpixelcup.github.io</a> · <a href="https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator">GitHub</a></dd>
+  <dt>Tech stack</dt>
+  <dd>Vite build; ~60% JavaScript, ~36% TypeScript, ~3% CSS; WebGL palette-recoloring shaders</dd>
+  <dt>License</dt>
+  <dd>GPL-3.0 (code); artwork under the LPC license options (CC0 / CC-BY / CC-BY-SA / OGA-BY / GPL)</dd>
+  <dt>Maintainers</dt>
+  <dd>Originally Gaurav0; long maintained by sanderfrenken; art by jrconway3 &amp; bluecarrot16; revised by ElizaWy. 22 contributors.</dd>
+  <dt>Lineage</dt>
+  <dd>Based on makrohn/Universal-LPC-spritesheet (the original offline sheet)</dd>
+</dl>
+
+<h2>Traction</h2>
+<div class="slate-metrics">
+  <div class="slate-metric">
+    <p class="slate-metric__value">1.4k</p>
+    <p class="slate-metric__label">GitHub stars</p>
+    <p class="slate-metric__delta slate-metric__delta--up">Most in the set</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">522</p>
+    <p class="slate-metric__label">Forks</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">22</p>
+    <p class="slate-metric__label">Contributors</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">6</p>
+    <p class="slate-metric__label">Body types</p>
+  </div>
+</div>
+
+<h2>What it offers</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Layered composition</h3>
+    <p class="slate-card__body">Body, head, hair, headwear, arms, torso, legs, feet, tools, and weapons -
+       selected and stacked into a single character. Body types: Male, Female, Teen, Child, Muscular, Pregnant.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Real-time recoloring</h3>
+    <p class="slate-card__body">GPU-accelerated WebGL palette swapping (fragment shaders, 1-32 colors per
+       variant) with an automatic CPU fallback - roughly 2x faster than CPU per preview.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animation preview</h3>
+    <p class="slate-card__body">Live animation playback with documented frame cycles, plus a full
+       spritesheet preview and zoom.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Export &amp; credits</h3>
+    <p class="slate-card__body">Download a spritesheet PNG, ZIP splits (by animation, item, or frame),
+       and CREDITS as CSV/TXT. Export/Import selections as JSON to restore a build later.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">License filtering</h3>
+    <p class="slate-card__body">Filter available items by license and by animation, so you can constrain
+       a character to only the terms your project can accept.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Engine plugins</h3>
+    <p class="slate-card__body">Community plugins for Godot 3.5 &amp; 4.2, plus an RPG Maker MZ starter
+       kit under the same organization.</p>
+  </article>
+</div>
+
+<h2>Export pipeline</h2>
+<ol class="slate-steps">
+  <li class="slate-step">
+    <p class="slate-step__title">Select layers</p>
+    <p>Choose body type and stack items across categories; auto-match heads/ears to body color.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Preview &amp; recolor</p>
+    <p>Watch animations live; recolor palettes in real time via WebGL.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Export</p>
+    <p>Download the spritesheet (PNG), split ZIPs, and the matching CREDITS file - or export selections to JSON.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Attribute</p>
+    <p>Ship the generated credits so every author of every used layer is properly acknowledged.</p>
+  </li>
+</ol>
+
+<h2>The Gaurav0 fork</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">LiberatedPixelCup (canonical)</p>
+    <ul>
+      <li>Actively maintained org repository</li>
+      <li>~1,400 stars, 522 forks, 22 contributors</li>
+      <li>The version the live demo runs</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Gaurav0/Universal-LPC-... </p>
+    <ul>
+      <li>Fork by the project's original author</li>
+      <li>Reported ~51 commits behind the canonical master</li>
+      <li>Same GPL-3.0 code and features; useful as historical lineage, not the source of truth</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Relevance to this project</p>
+  <p>This is the de-facto standard for LPC character assembly. Any new sprite tool will inevitably be
+     compared to it - its layer model, license-aware exports, and WebGL recoloring are the baseline
+     feature set to match or improve upon.</p>
+</div>

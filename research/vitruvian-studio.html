@@ -1,0 +1,91 @@
+<!-- Vitruvian LPC Studio. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Character Generators</p>
+  <h1 class="slate-hero__title">Vitruvian LPC Studio</h1>
+  <p class="slate-hero__summary">An alternative, modern-feeling LPC character generator app - paired with
+     its own repository of converted spritesheets.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Vitruvian Studio (by <strong>napsio</strong>) is a second-generation LPC generator with a cleaner
+     app-like UI, distinct <strong>Character</strong> and <strong>Horse</strong> modes, and
+     import/export/save of builds. Its art lives in a companion <code>spritesheets</code> repo,
+     reorganized into anatomy / clothes / equipment / horse / injuries. It is explicitly flagged as
+     <em>not yet production-ready</em>, and the flagship ULPC generator lists it as an alternative.</p>
+</aside>
+
+<h2>What it is</h2>
+<dl class="slate-defs">
+  <dt>Type</dt>
+  <dd>Web application (LPC character &amp; horse generator) + supporting asset repository</dd>
+  <dt>App</dt>
+  <dd><a href="https://vitruvianstudio.github.io/">vitruvianstudio.github.io</a></dd>
+  <dt>Assets</dt>
+  <dd><a href="https://github.com/vitruvianstudio/spritesheets">github.com/vitruvianstudio/spritesheets</a></dd>
+  <dt>Author</dt>
+  <dd>napsio (Napsio, Vitruvian Studio) - also credited in the ULPC generator</dd>
+  <dt>Since</dt>
+  <dd>2023</dd>
+  <dt>Asset license</dt>
+  <dd>CC-BY-SA 3.0 (per the spritesheets repo credits.json)</dd>
+</dl>
+
+<h2>App capabilities</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Two subjects</h3>
+    <p class="slate-card__body">Dedicated <strong>Character</strong> and <strong>Horse</strong> modes -
+       animals are first-class, not an afterthought.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animation set</h3>
+    <p class="slate-card__body">Walk, Shoot, Slash, Backslash, Spell, Thrust, Rod, Whip, Hurt, and Idle,
+       with zoom, speed, and per-frame controls.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Build persistence</h3>
+    <p class="slate-card__body">Import, Export, and Save selections so a character can be reopened and
+       iterated on later.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Reorganized art</h3>
+    <p class="slate-card__body">The companion repo restructures LPC assets into anatomy, clothes,
+       equipment, horse, and injuries categories.</p>
+  </article>
+</div>
+
+<h2>The companion spritesheets repo</h2>
+<p>The <code>vitruvianstudio/spritesheets</code> repository holds the art the app consumes, colorized to
+   default colors and licensed CC-BY-SA 3.0. It carries the standard LPC collective-credits block
+   (dozens of contributing artists) and a machine-readable <code>credits.json</code>. Notably, the ULPC
+   generator ships a <em>convert-to-Vitruvian</em> tool, so the two ecosystems are deliberately
+   interoperable.</p>
+
+<h2>Maturity vs. the flagship</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Vitruvian Studio</p>
+    <ul>
+      <li>Cleaner, app-style interface; character + horse modes</li>
+      <li>Newer (2023), small following (5 stars on the asset repo)</li>
+      <li>Author's own note: "currently not suitable for productive use"</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Universal LPC Generator</p>
+    <ul>
+      <li>Feature-complete, license-aware exports, WebGL recolor</li>
+      <li>Mature, ~1,400 stars, actively maintained</li>
+      <li>Production-ready today</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Relevance to this project</p>
+  <p>Vitruvian is the clearest example of a <em>UX-forward</em> rethink of LPC generation and of treating
+     animals (horses) as first-class subjects. It signals appetite for a more polished, app-like sprite
+     tool - and its interoperability tooling shows converting between asset layouts is expected.</p>
+</div>

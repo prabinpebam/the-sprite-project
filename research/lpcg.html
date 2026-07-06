@@ -1,0 +1,75 @@
+<!-- lpcg - Rust library + CLI. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Developer Tooling</p>
+  <h1 class="slate-hero__title">lpcg - Liberated Pixel Cup Generator</h1>
+  <p class="slate-hero__summary">A headless Rust library and CLI that merges LPC layers into a spritesheet
+     from plain identifiers - generation as code, no browser.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>By <strong>Bastien Sevajol (buxx)</strong>, lpcg takes an ordered list of layer identifiers and
+     produces a merged image. It is usable as a Rust crate (<code>Builder</code> + <code>Input</code>)
+     or a CLI binary, supports random (<code>*</code>) and variant selection, and imports its
+     <code>spritesheets</code> folder from the sanderfrenken ULPC repo via a Python script. It is small
+     (4 stars), ~4 years old, and licensed AGPL-3.0.</p>
+</aside>
+
+<h2>What it is</h2>
+<dl class="slate-defs">
+  <dt>Type</dt>
+  <dd>Rust library + command-line binaries (headless generator)</dd>
+  <dt>Repo</dt>
+  <dd><a href="https://github.com/buxx/lpcg">github.com/buxx/lpcg</a></dd>
+  <dt>Languages</dt>
+  <dd>Rust ~72%, Python ~28% (the import script)</dd>
+  <dt>License</dt>
+  <dd>AGPL-3.0 (code); artwork GPL-3.0 and/or CC-BY-SA 3.0</dd>
+  <dt>Age / traction</dt>
+  <dd>~4 years old, 4 stars, 1 fork</dd>
+</dl>
+
+<h2>How it works</h2>
+<p>Layers are addressed by <code>::</code>-separated identifiers, merged in order. A <code>*</code>
+   picks a random file; a <code>(variant)</code> suffix prefers a matching variant image if present.</p>
+
+<pre><code># Merge body then head, in order
+body::bodies::female::fur_tan head::heads::rabbit::fur_tan
+
+# Random head, light variant across layers
+body::bodies::*(light) head::heads::*(light) legs::pantaloons::*(light)</code></pre>
+
+<p>As a CLI:</p>
+<pre><code>lpcg-build ./spritesheets "body::bodies::*(light)" "head::heads::*(light)" "legs::pantaloons::*" out.png</code></pre>
+
+<p>As a Rust library:</p>
+<pre><code>use std::path::PathBuf;
+use lpcg::{builder::Builder, input::Input};
+
+let input = Input::from_str("body::bodies::female::fur_tan head::heads::rabbit::fur_tan").unwrap();
+let image = Builder::new(PathBuf::from("./spritesheets")).build(input).unwrap();
+image.save(&PathBuf::from("./out.png")).unwrap();</code></pre>
+
+<h2>Where its art comes from</h2>
+<ol class="slate-steps">
+  <li class="slate-step">
+    <p class="slate-step__title">Source of truth</p>
+    <p>The upstream sanderfrenken Universal-LPC-Spritesheet-Character-Generator.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Import</p>
+    <p><code>import_from_ulpcscg.py</code> copies only 832x1344 PNGs and <code>universal</code> folder content.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Credits</p>
+    <p><code>CREDITS.csv</code> is regenerated automatically on import.</p>
+  </li>
+</ol>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Relevance to this project</p>
+  <p>lpcg is the reference for <em>programmatic, server-side or build-time</em> sprite generation - the
+     opposite end from the interactive web apps. Its identifier-based layer language and random/variant
+     selection are a clean model for scripting bulk character generation.</p>
+</div>

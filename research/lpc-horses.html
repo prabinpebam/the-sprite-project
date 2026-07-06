@@ -1,0 +1,113 @@
+<!-- LPC Horses & Rework. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Art Sources</p>
+  <h1 class="slate-hero__title">LPC Horses &amp; the Stendhal Rework</h1>
+  <p class="slate-hero__summary">Animal sprites in LPC style - the original animated horse set and a later
+     rework that added mythical variants and optimized files.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Two related OpenGameArt submissions. The <strong>original [LPC] Horses</strong> by
+     <strong>bluecarrot16</strong> (2016) delivers fully animated horses - walk, eat, and gallop in four
+     directions, plus an 11-frame gallop and five color recolors. The <strong>LPC Horses Rework</strong>
+     by <strong>AntumDeluge</strong> re-cut it for the Stendhal game with indexed-color PNGs and added a
+     unicorn and pegasus. Both are broadly licensed (CC-BY 3.0 / GPL 2.0 &amp; 3.0 / OGA-BY 3.0).</p>
+</aside>
+
+<h2>The original: [LPC] Horses</h2>
+<dl class="slate-defs">
+  <dt>Source</dt>
+  <dd><a href="https://opengameart.org/node/69398">opengameart.org/node/69398</a></dd>
+  <dt>Author</dt>
+  <dd>bluecarrot16 (December 2016)</dd>
+  <dt>Scope</dt>
+  <dd>4-frame walk, eat, and gallop in all 4 directions; 11-frame gallop in east &amp; west; 5 recolors</dd>
+  <dt>Style match</dt>
+  <dd>Built to match daneeklu's LPC-style farm animals</dd>
+  <dt>License</dt>
+  <dd>CC-BY 3.0 / GPL 3.0 / GPL 2.0 / OGA-BY 3.0</dd>
+</dl>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 620 220" role="img" aria-labelledby="anim-title anim-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="anim-title">Original horse animation timing</title>
+    <desc id="anim-desc">Bar chart of animation frame durations: walk 150ms, 4-frame gallop 100ms,
+      11-frame gallop 50ms, eat 150ms. Shorter duration means a faster frame rate.</desc>
+    <text x="0" y="30" font-size="13" fill="currentColor">Walk (4f)</text>
+    <rect x="150" y="18" width="300" height="18" rx="3" fill="#7C3AED"></rect>
+    <text x="456" y="32" font-size="12" fill="currentColor">150 ms (6.6 fps)</text>
+
+    <text x="0" y="70" font-size="13" fill="currentColor">Eat (4f)</text>
+    <rect x="150" y="58" width="300" height="18" rx="3" fill="#7C3AED"></rect>
+    <text x="456" y="72" font-size="12" fill="currentColor">150 ms (6.6 fps)</text>
+
+    <text x="0" y="110" font-size="13" fill="currentColor">Gallop (4f)</text>
+    <rect x="150" y="98" width="200" height="18" rx="3" fill="#9F67F0"></rect>
+    <text x="356" y="112" font-size="12" fill="currentColor">100 ms (10 fps)</text>
+
+    <text x="0" y="150" font-size="13" fill="currentColor">Gallop (11f)</text>
+    <rect x="150" y="138" width="100" height="18" rx="3" fill="#C4A5F5"></rect>
+    <text x="256" y="152" font-size="12" fill="currentColor">50 ms (20 fps)</text>
+
+    <line x1="150" y1="10" x2="150" y2="166" stroke="currentColor" stroke-opacity="0.25"></line>
+  </svg>
+  <figcaption>Per-frame durations the artist used for each animation cycle in the original horse set.</figcaption>
+</figure>
+<details class="slate-figure-data">
+  <summary>Data</summary>
+  <table>
+    <thead><tr><th>Animation</th><th>Frame duration</th><th>Frame rate</th></tr></thead>
+    <tbody>
+      <tr><td>Walk (4-frame)</td><td>150 ms</td><td>6.6 FPS</td></tr>
+      <tr><td>Eat (4-frame)</td><td>150 ms</td><td>6.6 FPS</td></tr>
+      <tr><td>Gallop (4-frame)</td><td>100 ms</td><td>10 FPS</td></tr>
+      <tr><td>Gallop (11-frame)</td><td>50 ms</td><td>20 FPS</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<p>Recolors shipped: brown, black, gray, golden, and white.</p>
+
+<h2>The rework: LPC Horses Rework (for Stendhal)</h2>
+<dl class="slate-defs">
+  <dt>Source</dt>
+  <dd><a href="https://opengameart.org/node/77472">opengameart.org/node/77472</a> (a.k.a. lpc-horses-rework)</dd>
+  <dt>Author</dt>
+  <dd>Jordan Irwin (AntumDeluge), 2017 - reworking bluecarrot16's set for <a href="https://stendhalgame.org/">Stendhal</a></dd>
+  <dt>Dimensions</dt>
+  <dd>64x64 and 64x85; 4 facing directions; 3 tiles (frames) per direction</dd>
+  <dt>Formats</dt>
+  <dd>Indexed-color PNGs (smaller files); GIMP <code>.xcf</code> sources in RGB</dd>
+  <dt>New variants</dt>
+  <dd>Adds a unicorn and a pegasus (pegasus wings based on lemmling's CC0 wings)</dd>
+</dl>
+
+<h2>Original vs. rework</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">[LPC] Horses (bluecarrot16)</p>
+    <ul>
+      <li>Richer animation set (walk/eat/gallop + 11-frame gallop)</li>
+      <li>5 realistic recolors</li>
+      <li>Spawned further reworks (BenCreating's extended horse, riding kits)</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Horses Rework (AntumDeluge)</p>
+    <ul>
+      <li>Optimized indexed-color PNGs for a shipping game</li>
+      <li>Adds mythical unicorn &amp; pegasus</li>
+      <li>Tighter frame set (3 per direction) tuned for Stendhal</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Relevance to this project</p>
+  <p>Horses show LPC beyond humanoids, and the original-plus-rework pair is a live example of the
+     open-asset remix loop: one artist's animated base gets re-cut, optimized, and extended by others
+     for real games - exactly the kind of derivative pipeline a sprite platform must support.</p>
+</div>

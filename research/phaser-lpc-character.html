@@ -1,0 +1,74 @@
+<!-- Phaser 3 Universal LPC Character. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Developer Tooling</p>
+  <h1 class="slate-hero__title">Phaser 3 Universal LPC Character</h1>
+  <p class="slate-hero__summary">A TypeScript integration that turns LPC spritesheets into ready-to-use
+     game objects for the Phaser 3 engine.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>By <strong>ivopc</strong>, this project wraps Universal-LPC art for <strong>Phaser 3</strong>,
+     exposing characters as <code>Phaser.GameObjects.Sprite</code>,
+     <code>Phaser.Physics.Arcade.Sprite</code>, and <code>Phaser.Physics.Matter.Sprite</code>, with
+     animators, input behaviors, and typed interfaces for every spritesheet variation. It is
+     TypeScript-first, Vite-built, GPL-3.0, and openly under development (8 stars).</p>
+</aside>
+
+<h2>What it is</h2>
+<dl class="slate-defs">
+  <dt>Type</dt>
+  <dd>Engine integration / library (LPC characters for the Phaser 3 game framework)</dd>
+  <dt>Repo</dt>
+  <dd><a href="https://github.com/ivopc/phaser-lpc-character">github.com/ivopc/phaser-lpc-character</a></dd>
+  <dt>Languages</dt>
+  <dd>TypeScript ~84%, JavaScript ~14%, HTML ~2%</dd>
+  <dt>Build</dt>
+  <dd>Vite; scripts include a spritesheet JSON-map generator</dd>
+  <dt>License</dt>
+  <dd>GPL-3.0 (code); LPC art under its license options</dd>
+  <dt>Status</dt>
+  <dd>Under development; ships ~200 random pre-generated characters</dd>
+</dl>
+
+<h2>What it offers</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Multiple game-object flavors</h3>
+    <p class="slate-card__body">Plain sprite, Arcade-physics sprite, and Matter-physics sprite - so the
+       same character drops into whichever physics system a game uses.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animators &amp; input</h3>
+    <p class="slate-card__body">Built-in animation handling and input behaviors wired to the LPC animation
+       set.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Typed variations</h3>
+    <p class="slate-card__body">The full range of spritesheet character variations expressed as TypeScript
+       interfaces and methods - discoverable and type-safe.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Component architecture</h3>
+    <p class="slate-card__body">Prefab components, traits interfaces, and procedural dynamic traits for
+       assembling characters in code.</p>
+  </article>
+</div>
+
+<h2>Getting started</h2>
+<pre><code># install
+npm i
+# start dev server
+npm run dev
+# build
+npm run build
+# generate the spritesheet JSON map
+npm run generate-spritesheet-map</code></pre>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Relevance to this project</p>
+  <p>This shows the "last mile" - taking LPC output and making it <em>engine-native</em> with typed APIs
+     and physics bodies. It is a model for how a sprite tool's output could ship with first-class engine
+     bindings rather than bare PNGs.</p>
+</div>

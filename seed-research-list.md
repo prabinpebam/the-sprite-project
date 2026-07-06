@@ -23,3 +23,14 @@ https://liberatedpixelcup.github.io/Universal-LPC-Spritesheet-Character-Generato
 
 
 https://kenney.nl/
+
+## Research output
+
+The findings for every site above are documented as a visual, navigable Slate site under
+[`research/`](research/index.html) (built with the docs-presentation skill). Serve the repo over HTTP
+and open `research/index.html`:
+
+```powershell
+python -m http.server 8080
+# then open http://localhost:8080/research/
+```

@@ -1,0 +1,183 @@
+<!-- The Sprite Project - Research Overview (landing).
+     Body fragment. One H1. TL;DR first. Catalog components + inline SVG figures only.
+     Every fact traces to the researched sources listed in seed-research-list.md. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">The Sprite Project - Seed Research</p>
+  <h1 class="slate-hero__title">The Sprite & Game-Asset Landscape</h1>
+  <p class="slate-hero__summary">A structured survey of the tools, generators, art sets, and asset libraries
+     that define the modular 2D character-sprite space - the raw material for deciding where this
+     project goes next.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Almost every project in the seed list orbits a single body of work: the <strong>Liberated Pixel
+     Cup (LPC)</strong> - an openly licensed, style-guided set of 64x64 modular character sprites.
+     The ecosystem splits into <strong>generators</strong> (compose layers into a spritesheet),
+     <strong>developer tooling</strong> (embed LPC in engines), and <strong>art sources</strong> (the
+     sprites themselves). <strong>Kenney.nl</strong> sits outside LPC as a broad, CC0 general-purpose
+     asset library and a useful contrast point.</p>
+</aside>
+
+<h2>The field at a glance</h2>
+<p>Ten sources cluster into four roles. The Universal LPC Spritesheet Generator is the clear center of
+   gravity - by community traction it dwarfs every other repository in the list.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 760 270" role="img" aria-labelledby="stars-title stars-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="stars-title">GitHub stars by project</title>
+    <desc id="stars-desc">Horizontal bar chart. Universal LPC Generator has about 1,400 stars,
+      far ahead of LPC Revised at 191; all other repositories have single digits.</desc>
+    <!-- baseline scale: 500px = 1400 stars -->
+    <text x="0" y="24" font-size="13" fill="currentColor">Universal LPC Generator</text>
+    <rect x="200" y="12" width="500" height="20" rx="3" fill="#7C3AED"></rect>
+    <text x="706" y="27" font-size="12" fill="currentColor">1,400</text>
+
+    <text x="0" y="64" font-size="13" fill="currentColor">LPC Revised (ElizaWy)</text>
+    <rect x="200" y="52" width="68" height="20" rx="3" fill="#9F67F0"></rect>
+    <text x="274" y="67" font-size="12" fill="currentColor">191</text>
+
+    <text x="0" y="104" font-size="13" fill="currentColor">Phaser 3 LPC Character</text>
+    <rect x="200" y="92" width="4" height="20" rx="2" fill="#C4A5F5"></rect>
+    <text x="210" y="107" font-size="12" fill="currentColor">8</text>
+
+    <text x="0" y="144" font-size="13" fill="currentColor">Vitruvian spritesheets</text>
+    <rect x="200" y="132" width="3" height="20" rx="2" fill="#C4A5F5"></rect>
+    <text x="209" y="147" font-size="12" fill="currentColor">5</text>
+
+    <text x="0" y="184" font-size="13" fill="currentColor">lpcg (Rust)</text>
+    <rect x="200" y="172" width="3" height="20" rx="2" fill="#C4A5F5"></rect>
+    <text x="209" y="187" font-size="12" fill="currentColor">4</text>
+
+    <text x="0" y="224" font-size="13" fill="currentColor">Gaurav0 fork</text>
+    <rect x="200" y="212" width="3" height="20" rx="2" fill="#C4A5F5"></rect>
+    <text x="209" y="227" font-size="12" fill="currentColor">4</text>
+
+    <line x1="200" y1="6" x2="200" y2="238" stroke="currentColor" stroke-opacity="0.25"></line>
+  </svg>
+  <figcaption>Community traction (GitHub stars) across the LPC-related repositories in the seed list.
+     Kenney.nl is a website, not a repo, so it is excluded here.</figcaption>
+</figure>
+<details class="slate-figure-data">
+  <summary>Data</summary>
+  <table>
+    <thead><tr><th>Project</th><th>GitHub stars</th><th>Forks</th></tr></thead>
+    <tbody>
+      <tr><td>Universal LPC Generator (LiberatedPixelCup)</td><td>~1,400</td><td>522</td></tr>
+      <tr><td>LPC Revised (ElizaWy/LPC)</td><td>191</td><td>31</td></tr>
+      <tr><td>Phaser 3 LPC Character (ivopc)</td><td>8</td><td>1</td></tr>
+      <tr><td>Vitruvian spritesheets</td><td>5</td><td>3</td></tr>
+      <tr><td>lpcg (buxx)</td><td>4</td><td>1</td></tr>
+      <tr><td>Gaurav0 fork of ULPC</td><td>4</td><td>0</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<h2>Why this matters</h2>
+<div class="slate-metrics">
+  <div class="slate-metric">
+    <p class="slate-metric__value">1</p>
+    <p class="slate-metric__label">Shared foundation (LPC) behind 9 of 10 sources</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">64x64</p>
+    <p class="slate-metric__label">Base LPC frame size; weapons use oversize frames</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">5</p>
+    <p class="slate-metric__label">Open license options across the LPC corpus</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">6</p>
+    <p class="slate-metric__label">Body types in the flagship generator</p>
+  </div>
+</div>
+
+<h2>Explore the sources</h2>
+<div class="slate-card-grid" data-cols="3">
+  <article class="slate-card slate-card--interactive">
+    <a href="lpc-foundations.html">
+      <h3 class="slate-card__title">LPC Foundations</h3>
+      <p class="slate-card__body">The origin, style guide, licenses, and vocabulary shared by the whole ecosystem.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="ulpc-generator.html">
+      <h3 class="slate-card__title">Universal LPC Generator</h3>
+      <p class="slate-card__body">The flagship web generator, its live demo, and the Gaurav0 fork.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="vitruvian-studio.html">
+      <h3 class="slate-card__title">Vitruvian LPC Studio</h3>
+      <p class="slate-card__body">An alternative generator app plus its own converted spritesheet repo.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="lpcg.html">
+      <h3 class="slate-card__title">lpcg</h3>
+      <p class="slate-card__body">A headless Rust library + CLI that merges LPC layers programmatically.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="phaser-lpc-character.html">
+      <h3 class="slate-card__title">Phaser 3 LPC Character</h3>
+      <p class="slate-card__body">A TypeScript integration that drops LPC characters into the Phaser engine.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="lpc-revised.html">
+      <h3 class="slate-card__title">LPC Revised</h3>
+      <p class="slate-card__body">ElizaWy's curated, restyled, and expanded take on the LPC art set.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="lpc-pirates.html">
+      <h3 class="slate-card__title">LPC Pirates</h3>
+      <p class="slate-card__body">A themed clothing/prop pack showing how the community extends LPC.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="lpc-horses.html">
+      <h3 class="slate-card__title">LPC Horses & Rework</h3>
+      <p class="slate-card__body">Animal sprites - the original horse set and its Stendhal rework.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="kenney.html">
+      <h3 class="slate-card__title">Kenney.nl</h3>
+      <p class="slate-card__body">A large, CC0, general-purpose asset library outside the LPC world.</p>
+    </a>
+  </article>
+</div>
+
+<h2>Two philosophies of "free assets"</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">LPC ecosystem</p>
+    <ul>
+      <li>Modular, layer-composited characters</li>
+      <li>Collaborative, many authors, one style guide</li>
+      <li>Attribution-based licenses (CC-BY-SA, CC-BY, OGA-BY, GPL, some CC0)</li>
+      <li>Tooling ecosystem: generators, engine plugins, libraries</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Kenney.nl</p>
+    <ul>
+      <li>Finished, drop-in asset packs (2D + 3D + audio)</li>
+      <li>Largely single-studio, consistent house style</li>
+      <li>Public-domain (CC0) - no attribution required</li>
+      <li>Companion tools and genre starter kits</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">How to read this research</p>
+  <p>Each source page follows the same shape: what it is, what it offers, how it is licensed, and how
+     it relates to the rest of the ecosystem - so the set can be compared like-for-like when shaping
+     the project's direction.</p>
+</div>

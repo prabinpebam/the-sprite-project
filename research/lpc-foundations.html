@@ -1,0 +1,133 @@
+<!-- LPC Foundations - shared context page. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Context</p>
+  <h1 class="slate-hero__title">LPC Foundations</h1>
+  <p class="slate-hero__summary">The Liberated Pixel Cup - the openly licensed art body and style guide that
+     nearly every project in this research is built on.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>LPC began as an OpenGameArt.org art competition to produce a large, style-consistent, openly
+     licensed sprite set. That corpus - 64x64 modular characters with a shared style guide - became
+     the substrate for generators, engine tooling, and countless add-on art packs. Understanding its
+     vocabulary and licenses is prerequisite to understanding every other source here.</p>
+</aside>
+
+<h2>Origin</h2>
+<p>The concept of the Liberated Pixel Cup was introduced by <strong>Bart Kelsey</strong> and
+   <strong>Chris Webber</strong>. It was originally a competition on
+   <a href="https://opengameart.org/">OpenGameArt.org</a>, sponsored by Creative Commons, Mozilla, and
+   the Free Software Foundation, with the goal of creating a body of artwork sharing a common
+   <a href="https://lpc.opengameart.org/static/LPC-Style-Guide/build/index.html">style</a>. (Those
+   organizations sponsored the original contest only; they are not involved in the present-day tools.)</p>
+
+<h2>How the paradigm evolved</h2>
+<ol class="slate-steps slate-steps--timeline">
+  <li class="slate-step">
+    <p class="slate-step__title">LPC - the competition &amp; base set</p>
+    <p>A large body of compatible 64x64 art. Original animations: spellcast, thrust, walk, shoot,
+       slash, and hurt, for male and female adult bases.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">makrohn's Universal spritesheet</p>
+    <p>An XCF combining the PNG assets - effectively the first (offline) LPC spritesheet generator,
+       later the seed for the web generator.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Universal LPC (ULPC)</p>
+    <p>Expanded bases and animation sizes; ensured assets covered all bases/animations. Its most
+       notable addition was weapons with oversize animation frames.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">LPC Revised (LPCR)</p>
+    <p>Changes proposed by ElizaWy: in places a changed number/order of animation frames, a new color
+       palette, and smaller heads.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">LPC Expanded (LPCE)</p>
+    <p>Further animations (bow, climb, run, jump) and new bases (child, elderly). Many assets are not
+       yet drawn for these - an open "help wanted" frontier.</p>
+  </li>
+</ol>
+
+<h2>The vocabulary</h2>
+<dl class="slate-defs">
+  <dt>LPC</dt>
+  <dd>The original competition, and now the body of work and the style that "LPC" art follows.</dd>
+  <dt>ULPC (Universal LPC)</dt>
+  <dd>LPC expanded with new animation sizes/bases; the basis of the flagship generator. Added oversize weapon frames.</dd>
+  <dt>LPCR (LPC Revised)</dt>
+  <dd>ElizaWy's revision: reworked frames, new palette, smaller heads.</dd>
+  <dt>LPCE (LPC Expanded)</dt>
+  <dd>Additional animations (bow, climb, run, jump) and bases (child, elderly).</dd>
+  <dt>Base frame</dt>
+  <dd>64x64 pixels; weapons and some effects use oversize frames that exceed the base grid.</dd>
+</dl>
+
+<h2>The license landscape</h2>
+<p>LPC art is not a single license. Each asset is distributed under one or more open licenses, and the
+   most permissive available option determines how freely a given piece can be used. This is the single
+   most important practical constraint on building anything with LPC.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 720 260" role="img" aria-labelledby="lic-title lic-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="lic-title">LPC license options ordered by permissiveness</title>
+    <desc id="lic-desc">Five license options. CC0 is most permissive with no attribution required;
+      CC-BY and OGA-BY require attribution; CC-BY-SA and GPL require attribution and share-alike.</desc>
+    <text x="0" y="24" font-size="13" fill="currentColor">CC0</text>
+    <rect x="150" y="12" width="520" height="20" rx="3" fill="#16A34A"></rect>
+    <text x="158" y="27" font-size="11" fill="#ffffff">No attribution required - most permissive</text>
+
+    <text x="0" y="64" font-size="13" fill="currentColor">OGA-BY</text>
+    <rect x="150" y="52" width="410" height="20" rx="3" fill="#65A30D"></rect>
+    <text x="158" y="67" font-size="11" fill="#ffffff">Attribution; no DRM restriction</text>
+
+    <text x="0" y="104" font-size="13" fill="currentColor">CC-BY</text>
+    <rect x="150" y="92" width="410" height="20" rx="3" fill="#65A30D"></rect>
+    <text x="158" y="107" font-size="11" fill="#ffffff">Attribution required</text>
+
+    <text x="0" y="144" font-size="13" fill="currentColor">CC-BY-SA</text>
+    <rect x="150" y="132" width="300" height="20" rx="3" fill="#D97706"></rect>
+    <text x="158" y="147" font-size="11" fill="#ffffff">Attribution + share-alike</text>
+
+    <text x="0" y="184" font-size="13" fill="currentColor">GPL</text>
+    <rect x="150" y="172" width="300" height="20" rx="3" fill="#DC2626"></rect>
+    <text x="158" y="187" font-size="11" fill="#ffffff">Attribution + copyleft derivatives</text>
+
+    <text x="150" y="222" font-size="11" fill="currentColor" fill-opacity="0.7">More permissive</text>
+    <text x="600" y="222" font-size="11" fill="currentColor" fill-opacity="0.7">More restrictive</text>
+    <line x1="150" y1="206" x2="670" y2="206" stroke="currentColor" stroke-opacity="0.25"></line>
+  </svg>
+  <figcaption>The five supported LPC license options, arranged from most permissive (CC0) to most
+     restrictive (GPL). Bar length is an illustrative permissiveness ranking, not a measured quantity.</figcaption>
+</figure>
+<details class="slate-figure-data">
+  <summary>Data</summary>
+  <table>
+    <thead><tr><th>License</th><th>Attribution?</th><th>Key obligation</th></tr></thead>
+    <tbody>
+      <tr><td>CC0</td><td>No</td><td>Usable under any circumstances</td></tr>
+      <tr><td>OGA-BY</td><td>Yes</td><td>Credit authors; removes the DRM/technical-measures restriction</td></tr>
+      <tr><td>CC-BY</td><td>Yes</td><td>Credit authors; may not encrypt/protect</td></tr>
+      <tr><td>CC-BY-SA</td><td>Yes</td><td>Credit authors; derivatives must stay CC-BY-SA</td></tr>
+      <tr><td>GPL</td><td>Yes</td><td>Derivatives must be distributed under GPL</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Attribution is mandatory (except CC0)</p>
+  <p>If you use generated sprites or images from an LPC <code>spritesheets</code> directory, you must
+     credit every contributing author. Generators help by exporting a <code>CREDITS.csv</code>/text
+     file for exactly the layers you selected. For DRM platforms (Steam, iOS App Store), sticking to
+     CC0 and/or OGA-BY assets is the safe choice.</p>
+</div>
+
+<h2>Related artwork beyond characters</h2>
+<p>Although the flagship repository focuses on <em>character</em> sprites, LPC also includes many
+   tilesets and other artwork; tileset collections live on
+   <a href="https://opengameart.org/">OpenGameArt.org</a>. Two of the art sources in this research -
+   Pirates and Horses - are examples of the community continually extending that corpus.</p>
