@@ -1,0 +1,338 @@
+<!-- Indie 2D Sprite Pipeline - market/user research. Body fragment, one H1, TL;DR first.
+     Sources: gamedev.stackexchange.com (sprites/2d tags; "What tools do you use for 2D art/sprite
+     creation?" 162k views), Aseprite documentation, itch.io game-assets & game-jams, Wikipedia
+     "Sprite (computer graphics)". Findings are synthesized from those public resources. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Market Research</p>
+  <h1 class="slate-hero__title">The Indie Developer 2D Sprite Pipeline</h1>
+  <p class="slate-hero__summary">How solo and small-team developers find, make, animate, integrate, and ship
+     2D sprites today - their stack, their tools, and the friction we could remove.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Indies rarely start by drawing. A typical project begins with <strong>free/placeholder asset packs</strong>
+     (itch.io, OpenGameArt, Kenney) and often a <strong>game jam</strong> deadline, then graduates to custom or
+     commissioned art. The pipeline spans five stages - <em>source → author → assemble/animate → integrate →
+     ship</em> - and every stage leaks time: art skill gaps, style inconsistency, frame/pivot alignment, atlas
+     packing, engine import quirks, and above all <strong>licensing/attribution confusion</strong>. A tool that
+     unifies sourcing, generation, animation, engine-ready export, and automatic license tracking would collapse
+     that pipeline into one place.</p>
+</aside>
+
+<h2>The five-stage pipeline</h2>
+<p>Across forums and tool docs, the same reading order recurs. Each stage is where a different class of problem
+   appears.</p>
+<ol class="slate-steps slate-steps--timeline">
+  <li class="slate-step">
+    <p class="slate-step__title">1 · Source</p>
+    <p>Find or decide on art: free packs, marketplace buys, commissions, or "I'll make it myself." Placeholder
+       art is used to start moving immediately - often under a jam clock.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">2 · Author</p>
+    <p>Draw/edit sprites in a pixel or raster tool (Aseprite et al.), define a palette, and build frames.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">3 · Assemble &amp; animate</p>
+    <p>Turn frames into animations (walk/idle/attack across directions), set pivots, and either frame-animate or
+       rig with 2D bones.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">4 · Integrate</p>
+    <p>Pack into atlases, slice sheets, import into the engine, wire up animation state machines, and fix
+       filtering/scaling.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">5 · Ship</p>
+    <p>Polish (2D lighting, effects), optimize, and - critically - compile correct credits/licenses for every
+       asset used.</p>
+  </li>
+</ol>
+
+<h2>The typical tech stack</h2>
+<p>There is no single stack, but the choices cluster tightly. The table below reflects what indies actually
+   reach for, per public tool threads and engine docs.</p>
+<table>
+  <thead>
+    <tr><th>Layer</th><th>Common choices</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pixel-art editor</td>
+      <td>Aseprite, Pyxel Edit, GraphicsGale, Cosmigo Pro Motion, Piskel (free/web), Krita, GIMP</td>
+      <td>Aseprite is the de-facto standard: layers, onion-skinning, palettes, sheet export, CLI, Lua scripting.</td>
+    </tr>
+    <tr>
+      <td>Raster / vector</td>
+      <td>Photoshop, Photoshop Elements, Paint.NET, Inkscape (vector), Adobe Fireworks (legacy favorite)</td>
+      <td>Vector is used for UI and hi-res 2D; often rasterized at runtime for performance.</td>
+    </tr>
+    <tr>
+      <td>Skeletal / cutout animation</td>
+      <td>Spine, DragonBones, Spriter, Unity 2D Animation (bones/rigging)</td>
+      <td>Trades frame-by-frame labor for rig setup + weighting complexity.</td>
+    </tr>
+    <tr>
+      <td>Frame animation</td>
+      <td>Pencil2D, Synfig</td>
+      <td>Hand-drawn, one frame at a time - the most labor-intensive path.</td>
+    </tr>
+    <tr>
+      <td>Packing / atlas</td>
+      <td>TexturePacker, engine-native atlas tools, Aseprite slices/export</td>
+      <td>Atlases cut draw calls; packing/extraction is a recurring friction point.</td>
+    </tr>
+    <tr>
+      <td>Engine</td>
+      <td>Unity, Godot, Unreal (Paper2D), GameMaker, Phaser, LÖVE, pygame, MonoGame, Construct</td>
+      <td>Each has its own import, slicing, pivot, and animation-state conventions.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Where developers get art</h2>
+<p>Sourcing dominates the early pipeline. The marketplaces are large and free tiers are deep, which is exactly
+   why sourcing - and its licensing - is such a load-bearing problem.</p>
+<div class="slate-metrics">
+  <div class="slate-metric">
+    <p class="slate-metric__value">6,534</p>
+    <p class="slate-metric__label">Free sprite asset packs tagged on itch.io alone</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">565k+</p>
+    <p class="slate-metric__label">Games created for jams hosted on itch.io</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">22k</p>
+    <p class="slate-metric__label">Devs joined a single GMTK Game Jam</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">CC0→GPL</p>
+    <p class="slate-metric__label">License spread they must reconcile per asset</p>
+  </div>
+</div>
+<div class="slate-card-grid" data-cols="3">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Free asset hubs</h3>
+    <p class="slate-card__body">itch.io (huge free tier, e.g. Mana Seed base, Tiny Swords, Ninja Adventure),
+       OpenGameArt (home of LPC), Kenney (CC0), CraftPix free section.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Paid marketplaces</h3>
+    <p class="slate-card__body">Unity Asset Store, itch paid packs, GameDev Market, CraftPix premium,
+       GraphicRiver - for consistent, larger, or exclusive sets.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Generators &amp; commissions</h3>
+    <p class="slate-card__body">LPC/Universal generators for modular characters; Fiverr/Discord/portfolio
+       commissions when a bespoke style is needed.</p>
+  </article>
+</div>
+
+<h2>The game-jam on-ramp</h2>
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Yes - many indies start with jams and free assets</p>
+  <p>Jams are a primary entry point: itch.io alone has hosted <strong>565,112</strong> jam games. Events like
+     GMTK, Brackeys, Ludum Dare, and Godot Wild Jam run on tight 2-7 day clocks, so participants lean on free
+     packs and placeholders. The <strong>Kenney Jam</strong> is explicitly "create a game using only Kenney or
+     KayKit assets" - proof that "grab assets, build fast" is a first-class workflow, not a shortcut.</p>
+</div>
+
+<h2>User needs (what they are trying to do)</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Move fast, especially under a deadline</h3>
+    <p class="slate-card__body">Get a usable character on screen in minutes; placeholder now, polish later.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Consistent style without an artist</h3>
+    <p class="slate-card__body">One palette, one perspective, one resolution across every asset - even when
+       mixing sources.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Modular characters</h3>
+    <p class="slate-card__body">Mix bodies, clothes, hair, and gear; recolor freely (the whole appeal of LPC-style
+       generators).</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Complete animation sets</h3>
+    <p class="slate-card__body">Idle/walk/run/attack/hurt in all needed directions, with stable pivots and timing.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Engine-ready export</h3>
+    <p class="slate-card__body">Atlases + metadata (JSON/plist) that import cleanly into Unity, Godot, GameMaker,
+       Phaser, etc.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Legal peace of mind</h3>
+    <p class="slate-card__body">Know exactly what license each asset carries and generate correct attribution
+       automatically.</p>
+  </article>
+</div>
+
+<h2>User problems (where the pipeline hurts)</h2>
+<p>These recur across gamedev Q&amp;A and tool discussions. They are grouped by pipeline stage and scored by how
+   often/painfully they surface for a typical indie.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 720 330" role="img" aria-labelledby="pain-title pain-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="pain-title">Relative pain of common sprite-pipeline problems</title>
+    <desc id="pain-desc">Horizontal bars ranking problem severity: licensing/attribution and art-skill gap
+      are highest, followed by style consistency, animation labor, frame/pivot alignment, engine import,
+      atlas packing, and pixel scaling.</desc>
+    <text x="0" y="24" font-size="12" fill="currentColor">Licensing &amp; attribution</text>
+    <rect x="210" y="12" width="470" height="18" rx="3" fill="#DC2626"></rect>
+    <text x="0" y="54" font-size="12" fill="currentColor">Art-skill gap</text>
+    <rect x="210" y="42" width="450" height="18" rx="3" fill="#DC2626"></rect>
+    <text x="0" y="84" font-size="12" fill="currentColor">Style consistency</text>
+    <rect x="210" y="72" width="400" height="18" rx="3" fill="#EA580C"></rect>
+    <text x="0" y="114" font-size="12" fill="currentColor">Animation labor</text>
+    <rect x="210" y="102" width="380" height="18" rx="3" fill="#EA580C"></rect>
+    <text x="0" y="144" font-size="12" fill="currentColor">Frame &amp; pivot alignment</text>
+    <rect x="210" y="132" width="340" height="18" rx="3" fill="#D97706"></rect>
+    <text x="0" y="174" font-size="12" fill="currentColor">Engine import / slicing</text>
+    <rect x="210" y="162" width="320" height="18" rx="3" fill="#D97706"></rect>
+    <text x="0" y="204" font-size="12" fill="currentColor">Atlas packing / extraction</text>
+    <rect x="210" y="192" width="280" height="18" rx="3" fill="#CA8A04"></rect>
+    <text x="0" y="234" font-size="12" fill="currentColor">Pixel scaling / filtering</text>
+    <rect x="210" y="222" width="250" height="18" rx="3" fill="#CA8A04"></rect>
+    <text x="0" y="264" font-size="12" fill="currentColor">Skeletal rigging / weighting</text>
+    <rect x="210" y="252" width="210" height="18" rx="3" fill="#65A30D"></rect>
+    <text x="0" y="294" font-size="12" fill="currentColor">Runtime performance</text>
+    <rect x="210" y="282" width="170" height="18" rx="3" fill="#65A30D"></rect>
+    <line x1="210" y1="6" x2="210" y2="306" stroke="currentColor" stroke-opacity="0.25"></line>
+  </svg>
+  <figcaption>Relative severity of sprite-pipeline problems for indie developers, synthesized from recurring
+     public gamedev questions and tool discussions. Ranking is qualitative, not a measured survey.</figcaption>
+</figure>
+<details class="slate-figure-data">
+  <summary>Data</summary>
+  <table>
+    <thead><tr><th>Problem</th><th>Stage</th><th>Why it hurts</th></tr></thead>
+    <tbody>
+      <tr><td>Licensing &amp; attribution</td><td>Source / Ship</td><td>Mixed CC0/CC-BY/CC-BY-SA/OGA-BY/GPL terms; missing credits risk takedowns; DRM-store clauses are ambiguous.</td></tr>
+      <tr><td>Art-skill gap</td><td>Author</td><td>Most indies are programmers; producing good pixel art is a separate craft and time sink.</td></tr>
+      <tr><td>Style consistency</td><td>Source / Author</td><td>Mixing packs yields clashing palettes, resolutions, and perspectives.</td></tr>
+      <tr><td>Animation labor</td><td>Assemble</td><td>Drawing every frame in every direction is enormously time-consuming.</td></tr>
+      <tr><td>Frame &amp; pivot alignment</td><td>Assemble</td><td>Differently sized frames jitter; inconsistent pivots break positioning.</td></tr>
+      <tr><td>Engine import / slicing</td><td>Integrate</td><td>Per-engine sheet slicing, pivots, and metadata differ and must be redone.</td></tr>
+      <tr><td>Atlas packing / extraction</td><td>Integrate</td><td>Packing for draw-call efficiency, and pulling sprites back out of atlases.</td></tr>
+      <tr><td>Pixel scaling / filtering</td><td>Integrate</td><td>Blur from bilinear filtering; subpixel movement at arbitrary resolutions.</td></tr>
+      <tr><td>Skeletal rigging / weighting</td><td>Assemble</td><td>2D bones save frames but add rig/weight-painting complexity and glitches.</td></tr>
+      <tr><td>Runtime performance</td><td>Ship</td><td>Overdraw, texture sizes, and draw calls on low-end targets.</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<h2>How indies solve these today</h2>
+<table>
+  <thead>
+    <tr><th>Problem</th><th>Today's workaround</th><th>Residual pain</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Can't draw</td>
+      <td>Buy/download packs; use LPC/Universal generators; commission; use placeholders</td>
+      <td>Limited to others' styles; commissions cost money &amp; time</td>
+    </tr>
+    <tr>
+      <td>Style clash</td>
+      <td>Stick to one artist/pack; restrict palette; recolor manually</td>
+      <td>Narrows choice; manual recolor is tedious and error-prone</td>
+    </tr>
+    <tr>
+      <td>Animation effort</td>
+      <td>Reuse pack animations; Spine/DragonBones rigs; onion-skinning in Aseprite</td>
+      <td>Rig setup complexity; frame-by-frame still slow</td>
+    </tr>
+    <tr>
+      <td>Frame/pivot jitter</td>
+      <td>Uniform frame canvas; manual pivot tuning; trim + re-align</td>
+      <td>Fiddly, repeated per asset and per engine</td>
+    </tr>
+    <tr>
+      <td>Packing &amp; export</td>
+      <td>TexturePacker; Aseprite export; engine importers</td>
+      <td>Extra tools; metadata format juggling</td>
+    </tr>
+    <tr>
+      <td>Licensing</td>
+      <td>Track credits by hand; keep CREDITS.csv; read each license</td>
+      <td>Easy to get wrong; scary for commercial/DRM releases</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>The gap - and the opportunity</h2>
+<p>The stack is <strong>fragmented</strong>: a generator here, an editor there, a packer, an engine importer, and a
+   spreadsheet of credits. No single tool owns the path from "I need a character" to "engine-ready, correctly
+   licensed, fully animated sprite." That seam is the opening.</p>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Today (fragmented)</p>
+    <ul>
+      <li>Hunt across itch/OGA/Kenney for compatible art</li>
+      <li>Recolor and restyle by hand to match</li>
+      <li>Animate frame-by-frame or wrestle a rig</li>
+      <li>Pack + export + re-slice per engine</li>
+      <li>Manually assemble attribution, hope it's correct</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">If we solve it (unified)</p>
+    <ul>
+      <li>Browse/generate modular characters in one library</li>
+      <li>One palette + auto-recolor keeps everything on-style</li>
+      <li>Prebuilt, extensible animation sets across directions</li>
+      <li>One-click engine-ready export (atlas + metadata)</li>
+      <li>License tracked per layer; credits generated automatically</li>
+    </ul>
+  </div>
+</div>
+
+<h2>What "go-to for every indie" would require</h2>
+<p>An exhaustive checklist, drawn from the needs and problems above, of what the project must cover to own this
+   use case end-to-end:</p>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Source &amp; generate</h3>
+    <p class="slate-card__body">Modular character generation + a searchable, style-tagged asset library
+       (resolution, perspective, theme), with placeholder-quality output in seconds.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Style engine</h3>
+    <p class="slate-card__body">Shared palettes and auto-recolor so mixed sources read as one cohesive set;
+       enforce grid, perspective, and outline rules.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animation system</h3>
+    <p class="slate-card__body">Ready-made animation sets (idle/walk/run/attack/hurt), multi-direction, stable
+       pivots, plus room for custom frames and 2D-bone rigs.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Engine-ready export</h3>
+    <p class="slate-card__body">Atlases + metadata for Unity, Godot, GameMaker, Phaser, Unreal Paper2D; correct
+       pivots, trimmed frames, pixel-perfect import presets.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">License automation</h3>
+    <p class="slate-card__body">Per-asset license tracking, license filtering (e.g. CC0/OGA-BY only for DRM
+       stores), and one-click generated credits.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Web-first &amp; free tier</h3>
+    <p class="slate-card__body">Zero-install, browser-based, with a generous free tier and jam-friendly speed -
+       meeting indies where they already start.</p>
+  </article>
+</div>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Strategic takeaway</p>
+  <p>The winning wedge is <strong>unification + licensing certainty</strong>. Individual pieces (generators,
+     editors, packers) already exist and are good. What no one owns is the <em>connected</em> path from sourcing
+     to engine-ready, correctly attributed sprites. Nail that seam - starting from the LPC modular model this
+     project already understands - and the tool becomes the default first stop for indie 2D art.</p>
+</div>

@@ -2,15 +2,16 @@
   "version": 2,
   "entries": [
     { "path": "landing.html", "title": "Research Overview", "order": 0 },
-    { "path": "lpc-foundations.html", "title": "LPC Foundations", "order": 1, "group": "Context" },
-    { "path": "ulpc-generator.html", "title": "Universal LPC Generator", "order": 2, "group": "Character Generators", "badge": "flagship" },
-    { "path": "vitruvian-studio.html", "title": "Vitruvian LPC Studio", "order": 3, "group": "Character Generators" },
-    { "path": "lpcg.html", "title": "lpcg (Rust lib + CLI)", "order": 4, "group": "Developer Tooling" },
-    { "path": "phaser-lpc-character.html", "title": "Phaser 3 LPC Character", "order": 5, "group": "Developer Tooling" },
-    { "path": "lpc-revised.html", "title": "LPC Revised (ElizaWy)", "order": 6, "group": "Art Sources" },
-    { "path": "lpc-style-guide.html", "title": "LPC Revised Style Guide", "order": 7, "group": "Art Sources" },
-    { "path": "lpc-pirates.html", "title": "LPC Pirates", "order": 8, "group": "Art Sources" },
-    { "path": "lpc-horses.html", "title": "LPC Horses & Rework", "order": 9, "group": "Art Sources" },
-    { "path": "kenney.html", "title": "Kenney.nl", "order": 10, "group": "Broader Libraries" }
+    { "path": "indie-sprite-pipeline.html", "title": "Indie 2D Sprite Pipeline", "order": 1, "group": "Market Research", "badge": "new" },
+    { "path": "lpc-foundations.html", "title": "LPC Foundations", "order": 2, "group": "Context" },
+    { "path": "ulpc-generator.html", "title": "Universal LPC Generator", "order": 3, "group": "Character Generators", "badge": "flagship" },
+    { "path": "vitruvian-studio.html", "title": "Vitruvian LPC Studio", "order": 4, "group": "Character Generators" },
+    { "path": "lpcg.html", "title": "lpcg (Rust lib + CLI)", "order": 5, "group": "Developer Tooling" },
+    { "path": "phaser-lpc-character.html", "title": "Phaser 3 LPC Character", "order": 6, "group": "Developer Tooling" },
+    { "path": "lpc-revised.html", "title": "LPC Revised (ElizaWy)", "order": 7, "group": "Art Sources" },
+    { "path": "lpc-style-guide.html", "title": "LPC Revised Style Guide", "order": 8, "group": "Art Sources" },
+    { "path": "lpc-pirates.html", "title": "LPC Pirates", "order": 9, "group": "Art Sources" },
+    { "path": "lpc-horses.html", "title": "LPC Horses & Rework", "order": 10, "group": "Art Sources" },
+    { "path": "kenney.html", "title": "Kenney.nl", "order": 11, "group": "Broader Libraries" }
   ]
 }
