@@ -1,0 +1,168 @@
+<!-- Design proposal: Material & lighting maps (normal, specular, emissive, etc.). Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Systems</p>
+  <h1 class="slate-hero__title">Material &amp; Lighting Maps</h1>
+  <p class="slate-hero__summary">Every asset ships not just a color image but a coordinated set of maps - normal,
+     specular, emissive, and more - so 2D dynamic lighting "just works" in the engine.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Modern 2D games light sprites dynamically, which needs more than a diffuse image. Each generator and the editor
+     must produce a <strong>matched map set</strong> - at minimum a <strong>normal map</strong>, with
+     <strong>specular/roughness</strong>, <strong>emissive</strong>, <strong>height</strong>, <strong>ambient
+     occlusion</strong>, and <strong>light/mask</strong> maps as needed. Maps are token-aware, travel with the asset
+     through composition, and export in each engine's expected slots (e.g. Godot normal/specular, Unity secondary
+     textures).</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Grounding</p>
+  <p>2D lighting is an explicit polish-stage need in the <a href="../../research/market-research/indie-sprite-pipeline.html">indie
+     pipeline research</a>, and a recurring source of developer questions (normal maps, hiding sprites outside
+     light, shader-driven lit sprites). Producing maps automatically removes a whole class of manual work.</p>
+</div>
+
+<h2>Why maps are a first-class requirement</h2>
+<p>A flat color sprite can't react to a torch, a day/night cycle, or a glowing rune. Engines composite a sprite with
+   its maps at render time to fake depth and material response. If the tool only outputs diffuse art, users are back
+   in a separate program hand-painting normal maps - exactly the fragmentation this project removes.</p>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Diffuse only (today)</p>
+    <ul>
+      <li>Sprites look flat under dynamic lights</li>
+      <li>Normal/specular maps hand-painted elsewhere</li>
+      <li>Maps drift out of sync with edits</li>
+      <li>Per-engine wiring done by hand</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Coordinated map set (proposed)</p>
+    <ul>
+      <li>Sprites respond to lights out of the box</li>
+      <li>Maps generated alongside the diffuse image</li>
+      <li>Edits regenerate/propagate to all maps</li>
+      <li>Exported into each engine's native slots</li>
+    </ul>
+  </div>
+</div>
+
+<h2>The map set</h2>
+<p>The required and optional maps, what they encode, and why a 2D asset needs them.</p>
+<table>
+  <thead>
+    <tr><th>Map</th><th>Encodes</th><th>Requirement</th><th>Used for</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Diffuse / albedo</strong></td><td>Base color (the sprite)</td><td>Required</td><td>The visible art; the source everything else aligns to.</td></tr>
+    <tr><td><strong>Normal</strong></td><td>Per-pixel surface direction (RGB = XYZ)</td><td>Required for lit games</td><td>Makes flat pixels catch light from any direction.</td></tr>
+    <tr><td><strong>Specular / roughness</strong></td><td>Shininess / microsurface</td><td>Recommended</td><td>Metal, glass, water highlights vs. matte cloth/wood.</td></tr>
+    <tr><td><strong>Emissive / glow</strong></td><td>Self-lit regions + intensity</td><td>Recommended</td><td>Lamps, runes, eyes, screens, lava that glow in the dark.</td></tr>
+    <tr><td><strong>Height / displacement</strong></td><td>Relative depth</td><td>Optional</td><td>Parallax, richer normal derivation, self-shadowing.</td></tr>
+    <tr><td><strong>Ambient occlusion</strong></td><td>Contact/crevice shadowing</td><td>Optional</td><td>Grounds objects; adds depth in ambient light.</td></tr>
+    <tr><td><strong>Light / mask</strong></td><td>Which pixels react / material IDs</td><td>Optional</td><td>Unity secondary mask; selective lighting; recolor regions.</td></tr>
+    <tr><td><strong>Alpha / opacity</strong></td><td>Transparency</td><td>Required</td><td>Cutout shapes; glass and water translucency (style-guide 120/256).</td></tr>
+  </tbody>
+</table>
+
+<h2>How maps are produced</h2>
+<p>Because assets are generated from known parts and token-tagged materials, most maps can be <strong>derived
+   automatically</strong> rather than hand-painted - then refined in the editor.</p>
+<ol class="slate-steps">
+  <li class="slate-step">
+    <p class="slate-step__title">Author-time normals from parts</p>
+    <p>Layers/parts carry authored or inferred normals; compositing a character or building composites their normals
+       too, so the assembled asset has a correct normal map for free.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Material-driven specular/emissive</p>
+    <p>Palette <a href="token-coherence.html">tokens</a> already know a region is metal, glass, or a glowing rune, so
+       specular and emissive maps are generated from token material class.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Derived height/AO</p>
+    <p>Height and ambient occlusion are estimated from shading and part depth; used to improve normals and grounding.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Consistent light model</p>
+    <p>All derivation obeys the style guide's fixed light direction (top-front-left) so maps agree with the baked
+       shading.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Edit &amp; override</p>
+    <p>The <a href="manual-editing.html">editor</a> can paint/tweak any map with onion-skinned alignment to the
+       diffuse frame.</p>
+  </li>
+</ol>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Tokens tie shading and maps together</p>
+  <p>The style guide fixes the light direction and shadow color, and tokens tag material class. That shared
+     information is exactly what a normal/specular/emissive generator needs - so maps stay consistent with the baked
+     art and with each other by construction, across every generator.</p>
+</div>
+
+<h2>Maps across the pipeline</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Every generator emits maps</h3>
+    <p class="slate-card__body">Characters, <a href="../generators/environment-generator.html">terrain</a>, and
+       <a href="../generators/structures-props.html">structures/props</a> each output the map set appropriate to their
+       materials (e.g. water needs specular + normal for ripples).</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Maps travel through composition</h3>
+    <p class="slate-card__body">In the <a href="composition-model.html">shared asset model</a>, maps are part of the
+       asset, so animation frames, atlases, and scenes keep every map in lockstep with the diffuse.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animated maps</h3>
+    <p class="slate-card__body">Animated assets animate their maps too - a flickering lamp's emissive, water's moving
+       normals - via the same per-frame animation path.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Editor authors maps</h3>
+    <p class="slate-card__body">Users can view and hand-edit any map channel in-app, with a lit preview to check the
+       result immediately.</p>
+  </article>
+</div>
+
+<h2>Engine-ready export</h2>
+<p>Maps export into each engine's expected structure so lighting works on import, not after manual setup.</p>
+<table>
+  <thead>
+    <tr><th>Engine</th><th>How maps are consumed</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Godot</td><td>Sprite/CanvasItem <code>normal_map</code> and specular via material; emissive through a shader/CanvasItemMaterial.</td></tr>
+    <tr><td>Unity 2D</td><td>Sprite <strong>secondary textures</strong> (<code>_NormalMap</code>, <code>_MaskTex</code>) for the 2D lighting system.</td></tr>
+    <tr><td>Unreal (Paper2D)</td><td>Normal/emissive fed through the sprite material.</td></tr>
+    <tr><td>Phaser / custom</td><td>Normal-mapped pipeline (e.g. paired <code>*_n</code> atlas) + shader hooks.</td></tr>
+  </tbody>
+</table>
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Naming &amp; packing conventions</p>
+  <p>Export follows predictable conventions - paired atlases and channel packing (e.g. a suffix like
+     <code>_n</code>/<code>_s</code>/<code>_e</code>, or packing roughness/AO/height into one texture's channels) - so
+     both engine importers and the live link and CLI can wire them up automatically.</p>
+</div>
+
+<h2>User-facing capabilities</h2>
+<ul>
+  <li>User can generate a coordinated map set (normal, specular, emissive, +optional) with any asset.</li>
+  <li>User can preview the asset under a movable light to check how the maps read.</li>
+  <li>User can toggle which maps an asset produces (keep it lean for unlit games).</li>
+  <li>User can hand-edit any map channel in the in-app editor, aligned to the diffuse.</li>
+  <li>User can rely on maps staying in sync across frames, atlases, recolors, and scenes.</li>
+  <li>User can export maps into the target engine's native lighting slots via files, live link, or CLI.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why this is a core requirement</p>
+  <p>Dynamic lighting is table stakes for a polished 2D game, and authoring maps by hand is a real, documented pain.
+     Because the tool already knows each asset's parts, materials (via tokens), and light model, it is uniquely
+     positioned to <strong>generate the whole map set automatically</strong> - a capability the standalone LPC
+     generator and most asset packs simply don't offer.</p>
+</div>

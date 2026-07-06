@@ -24,6 +24,7 @@
     { "path": "design/systems/composition-model.html", "title": "How It Comes Together", "order": 34, "badge": "proposal" },
     { "path": "design/systems/token-coherence.html", "title": "Token-Based Coherence", "order": 35, "badge": "proposal" },
     { "path": "design/systems/manual-editing.html", "title": "Manual Edit & Create", "order": 36, "badge": "proposal" },
+    { "path": "design/systems/material-maps.html", "title": "Material & Lighting Maps", "order": 37, "badge": "proposal" },
 
     { "path": "planning/overview.html", "title": "Planning Overview", "order": 40, "icon": "checklist", "badge": "planned" },
 

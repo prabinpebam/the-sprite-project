@@ -80,6 +80,9 @@
   <dd>Recolorable regions bound to shared tokens (see <a href="token-coherence.html">token coherence</a>).</dd>
   <dt>Animation set</dt>
   <dd>Frames/directions via one animation format used by all generators.</dd>
+  <dt>Material &amp; lighting maps</dt>
+  <dd>Normal, specular, emissive, and related maps that stay in lockstep with the diffuse (see
+     <a href="material-maps.html">material &amp; lighting maps</a>).</dd>
   <dt>License metadata</dt>
   <dd>Per-source credits that merge across every asset in the project.</dd>
 </dl>
@@ -117,7 +120,8 @@
 <h2>One export pipeline</h2>
 <p>Because all assets share the model, a single pipeline serves every generator: packed files (atlas + metadata),
    an engine <strong>live link</strong> that writes native resources into a running project, and a
-   <strong>CLI/API</strong> for agentic automation. Credits merge automatically across the whole project.</p>
+   <strong>CLI/API</strong> for agentic automation. Credits merge automatically across the whole project, and every
+   asset's <a href="material-maps.html">lighting maps</a> export into the engine's native slots alongside the diffuse.</p>
 
 <div class="slate-callout slate-callout--tip" role="note">
   <p class="slate-callout__title">The unifying idea</p>
