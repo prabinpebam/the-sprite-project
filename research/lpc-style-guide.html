@@ -1,0 +1,186 @@
+<!-- LPC Revised Style Guide. Body fragment, one H1, TL;DR first.
+     Source: https://github.com/ElizaWy/LPC/wiki/Style-Guide (Eliza, last edited 2023-05-20). -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Art Sources</p>
+  <h1 class="slate-hero__title">LPC Revised Style Guide</h1>
+  <p class="slate-hero__summary">The written rulebook behind the LPC Revised look - the palette, geometry,
+     lighting, and material conventions every asset must follow to stay compatible.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>ElizaWy's Style Guide codifies <strong>how</strong> LPC Revised art is drawn: a fixed bright palette
+     (required for the auto-recolor scripts), 32-pixel tiles, a top-down orthographic "three-quarter"
+     perspective with strict pixel ratios, light from the top-front-left with a semi-transparent
+     <code>#2a1722</code> shadow, 1-pixel outlines, and per-material texturing rules. Sticking to it is
+     what makes assets mix cleanly in the generators.</p>
+</aside>
+
+<h2>What it is</h2>
+<dl class="slate-defs">
+  <dt>Type</dt>
+  <dd>Art-direction specification (wiki page) for the LPC Revised project</dd>
+  <dt>Source</dt>
+  <dd><a href="https://github.com/ElizaWy/LPC/wiki/Style-Guide">github.com/ElizaWy/LPC/wiki/Style-Guide</a></dd>
+  <dt>Author</dt>
+  <dd>Eliza (ElizaWy); last edited May 20, 2023 (4 revisions)</dd>
+  <dt>Purpose</dt>
+  <dd>Standards for creating and modifying pixel-art material textures so all assets share one look</dd>
+  <dt>Lineage</dt>
+  <dd>Builds on the original <a href="https://lpc.opengameart.org/static/LPC-Style-Guide/build/styleguide.html">LPC Style Guide</a></dd>
+</dl>
+
+<h2>Core geometry</h2>
+<div class="slate-metrics">
+  <div class="slate-metric">
+    <p class="slate-metric__value">32px</p>
+    <p class="slate-metric__label">Base tile; larger assets must be divisible by it</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">1:2</p>
+    <p class="slate-metric__label">Diagonal rise:run (1 up for every 2 across)</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">4:3</p>
+    <p class="slate-metric__label">Y/Z square width:height ratio</p>
+  </div>
+  <div class="slate-metric">
+    <p class="slate-metric__value">1px</p>
+    <p class="slate-metric__label">Standard outline thickness</p>
+  </div>
+</div>
+
+<h2>Perspective &amp; scale</h2>
+<p>LPC and LPC Revised use a <strong>top-down orthographic</strong> perspective (a "three-quarter view"):
+   objects are drawn without foreshortening, keeping full size regardless of distance - the classic
+   video-game aesthetic. Concrete rules follow from that projection:</p>
+<ul>
+  <li><strong>Diagonals:</strong> 1:2 pixel rise over run.</li>
+  <li><strong>Squares on the Y and Z axis:</strong> 4:3 width-to-height. The top face of a perfect cube
+      is 24px high and 32px wide.</li>
+  <li><strong>Scale, X axis:</strong> 32px ≈ 3 feet / 90 cm (horizontal).</li>
+  <li><strong>Scale, Y &amp; Z axis:</strong> 24px ≈ 3 feet / 90 cm (vertical and depth).</li>
+</ul>
+
+<h2>Color palette</h2>
+<p>The project uses a fixed, bright, diverse palette stored in the Palette folder. This is not just an
+   aesthetic preference - it is a <em>technical contract</em>.</p>
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">The palette is enforced by tooling</p>
+  <p>LPC Revised uses automated scripts to recolor clothing and skin. <strong>Any color not in the
+     approved ramps will not be recognized</strong> by those scripts - so off-palette pixels silently
+     break recoloring. Assets must keep to the ramps.</p>
+</div>
+
+<h2>Lighting &amp; shadows</h2>
+<p>Light comes from the <strong>top, slightly to the front and left</strong>. Highlights fall on the top
+   and left; shadows on the bottom and right. Shadows use a specific, semi-transparent color for
+   consistent depth.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 520 150" role="img" aria-labelledby="shadow-title shadow-desc"
+       xmlns="http://www.w3.org/2000/svg">
+    <title id="shadow-title">Standard LPC shadow color</title>
+    <desc id="shadow-desc">A swatch of the standard shadow color #2a1722 at full opacity and at its
+      120 of 256 alpha, next to the pure-black shadow used for dark environments.</desc>
+    <rect x="10" y="20" width="90" height="90" rx="6" fill="#2a1722"></rect>
+    <text x="55" y="130" font-size="12" text-anchor="middle" fill="currentColor">#2a1722</text>
+    <rect x="130" y="20" width="90" height="90" rx="6" fill="#2a1722" fill-opacity="0.469"></rect>
+    <text x="175" y="130" font-size="12" text-anchor="middle" fill="currentColor">alpha 120/256</text>
+    <rect x="250" y="20" width="90" height="90" rx="6" fill="#000000"></rect>
+    <text x="295" y="130" font-size="12" text-anchor="middle" fill="currentColor">#000000 (dark scenes)</text>
+    <g fill="none" stroke="currentColor" stroke-opacity="0.6">
+      <circle cx="430" cy="45" r="16" fill="#f4d35e" stroke="none"></circle>
+      <line x1="430" y1="45" x2="400" y2="80" stroke-width="2"></line>
+      <polygon points="398,78 388,92 410,86" fill="#2a1722" fill-opacity="0.469" stroke="none"></polygon>
+    </g>
+    <text x="430" y="130" font-size="12" text-anchor="middle" fill="currentColor">light: top-front-left</text>
+  </svg>
+  <figcaption>The standard shadow color <code>#2a1722</code> at full and 120/256 alpha, the black shadow
+     reserved for caverns/night, and the top-front-left light direction that casts shadows down and right.</figcaption>
+</figure>
+<details class="slate-figure-data">
+  <summary>Data</summary>
+  <table>
+    <thead><tr><th>Rule</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Light direction</td><td>Top, slightly front and left</td></tr>
+      <tr><td>Highlights</td><td>Top and left of objects</td></tr>
+      <tr><td>Shadows</td><td>Bottom and right of objects</td></tr>
+      <tr><td>Shadow color</td><td>#2a1722</td></tr>
+      <tr><td>Shadow alpha</td><td>120/256 (≈47%)</td></tr>
+      <tr><td>Dark environments</td><td>#000000, while keeping objects readable</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<h2>Outlines</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Strong outlines</p>
+    <ul>
+      <li>For characters and interactable objects</li>
+      <li>Solid, consistent 1-pixel thickness all the way around</li>
+      <li>Makes objects pop against the background</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Soft outlines</p>
+    <ul>
+      <li>For props, furniture, and soft-edged items</li>
+      <li>Lighter on the lit (top-front-left) portions</li>
+      <li>Color darker than the fill but lighter than the standard outline</li>
+    </ul>
+  </div>
+</div>
+<p>Most assets carry a 1-pixel outline in a darker shade of the asset's primary color. Exceptions are
+   allowed where a specific asset or aesthetic calls for it, but the rules are the default.</p>
+
+<h2>Material texture guidelines</h2>
+<p>Each common material has color and texture rules so surfaces read correctly at pixel scale.</p>
+<table>
+  <thead>
+    <tr><th>Material</th><th>Color</th><th>Texture / notes</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Wood</td>
+      <td>Stay to the ramps</td>
+      <td>Subtle horizontal/vertical grain; avoid harsh contrast; minimal or none for a clean look</td>
+    </tr>
+    <tr>
+      <td>Stone</td>
+      <td>Varied grays; moss/dirt spots; uneven brown at the bottom to blend with terrain</td>
+      <td>Uneven with some noise; smooth stone more uniform with slight noise</td>
+    </tr>
+    <tr>
+      <td>Metal</td>
+      <td>Stick to the ramps</td>
+      <td>Smooth unless old/weathered; high light-dark contrast for reflective metals</td>
+    </tr>
+    <tr>
+      <td>Glass</td>
+      <td>Lighter tones, high contrast</td>
+      <td>Smooth; 45° lines of varying thickness for reflection; alpha 120/256 when transparent</td>
+    </tr>
+    <tr>
+      <td>Fabric / Skin</td>
+      <td>Keep to the ramps (required for auto-recolor)</td>
+      <td>Preserve silhouette without busyness; silk smoother than cotton/wool; glossy = high contrast</td>
+    </tr>
+    <tr>
+      <td>Plants / Foliage</td>
+      <td>Varying greens (reds/yellows/browns by plant or season)</td>
+      <td>Texture reflects plant type (bark, veins, grass strands); add detail on larger plants; vary for a lively scene</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Relevance to this project</p>
+  <p>This is the machine-and-human contract that keeps thousands of community assets visually and
+     technically interoperable. Any sprite tool that wants to <em>generate</em> or <em>validate</em>
+     LPC-compatible art should encode these exact constraints - palette membership, 32px grid, the
+     1:2 / 4:3 ratios, the <code>#2a1722</code> shadow, and 1px outlines - as first-class rules.</p>
+</div>

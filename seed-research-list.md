@@ -23,6 +23,7 @@ https://liberatedpixelcup.github.io/Universal-LPC-Spritesheet-Character-Generato
 
 
 https://kenney.nl/
+https://github.com/ElizaWy/LPC/wiki/Style-Guide#color-palette
 
 ## Research output
 
