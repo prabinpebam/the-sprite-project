@@ -1,0 +1,113 @@
+<!-- Design proposal: Environment & terrain generator. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Generators</p>
+  <h1 class="slate-hero__title">Environment &amp; Terrain Generator</h1>
+  <p class="slate-hero__summary">The character generator's counterpart for the ground itself - grass, dirt, water,
+     floors, and paths - built as smart, autotiling terrain rather than loose images.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Where the character generator composes <em>layers</em>, the environment generator composes <em>tiles</em>.
+     The core idea: users pick a <strong>material</strong> (grass, dirt, water, stone floor, sand, path) and the
+     tool produces a complete, seamless <strong>autotile set</strong> - edges, corners, and transitions between
+     materials - all recolored from the same palette tokens. Output is a ready-to-use tileset plus the metadata an
+     engine's tilemap needs.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Grounding</p>
+  <p>Terrain sits on the same 32px grid and perspective as everything else - see the
+     <a href="../../research/art-sources/lpc-style-guide.html">LPC Revised Style Guide</a> for the material rules
+     (wood, stone, plants, water) this generator should encode.</p>
+</div>
+
+<h2>The unit of terrain: materials and transitions</h2>
+<p>A game floor is never one tile - it's a <strong>material</strong> that must tile seamlessly and blend into its
+   neighbors. The generator's job is to produce, from a single material choice, every tile needed for that
+   material to sit convincingly in a map.</p>
+<div class="slate-card-grid" data-cols="3">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Base materials</h3>
+    <p class="slate-card__body">Grass, dirt, sand, stone/rock, water, wood floor, tile floor, path - each a
+       token-driven material with texture rules.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Autotile set</h3>
+    <p class="slate-card__body">Center, edges, outer/inner corners generated so the material tiles seamlessly in
+       any shape (e.g. blob/47-tile or wang sets).</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Transitions</h3>
+    <p class="slate-card__body">Blends between materials - grass→dirt, sand→water shorelines, path→grass edges -
+       generated as transition tiles.</p>
+  </article>
+</div>
+
+<h2>How generation works</h2>
+<ol class="slate-steps">
+  <li class="slate-step">
+    <p class="slate-step__title">Choose materials</p>
+    <p>Pick one or more materials and their palette tokens (a "biome" is a set of materials that go together).</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Generate the tile matrix</p>
+    <p>The tool synthesizes the full autotile matrix per material - center, edges, corners - using texture rules
+       (grain, noise, foliage) from the style guide.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Generate transitions</p>
+    <p>For each pair of adjacent materials, produce transition/blend tiles so borders read naturally.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Scatter &amp; detail</p>
+    <p>Optional decorators - pebbles, flowers, cracks, ripples - placed with controllable density for variation.</p>
+  </li>
+  <li class="slate-step">
+    <p class="slate-step__title">Export tileset + rules</p>
+    <p>Emit the packed tileset image plus autotile/terrain metadata the engine's tilemap can consume directly.</p>
+  </li>
+</ol>
+
+<h2>Materials and their token/texture rules</h2>
+<table>
+  <thead>
+    <tr><th>Material</th><th>Palette tokens</th><th>Texture behavior (from style guide)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Grass</td><td>Greens ramp (+ seasonal reds/yellows)</td><td>Clumped strands; density-controlled blades.</td></tr>
+    <tr><td>Dirt / path</td><td>Browns ramp</td><td>Uneven noise; blends up into grass edges.</td></tr>
+    <tr><td>Sand</td><td>Warm neutrals</td><td>Fine noise; shoreline transition to water.</td></tr>
+    <tr><td>Stone / rock floor</td><td>Grays ramp</td><td>Uneven with noise; smooth variants more uniform; moss spots.</td></tr>
+    <tr><td>Wood floor</td><td>Browns ramp</td><td>Subtle plank grain; minimal for a clean look.</td></tr>
+    <tr><td>Water</td><td>Blues ramp + highlight</td><td>Animated ripples/reflections; alpha for shallows.</td></tr>
+  </tbody>
+</table>
+
+<h2>Animated terrain</h2>
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Water and FX are animated tiles</p>
+  <p>Some materials aren't static - water ripples, waterfalls, and shoreline foam are multi-frame tiles. The
+     environment generator treats animation as a first-class property of a material, reusing the same animation
+     export path as characters so an engine gets an animated tileset, not just a still image.</p>
+</div>
+
+<h2>User-facing capabilities</h2>
+<ul>
+  <li>User can generate a seamless autotile set for any material from one choice.</li>
+  <li>User can generate transition tiles between any two materials.</li>
+  <li>User can assemble a "biome" - a coherent group of materials that blend together.</li>
+  <li>User can control detail/scatter density and variation.</li>
+  <li>User can recolor materials via shared palette tokens (grass to autumn, water to swamp).</li>
+  <li>User can preview terrain on a test map (paint materials, see autotiling live).</li>
+  <li>User can export a packed tileset plus autotile/terrain rules for the target engine.</li>
+  <li>User gets merged credits for any source art the materials draw on.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why this belongs in the same product</p>
+  <p>Terrain is where most of a 2D world's surface area comes from, and it must match the characters standing on
+     it. Because it shares the grid, perspective, palette tokens, animation path, and export pipeline, it is the
+     natural second generator - not a separate tool.</p>
+</div>

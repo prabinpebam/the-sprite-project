@@ -1,0 +1,124 @@
+<!-- Design proposal: Manual edit & create (in-app editor). Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Systems</p>
+  <h1 class="slate-hero__title">Manual Edit &amp; Create</h1>
+  <p class="slate-hero__summary">The pixel-level work people do in Aseprite today - brought inside the tool, made
+     token-aware, and kept in the same project as everything they generate.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Generation gets users 90% of the way; the last 10% is hand work - a tweak here, a custom frame there, a brand
+     new asset. Today that means exporting to <strong>Aseprite</strong>, editing, and re-importing, which breaks
+     the pipeline and the token coherence. The proposal is a built-in, <strong>token-aware pixel editor</strong>:
+     draw, animate, and create with the same palette/tokens the generators use, so custom art is a first-class,
+     re-exportable project asset - not a fork.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Grounding</p>
+  <p>The <a href="../../research/market-research/indie-sprite-pipeline.html">pipeline research</a> shows Aseprite is
+     the de-facto editor (layers, onion-skinning, palettes, sheet export, CLI). This proposal absorbs that core
+     workflow rather than sending users out to it.</p>
+</div>
+
+<h2>Why edit in-app at all</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Today: round-trip to Aseprite</p>
+    <ul>
+      <li>Export generated asset out of the tool</li>
+      <li>Edit in a separate app, off the token system</li>
+      <li>Re-import, re-slice, re-wire</li>
+      <li>Custom colors drift off-palette; credits desync</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Proposed: edit in place</p>
+    <ul>
+      <li>Open any generated asset in the built-in editor</li>
+      <li>Draw with the same palette/tokens and grid</li>
+      <li>Stays in the project; re-exports through one pipeline</li>
+      <li>On-palette by default; credits stay attached</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Editor capabilities (the Aseprite-equivalent core)</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Drawing</h3>
+    <p class="slate-card__body">Pencil, eraser, fill, shapes, selection, and transforms at true pixel scale, with a
+       zoomed + actual-size split view.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Layers</h3>
+    <p class="slate-card__body">Compose in layers that map to the generator's slot/z-order model, so edits round-trip
+       cleanly.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animation</h3>
+    <p class="slate-card__body">Frames, timing, and onion-skinning; author new animations or extend a generated set.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Palette / tokens</h3>
+    <p class="slate-card__body">Paint with token-bound swatches; the palette is the project's palette, so nothing
+       goes off-ramp.</p>
+  </article>
+</div>
+
+<h2>What makes it different from Aseprite: it's token-aware</h2>
+<p>The editor is not a generic canvas - it understands the project's tokens and rules, so hand work inherits the
+   same coherence guarantees as generated content.</p>
+<dl class="slate-defs">
+  <dt>Token brushes</dt>
+  <dd>Swatches are tokens (<code>skin.shadow</code>, <code>wood.base</code>), so edits recolor with the theme.</dd>
+  <dt>Palette lock</dt>
+  <dd>Optional guardrail that keeps painting on-ramp, preserving recolor-script compatibility.</dd>
+  <dt>Style assists</dt>
+  <dd>Grid, perspective guides (1:2 / 4:3), and the fixed light direction + <code>#2a1722</code> shadow available as
+     helpers.</dd>
+  <dt>Slot awareness</dt>
+  <dd>Edits know which slot/animation/direction they belong to, so they re-integrate without manual slicing.</dd>
+</dl>
+
+<h2>Two modes: edit and create</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Edit a generated asset</h3>
+    <p class="slate-card__body">Open a character layer, tile, or prop, tweak pixels or frames, and it updates in the
+       project (and via live link, in the engine) - no export/import.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Create from scratch</h3>
+    <p class="slate-card__body">Make a brand-new asset that becomes part of a pack - a custom hat, a unique tile, a
+       one-off prop - fully token-bound and creditable.</p>
+  </article>
+</div>
+
+<h2>Closing the loop with packs and CLI</h2>
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Hand-made content becomes reusable</p>
+  <p>A created asset can be saved into a <a href="../generators/character-generator.html">pack</a>, so bespoke work
+     re-enters the generator catalog. And because editing is in-project, the <a href="composition-model.html">CLI</a>
+     can batch-apply edits or regenerate variants - the same automation story as generation.</p>
+</div>
+
+<h2>User-facing capabilities</h2>
+<ul>
+  <li>User can open any generated asset and edit its pixels or frames in-app.</li>
+  <li>User can create a new asset from scratch on the project grid.</li>
+  <li>User can draw with token-bound swatches and stay on-palette automatically.</li>
+  <li>User can author or extend animations with onion-skinning.</li>
+  <li>User can save custom art into a pack for reuse in the generators.</li>
+  <li>User can see edits reflected live in the engine via the live link.</li>
+  <li>User never has to leave the tool for routine pixel work.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why this is essential, not optional</p>
+  <p>Without in-app editing, the product is "generation only" and users still live in Aseprite for the finishing
+     touches - fragmenting the pipeline the whole project aims to unify. A token-aware editor keeps the last 10% of
+     hand work inside the coherent system.</p>
+</div>

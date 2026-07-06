@@ -1,44 +1,121 @@
-<!-- Design phase overview (placeholder scaffold). Body fragment, one H1, TL;DR first. -->
+<!-- Design phase overview - proposal hub. Body fragment, one H1, TL;DR first. -->
 
 <header class="slate-hero">
   <p class="slate-hero__eyebrow">Phase 2 · Design</p>
   <h1 class="slate-hero__title">Design</h1>
-  <p class="slate-hero__summary">Turning research findings into a concrete product shape - vision, experience, data
-     model, and architecture.</p>
+  <p class="slate-hero__summary">Turning the research into a concrete product shape - a family of generators unified by
+     a shared token system and an in-app editor.</p>
 </header>
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p>This phase is <strong>scaffolded and awaiting content</strong>. It will translate the research evidence into a
-     product vision, UX flows, the sprite/style data model, and architectural decisions. Pages will be added under
-     <code>design/</code> as the work begins.</p>
+  <p>The product is not one generator but a <strong>family of them</strong> - characters, environment/terrain, and
+     structures/props - that all compose onto the same scene and stay visually coherent through a
+     <strong>token-based style system</strong> aligned to the LPC palette guidelines. A built-in
+     <strong>manual editor</strong> covers the pixel-level work people do in Aseprite today, so users never have
+     to leave the tool. This phase details each piece and how they fit together.</p>
 </aside>
 
 <div class="slate-callout slate-callout--info" role="note">
-  <p class="slate-callout__title">Status</p>
-  <p>Placeholder. See the <a href="../landing.html">project overview</a> for how design follows research, and the
-     <a href="../research/overview.html">research phase</a> for the inputs that will drive it.</p>
+  <p class="slate-callout__title">Where this comes from</p>
+  <p>These proposals build directly on the <a href="../research/overview.html">research phase</a> - especially the
+     <a href="../research/market-research/indie-sprite-pipeline.html">indie pipeline needs</a> and the
+     <a href="../research/character-generators/ulpc-capabilities-gaps.html">ULPC capability gaps</a>.</p>
 </div>
 
-<h2>Planned contents</h2>
+<h2>The shape of the product</h2>
+<p>Three generators produce assets; two shared systems keep them coherent and editable. Everything lands in one
+   project and exports together.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 720 300" role="img" aria-labelledby="arch-title arch-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="arch-title">Product architecture at a glance</title>
+    <desc id="arch-desc">Three generators (character, environment, structures/props) sit above two shared
+      systems (token style system and manual editor), all feeding one project and a unified export.</desc>
+    <text x="360" y="22" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity="0.75">Generators</text>
+    <g font-size="12">
+      <rect x="20" y="34" width="210" height="46" rx="8" fill="#7C3AED"></rect>
+      <text x="125" y="62" text-anchor="middle" fill="#ffffff">Character generator</text>
+      <rect x="255" y="34" width="210" height="46" rx="8" fill="#7C3AED"></rect>
+      <text x="360" y="62" text-anchor="middle" fill="#ffffff">Environment / terrain</text>
+      <rect x="490" y="34" width="210" height="46" rx="8" fill="#7C3AED"></rect>
+      <text x="595" y="62" text-anchor="middle" fill="#ffffff">Structures &amp; props</text>
+    </g>
+    <g stroke="currentColor" stroke-opacity="0.4">
+      <line x1="125" y1="80" x2="125" y2="110"></line>
+      <line x1="360" y1="80" x2="360" y2="110"></line>
+      <line x1="595" y1="80" x2="595" y2="110"></line>
+    </g>
+    <text x="360" y="128" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity="0.75">Shared systems</text>
+    <g font-size="12">
+      <rect x="80" y="140" width="250" height="46" rx="8" fill="none" stroke="#7C3AED" stroke-width="2"></rect>
+      <text x="205" y="168" text-anchor="middle" fill="currentColor">Token style system</text>
+      <rect x="390" y="140" width="250" height="46" rx="8" fill="none" stroke="#7C3AED" stroke-width="2"></rect>
+      <text x="515" y="168" text-anchor="middle" fill="currentColor">Manual editor</text>
+    </g>
+    <g stroke="currentColor" stroke-opacity="0.4">
+      <line x1="205" y1="186" x2="360" y2="212"></line>
+      <line x1="515" y1="186" x2="360" y2="212"></line>
+    </g>
+    <g font-size="12">
+      <rect x="240" y="214" width="240" height="44" rx="8" fill="#7C3AED" fill-opacity="0.18" stroke="#7C3AED"></rect>
+      <text x="360" y="241" text-anchor="middle" fill="currentColor">One project</text>
+    </g>
+    <polygon points="360,258 352,272 368,272" fill="currentColor" fill-opacity="0.5"></polygon>
+    <text x="360" y="292" font-size="12" text-anchor="middle" fill="currentColor">Unified export · live link · CLI</text>
+  </svg>
+  <figcaption>Three generators over two shared systems, composited into one project with a single export path.</figcaption>
+</figure>
+
+<h2>Proposals</h2>
 <div class="slate-card-grid" data-cols="2">
-  <article class="slate-card">
-    <h3 class="slate-card__title">Product vision &amp; positioning</h3>
-    <p class="slate-card__body">Who it's for, the core promise, and how it differs from existing generators and
-       asset libraries.</p>
+  <article class="slate-card slate-card--interactive">
+    <a href="generators/character-generator.html">
+      <h3 class="slate-card__title">Character generator (expanded)</h3>
+      <p class="slate-card__body">Beyond the base body: fold in themed packs (pirates, horses/mounts, animals) and
+         make the catalog extensible.</p>
+    </a>
   </article>
-  <article class="slate-card">
-    <h3 class="slate-card__title">UX flows</h3>
-    <p class="slate-card__body">Key journeys: source/generate a character, recolor, animate, export engine-ready
-       assets with correct credits.</p>
+  <article class="slate-card slate-card--interactive">
+    <a href="generators/environment-generator.html">
+      <h3 class="slate-card__title">Environment &amp; terrain generator</h3>
+      <p class="slate-card__body">Tiles for grass, dirt, water, floors, paths - autotiling, transitions, and
+         seamless terrain.</p>
+    </a>
   </article>
-  <article class="slate-card">
-    <h3 class="slate-card__title">Sprite &amp; style data model</h3>
-    <p class="slate-card__body">Layers, palettes, animations, licensing metadata - the schema that everything
-       builds on.</p>
+  <article class="slate-card slate-card--interactive">
+    <a href="generators/structures-props.html">
+      <h3 class="slate-card__title">Structures &amp; props generator</h3>
+      <p class="slate-card__body">Houses, buildings, furniture, and objects - modular parts assembled in the LPC
+         perspective.</p>
+    </a>
   </article>
-  <article class="slate-card">
-    <h3 class="slate-card__title">Architecture decisions</h3>
-    <p class="slate-card__body">Web-first stack, rendering/recolor approach, export pipeline, and extensibility.</p>
+  <article class="slate-card slate-card--interactive">
+    <a href="systems/composition-model.html">
+      <h3 class="slate-card__title">How it comes together</h3>
+      <p class="slate-card__body">The scene/composition model that lets characters, terrain, and structures share one
+         project and export.</p>
+    </a>
   </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="systems/token-coherence.html">
+      <h3 class="slate-card__title">Token-based coherence</h3>
+      <p class="slate-card__body">A palette-aligned token system that drives one consistent look across every generator.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="systems/manual-editing.html">
+      <h3 class="slate-card__title">Manual edit &amp; create</h3>
+      <p class="slate-card__body">In-app pixel editing - the Aseprite-style work people do separately today, brought
+         inside and token-aware.</p>
+    </a>
+  </article>
+</div>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">The throughline</p>
+  <p>Generators create; the <strong>token system</strong> keeps them coherent; the <strong>editor</strong> lets
+     users go off-catalog without breaking that coherence; the <strong>composition model</strong> makes them one
+     scene. That combination is what turns a character tool into a complete world-asset pipeline.</p>
 </div>

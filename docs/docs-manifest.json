@@ -17,7 +17,13 @@
     { "path": "research/art-sources/lpc-horses.html", "title": "LPC Horses & Rework", "order": 20 },
     { "path": "research/broader-libraries/kenney.html", "title": "Kenney.nl", "order": 21 },
 
-    { "path": "design/overview.html", "title": "Design Overview", "order": 30, "icon": "draw", "badge": "planned" },
+    { "path": "design/overview.html", "title": "Design Overview", "order": 30, "icon": "draw" },
+    { "path": "design/generators/character-generator.html", "title": "Character Generator (Expanded)", "order": 31, "badge": "proposal" },
+    { "path": "design/generators/environment-generator.html", "title": "Environment & Terrain Generator", "order": 32, "badge": "proposal" },
+    { "path": "design/generators/structures-props.html", "title": "Structures & Props Generator", "order": 33, "badge": "proposal" },
+    { "path": "design/systems/composition-model.html", "title": "How It Comes Together", "order": 34, "badge": "proposal" },
+    { "path": "design/systems/token-coherence.html", "title": "Token-Based Coherence", "order": 35, "badge": "proposal" },
+    { "path": "design/systems/manual-editing.html", "title": "Manual Edit & Create", "order": 36, "badge": "proposal" },
 
     { "path": "planning/overview.html", "title": "Planning Overview", "order": 40, "icon": "checklist", "badge": "planned" },
 

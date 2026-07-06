@@ -1,0 +1,127 @@
+<!-- Design proposal: Character generator (expanded). Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Generators</p>
+  <h1 class="slate-hero__title">Character Generator (Expanded)</h1>
+  <p class="slate-hero__summary">The character generator is only the nucleus. This proposal grows it from a fixed
+     body-and-clothes tool into an extensible, pack-driven character system.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Today's LPC generator is characters + clothing. But the wider LPC world already includes separately
+     distributed packs - <strong>pirates</strong>, <strong>horses/mounts</strong>, animals, and more - that users
+     assemble by hand. The proposal: make the catalog a <strong>first-class, extensible pack system</strong> so
+     themed and non-humanoid content (mounts, animals, riders) plug in cleanly, all sharing the same layer,
+     palette, and license model.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Grounding</p>
+  <p>See the research on <a href="../../research/character-generators/ulpc-generator.html">the ULPC generator</a>,
+     its <a href="../../research/character-generators/ulpc-capabilities-gaps.html">gaps</a>, and the art packs
+     <a href="../../research/art-sources/lpc-pirates.html">Pirates</a> and
+     <a href="../../research/art-sources/lpc-horses.html">Horses</a>.</p>
+</div>
+
+<h2>The problem with a fixed catalog</h2>
+<p>Great character content exists <em>outside</em> the base generator and is merged in slowly or used manually.
+   The Pirates pack and the Horses/Rework sets are perfect examples - clearly compatible, yet not first-class.</p>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Today</p>
+    <ul>
+      <li>One curated catalog; new packs merged upstream slowly</li>
+      <li>Humanoid-centric; mounts/animals awkward or absent</li>
+      <li>Themed sets (pirates) live as separate downloads</li>
+      <li>No user-supplied packs</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Proposed</p>
+    <ul>
+      <li>Catalog = a set of installable <strong>packs</strong></li>
+      <li>Subject types: humanoid, mount, animal, creature</li>
+      <li>Themed packs are one-click add-ons</li>
+      <li>Users/community can register their own packs</li>
+    </ul>
+  </div>
+</div>
+
+<h2>A pack-based catalog</h2>
+<p>Every piece of character content - base bodies, clothing, the pirate wardrobe, a horse, a rider rig - is a
+   <strong>pack</strong>: a bundle of layers with slots, palette bindings, animation coverage, and license
+   metadata. The generator becomes a host that composes whatever packs are installed.</p>
+<div class="slate-card-grid" data-cols="3">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Base packs</h3>
+    <p class="slate-card__body">Body types and core anatomy (male, female, teen, child, muscular, pregnant) plus
+       heads, hair, and faces.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Wardrobe packs</h3>
+    <p class="slate-card__body">Clothing, armor, and themed sets like <a href="../../research/art-sources/lpc-pirates.html">Pirates</a>
+       (coats, hats, hooks, peg legs) as drop-in add-ons.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Mount &amp; animal packs</h3>
+    <p class="slate-card__body"><a href="../../research/art-sources/lpc-horses.html">Horses</a>, unicorns, pegasus,
+       farm animals - as ridable mounts or standalone creatures.</p>
+  </article>
+</div>
+
+<h2>Subject types beyond the humanoid</h2>
+<p>The base generator assumes a humanoid skeleton. Expanding means modeling other subject types, each with its own
+   slot map and animation set, while reusing the shared palette and export machinery.</p>
+<table>
+  <thead>
+    <tr><th>Subject type</th><th>Example content</th><th>Special handling</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Humanoid</td><td>Bodies, clothing, pirates, gear</td><td>Existing LPC slot map; oversize weapon frames.</td></tr>
+    <tr><td>Mount</td><td>Horses + tack, saddles, reins</td><td>Rider compositing (front/back split, leg overlays).</td></tr>
+    <tr><td>Animal / creature</td><td>Farm animals, unicorn, pegasus</td><td>Own frame counts; wing/effect layers.</td></tr>
+    <tr><td>Rider pairing</td><td>Character on mount</td><td>Two subjects combined into one animated unit.</td></tr>
+  </tbody>
+</table>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">The rider/mount challenge</p>
+  <p>Mounts are the hard case: a character on a horse needs correct draw order (draw part of the horse, then the
+     rider, then an overlay of the horse's near legs) and per-direction masks. The Horses research documents exactly
+     this technique - the pack system should encode those compositing rules as data, not one-off code.</p>
+</div>
+
+<h2>What a pack contains</h2>
+<dl class="slate-defs">
+  <dt>Slots</dt>
+  <dd>Which layer positions it fills (e.g. <code>torso</code>, <code>hat</code>, <code>mount.saddle</code>).</dd>
+  <dt>Layers &amp; z-order</dt>
+  <dd>The images per animation/direction and where they sit in the draw stack.</dd>
+  <dt>Palette bindings</dt>
+  <dd>Which recolorable regions map to which palette tokens (see
+     <a href="../systems/token-coherence.html">token coherence</a>).</dd>
+  <dt>Animation coverage</dt>
+  <dd>Which animations/frames the pack supports, so the UI can show gaps.</dd>
+  <dt>Compositing rules</dt>
+  <dd>Masks and overlays for hard cases like riders on mounts.</dd>
+  <dt>License metadata</dt>
+  <dd>Per-asset license + author, feeding automatic credits.</dd>
+</dl>
+
+<h2>User-facing capabilities</h2>
+<ul>
+  <li>User can browse and enable/disable packs, including themed and community packs.</li>
+  <li>User can build humanoids, mounts, animals, and rider+mount pairings.</li>
+  <li>User can see per-animation coverage and which packs fill which slots.</li>
+  <li>User can recolor any pack's regions through the shared palette tokens.</li>
+  <li>User can register a custom pack (their own art) that behaves like a built-in one.</li>
+  <li>User gets correct, merged credits spanning every pack used.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why this matters</p>
+  <p>Turning the catalog into packs is what lets the character generator keep pace with the community's output
+     (pirates today, something new tomorrow) and extend past humanoids - without forking the tool each time. It is
+     also the model the environment and structures generators reuse.</p>
+</div>

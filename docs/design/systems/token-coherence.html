@@ -1,0 +1,140 @@
+<!-- Design proposal: Token-based coherence. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Systems</p>
+  <h1 class="slate-hero__title">Token-Based Coherence</h1>
+  <p class="slate-hero__summary">A palette-aligned token system that makes every generator - characters, terrain,
+     structures - share one consistent look.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Assets don't reference raw colors; they reference <strong>tokens</strong> - named roles like
+     <code>skin.base</code>, <code>foliage.mid</code>, <code>wood.shadow</code> - that resolve to specific entries
+     in the shared palette's color ramps. Because the palette follows the LPC style guide (and its recolor scripts
+     only recognize on-ramp colors), tokens guarantee coherence: swap a theme and every generator recolors together,
+     correctly, by construction.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Grounding</p>
+  <p>The <a href="../../research/art-sources/lpc-style-guide.html">LPC Revised Style Guide</a> mandates a fixed
+     palette organized as ramps, enforced by automated recolor scripts - "any color not in the ramps will not be
+     recognized." Tokens turn that hard constraint into a design advantage.</p>
+</div>
+
+<h2>The problem tokens solve</h2>
+<p>If each asset bakes in literal RGB values, mixing sources produces clashing palettes and manual recolor is
+   tedious and error-prone (a top pipeline pain point). Coherence has to be <em>structural</em>, not a cleanup step.</p>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Raw colors (today)</p>
+    <ul>
+      <li>Each pack ships its own literal colors</li>
+      <li>Mixing packs = clashing palettes</li>
+      <li>Recoloring is manual, per asset</li>
+      <li>Off-palette pixels silently break recolor scripts</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Tokens (proposed)</p>
+    <ul>
+      <li>Assets reference token roles, not RGB</li>
+      <li>All packs resolve through one palette</li>
+      <li>Recolor = rebind tokens, project-wide</li>
+      <li>Only on-ramp colors are ever produced</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Three layers: palette → ramps → tokens</h2>
+<p>The system is a small, strict hierarchy borrowed from design-token practice and fitted to pixel-art ramps.</p>
+<dl class="slate-defs">
+  <dt>Palette</dt>
+  <dd>The full fixed set of allowed colors (the LPC palette). Nothing renders outside it.</dd>
+  <dt>Ramps</dt>
+  <dd>Ordered shade sequences within the palette - e.g. a green ramp from darkest to lightest for foliage.</dd>
+  <dt>Tokens</dt>
+  <dd>Named semantic roles that point at a ramp + position, e.g. <code>foliage.shadow</code> → green ramp, step 2.</dd>
+</dl>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 700 210" role="img" aria-labelledby="tok-title tok-desc"
+       xmlns="http://www.w3.org/2000/svg">
+    <title id="tok-title">Token resolution through ramps to palette</title>
+    <desc id="tok-desc">A token 'foliage.mid' points to the green ramp at a mid step, which resolves to a
+      specific palette color. Rebinding the token to a different ramp recolors everything using it.</desc>
+    <text x="10" y="24" font-size="13" fill="currentColor">Token</text>
+    <rect x="10" y="34" width="150" height="30" rx="5" fill="#7C3AED"></rect>
+    <text x="85" y="54" font-size="12" text-anchor="middle" fill="#ffffff">foliage.mid</text>
+    <text x="180" y="53" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+    <text x="220" y="24" font-size="13" fill="currentColor">Green ramp</text>
+    <g>
+      <rect x="220" y="34" width="30" height="30" fill="#1e3a1e"></rect>
+      <rect x="250" y="34" width="30" height="30" fill="#2f5a2a"></rect>
+      <rect x="280" y="34" width="30" height="30" fill="#4a8b3a" stroke="#ffffff" stroke-width="2"></rect>
+      <rect x="310" y="34" width="30" height="30" fill="#6fb84e"></rect>
+      <rect x="340" y="34" width="30" height="30" fill="#a5e06a"></rect>
+    </g>
+    <text x="400" y="53" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+    <rect x="440" y="34" width="30" height="30" rx="4" fill="#4a8b3a"></rect>
+    <text x="490" y="54" font-size="12" fill="currentColor">resolved color</text>
+
+    <text x="10" y="120" font-size="13" fill="currentColor">Rebind the same token &#8594; autumn ramp</text>
+    <rect x="10" y="130" width="150" height="30" rx="5" fill="#7C3AED"></rect>
+    <text x="85" y="150" font-size="12" text-anchor="middle" fill="#ffffff">foliage.mid</text>
+    <text x="180" y="149" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+    <g>
+      <rect x="220" y="130" width="30" height="30" fill="#5a2a12"></rect>
+      <rect x="250" y="130" width="30" height="30" fill="#8a4a1e"></rect>
+      <rect x="280" y="130" width="30" height="30" fill="#c67a2a" stroke="#ffffff" stroke-width="2"></rect>
+      <rect x="310" y="130" width="30" height="30" fill="#e0a54e"></rect>
+      <rect x="340" y="130" width="30" height="30" fill="#f0d06a"></rect>
+    </g>
+    <text x="400" y="149" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
+    <rect x="440" y="130" width="30" height="30" rx="4" fill="#c67a2a"></rect>
+    <text x="490" y="150" font-size="12" fill="currentColor">everything updates</text>
+  </svg>
+  <figcaption>A token resolves through a ramp to a palette color. Rebinding the token to another ramp recolors
+     every asset that uses it - the mechanism behind project-wide theming.</figcaption>
+</figure>
+
+<h2>Shared token vocabulary across generators</h2>
+<p>Generators use overlapping token namespaces so a single theme touches all of them coherently.</p>
+<table>
+  <thead>
+    <tr><th>Namespace</th><th>Example tokens</th><th>Used by</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>skin</td><td>skin.base, skin.shadow, skin.highlight</td><td>Characters</td></tr>
+    <tr><td>cloth</td><td>cloth.primary, cloth.trim</td><td>Characters, structures (awnings, banners)</td></tr>
+    <tr><td>foliage</td><td>foliage.shadow/mid/light</td><td>Environment, props (trees)</td></tr>
+    <tr><td>ground</td><td>ground.dirt, ground.sand, ground.stone</td><td>Environment, structure bases</td></tr>
+    <tr><td>water</td><td>water.deep, water.shallow, water.foam</td><td>Environment</td></tr>
+    <tr><td>wood / stone / metal</td><td>wood.base/shadow, stone.mid, metal.spec</td><td>Structures, props, characters (gear)</td></tr>
+  </tbody>
+</table>
+
+<h2>Lighting tokens too</h2>
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Shading is tokenized as well</p>
+  <p>The style guide fixes light direction (top-front-left) and a specific shadow color (<code>#2a1722</code> at
+     120/256 alpha). Those become tokens like <code>shadow.cast</code> and <code>shadow.dark</code>, so generated
+     and hand-edited art shade identically - coherence extends to light, not just hue.</p>
+</div>
+
+<h2>User-facing capabilities</h2>
+<ul>
+  <li>User can retheme an entire project by rebinding tokens (summer → autumn, day → dusk).</li>
+  <li>User can define custom themes (token → ramp mappings) and reuse them across projects.</li>
+  <li>User can trust that every generated and edited asset stays on-palette and recolor-script-compatible.</li>
+  <li>User can recolor one asset by overriding specific tokens without breaking the shared theme.</li>
+  <li>User can see which tokens an asset uses, and where a token is used across the project.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why tokens are the keystone</p>
+  <p>Coherence is the difference between "a pile of assets" and "a world." Tokens make coherence automatic and
+     palette-legal, and they are the shared language that lets three generators - plus the manual editor - all speak
+     the same visual dialect.</p>
+</div>

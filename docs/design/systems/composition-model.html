@@ -1,0 +1,126 @@
+<!-- Design proposal: Composition model - how the generators come together. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Systems</p>
+  <h1 class="slate-hero__title">How It Comes Together</h1>
+  <p class="slate-hero__summary">The composition model that lets characters, terrain, and structures live in one
+     project, share a look, and export together.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>The three generators are not separate apps - they are <strong>producers</strong> that emit assets into a single
+     <strong>project</strong>. A shared <strong>scene/composition layer</strong> places those assets on the same
+     grid with correct depth sorting; a shared <strong>token style system</strong> keeps them coherent; a shared
+     <strong>export pipeline</strong> (files, live link, CLI) ships them together. The glue is common data, not
+     copied features.</p>
+</aside>
+
+<h2>One project, many producers</h2>
+<p>Everything a user makes belongs to a project. Each generator writes into it using the same underlying asset
+   model, so a character, a grass tileset, and a house are siblings that already agree on grid, palette, and
+   license format.</p>
+
+<figure class="slate-figure">
+  <svg viewBox="0 0 720 260" role="img" aria-labelledby="comp-title comp-desc"
+       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <title id="comp-title">Composition data flow</title>
+    <desc id="comp-desc">Three generators write assets into a shared project; the token system styles them; the
+      scene composes them; the export pipeline emits files, a live link, and CLI output.</desc>
+    <g font-size="11">
+      <rect x="10" y="16" width="150" height="40" rx="7" fill="#7C3AED"></rect>
+      <text x="85" y="41" text-anchor="middle" fill="#ffffff">Character gen</text>
+      <rect x="10" y="66" width="150" height="40" rx="7" fill="#7C3AED"></rect>
+      <text x="85" y="91" text-anchor="middle" fill="#ffffff">Environment gen</text>
+      <rect x="10" y="116" width="150" height="40" rx="7" fill="#7C3AED"></rect>
+      <text x="85" y="141" text-anchor="middle" fill="#ffffff">Structures gen</text>
+    </g>
+    <g stroke="currentColor" stroke-opacity="0.4">
+      <line x1="160" y1="36" x2="250" y2="86"></line>
+      <line x1="160" y1="86" x2="250" y2="86"></line>
+      <line x1="160" y1="136" x2="250" y2="86"></line>
+    </g>
+    <g font-size="12">
+      <rect x="250" y="60" width="180" height="52" rx="8" fill="#7C3AED" fill-opacity="0.18" stroke="#7C3AED"></rect>
+      <text x="340" y="82" text-anchor="middle" fill="currentColor">Project</text>
+      <text x="340" y="100" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">assets · tokens · licenses</text>
+    </g>
+    <g stroke="currentColor" stroke-opacity="0.4">
+      <line x1="340" y1="112" x2="340" y2="150"></line>
+    </g>
+    <g font-size="11">
+      <rect x="250" y="152" width="180" height="38" rx="7" fill="none" stroke="#7C3AED" stroke-width="2"></rect>
+      <text x="340" y="176" text-anchor="middle" fill="currentColor">Scene / composition</text>
+    </g>
+    <g stroke="currentColor" stroke-opacity="0.4">
+      <line x1="430" y1="86" x2="500" y2="86"></line>
+    </g>
+    <g font-size="11">
+      <rect x="500" y="40" width="200" height="38" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="600" y="64" text-anchor="middle" fill="currentColor">Export: files</text>
+      <rect x="500" y="86" width="200" height="38" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="600" y="110" text-anchor="middle" fill="currentColor">Export: live link</text>
+      <rect x="500" y="132" width="200" height="38" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
+      <text x="600" y="156" text-anchor="middle" fill="currentColor">Export: CLI / API</text>
+    </g>
+  </svg>
+  <figcaption>Generators feed one project; the scene composes assets; a single export pipeline emits files, a live
+     link, and CLI output.</figcaption>
+</figure>
+
+<h2>The shared asset model</h2>
+<p>Whatever the generator, an asset carries the same core fields so the rest of the system can treat them
+   uniformly.</p>
+<dl class="slate-defs">
+  <dt>Grid &amp; size</dt>
+  <dd>32px-aligned dimensions and footprint, so everything snaps to the same tilemap.</dd>
+  <dt>Anchor &amp; z-order</dt>
+  <dd>Ground origin and depth rules for correct sorting between characters, props, and terrain.</dd>
+  <dt>Palette tokens</dt>
+  <dd>Recolorable regions bound to shared tokens (see <a href="token-coherence.html">token coherence</a>).</dd>
+  <dt>Animation set</dt>
+  <dd>Frames/directions via one animation format used by all generators.</dd>
+  <dt>License metadata</dt>
+  <dd>Per-source credits that merge across every asset in the project.</dd>
+</dl>
+
+<h2>The scene: composing across generators</h2>
+<p>A scene is an optional composition surface where the three asset kinds meet: paint terrain, drop structures and
+   props, place characters. Its value is <strong>verification and export context</strong> - seeing that a character
+   reads against the ground and sorts correctly behind a roof, and exporting a coherent set rather than loose
+   files.</p>
+<ul>
+  <li>Terrain forms the base layer via autotiling.</li>
+  <li>Structures and props sort by anchor/z-order against characters.</li>
+  <li>Characters preview their animations in situ.</li>
+  <li>The whole scene, or any selection, exports together.</li>
+</ul>
+
+<h2>Coherence and editing run through everything</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card slate-card--interactive">
+    <a href="token-coherence.html">
+      <h3 class="slate-card__title">Token style system</h3>
+      <p class="slate-card__body">One palette-aligned token set styles every generator, so a project-wide
+         recolor stays consistent across characters, terrain, and structures.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="manual-editing.html">
+      <h3 class="slate-card__title">Manual editor</h3>
+      <p class="slate-card__body">Any generated asset can be hand-edited in-app without leaving the token system,
+         so custom work stays coherent and re-exportable.</p>
+    </a>
+  </article>
+</div>
+
+<h2>One export pipeline</h2>
+<p>Because all assets share the model, a single pipeline serves every generator: packed files (atlas + metadata),
+   an engine <strong>live link</strong> that writes native resources into a running project, and a
+   <strong>CLI/API</strong> for agentic automation. Credits merge automatically across the whole project.</p>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">The unifying idea</p>
+  <p>The generators differ in <em>what</em> they make but agree on <em>how</em> assets are described. That shared
+     description - grid, tokens, animation, license - is what lets three tools behave like one coherent product.</p>
+</div>

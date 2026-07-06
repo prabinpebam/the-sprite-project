@@ -1,0 +1,104 @@
+<!-- Design proposal: Structures & props generator. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Design · Generators</p>
+  <h1 class="slate-hero__title">Structures &amp; Props Generator</h1>
+  <p class="slate-hero__summary">Houses, buildings, furniture, and objects - assembled from modular parts in the LPC
+     three-quarter perspective, filling the space between terrain and characters.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>The third generator builds <strong>objects with volume</strong>: a house from walls + roof + door + windows,
+     furniture and clutter as placeable props. It works like the character generator (modular parts, palette
+     tokens, correct z-order) but adds <strong>perspective-correct assembly</strong> - respecting the style
+     guide's pixel ratios - and outputs multi-tile objects with the footprint/anchor data a scene needs.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Grounding</p>
+  <p>Structures must obey the <a href="../../research/art-sources/lpc-style-guide.html">style guide's</a>
+     perspective and pixel ratios (1:2 diagonals, 4:3 Y/Z squares) and material rules for wood, stone, metal,
+     and glass.</p>
+</div>
+
+<h2>Two content classes</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Structures</p>
+    <ul>
+      <li>Buildings: houses, shops, towers, walls, fences</li>
+      <li>Assembled from parts: base, walls, roof, door, windows, trim</li>
+      <li>Multi-tile footprints with an anchor and collision hint</li>
+      <li>Interior vs. exterior variants</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Props</p>
+    <ul>
+      <li>Furniture: tables, chairs, beds, chests, shelves</li>
+      <li>Clutter: barrels, crates, pots, signs, lamps</li>
+      <li>Nature props: trees, bushes, rocks, stumps</li>
+      <li>Single- or few-tile, often with a shadow + anchor</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Modular structure assembly</h2>
+<p>A building is not one sprite - it is a kit of parts combined under perspective rules. The generator exposes the
+   parts and assembles them so the result is always geometrically consistent.</p>
+<div class="slate-card-grid" data-cols="3">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Shell</h3>
+    <p class="slate-card__body">Footprint and wall height define the box; the tool draws walls and the roof in the
+       correct 4:3 / 1:2 ratios.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Openings &amp; trim</h3>
+    <p class="slate-card__body">Doors, windows, chimneys, awnings, signs - snapped to valid positions on the shell.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Materials</h3>
+    <p class="slate-card__body">Wall/roof/trim materials (wood, stone, thatch, tile) driven by palette tokens and the
+       style guide's texture rules.</p>
+  </article>
+</div>
+
+<h2>Props as a pack, like characters</h2>
+<p>Props reuse the character generator's <a href="character-generator.html">pack model</a>: a prop pack is a set of
+   objects with palette bindings, an anchor/footprint, an optional animation (a flickering lamp, a swaying tree),
+   and license metadata. Trees are the bridge to terrain - a "nature" pack shared between environment and props.</p>
+
+<h2>What a structure/prop carries</h2>
+<dl class="slate-defs">
+  <dt>Footprint</dt>
+  <dd>The tile area it occupies, for placement and collision hints.</dd>
+  <dt>Anchor / origin</dt>
+  <dd>The base point that sits on the ground, so props stand correctly in a scene.</dd>
+  <dt>Z-order / depth</dt>
+  <dd>How it sorts against characters (walk behind a roof, in front of a fence base).</dd>
+  <dt>Palette tokens</dt>
+  <dd>Recolorable materials, shared with every other generator.</dd>
+  <dt>Optional animation</dt>
+  <dd>Lamp flicker, water wheel, banner sway - via the shared animation path.</dd>
+  <dt>License metadata</dt>
+  <dd>Per-part credits, merged on export.</dd>
+</dl>
+
+<h2>User-facing capabilities</h2>
+<ul>
+  <li>User can assemble a building from parts (shell, roof, door, windows, trim) that stay perspective-correct.</li>
+  <li>User can place and recolor props (furniture, clutter, nature) from packs.</li>
+  <li>User can set a footprint, anchor, and z-order so objects drop into a scene correctly.</li>
+  <li>User can give a prop an optional animation.</li>
+  <li>User can recolor structures/props via the shared palette tokens.</li>
+  <li>User can export multi-tile objects with placement metadata for the target engine.</li>
+  <li>User gets merged credits across all parts used.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Why this completes the set</p>
+  <p>Characters + terrain + structures/props is the full vocabulary of a 2D scene. Sharing the pack model, palette
+     tokens, perspective rules, and export path means the three generators are variations on one engine - not three
+     products bolted together.</p>
+</div>
