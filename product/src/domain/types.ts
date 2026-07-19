@@ -67,6 +67,10 @@ export interface CharacterRecipe {
   overrides: Partial<ThemeTokens>
 }
 
+export interface CharacterRecipeV1 extends CharacterRecipe {
+  schemaVersion: 1
+}
+
 export interface PreviewState {
   animation: AnimationId
   direction: Direction
@@ -86,6 +90,32 @@ export interface SpriteProject {
   preview: PreviewState
   createdAt: string
   updatedAt: string
+}
+
+export interface PackLockRef {
+  packId: string
+  version: string
+  sha256: string
+}
+
+export interface SpriteProjectV2 {
+  schemaVersion: 2
+  id: string
+  name: string
+  activeRecipeId: string
+  recipeIds: string[]
+  packLocks: PackLockRef[]
+  themePresetId: string
+  theme: ThemeTokens
+  preview: PreviewState
+  createdAt: string
+  updatedAt: string
+  revision: number
+}
+
+export interface ProjectGraphV2 {
+  project: SpriteProjectV2
+  recipes: Record<string, CharacterRecipeV1>
 }
 
 export interface AnimationFrame {

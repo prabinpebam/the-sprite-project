@@ -9,7 +9,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-OPEN-ZERO-INSTALL`, `UC-WEB-CREATE-PROJECT`, `UC-WEB-LIST-PROJECTS`, `UC-WEB-OPEN-PROJECT`, `UC-WEB-RENAME-PROJECT`, `UC-WEB-DELETE-PROJECT`
 - **Preconditions:** GitHub Pages application loaded
 - **Completion:** Browser project library manages several projects without cross-project mutation
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -26,7 +26,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-AUTOSAVE-IDB`, `UC-WEB-RESTORE-SESSION`, `UC-WEB-INSPECT-STORAGE`
 - **Preconditions:** IndexedDB project open
 - **Completion:** Semantic edit persists transactionally and restores exactly
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -42,7 +42,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-MIGRATE-LEGACY`
 - **Preconditions:** The exact verified-MVP localStorage key exists; No verified legacy migration marker exists
 - **Completion:** A valid version-1 project exists once as a parity-checked version-2 graph or the untouched legacy bytes remain recoverable
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -58,7 +58,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-RESTORE-SNAPSHOT`
 - **Preconditions:** An open project has at least one known-good snapshot
 - **Completion:** The selected snapshot becomes a new current revision while the pre-restore graph remains recoverable
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -72,7 +72,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-INSPECT-STORAGE`, `UC-WEB-RECOVER-STORAGE`, `UC-WEB-EXPORT-ARCHIVE`
 - **Preconditions:** Estimated browser storage is at or above warning threshold or a write raises QuotaExceededError
 - **Completion:** Safe cleanup or backup completes without silent loss of current, owned, referenced, migration-recovery, or last-known-good data
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -87,7 +87,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-AUTOSAVE-IDB`, `UC-WEB-RESOLVE-SAVE-CONFLICT`
 - **Preconditions:** Two same-origin tabs loaded the same project revision
 - **Completion:** A stale tab cannot overwrite the newer revision without one explicit recovery choice
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -102,7 +102,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-EXPORT-ARCHIVE`, `UC-WEB-IMPORT-ARCHIVE`
 - **Preconditions:** Valid browser project
 - **Completion:** Archive restores the project after browser project storage is cleared
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -118,7 +118,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-WORK-OFFLINE`, `UC-WEB-OPEN-PROJECT`
 - **Preconditions:** App and selected packs loaded online once
 - **Completion:** Installed project workflow and exports complete offline
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -133,7 +133,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-DESKTOP-LAUNCH-PORTABLE`, `UC-DESKTOP-SEE-HOST`, `UC-DESKTOP-OPEN-RECENT`
 - **Preconditions:** Portable Windows x64 ZIP extracted
 - **Completion:** Desktop host opens with correct capabilities and recent-folder state
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -148,7 +148,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-DESKTOP-CREATE-FOLDER`, `UC-DESKTOP-OPEN-FOLDER`, `UC-DESKTOP-SAVE-ATOMIC`, `UC-DESKTOP-SAVE-AS`, `UC-DESKTOP-OPEN-RECENT`, `UC-DESKTOP-RESOLVE-EXTERNAL-CHANGE`
 - **Preconditions:** Desktop host active
 - **Completion:** Project folder creates, saves, opens, and relocates without semantic drift
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -166,7 +166,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-DESKTOP-DIRECT-EXPORT`
 - **Preconditions:** Complete desktop project
 - **Completion:** Generic and Godot outputs are written safely to selected directory
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -182,7 +182,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-DESKTOP-SAVE-ATOMIC`, `UC-DESKTOP-CLOSE-SAFELY`
 - **Preconditions:** Dirty desktop project
 - **Completion:** Save, Discard, and Cancel each produce the exact selected outcome
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -198,7 +198,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-WEB-EXPORT-ARCHIVE`, `UC-CROSS-HOST-WEB-TO-DESKTOP`, `UC-CROSS-HOST-SAME-FILE`, `UC-CROSS-HOST-IDENTICAL-OUTPUT`, `UC-DESKTOP-OPEN-FOLDER`
 - **Preconditions:** Verified project in web
 - **Completion:** Electron continues the web project with exact parity
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -214,7 +214,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-CROSS-HOST-DESKTOP-TO-WEB`, `UC-CROSS-HOST-SAME-FILE`, `UC-CROSS-HOST-IDENTICAL-OUTPUT`, `UC-WEB-IMPORT-ARCHIVE`
 - **Preconditions:** Verified project folder in Electron
 - **Completion:** Web continues the desktop project with exact parity
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -230,7 +230,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 - **Capabilities:** `UC-SEE-DATA-LOCATION`, `UC-WEB-EXPORT-ARCHIVE`, `UC-DESKTOP-SEE-HOST`
 - **Preconditions:** Project open on web or desktop
 - **Completion:** User sees storage location and owns a portable backup with no undeclared transfer
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|

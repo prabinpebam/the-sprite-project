@@ -1,0 +1,18 @@
+{
+  "name": "The Sprite Project",
+  "short_name": "Sprite Project",
+  "description": "A local-first character sprite workspace.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4ef",
+  "theme_color": "#b11f4b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

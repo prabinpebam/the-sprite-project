@@ -140,4 +140,4 @@ Severity does not prove ROI. A high-impact theoretical claim still needs evidenc
 
 Use `bytes` mode for stable Markdown/HTML/JSON contracts. Use `traceability-contract` for traceability JSON; it excludes `status`, `evidence`, `runs`, and `issues` from the semantic projection so delivery evidence can advance while promises, scenarios, oracles, gates, exclusions, and decisions remain protected.
 
-Use `html-contract` for generated UPD pages. It excludes the generated lock notice, lifecycle status badges, the TL;DR lifecycle status value, and CRLF/LF differences. Host classifications, promises, outcomes, gates, exclusions, counts, IDs, and other product prose remain protected.
+Use `html-contract` for generated UPD pages. It excludes the generated lock notice, lifecycle status badges, the TL;DR lifecycle status value, the dedicated generated specified/verified lifecycle callout, and CRLF/LF differences. Host classifications, promises, outcomes, gates, exclusions, counts, IDs, and other product prose remain protected.

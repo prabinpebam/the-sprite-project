@@ -233,6 +233,11 @@ function runSelfTest() {
     const htmlDesktop = '<span class="slate-badge">desktop</span><span class="slate-badge slate-badge--status">specified</span>';
     if (projectHtmlContract(htmlWeb) !== projectHtmlContract(htmlVerified)) throw new Error('HTML lifecycle status changed the HTML contract projection');
     if (projectHtmlContract(htmlWeb) === projectHtmlContract(htmlDesktop)) throw new Error('HTML host drift did not change the HTML contract projection');
+    const specifiedNotice = '<div class="slate-callout slate-callout--warning" role="note"><p class="slate-callout__title">Specified, not implemented</p><p>This page records the approved shape to review before implementation. No new flow inherits verification from the baseline. Status changes only from generated web, Electron, cross-host, migration, and regression evidence.</p></div>';
+    const implementedNotice = '<div class="slate-callout slate-callout--warning" role="note"><p class="slate-callout__title">Implemented · release verification pending</p><p>RUN-UPD001-001 passes local production web, packaged Electron, cross-host, migration, recovery, accessibility, regression, and data-custody checks. Actual GitHub Pages and clean-machine Windows evidence remain required.</p></div>';
+    const verifiedNotice = '<div class="slate-callout slate-callout--tip" role="note"><p class="slate-callout__title">Implemented and verified</p><p>RUN-UPD001-001 verifies every declared web, Electron, cross-host, migration, recovery, accessibility, regression, and data-custody flow. The release remains bound to the locked specification.</p></div>';
+    if (projectHtmlContract(specifiedNotice) !== projectHtmlContract(implementedNotice)) throw new Error('HTML implemented lifecycle notice changed the HTML contract projection');
+    if (projectHtmlContract(specifiedNotice) !== projectHtmlContract(verifiedNotice)) throw new Error('HTML lifecycle notice changed the HTML contract projection');
 
     const evidenceProgress = structuredClone(initialTrace);
     evidenceProgress.update.status = 'implemented';
@@ -366,6 +371,7 @@ function validateReviewFile(reviewPath, root, result, skipLockCheck) {
 function projectHtmlContract(value) {
   return value
     .replace(/<div class="slate-callout slate-callout--info" role="note"><p class="slate-callout__title">Specification locked · [^<]+<\/p><p>[^<]+<\/p><\/div>\r?\n?/g, '')
+    .replace(/<div class="slate-callout slate-callout--(?:warning|tip)" role="note"><p class="slate-callout__title">(?:Specified, not implemented|Implemented · release verification pending|Implemented and verified)<\/p><p>[^<]+<\/p><\/div>/g, '<div class="slate-callout slate-callout--warning" role="note"><p class="slate-callout__title">Specified, not implemented</p><p>This page records the approved shape to review before implementation. No new flow inherits verification from the baseline. Status changes only from generated web, Electron, cross-host, migration, and regression evidence.</p></div>')
     .replace(/<span class="slate-badge slate-badge--status">[^<]*<\/span>/g, '<span class="slate-badge slate-badge--status">STATUS</span>')
     .replace(/Status: <strong>[^<]*<\/strong>/g, 'Status: <strong>STATUS</strong>')
     .replace(/\r\n/g, '\n');

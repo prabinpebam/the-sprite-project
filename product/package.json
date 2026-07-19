@@ -1,23 +1,32 @@
 {
   "name": "the-sprite-project",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "A local-first character sprite workspace for web and portable Windows.",
+  "author": "Prabin Pebam",
   "type": "module",
+  "main": "dist-electron/main.mjs",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run build:electron",
+    "build:electron": "node scripts/build-electron.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm run test && npm run build"
+    "test:electron": "playwright test --config playwright.electron.config.ts",
+    "check": "npm run lint && npm run test && npm run build",
+    "prepare:icon": "node scripts/prepare-icon.mjs",
+    "package:electron": "npm run build && npm run prepare:icon && electron-builder --win zip --x64 && node scripts/write-release-hash.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.3",
+    "idb": "^8.0.3",
     "lucide-react": "^1.24.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
@@ -27,10 +36,40 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "electron": "^40.10.6",
+    "electron-builder": "^26.0.12",
+    "esbuild": "^0.28.1",
+    "fake-indexeddb": "^6.2.5",
     "jsdom": "^29.1.1",
     "oxlint": "^1.71.0",
+    "sharp": "^0.35.3",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
     "vitest": "^4.1.10"
+  },
+  "build": {
+    "appId": "io.github.prabinpebam.the-sprite-project",
+    "productName": "The Sprite Project",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "RELEASE-NOTES.md",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "the-sprite-project-${version}-windows-x64-portable.${ext}"
+    }
   }
 }

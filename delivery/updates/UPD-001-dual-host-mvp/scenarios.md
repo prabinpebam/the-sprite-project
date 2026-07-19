@@ -27,7 +27,7 @@
 - **Environment:** Supported desktop browser
 - **Success:** Project appears in the library and survives reload
 - **Interruptions:** Storage persistence denied; Tab closed during autosave; Duplicate project name
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-LEGACY-MIGRATION
 
@@ -39,7 +39,7 @@
 - **Environment:** Same GitHub Pages origin with IndexedDB available
 - **Success:** A valid project migrates once to schema version 2 with parity, while failure leaves legacy bytes unchanged and downloadable
 - **Interruptions:** Malformed legacy JSON; Missing exact pack; IndexedDB transaction failure; Quota exceeded; Browser closes during migration
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-SNAPSHOT-RECOVERY
 
@@ -51,7 +51,7 @@
 - **Environment:** Supported browser with the project repository available
 - **Success:** The selected snapshot becomes the current project only after confirmation and the pre-restore graph remains recoverable
 - **Interruptions:** Restore cancelled; Snapshot fails validation; Current project changed in another tab
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-STORAGE-PRESSURE
 
@@ -63,7 +63,7 @@
 - **Environment:** Supported browser with projects, packs, snapshots, and disposable caches
 - **Success:** Only previewed disposable data is removed or the blocked project is backed up; current and last-known-good work remain intact
 - **Interruptions:** Estimate unavailable; Cleanup is insufficient; Backup cancelled; Quota changes during cleanup
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-CONCURRENT-EDIT
 
@@ -75,7 +75,7 @@
 - **Environment:** Two same-origin supported browser tabs
 - **Success:** The stale save writes nothing and offers explicit reload, overwrite with checkpoint, save-as-copy, or cancel choices
 - **Interruptions:** Broadcast message missed; Conflict dialog cancelled; Stored revision changes again before resolution
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-PROJECT-LIBRARY
 
@@ -87,7 +87,7 @@
 - **Environment:** Same browser origin
 - **Success:** The selected operation affects only the intended project
 - **Interruptions:** Delete cancelled; Older tab revision; Missing installed pack
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-BACKUP-RESTORE
 
@@ -99,7 +99,7 @@
 - **Environment:** Browser with download and file input support
 - **Success:** Imported project reproduces the original semantic and render state
 - **Interruptions:** Conflicting project ID; Corrupt archive; Unsupported future version
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-WEB-OFFLINE
 
@@ -111,7 +111,7 @@
 - **Environment:** Offline supported browser
 - **Success:** Installed projects and packs remain usable and exports download locally
 - **Interruptions:** Optional pack was never installed; Update waiting; External source link unavailable
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-DESKTOP-PORTABLE-LAUNCH
 
@@ -123,7 +123,7 @@
 - **Environment:** Supported Windows x64 machine
 - **Success:** The app opens and identifies the desktop host and available file capabilities
 - **Interruptions:** SmartScreen warning; Read-only extraction location; Missing recent folder
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-DESKTOP-PROJECT-FOLDER
 
@@ -135,7 +135,7 @@
 - **Environment:** Local filesystem
 - **Success:** Canonical files are written atomically and reopen with the same render
 - **Interruptions:** Permission denied; Folder moved; External modification; Disk full
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-DESKTOP-DIRECT-EXPORT
 
@@ -147,7 +147,7 @@
 - **Environment:** Local project and export folders
 - **Success:** Expected generic or Godot files appear with matching hashes
 - **Interruptions:** Destination unavailable; Overwrite conflict; Partial write
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-DESKTOP-UNSAVED-CLOSE
 
@@ -159,7 +159,7 @@
 - **Environment:** Electron window
 - **Success:** The exact selected action occurs without accidental loss
 - **Interruptions:** Save fails; Cancel close; Folder permission revoked
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-CROSS-HOST-HANDOFF
 
@@ -171,7 +171,7 @@
 - **Environment:** Web archive and desktop project-folder adapters
 - **Success:** Project, packs, preview, credits, and exports are semantically identical
 - **Interruptions:** Missing pack; Version mismatch; Project ID conflict
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-DATA-CUSTODY
 
@@ -183,4 +183,4 @@
 - **Environment:** Web or desktop storage view
 - **Success:** Data location, persistence, destination, and backup action are explicit
 - **Interruptions:** Persistence denied; Backup cancelled; Destination unavailable
-- **Status:** specified
+- **Status:** implemented
