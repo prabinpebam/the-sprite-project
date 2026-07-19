@@ -10,6 +10,7 @@
 | IA-PROJECT-REPOSITORY | Project repository | projects, revisions, snapshots, migration state | specified |
 | IA-PROJECT-ARCHIVE | Portable project archive | manifest, project, pack locks, owned imports, provenance, checksums | specified |
 | IA-PROJECT-FOLDER | Desktop project folder | project JSON, pack lock, recipes, imports, exports, cache | specified |
+| IA-FILE-COMPATIBILITY | Cross-host file compatibility profile | archive version, project schema version, canonical JSON, entry ordering, checksums, path rules, migration policy, host metadata exclusions | specified |
 | IA-STORAGE-STATUS | Storage status | location, persistence, usage, quota, last save, last snapshot | specified |
 | IA-EXPORT-DESTINATION | Export destination | target host, directory, overwrite policy, result files, hashes | specified |
 
@@ -31,7 +32,7 @@
 | VIEW-PROJECTS | Project library | List and manage local projects | `IA-PROJECT-SUMMARY`, `IA-PROJECT-REPOSITORY` | specified |
 | VIEW-WORKSPACE | Creative workspace | Retain the verified compose, theme, preview, and export workflow | `IA-PROJECT-DOCUMENT`, `IA-STORAGE-STATUS` | specified |
 | VIEW-STORAGE | Storage and backup | Explain data custody, manage archives, and expose recovery state | `IA-STORAGE-STATUS`, `IA-PROJECT-ARCHIVE` | specified |
-| VIEW-ARCHIVE-IMPORT | Archive import | Inspect, validate, migrate, and resolve archive conflicts before commit | `IA-PROJECT-ARCHIVE`, `IA-PROJECT-DOCUMENT` | specified |
+| VIEW-ARCHIVE-IMPORT | Archive import | Inspect, validate, migrate, and resolve archive conflicts before commit | `IA-PROJECT-ARCHIVE`, `IA-PROJECT-DOCUMENT`, `IA-FILE-COMPATIBILITY` | specified |
 | VIEW-EXPORT | Export | Generate downloads or direct desktop directory output | `IA-PROJECT-DOCUMENT`, `IA-EXPORT-DESTINATION` | specified |
 | VIEW-DESKTOP-FILE | Desktop file operations | Create, open, save, relocate, and archive local project folders | `IA-PROJECT-FOLDER`, `IA-PROJECT-SUMMARY` | specified |
 | VIEW-UNSAVED-DIALOG | Unsaved changes confirmation | Resolve Save, Discard, or Cancel before close | `IA-PROJECT-DOCUMENT`, `IA-STORAGE-STATUS` | specified |
@@ -105,9 +106,11 @@
 | EB-CROSS-WEB-EXPORT | `TF-CROSS-HOST-WEB-TO-DESKTOP` | `S1` | Web exports a valid archive whose manifest names the baseline schema, packs, checksums, and no browser-specific state. | specified |
 | EB-CROSS-DESKTOP-OPEN | `TF-CROSS-HOST-WEB-TO-DESKTOP` | `S2` | Electron opens the web archive after validation and reports exact project, pack, migration, and source summary. | specified |
 | EB-CROSS-WEB-DESKTOP-PARITY | `TF-CROSS-HOST-WEB-TO-DESKTOP` | `S3` | Desktop render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the web source. | specified |
+| EB-CROSS-WEB-DESKTOP-RESAVE | `TF-CROSS-HOST-WEB-TO-DESKTOP` | `S4` | Electron re-saves the web-authored .spriteproject using the same archive version and canonical entry contract; a second web import needs no host conversion and preserves canonical payload hashes. | specified |
 | EB-CROSS-DESKTOP-EXPORT | `TF-CROSS-HOST-DESKTOP-TO-WEB` | `S1` | Electron exports a portable archive without absolute paths, permission handles, recent entries, or host-only settings. | specified |
 | EB-CROSS-WEB-IMPORT | `TF-CROSS-HOST-DESKTOP-TO-WEB` | `S2` | Web validates and imports the desktop archive transactionally with explicit conflict handling. | specified |
 | EB-CROSS-DESKTOP-WEB-PARITY | `TF-CROSS-HOST-DESKTOP-TO-WEB` | `S3` | Web render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the desktop source. | specified |
+| EB-CROSS-DESKTOP-WEB-RESAVE | `TF-CROSS-HOST-DESKTOP-TO-WEB` | `S4` | Web re-saves the Electron-authored .spriteproject using the same archive version and canonical entry contract; Electron reopens it without host conversion and preserves canonical payload hashes. | specified |
 | EB-DATA-LOCATION | `TF-DATA-CUSTODY` | `S1` | Storage view states IndexedDB for web or the exact approved project folder for desktop and explicitly says no cloud backup is active. | specified |
 | EB-DATA-BACKUP | `TF-DATA-CUSTODY` | `S2` | Backup action produces a user-owned archive and reports completion only after its bytes and checksums are generated. | specified |
 | EB-DATA-NETWORK | `TF-DATA-CUSTODY` | `S3` | Creating, editing, saving, backing up, and exporting project data causes zero undeclared project-data network requests. | specified |

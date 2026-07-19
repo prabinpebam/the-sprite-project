@@ -45,6 +45,12 @@ The creative outputs may retain their baseline IDs and oracles when unchanged, b
 - The web repository gains multiple-project indexing, revisions, snapshots, and conflict handling.
 - Electron project folders serialize the same canonical project document and pack lock used by archives.
 - Browser-only keys, object URLs, filesystem paths, and Electron handles never enter canonical project data.
+- Web and Electron use one canonical `.spriteproject` file profile with identical JSON normalization, entry paths,
+	checksums, version negotiation, migration behavior, and host-metadata exclusions.
+- The Electron project folder is the exploded canonical archive payload; `exports/` and `.sprite-cache/` remain
+	outside portable data.
+- Both hosts must open and save files produced by the other without host conversion. Independent serializers are
+	acceptable only if compatibility fixtures prove identical canonical payload bytes.
 
 ## UX Impact
 

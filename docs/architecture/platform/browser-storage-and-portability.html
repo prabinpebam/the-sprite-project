@@ -20,6 +20,13 @@
      browsing, profile loss, or device failure. The product must make project archive export visible and routine.</p>
 </div>
 
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Cross-host file contract</p>
+  <p>The exact serialization and compatibility rules are defined by
+     <a href="project-file-compatibility.html">Project File Compatibility</a>. Web and Electron must open and save
+     the same <code>.spriteproject</code> format; neither host owns a private dialect.</p>
+</div>
+
 <h2>Storage ownership</h2>
 <table>
   <thead><tr><th>Data class</th><th>Store</th><th>Authoritative?</th><th>Recovery</th></tr></thead>

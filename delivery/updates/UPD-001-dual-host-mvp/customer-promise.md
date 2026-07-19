@@ -39,9 +39,9 @@
 - **Host:** cross-host
 - **User:** A developer alternating between browser convenience and desktop file access
 - **Context:** Transferring a versioned .spriteproject archive or opening an equivalent project folder
-- **Trigger:** They switch host or device
-- **Observable outcome:** Both hosts load the same project schema, pack locks, recipes, themes, credits, and export contract
-- **Quality expectation:** Semantic project data, render hashes, credits, and engine metadata remain identical across hosts
+- **Trigger:** They switch host or device or re-save a project file in the other host
+- **Observable outcome:** Both hosts open and save the same .spriteproject format and load the same project schema, pack locks, recipes, themes, credits, and export contract
+- **Quality expectation:** Canonical project bytes are deterministic and semantic project data, render hashes, credits, and engine metadata remain identical across hosts
 - **Recovery expectation:** Unsupported versions and missing packs fail closed with an intact source archive and actionable resolution
 - **Acceptance evidence:** Web-to-desktop and desktop-to-web round trips pass with exact parity assertions
 - **Status:** specified

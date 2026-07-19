@@ -6,9 +6,9 @@
 |---|---|
 | Customer promises | 4 |
 | Scenarios | 10 |
-| User-can capabilities | 25 |
+| User-can capabilities | 26 |
 | Task flows | 11 |
-| Expected behaviors | 40 |
+| Expected behaviors | 42 |
 
 ## Deliberate Exclusions
 

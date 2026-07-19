@@ -21,7 +21,8 @@
     "delivery/updates/UPD-001-dual-host-mvp/impact-analysis.md",
     "delivery/mvp/traceability.json",
     "docs/architecture/decisions/0001-zero-server-web-platform.html",
-    "docs/architecture/decisions/0002-dual-host-local-first-product.html"
+    "docs/architecture/decisions/0002-dual-host-local-first-product.html",
+    "docs/architecture/platform/project-file-compatibility.html"
   ],
   "promises": [
     {
@@ -57,9 +58,9 @@
       "statement": "A developer can move the same project between web and desktop without changing its creative meaning, provenance, or generated output.",
       "user": "A developer alternating between browser convenience and desktop file access",
       "context": "Transferring a versioned .spriteproject archive or opening an equivalent project folder",
-      "trigger": "They switch host or device",
-      "outcome": "Both hosts load the same project schema, pack locks, recipes, themes, credits, and export contract",
-      "quality": "Semantic project data, render hashes, credits, and engine metadata remain identical across hosts",
+      "trigger": "They switch host or device or re-save a project file in the other host",
+      "outcome": "Both hosts open and save the same .spriteproject format and load the same project schema, pack locks, recipes, themes, credits, and export contract",
+      "quality": "Canonical project bytes are deterministic and semantic project data, render hashes, credits, and engine metadata remain identical across hosts",
       "recovery": "Unsupported versions and missing packs fail closed with an intact source archive and actionable resolution",
       "evidence": "Web-to-desktop and desktop-to-web round trips pass with exact parity assertions"
     },
@@ -223,6 +224,7 @@
     { "id": "UC-DESKTOP-CLOSE-SAFELY", "status": "specified", "host": "desktop", "statement": "User can choose Save, Discard, or Cancel when closing a dirty project.", "scenarioIds": ["SC-DESKTOP-UNSAVED-CLOSE"] },
     { "id": "UC-CROSS-HOST-WEB-TO-DESKTOP", "status": "specified", "host": "cross-host", "statement": "User can export a web project archive and continue it in Electron.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
     { "id": "UC-CROSS-HOST-DESKTOP-TO-WEB", "status": "specified", "host": "cross-host", "statement": "User can export a desktop project archive and continue it in the web app.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-CROSS-HOST-SAME-FILE", "status": "specified", "host": "cross-host", "statement": "User can open, edit, and save the same versioned .spriteproject file in web and Electron without host conversion or semantic loss.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
     { "id": "UC-CROSS-HOST-IDENTICAL-OUTPUT", "status": "specified", "host": "cross-host", "statement": "User receives identical semantic project data, render hashes, credits, and export metadata from either host.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
     { "id": "UC-SEE-DATA-LOCATION", "status": "specified", "host": "shared", "statement": "User can see whether project data lives in IndexedDB, a project folder, or a selected export destination.", "scenarioIds": ["SC-DATA-CUSTODY"] }
   ],
@@ -233,6 +235,7 @@
     { "id": "IA-PROJECT-REPOSITORY", "status": "specified", "name": "Project repository", "contains": ["projects", "revisions", "snapshots", "migration state"] },
     { "id": "IA-PROJECT-ARCHIVE", "status": "specified", "name": "Portable project archive", "contains": ["manifest", "project", "pack locks", "owned imports", "provenance", "checksums"] },
     { "id": "IA-PROJECT-FOLDER", "status": "specified", "name": "Desktop project folder", "contains": ["project JSON", "pack lock", "recipes", "imports", "exports", "cache"] },
+    { "id": "IA-FILE-COMPATIBILITY", "status": "specified", "name": "Cross-host file compatibility profile", "contains": ["archive version", "project schema version", "canonical JSON", "entry ordering", "checksums", "path rules", "migration policy", "host metadata exclusions"] },
     { "id": "IA-STORAGE-STATUS", "status": "specified", "name": "Storage status", "contains": ["location", "persistence", "usage", "quota", "last save", "last snapshot"] },
     { "id": "IA-EXPORT-DESTINATION", "status": "specified", "name": "Export destination", "contains": ["target host", "directory", "overwrite policy", "result files", "hashes"] }
   ],
@@ -248,7 +251,7 @@
     { "id": "VIEW-PROJECTS", "status": "specified", "name": "Project library", "informationIds": ["IA-PROJECT-SUMMARY", "IA-PROJECT-REPOSITORY"], "purpose": "List and manage local projects" },
     { "id": "VIEW-WORKSPACE", "status": "specified", "name": "Creative workspace", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-STORAGE-STATUS"], "purpose": "Retain the verified compose, theme, preview, and export workflow" },
     { "id": "VIEW-STORAGE", "status": "specified", "name": "Storage and backup", "informationIds": ["IA-STORAGE-STATUS", "IA-PROJECT-ARCHIVE"], "purpose": "Explain data custody, manage archives, and expose recovery state" },
-    { "id": "VIEW-ARCHIVE-IMPORT", "status": "specified", "name": "Archive import", "informationIds": ["IA-PROJECT-ARCHIVE", "IA-PROJECT-DOCUMENT"], "purpose": "Inspect, validate, migrate, and resolve archive conflicts before commit" },
+    { "id": "VIEW-ARCHIVE-IMPORT", "status": "specified", "name": "Archive import", "informationIds": ["IA-PROJECT-ARCHIVE", "IA-PROJECT-DOCUMENT", "IA-FILE-COMPATIBILITY"], "purpose": "Inspect, validate, migrate, and resolve archive conflicts before commit" },
     { "id": "VIEW-EXPORT", "status": "specified", "name": "Export", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-EXPORT-DESTINATION"], "purpose": "Generate downloads or direct desktop directory output" },
     { "id": "VIEW-DESKTOP-FILE", "status": "specified", "name": "Desktop file operations", "informationIds": ["IA-PROJECT-FOLDER", "IA-PROJECT-SUMMARY"], "purpose": "Create, open, save, relocate, and archive local project folders" },
     { "id": "VIEW-UNSAVED-DIALOG", "status": "specified", "name": "Unsaved changes confirmation", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-STORAGE-STATUS"], "purpose": "Resolve Save, Discard, or Cancel before close" }
@@ -316,9 +319,11 @@
     { "id": "EB-CROSS-WEB-EXPORT", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S1"], "oracle": "Web exports a valid archive whose manifest names the baseline schema, packs, checksums, and no browser-specific state." },
     { "id": "EB-CROSS-DESKTOP-OPEN", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S2"], "oracle": "Electron opens the web archive after validation and reports exact project, pack, migration, and source summary." },
     { "id": "EB-CROSS-WEB-DESKTOP-PARITY", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S3"], "oracle": "Desktop render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the web source." },
+    { "id": "EB-CROSS-WEB-DESKTOP-RESAVE", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S4"], "oracle": "Electron re-saves the web-authored .spriteproject using the same archive version and canonical entry contract; a second web import needs no host conversion and preserves canonical payload hashes." },
     { "id": "EB-CROSS-DESKTOP-EXPORT", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S1"], "oracle": "Electron exports a portable archive without absolute paths, permission handles, recent entries, or host-only settings." },
     { "id": "EB-CROSS-WEB-IMPORT", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S2"], "oracle": "Web validates and imports the desktop archive transactionally with explicit conflict handling." },
     { "id": "EB-CROSS-DESKTOP-WEB-PARITY", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S3"], "oracle": "Web render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the desktop source." },
+    { "id": "EB-CROSS-DESKTOP-WEB-RESAVE", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S4"], "oracle": "Web re-saves the Electron-authored .spriteproject using the same archive version and canonical entry contract; Electron reopens it without host conversion and preserves canonical payload hashes." },
     { "id": "EB-DATA-LOCATION", "status": "specified", "flowId": "TF-DATA-CUSTODY", "stepIds": ["S1"], "oracle": "Storage view states IndexedDB for web or the exact approved project folder for desktop and explicitly says no cloud backup is active." },
     { "id": "EB-DATA-BACKUP", "status": "specified", "flowId": "TF-DATA-CUSTODY", "stepIds": ["S2"], "oracle": "Backup action produces a user-owned archive and reports completion only after its bytes and checksums are generated." },
     { "id": "EB-DATA-NETWORK", "status": "specified", "flowId": "TF-DATA-CUSTODY", "stepIds": ["S3"], "oracle": "Creating, editing, saving, backing up, and exporting project data causes zero undeclared project-data network requests." }
@@ -448,13 +453,14 @@
       "status": "specified",
       "host": "cross-host",
       "scenarioIds": ["SC-CROSS-HOST-HANDOFF"],
-      "capabilityIds": ["UC-WEB-EXPORT-ARCHIVE", "UC-CROSS-HOST-WEB-TO-DESKTOP", "UC-CROSS-HOST-IDENTICAL-OUTPUT", "UC-DESKTOP-OPEN-FOLDER"],
+      "capabilityIds": ["UC-WEB-EXPORT-ARCHIVE", "UC-CROSS-HOST-WEB-TO-DESKTOP", "UC-CROSS-HOST-SAME-FILE", "UC-CROSS-HOST-IDENTICAL-OUTPUT", "UC-DESKTOP-OPEN-FOLDER"],
       "preconditions": ["Verified project in web"],
       "completion": "Electron continues the web project with exact parity",
       "steps": [
         { "id": "S1", "action": "Export web project archive", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-CROSS-WEB-EXPORT"] },
         { "id": "S2", "action": "Open archive in Electron", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-OPEN-ARCHIVE", "navigationId": "NAV-DESKTOP-FILE", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-OPEN"] },
-        { "id": "S3", "action": "Inspect imported summary and export", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-CROSS-WEB-DESKTOP-PARITY"] }
+        { "id": "S3", "action": "Inspect imported summary and export", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-CROSS-WEB-DESKTOP-PARITY"] },
+        { "id": "S4", "action": "Re-save in Electron and reopen in web", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-DESKTOP-FILE", "expectedBehaviorIds": ["EB-CROSS-WEB-DESKTOP-RESAVE"] }
       ]
     },
     {
@@ -462,13 +468,14 @@
       "status": "specified",
       "host": "cross-host",
       "scenarioIds": ["SC-CROSS-HOST-HANDOFF"],
-      "capabilityIds": ["UC-CROSS-HOST-DESKTOP-TO-WEB", "UC-CROSS-HOST-IDENTICAL-OUTPUT", "UC-WEB-IMPORT-ARCHIVE"],
+      "capabilityIds": ["UC-CROSS-HOST-DESKTOP-TO-WEB", "UC-CROSS-HOST-SAME-FILE", "UC-CROSS-HOST-IDENTICAL-OUTPUT", "UC-WEB-IMPORT-ARCHIVE"],
       "preconditions": ["Verified project folder in Electron"],
       "completion": "Web continues the desktop project with exact parity",
       "steps": [
         { "id": "S1", "action": "Export desktop project backup", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-EXPORT"] },
         { "id": "S2", "action": "Import backup in web", "viewId": "VIEW-STORAGE", "uiId": "UI-IMPORT-ARCHIVE", "expectedBehaviorIds": ["EB-CROSS-WEB-IMPORT"] },
-        { "id": "S3", "action": "Inspect imported summary and export", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-WEB-PARITY"] }
+        { "id": "S3", "action": "Inspect imported summary and export", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-WEB-PARITY"] },
+        { "id": "S4", "action": "Re-save in web and reopen in Electron", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-WEB-RESAVE"] }
       ]
     },
     {
@@ -502,7 +509,7 @@
     { "id": "WP-UPD001-SPEC", "status": "specified", "dependsOn": [], "traceIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-DESKTOP-PORTABLE-WORKSPACE", "CP-CROSS-HOST-PORTABILITY", "CP-LOCAL-DATA-CUSTODY"], "gate": "Update envelope, impact analysis, ADR-002, traceability, exclusions, and release gate pass review" },
     { "id": "WP-UPD001-HOST-ADAPTERS", "status": "specified", "dependsOn": ["WP-UPD001-SPEC"], "traceIds": ["IA-HOST", "IA-PROJECT-DOCUMENT", "UC-DESKTOP-SEE-HOST", "UC-SEE-DATA-LOCATION"], "gate": "Domain modules have no browser or Electron dependency and host contract tests pass" },
     { "id": "WP-UPD001-WEB-REPOSITORY", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-PROJECT-LIBRARY", "TF-WEB-AUTOSAVE-REOPEN", "UC-WEB-AUTOSAVE-IDB", "UC-WEB-INSPECT-STORAGE"], "gate": "IndexedDB library, revisions, snapshots, migration, and failure recovery pass actual-UI flows" },
-    { "id": "WP-UPD001-ARCHIVES", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-BACKUP-RESTORE", "IA-PROJECT-ARCHIVE", "UC-WEB-EXPORT-ARCHIVE", "UC-WEB-IMPORT-ARCHIVE"], "gate": "Archive validation, conflicts, migration, malicious fixtures, and exact round trip pass" },
+    { "id": "WP-UPD001-ARCHIVES", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-BACKUP-RESTORE", "IA-PROJECT-ARCHIVE", "IA-FILE-COMPATIBILITY", "UC-WEB-EXPORT-ARCHIVE", "UC-WEB-IMPORT-ARCHIVE", "UC-CROSS-HOST-SAME-FILE"], "gate": "Archive validation, deterministic canonical serialization, conflicts, migration, malicious fixtures, and exact round trip pass" },
     { "id": "WP-UPD001-WEB-OFFLINE", "status": "specified", "dependsOn": ["WP-UPD001-WEB-REPOSITORY"], "traceIds": ["TF-WEB-OFFLINE", "UC-WEB-WORK-OFFLINE"], "gate": "Published-subpath PWA completes declared flows with network disconnected" },
     { "id": "WP-UPD001-ELECTRON-SHELL", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-DESKTOP-PORTABLE-LAUNCH", "UC-DESKTOP-LAUNCH-PORTABLE", "VIEW-HOST-START"], "gate": "Packaged portable Windows app launches with secure renderer and typed IPC checks" },
     { "id": "WP-UPD001-DESKTOP-FILES", "status": "specified", "dependsOn": ["WP-UPD001-ELECTRON-SHELL", "WP-UPD001-ARCHIVES"], "traceIds": ["TF-DESKTOP-PROJECT-FOLDER", "TF-DESKTOP-DIRECT-EXPORT", "TF-DESKTOP-UNSAVED-CLOSE", "IA-PROJECT-FOLDER"], "gate": "Folder lifecycle, atomic writes, failures, direct exports, and unsaved close pass packaged Electron UI flows" },

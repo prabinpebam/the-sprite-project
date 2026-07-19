@@ -37,6 +37,10 @@ UPD-001 is complete only when all measures below are exactly satisfied. Categori
 
 - Web archive opens in Electron and produces the same semantic project, render hash, credits, and engine export.
 - Electron project exports an archive that imports in web with the same results.
+- A web-authored `.spriteproject` re-saved by Electron reopens in web without conversion and preserves canonical payload hashes when unedited.
+- An Electron-authored `.spriteproject` re-saved by web reopens in Electron without conversion and preserves canonical payload hashes when unedited.
+- Independent web and Electron writers emit identical canonical JSON and manifest entry checksums for the same fixture.
+- Folder → archive → folder round trip preserves canonical entries and excludes outputs, caches, recent paths, permission handles, and other host metadata.
 - Pack locks and unavailable pack handling are identical.
 - Host-specific state does not leak into canonical data.
 

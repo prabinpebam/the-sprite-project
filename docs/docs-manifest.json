@@ -17,6 +17,7 @@
     { "path": "architecture/decisions/0001-zero-server-web-platform.html", "title": "ADR-001 - Zero-Server Web Platform", "order": 36, "badge": "accepted" },
     { "path": "architecture/decisions/0002-dual-host-local-first-product.html", "title": "ADR-002 - Dual-Host Local-First Product", "order": 36.5, "badge": "accepted" },
     { "path": "architecture/platform/browser-storage-and-portability.html", "title": "Browser Storage & Project Portability", "order": 37 },
+    { "path": "architecture/platform/project-file-compatibility.html", "title": "Project File Compatibility", "order": 37.5, "badge": "binding" },
     { "path": "architecture/platform/github-pages-and-offline.html", "title": "GitHub Pages & Offline Delivery", "order": 38 },
     { "path": "architecture/platform/capability-boundaries.html", "title": "Capability Boundaries", "order": 39 },
 

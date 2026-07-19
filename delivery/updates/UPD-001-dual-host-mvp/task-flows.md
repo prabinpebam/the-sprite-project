@@ -133,7 +133,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 
 - **Host:** cross-host
 - **Scenarios:** `SC-CROSS-HOST-HANDOFF`
-- **Capabilities:** `UC-WEB-EXPORT-ARCHIVE`, `UC-CROSS-HOST-WEB-TO-DESKTOP`, `UC-CROSS-HOST-IDENTICAL-OUTPUT`, `UC-DESKTOP-OPEN-FOLDER`
+- **Capabilities:** `UC-WEB-EXPORT-ARCHIVE`, `UC-CROSS-HOST-WEB-TO-DESKTOP`, `UC-CROSS-HOST-SAME-FILE`, `UC-CROSS-HOST-IDENTICAL-OUTPUT`, `UC-DESKTOP-OPEN-FOLDER`
 - **Preconditions:** Verified project in web
 - **Completion:** Electron continues the web project with exact parity
 - **Status:** specified
@@ -143,12 +143,13 @@ Every flow is accepted only through visible interaction on its declared host. Th
 | S1 | Export web project archive | `VIEW-STORAGE` | `UI-EXPORT-ARCHIVE` | `NAV-STORAGE` | `EB-CROSS-WEB-EXPORT`: Web exports a valid archive whose manifest names the baseline schema, packs, checksums, and no browser-specific state. |
 | S2 | Open archive in Electron | `VIEW-DESKTOP-FILE` | `UI-DESKTOP-OPEN-ARCHIVE` | `NAV-DESKTOP-FILE` | `EB-CROSS-DESKTOP-OPEN`: Electron opens the web archive after validation and reports exact project, pack, migration, and source summary. |
 | S3 | Inspect imported summary and export | `VIEW-ARCHIVE-IMPORT` | `UI-IMPORT-SUMMARY` | No route change | `EB-CROSS-WEB-DESKTOP-PARITY`: Desktop render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the web source. |
+| S4 | Re-save in Electron and reopen in web | `VIEW-DESKTOP-FILE` | `UI-EXPORT-ARCHIVE` | `NAV-DESKTOP-FILE` | `EB-CROSS-WEB-DESKTOP-RESAVE`: Electron re-saves the web-authored .spriteproject using the same archive version and canonical entry contract; a second web import needs no host conversion and preserves canonical payload hashes. |
 
 ## TF-CROSS-HOST-DESKTOP-TO-WEB
 
 - **Host:** cross-host
 - **Scenarios:** `SC-CROSS-HOST-HANDOFF`
-- **Capabilities:** `UC-CROSS-HOST-DESKTOP-TO-WEB`, `UC-CROSS-HOST-IDENTICAL-OUTPUT`, `UC-WEB-IMPORT-ARCHIVE`
+- **Capabilities:** `UC-CROSS-HOST-DESKTOP-TO-WEB`, `UC-CROSS-HOST-SAME-FILE`, `UC-CROSS-HOST-IDENTICAL-OUTPUT`, `UC-WEB-IMPORT-ARCHIVE`
 - **Preconditions:** Verified project folder in Electron
 - **Completion:** Web continues the desktop project with exact parity
 - **Status:** specified
@@ -158,6 +159,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 | S1 | Export desktop project backup | `VIEW-STORAGE` | `UI-EXPORT-ARCHIVE` | `NAV-STORAGE` | `EB-CROSS-DESKTOP-EXPORT`: Electron exports a portable archive without absolute paths, permission handles, recent entries, or host-only settings. |
 | S2 | Import backup in web | `VIEW-STORAGE` | `UI-IMPORT-ARCHIVE` | No route change | `EB-CROSS-WEB-IMPORT`: Web validates and imports the desktop archive transactionally with explicit conflict handling. |
 | S3 | Inspect imported summary and export | `VIEW-ARCHIVE-IMPORT` | `UI-IMPORT-SUMMARY` | No route change | `EB-CROSS-DESKTOP-WEB-PARITY`: Web render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the desktop source. |
+| S4 | Re-save in web and reopen in Electron | `VIEW-STORAGE` | `UI-EXPORT-ARCHIVE` | `NAV-STORAGE` | `EB-CROSS-DESKTOP-WEB-RESAVE`: Web re-saves the Electron-authored .spriteproject using the same archive version and canonical entry contract; Electron reopens it without host conversion and preserves canonical payload hashes. |
 
 ## TF-DATA-CUSTODY
 

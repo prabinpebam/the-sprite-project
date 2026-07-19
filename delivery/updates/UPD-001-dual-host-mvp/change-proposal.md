@@ -34,3 +34,12 @@ Product owner approves the product direction. Architecture details remain subjec
 ## Requested Status
 
 `specified` after traceability, impact, architecture, and execution plans pass validation. Implementation is a subsequent stage and must not be inferred from specification approval.
+
+## Amendment A · Same project file on both hosts
+
+Owner clarification received 2026-07-19: files saved from web and Electron must be mutually compatible.
+
+UPD-001 therefore requires one universal <code>.spriteproject</code> interchange format that both hosts open and
+save directly. The Electron project folder is the exploded canonical archive payload plus non-portable output and
+cache directories. This amendment does not add a new promise or rollout boundary; it makes the existing cross-host
+portability promise implementation-grade and adds bidirectional re-save evidence.

@@ -1,0 +1,199 @@
+<!-- Canonical web/Electron project file compatibility contract. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture · Compatibility contract</p>
+  <h1 class="slate-hero__title">Project File Compatibility</h1>
+  <p class="slate-hero__summary">One versioned <code>.spriteproject</code> format that web and Electron can both
+     open, edit, save, migrate, validate, and exchange without host conversion or semantic drift.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p><strong>The same file works in both hosts.</strong> A <code>.spriteproject</code> file is the universal portable
+     project format. The Electron project folder is its exploded canonical payload plus explicitly non-portable
+     <code>exports/</code> and <code>.sprite-cache/</code> directories. Both hosts use identical schemas,
+     canonical JSON, path rules, checksums, migrations, and pack locks. Host-only state never enters the file.</p>
+</aside>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Compatibility is a product invariant</p>
+  <p>Web and Electron may differ in storage convenience, but they cannot create different project dialects. A file
+     saved by either host must open and re-save in the other without an import conversion step, loss of supported
+     data, changed rendering, changed attribution, or changed engine output.</p>
+</div>
+
+<h2>Canonical representations</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Portable file</p>
+    <pre><code>project-name.spriteproject
+  archive-manifest.json
+  project.json
+  packs.lock.json
+  recipes/
+  imported/
+  provenance/
+  README.txt</code></pre>
+    <p>The interchange, backup, and cross-host file. Both web and Electron open and save it directly.</p>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Electron project folder</p>
+    <pre><code>project-name/
+  archive-manifest.json
+  project.json
+  packs.lock.json
+  recipes/
+  imported/
+  provenance/
+  README.txt
+  exports/
+  .sprite-cache/</code></pre>
+    <p>The canonical archive payload is present unchanged at the folder root. <code>exports/</code> and
+       <code>.sprite-cache/</code> are host conveniences and are excluded when producing a portable file.</p>
+  </div>
+</div>
+
+<h2>File profile</h2>
+<table>
+  <thead><tr><th>Property</th><th>Binding rule</th></tr></thead>
+  <tbody>
+    <tr><td>Extension</td><td><code>.spriteproject</code></td></tr>
+    <tr><td>Container</td><td>ZIP, non-encrypted, no symlinks, no absolute paths, no data descriptors required for interpretation</td></tr>
+    <tr><td>Entry paths</td><td>UTF-8, forward slash, relative, Unicode NFC, no <code>.</code>/<code>..</code>, no duplicate case-folded path</td></tr>
+    <tr><td>Required JSON encoding</td><td>UTF-8 without BOM, LF newline, exactly one trailing LF</td></tr>
+    <tr><td>Canonical JSON</td><td>Object keys sorted lexicographically, arrays retain schema-defined order, no insignificant whitespace, finite JSON numbers only</td></tr>
+    <tr><td>Archive entry order</td><td>Required root files first in documented order, then remaining paths by UTF-8 byte order</td></tr>
+    <tr><td>ZIP timestamps</td><td>Fixed canonical timestamp; filesystem modification time is not semantic project data</td></tr>
+    <tr><td>Compression</td><td>Store or deterministic Deflate as defined by archive format version; readers must not depend on compression choice</td></tr>
+    <tr><td>Checksums</td><td>SHA-256 of uncompressed canonical entry bytes; manifest lists every payload entry except itself</td></tr>
+    <tr><td>Media identity</td><td>Imported binary content addressed by SHA-256; original display name is metadata, not an internal path</td></tr>
+    <tr><td>MIME declaration</td><td>Manifest records expected media type; readers verify signature where supported</td></tr>
+    <tr><td>Maximum expansion</td><td>Versioned safety limits for entries, individual size, total size, and compression ratio</td></tr>
+  </tbody>
+</table>
+
+<h2>Version dimensions</h2>
+<p>Versions are independent. Hosts must not infer one from another.</p>
+<table>
+  <thead><tr><th>Version</th><th>Owns</th><th>Compatibility behavior</th></tr></thead>
+  <tbody>
+    <tr><td><code>archiveFormatVersion</code></td><td>ZIP entry contract, manifest, checksums, canonicalization</td><td>Unsupported future major fails before extraction or mutation.</td></tr>
+    <tr><td><code>projectSchemaVersion</code></td><td>Project semantics, recipes, themes, preview, provenance references</td><td>Older supported versions migrate transactionally; future versions remain intact and unopened.</td></tr>
+    <tr><td><code>packLockVersion</code></td><td>Pack identity, version, checksum, source and embedding state</td><td>Missing exact packs block deterministic rendering but not safe archive inspection.</td></tr>
+    <tr><td><code>recipeSchemaVersion</code></td><td>Asset selections, token overrides, producer-specific recipe fields</td><td>Migrated independently so future producers do not force archive changes.</td></tr>
+    <tr><td><code>createdWith</code></td><td>Informational product build identity</td><td>Never used as a substitute for schema compatibility.</td></tr>
+  </tbody>
+</table>
+
+<h2>Archive manifest</h2>
+<pre><code>{
+  "archiveFormatVersion": 1,
+  "projectSchemaVersion": 1,
+  "packLockVersion": 1,
+  "projectId": "uuid",
+  "createdWith": "sprite-project/x.y.z",
+  "entries": [
+    {
+      "path": "project.json",
+      "mediaType": "application/json",
+      "size": 1234,
+      "sha256": "lowercase-hex"
+    }
+  ]
+}</code></pre>
+<ul>
+  <li>Entry inventory is complete and sorted by canonical path.</li>
+  <li>Checksums use lowercase hexadecimal.</li>
+  <li>The manifest does not checksum itself.</li>
+  <li>All listed entries must exist; unlisted entries fail validation except explicitly permitted non-semantic metadata in a later archive version.</li>
+  <li>Readers validate the entire manifest before committing project data.</li>
+</ul>
+
+<h2>Canonical project rules</h2>
+<table>
+  <thead><tr><th>Field class</th><th>Rule</th></tr></thead>
+  <tbody>
+    <tr><td>Stable identity</td><td>Project, recipe, asset, and pack IDs survive host transfer and ordinary Save/Save As.</td></tr>
+    <tr><td>Import as copy</td><td>Generates a new project ID through an explicit user choice; source archive remains unchanged.</td></tr>
+    <tr><td>Time values</td><td>ISO 8601 UTC. Updated timestamps may change on save but are excluded from semantic/render parity comparison.</td></tr>
+    <tr><td>Colors</td><td>Canonical lowercase <code>#rrggbb</code>; migration normalizes equivalent legacy forms.</td></tr>
+    <tr><td>Numbers</td><td>Schema-bounded integers where possible; no NaN, Infinity, locale formatting, or imprecise timestamps.</td></tr>
+    <tr><td>Asset references</td><td>Stable pack ID + exact pack version + asset ID, never host path or object URL.</td></tr>
+    <tr><td>Imported content</td><td>Referenced by checksum-based relative path and provenance record.</td></tr>
+    <tr><td>Extensions</td><td>Only inside a versioned, namespaced <code>extensions</code> object; unsupported required extensions fail closed.</td></tr>
+  </tbody>
+</table>
+
+<h2>Host-only data that must not enter the file</h2>
+<ul>
+  <li>IndexedDB keys, object URLs, storage estimates, persistence grants, and browser permission handles</li>
+  <li>Absolute filesystem paths, drive letters, recent folders, file handles, inode/file IDs, and Electron IPC state</li>
+  <li>Window size, position, maximized state, theme preference, panel expansion, and development flags</li>
+  <li>Autosave timers, current write locks, transient errors, analytics identifiers, and temporary files</li>
+  <li>Generated thumbnails, render caches, service-worker caches, and <code>.sprite-cache/</code></li>
+  <li>Engine export destinations and generated <code>exports/</code> content</li>
+</ul>
+
+<h2>Folder and archive equivalence</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Read</p><p>Electron validates the canonical root files exactly as the archive reader does. Folder access is not permission to accept a different schema.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Save</p><p>Electron canonicalizes JSON and updates manifest size/checksum entries before atomic replacement.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Pack</p><p>Electron creates <code>.spriteproject</code> from only manifest-listed canonical payload entries; outputs and caches are omitted.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Unpack</p><p>Opening a portable file as a folder writes canonical entries only after complete validation; existing folders require explicit conflict handling.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Web import</p><p>The web reader stores canonical content in IndexedDB without injecting browser state into the project document.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Web save</p><p>The web writer emits the same canonical payload and archive profile used by Electron.</p></li>
+</ol>
+
+<h2>Compatibility matrix</h2>
+<table>
+  <thead><tr><th>Source</th><th>Destination</th><th>Required result</th></tr></thead>
+  <tbody>
+    <tr><td>Current web file</td><td>Same Electron version</td><td>Open and save directly; no conversion prompt; canonical payload hashes preserved unless edited.</td></tr>
+    <tr><td>Current Electron file</td><td>Same web version</td><td>Open and save directly; no conversion prompt; canonical payload hashes preserved unless edited.</td></tr>
+    <tr><td>Older supported schema</td><td>Current host</td><td>Preview migration, preserve source, migrate transactionally, record result, then save current schema.</td></tr>
+    <tr><td>Future unsupported archive major</td><td>Older host</td><td>Fail before extraction; preserve file; show required version.</td></tr>
+    <tr><td>Future unsupported project schema</td><td>Older host</td><td>Inspect safe manifest summary only; do not mutate or partially load.</td></tr>
+    <tr><td>Known schema with missing exact pack</td><td>Either host</td><td>Open in blocked/recovery state only if semantics can be preserved; never substitute a different pack silently.</td></tr>
+    <tr><td>Archive with unsupported required extension</td><td>Either host</td><td>Fail closed and name the extension; preserve source bytes.</td></tr>
+  </tbody>
+</table>
+
+<h2>Parity levels</h2>
+<dl class="slate-defs">
+  <dt>Byte parity</dt><dd>Unchanged canonical payload entries have identical SHA-256 hashes after cross-host open and re-save. Container bytes may differ only where the archive profile explicitly permits.</dd>
+  <dt>Semantic parity</dt><dd>After excluding declared non-semantic metadata such as <code>updatedAt</code>, canonical project structures are equal.</dd>
+  <dt>Render parity</dt><dd>Identical project + exact packs produce identical frame and spritesheet hashes.</dd>
+  <dt>Provenance parity</dt><dd>Selected source, author, license, and credit records are identical and complete.</dd>
+  <dt>Export parity</dt><dd>Animation and Godot metadata are structurally identical; generated PNG hashes match.</dd>
+</dl>
+
+<h2>Atomicity and recovery</h2>
+<ul>
+  <li>Writers create a complete temporary file or folder payload, validate it, flush where available, and atomically replace the destination.</li>
+  <li>Never update <code>project.json</code> without updating its manifest size and checksum in the same logical save.</li>
+  <li>A failed save leaves the last valid file/folder intact and keeps the project visibly dirty.</li>
+  <li>Migration never overwrites the only source copy. Web keeps an IndexedDB snapshot; Electron keeps the source file/folder and writes a new temporary result.</li>
+  <li>Locking detects simultaneous writes where possible; revision mismatch requires explicit reload, overwrite, or save-as resolution.</li>
+</ul>
+
+<h2>Compatibility verification</h2>
+<table>
+  <thead><tr><th>ID</th><th>Objective gate</th></tr></thead>
+  <tbody>
+    <tr><td><code>FILE-001</code></td><td>A web-authored file opens and re-saves in Electron, then reopens in web without conversion or canonical payload loss.</td></tr>
+    <tr><td><code>FILE-002</code></td><td>An Electron-authored file opens and re-saves in web, then reopens in Electron without conversion or canonical payload loss.</td></tr>
+    <tr><td><code>FILE-003</code></td><td>Independent web and Electron writers produce identical canonical JSON and entry checksums for the same fixture.</td></tr>
+    <tr><td><code>FILE-004</code></td><td>Exploded folder → archive → folder preserves every canonical entry and excludes outputs, caches, and host metadata.</td></tr>
+    <tr><td><code>FILE-005</code></td><td>Supported old fixtures migrate identically on both hosts; unsupported future fixtures fail without mutation.</td></tr>
+    <tr><td><code>FILE-006</code></td><td>Traversal, duplicate path, checksum mismatch, zip bomb, unsupported required extension, and malformed media fixtures fail on both hosts.</td></tr>
+    <tr><td><code>FILE-007</code></td><td>Cross-host semantic, render, provenance, generic export, and Godot export parity all pass.</td></tr>
+    <tr><td><code>FILE-008</code></td><td>Interrupted or conflicting saves retain the prior valid file and expose an actionable recovery state.</td></tr>
+  </tbody>
+</table>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Implementation source of truth</p>
+  <p>This profile is binding for <a href="../../execution/updates/upd-001-dual-host-mvp.html">UPD-001</a>.
+     JSON Schemas, canonical serializers, archive readers/writers, folder adapters, migrations, and compatibility
+     fixtures must be shared packages consumed by both hosts, not separately reimplemented behavior.</p>
+</div>

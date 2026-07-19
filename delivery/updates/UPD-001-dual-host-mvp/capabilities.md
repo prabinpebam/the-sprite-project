@@ -25,5 +25,6 @@
 | UC-DESKTOP-CLOSE-SAFELY | desktop | User can choose Save, Discard, or Cancel when closing a dirty project. | `SC-DESKTOP-UNSAVED-CLOSE` | specified |
 | UC-CROSS-HOST-WEB-TO-DESKTOP | cross-host | User can export a web project archive and continue it in Electron. | `SC-CROSS-HOST-HANDOFF` | specified |
 | UC-CROSS-HOST-DESKTOP-TO-WEB | cross-host | User can export a desktop project archive and continue it in the web app. | `SC-CROSS-HOST-HANDOFF` | specified |
+| UC-CROSS-HOST-SAME-FILE | cross-host | User can open, edit, and save the same versioned .spriteproject file in web and Electron without host conversion or semantic loss. | `SC-CROSS-HOST-HANDOFF` | specified |
 | UC-CROSS-HOST-IDENTICAL-OUTPUT | cross-host | User receives identical semantic project data, render hashes, credits, and export metadata from either host. | `SC-CROSS-HOST-HANDOFF` | specified |
 | UC-SEE-DATA-LOCATION | shared | User can see whether project data lives in IndexedDB, a project folder, or a selected export destination. | `SC-DATA-CUSTODY` | specified |
