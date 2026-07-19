@@ -2,6 +2,106 @@
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">LPC license options ordered by permissiveness</title>
   <desc id="figure-desc">A five-step obligation ladder runs from CC0 with no attribution to GPL with attribution and copyleft requirements.</desc>
+  <style>
+        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
+        .motion-enter {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 38ms);
+        }
+        .motion-grow {
+            transform-box: fill-box; transform-origin: left center;
+            animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(120ms + var(--i) * 55ms);
+        }
+        .motion-ring {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 100ms);
+        }
+        .motion-draw {
+            stroke-dasharray: 1200; stroke-dashoffset: 1200;
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(160ms + var(--i) * 38ms);
+        }
+        .motion-highlight {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
+            animation-delay: 1250ms;
+        }
+        .motion-active-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-active 2200ms ease-in-out 1500ms infinite;
+        }
+        .motion-flow-loop {
+            stroke-dasharray: 10 8;
+            animation: svg-flow 1100ms linear 1300ms infinite;
+        }
+        .motion-light-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-light 2600ms ease-in-out 1200ms infinite;
+        }
+        .motion-enter.motion-highlight {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
+        }
+        .motion-ring.motion-highlight {
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
+        }
+        .motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out 1500ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
+        }
+        .motion-draw.motion-flow-loop {
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-flow 1100ms linear 1300ms infinite;
+            animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
+        }
+        .motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out 1200ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        @keyframes svg-enter {
+            from { opacity: 0; transform: translateY(10px) scale(.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes svg-grow {
+            from { opacity: .35; transform: scaleX(0); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+        @keyframes svg-ring {
+            from { opacity: 0; transform: scale(.72); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes svg-draw {
+            from { opacity: .25; stroke-dashoffset: 1200; }
+            to { opacity: 1; stroke-dashoffset: 0; }
+        }
+        @keyframes svg-highlight {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.045); filter: brightness(1.12); }
+        }
+        @keyframes svg-active {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: .82; }
+        }
+        @keyframes svg-flow { to { stroke-dashoffset: -36; } }
+        @keyframes svg-light {
+            0%, 100% { transform: scale(1); opacity: .88; }
+            50% { transform: scale(1.12); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .motion-stage * {
+                animation: none !important; opacity: 1 !important; transform: none !important;
+                filter: none !important; stroke-dashoffset: 0 !important;
+            }
+        }
+</style>
   <rect width="1000" height="385" fill="#FFFFFF" />
-  <g stroke-linecap="round" stroke-linejoin="round"><text x="500" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle">ORDERED BY PRACTICAL OBLIGATION</text><path d="M 70 78 V 322" stroke="#64748B" stroke-width="4" stroke-linecap="round" /><circle cx="70" cy="92" r="18" fill="#15803D" /><text x="70" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text><rect x="110" y="70" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" /><text x="135" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start">CC0</text><text x="270" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#15803D" text-anchor="start">No attribution</text><text x="520" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start">Most permissive</text><circle cx="70" cy="150" r="18" fill="#15803D" /><text x="70" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text><rect x="110" y="128" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" /><text x="135" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start">OGA-BY</text><text x="270" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#15803D" text-anchor="start">Attribution</text><text x="520" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start">No DRM restriction</text><circle cx="70" cy="208" r="18" fill="#15803D" /><text x="70" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text><rect x="110" y="186" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" /><text x="135" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start">CC-BY</text><text x="270" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#15803D" text-anchor="start">Attribution</text><text x="520" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start">Credit authors</text><circle cx="70" cy="266" r="18" fill="#B45309" /><text x="70" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text><rect x="110" y="244" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" /><text x="135" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start">CC-BY-SA</text><text x="270" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#B45309" text-anchor="start">Attribution + share-alike</text><text x="520" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start">Derivatives stay CC-BY-SA</text><circle cx="70" cy="324" r="18" fill="#B91C1C" /><text x="70" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">5</text><rect x="110" y="302" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" /><text x="135" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start">GPL</text><text x="270" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#B91C1C" text-anchor="start">Attribution + copyleft</text><text x="520" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start">Derivatives distributed under GPL</text><text x="70" y="356" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#5D6B7E" text-anchor="middle">more obligations</text><polygon points="64,330 76,330 70,342" fill="#5D6B7E" /></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="500" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:0" class="motion-enter">ORDERED BY PRACTICAL OBLIGATION</text><path d="M 70 78 V 322" stroke="#64748B" stroke-width="4" stroke-linecap="round" style="--i:1" class="motion-draw" /><circle cx="70" cy="92" r="18" fill="#15803D" style="--i:0" class="motion-enter" /><text x="70" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:3" class="motion-enter">1</text><rect x="110" y="70" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" style="--i:4" class="motion-enter" /><text x="135" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:5" class="motion-enter">CC0</text><text x="270" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#15803D" text-anchor="start" style="--i:6" class="motion-enter">No attribution</text><text x="520" y="97" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:7" class="motion-enter">Most permissive</text><circle cx="70" cy="150" r="18" fill="#15803D" style="--i:1" class="motion-enter" /><text x="70" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:9" class="motion-enter">2</text><rect x="110" y="128" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" style="--i:10" class="motion-enter" /><text x="135" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:11" class="motion-enter">OGA-BY</text><text x="270" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#15803D" text-anchor="start" style="--i:12" class="motion-enter">Attribution</text><text x="520" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:13" class="motion-enter">No DRM restriction</text><circle cx="70" cy="208" r="18" fill="#15803D" style="--i:2" class="motion-enter" /><text x="70" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:15" class="motion-enter">3</text><rect x="110" y="186" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" style="--i:16" class="motion-enter" /><text x="135" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:17" class="motion-enter">CC-BY</text><text x="270" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#15803D" text-anchor="start" style="--i:18" class="motion-enter">Attribution</text><text x="520" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:19" class="motion-enter">Credit authors</text><circle cx="70" cy="266" r="18" fill="#B45309" style="--i:3" class="motion-enter" /><text x="70" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:21" class="motion-enter">4</text><rect x="110" y="244" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" style="--i:22" class="motion-enter" /><text x="135" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:23" class="motion-enter">CC-BY-SA</text><text x="270" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#B45309" text-anchor="start" style="--i:24" class="motion-enter">Attribution + share-alike</text><text x="520" y="271" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:24" class="motion-enter">Derivatives stay CC-BY-SA</text><circle cx="70" cy="324" r="18" fill="#B91C1C" style="--i:4" class="motion-enter" /><text x="70" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:24" class="motion-enter">5</text><rect x="110" y="302" width="840" height="44" rx="8" fill="#FAFAFC" stroke="#64748B" stroke-width="1" style="--i:24" class="motion-enter" /><text x="135" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">GPL</text><text x="270" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#B91C1C" text-anchor="start" style="--i:24" class="motion-enter">Attribution + copyleft</text><text x="520" y="329" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:24" class="motion-enter">Derivatives distributed under GPL</text><text x="70" y="356" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--i:24" class="motion-enter">more obligations</text><polygon points="64,330 76,330 70,342" fill="#5D6B7E" style="--i:24" class="motion-enter" /></g>
 </svg>

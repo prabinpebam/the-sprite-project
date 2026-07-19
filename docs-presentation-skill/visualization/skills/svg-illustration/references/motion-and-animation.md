@@ -33,6 +33,57 @@ Compose two to four atomic moves, not a bag of effects:
 
 For complex motion, plan time-coded phases before markup. Do not dump every element at time zero. Preserve subject identity through transformation; a substitute crossfade does not prove that the same object moved or changed.
 
+## Choose the Animation Role
+
+Every animation must have exactly one primary role. Roles may be sequenced, but do not stack effects on the same
+element merely because they are available.
+
+### Entry animation
+
+Use entry motion when it establishes reading order, hierarchy, assembly, or causality.
+
+- reveal parent structure before children;
+- reveal connectors before or with the destination they explain;
+- grow measured bars from the true baseline;
+- stagger ordered steps, ranked rows, or timeline milestones in semantic order;
+- use short distance/scale changes so elements settle exactly into authored geometry;
+- finish quickly enough that the complete figure is readable without waiting.
+
+Do not animate every label independently. Group labels with the mark or node they describe unless separate timing
+adds meaning.
+
+### Highlight animation
+
+Use highlight motion when the viewer should notice an active state, selected item, conclusion, outlier, current
+phase, or resolved result.
+
+- prefer one or two pulses of stroke, halo, opacity, or modest scale after entry;
+- highlight the claim, not decoration;
+- preserve encoded values and geometry (a data bar must not overshoot its value);
+- pair color with a non-color cue when color already encodes another variable;
+- stop after the emphasis unless the state is genuinely ongoing.
+
+### Loop animation
+
+Use a loop only when the subject represents an ongoing process: live synchronization, orbit/cycle, active status,
+flowing data, moving light, or continuous preview.
+
+- keep amplitude low and duration calm;
+- loop one focal mechanism, never the whole figure;
+- avoid loops behind dense text or data labels;
+- disable loops under reduced motion;
+- prefer a finite highlight when “ongoing” is not part of the meaning.
+
+### Functional and aesthetic gate
+
+Motion is functional when removing it loses sequence, state, direction, causality, or attention. It is aesthetic when
+it improves continuity, rhythm, and polish without obscuring meaning. Ship only motion that is functional, or clearly
+aesthetic and sufficiently restrained.
+
+Reject motion when it delays access to information, changes a measured value or apparent hierarchy, causes
+collisions/clipping/reflow, competes with the thesis, repeats without semantic justification, or lacks a complete
+static/reduced-motion state.
+
 ## Small Motion Vocabulary
 
 | Intent | Mechanism |
@@ -59,6 +110,8 @@ Use one signature move per illustration. Supporting moves reinforce it.
 - Critically damped/smooth settling is the default. Bounce and overshoot are rare, explicitly playful or tactile choices.
 - Final holds are longer than transition poses so viewers can read the result.
 - Stillness is part of choreography. Do not add idle wobble everywhere.
+- Documentation figures should usually finish entry and finite highlight motion within 1.5–2.5 seconds. Longer
+  sequences require user control or a clearly narrative subject.
 
 ## Animate Stable Channels
 
@@ -146,6 +199,7 @@ For external SVG through `<img>`, internal media queries follow the operating sy
 - Avoid continuous motion behind dense text.
 - Preserve theme and semantic color meaning through every state.
 - Use high-energy transitions only for genuine idea changes.
+- A figure may combine entry, one highlight, and one justified loop, but most should use fewer.
 
 ## Validation
 
@@ -161,9 +215,19 @@ Inspect more than endpoints. Capture:
 
 Sample bounding boxes through time and flag clipping, collisions, dead zones, inconsistent stagger/direction, identity breaks, unreadable text, wrong final state, missing hold, or motion still running.
 
+Record the chosen roles for each SVG:
+
+```text
+Entry: none | grouped fade/settle | stagger | grow | draw
+Highlight: none | pulse | halo | contrast | focus
+Loop: none | flow | active-status | orbit/cycle | light/preview
+Why each role matches the subject:
+```
+
 ## Profile Limits
 
-- `docs-inline`, Office, print, and static publication: default to static; animation is a separate web/standalone deliverable.
+- `docs-inline`, Office, print, and static publication: static only.
+- `docs-animated`: self-contained external SVG with CSS animation, no script/SMIL/external resources, and mandatory reduced-motion rules.
 - `web-inline`: CSS/WAAPI or host timeline, scoped selectors, reduced motion.
 - `standalone`: self-contained CSS/SMIL when supported; finite motion and static fallback.
 - interactive app: host owns triggers, focus, pause/replay, and application-level reduced motion.

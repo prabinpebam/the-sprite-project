@@ -7,6 +7,7 @@ import argparse
 import json
 import math
 import re
+import xml.etree.ElementTree as ET
 from html import escape
 from pathlib import Path
 
@@ -40,6 +41,195 @@ CONNECTOR_WIDTH = 2.0
 LINE_CAP = "round"
 LINE_JOIN = "round"
 DASH: list[float] = []
+
+
+MOTION_CSS = """
+        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
+        .motion-enter {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 38ms);
+        }
+        .motion-grow {
+            transform-box: fill-box; transform-origin: left center;
+            animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(120ms + var(--i) * 55ms);
+        }
+        .motion-ring {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 100ms);
+        }
+        .motion-draw {
+            stroke-dasharray: 1200; stroke-dashoffset: 1200;
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(160ms + var(--i) * 38ms);
+        }
+        .motion-highlight {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
+            animation-delay: 1250ms;
+        }
+        .motion-active-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-active 2200ms ease-in-out 1500ms infinite;
+        }
+        .motion-flow-loop {
+            stroke-dasharray: 10 8;
+            animation: svg-flow 1100ms linear 1300ms infinite;
+        }
+        .motion-light-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-light 2600ms ease-in-out 1200ms infinite;
+        }
+        .motion-enter.motion-highlight {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
+        }
+        .motion-ring.motion-highlight {
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
+        }
+        .motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out 1500ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
+        }
+        .motion-draw.motion-flow-loop {
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-flow 1100ms linear 1300ms infinite;
+            animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
+        }
+        .motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out 1200ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        @keyframes svg-enter {
+            from { opacity: 0; transform: translateY(10px) scale(.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes svg-grow {
+            from { opacity: .35; transform: scaleX(0); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+        @keyframes svg-ring {
+            from { opacity: 0; transform: scale(.72); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes svg-draw {
+            from { opacity: .25; stroke-dashoffset: 1200; }
+            to { opacity: 1; stroke-dashoffset: 0; }
+        }
+        @keyframes svg-highlight {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.045); filter: brightness(1.12); }
+        }
+        @keyframes svg-active {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: .82; }
+        }
+        @keyframes svg-flow { to { stroke-dashoffset: -36; } }
+        @keyframes svg-light {
+            0%, 100% { transform: scale(1); opacity: .88; }
+            50% { transform: scale(1.12); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .motion-stage * {
+                animation: none !important; opacity: 1 !important; transform: none !important;
+                filter: none !important; stroke-dashoffset: 0 !important;
+            }
+        }
+"""
+
+
+def number(element: ET.Element, name: str, default: float = 0) -> float:
+        try:
+                return float(element.attrib.get(name, default))
+        except ValueError:
+                return default
+
+
+def add_motion_class(element: ET.Element, class_name: str) -> None:
+    classes = element.attrib.get("class", "").split()
+    if class_name not in classes:
+        classes.append(class_name)
+    element.set("class", " ".join(classes))
+
+
+def apply_motion(body: str, slug: str) -> str:
+    root = ET.fromstring(f"<root>{body}</root>")
+    children = list(root)
+    for index, element in enumerate(children):
+        tag = element.tag
+        element.set("style", f"--i:{min(index, 24)}")
+        if tag in {"path", "line", "polyline"} and element.attrib.get("stroke", "none") != "none":
+            add_motion_class(element, "motion-draw")
+        elif tag in {"rect", "circle", "polygon", "text"}:
+            add_motion_class(element, "motion-enter")
+
+    if slug in {"github-stars", "horse-animation-timing"}:
+        for element in children:
+            if element.tag == "rect" and number(element, "height") <= 30 and number(element, "width") > 5:
+                add_motion_class(element, "motion-grow")
+                element.attrib["class"] = element.attrib["class"].replace("motion-enter", "").strip()
+
+    if slug == "mvp-expansion":
+        circles = [element for element in children if element.tag == "circle"]
+        for index, element in enumerate(circles):
+            add_motion_class(element, "motion-ring")
+            element.attrib["class"] = element.attrib["class"].replace("motion-enter", "").strip()
+            element.set("style", f"--i:{index}")
+        core = next((element for element in circles if number(element, "cx") == 300 and number(element, "r") == 55), None)
+        if core is not None:
+            add_motion_class(core, "motion-highlight")
+
+    if slug in {"mvp-character-journey", "delivery-roadmap"}:
+        circles = [element for element in children if element.tag == "circle"]
+        for index, element in enumerate(circles):
+            element.set("style", f"--i:{index}")
+        if slug == "mvp-character-journey":
+            for element in [item for item in circles if number(item, "cx") > 900]:
+                add_motion_class(element, "motion-highlight")
+        else:
+            for element in [item for item in circles if number(item, "cx") == 95]:
+                add_motion_class(element, "motion-active-loop")
+
+    if slug == "token-resolution":
+        for element in [item for item in children if item.tag == "rect" and number(item, "x") == 680]:
+            add_motion_class(element, "motion-highlight")
+
+    if slug == "ulpc-capability-coverage":
+        status = [element for element in children if element.tag == "circle" and number(element, "r") == 9]
+        for index, element in enumerate(status):
+            element.set("style", f"--i:{index}")
+        for element in status[:3]:
+            add_motion_class(element, "motion-highlight")
+
+    if slug == "lpc-license-obligations":
+        for index, element in enumerate(item for item in children if item.tag == "circle"):
+            element.set("style", f"--i:{index}")
+
+    if slug == "sprite-pipeline-pain-ranking":
+        ranks = [element for element in children if element.tag == "circle"]
+        for index, element in enumerate(ranks):
+            element.set("style", f"--i:{index}")
+        for element in ranks[:2]:
+            add_motion_class(element, "motion-highlight")
+
+    if slug == "manual-vs-live-link":
+        for element in children:
+            if element.tag == "path" and element.attrib.get("stroke") == GREEN:
+                add_motion_class(element, "motion-flow-loop")
+
+    if slug == "lpc-shadow-guide":
+        sun = next((element for element in children if element.tag == "circle" and number(element, "cx") == 760), None)
+        if sun is not None:
+            add_motion_class(sun, "motion-light-loop")
+
+    return "".join(ET.tostring(element, encoding="unicode") for element in children)
 
 
 def apply_theme(theme: dict, mode_name: str) -> None:
@@ -78,7 +268,8 @@ def apply_theme(theme: dict, mode_name: str) -> None:
     SUFFIX = "" if mode_name == "light" else f"-{mode_name}"
 
 
-def text(x, y, value, size=14, fill=INK, anchor="start", weight=400, opacity=None):
+def text(x, y, value, size=14, fill=None, anchor="start", weight=400, opacity=None):
+    fill = INK if fill is None else fill
     attrs = [
         f'x="{x}"', f'y="{y}"', f'font-family="{FONT}"', f'font-size="{size}"',
         f'font-weight="{weight}"', f'fill="{fill}"', f'text-anchor="{anchor}"',
@@ -88,7 +279,8 @@ def text(x, y, value, size=14, fill=INK, anchor="start", weight=400, opacity=Non
     return f'<text {" ".join(attrs)}>{escape(str(value))}</text>'
 
 
-def multiline(x, y, lines, size=14, fill=INK, anchor="middle", weight=400, line_height=18):
+def multiline(x, y, lines, size=14, fill=None, anchor="middle", weight=400, line_height=18):
+    fill = INK if fill is None else fill
     spans = []
     for index, line in enumerate(lines):
         dy = 0 if index == 0 else line_height
@@ -145,21 +337,34 @@ def arrow_down(x, y1, y2, color=None, width=None):
     )
 
 
-def svg_document(title, description, width, height, body):
+def svg_document(title, description, width, height, body, slug):
     title_id = "figure-title"
     desc_id = "figure-desc"
+    if STROKE_SCALE == 1:
+        body = apply_motion(body, slug)
+        return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
+     role="img" aria-labelledby="{title_id} {desc_id}" preserveAspectRatio="xMidYMid meet">
+  <title id="{title_id}">{escape(title)}</title>
+  <desc id="{desc_id}">{escape(description)}</desc>
+  <style>{MOTION_CSS}</style>
+  <rect width="{width}" height="{height}" fill="{BG}" />
+  <g class="motion-stage" stroke-linecap="{LINE_CAP}" stroke-linejoin="{LINE_JOIN}">{body}</g>
+</svg>
+'''
     if STROKE_SCALE != 1:
         body = re.sub(
             r'stroke-width="([0-9.]+)"',
             lambda match: f'stroke-width="{float(match.group(1)) * STROKE_SCALE:g}"',
             body,
         )
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
+        body = apply_motion(body, slug)
+        return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
      role="img" aria-labelledby="{title_id} {desc_id}" preserveAspectRatio="xMidYMid meet">
   <title id="{title_id}">{escape(title)}</title>
   <desc id="{desc_id}">{escape(description)}</desc>
+    <style>{MOTION_CSS}</style>
   <rect width="{width}" height="{height}" fill="{BG}" />
-  <g stroke-linecap="{LINE_CAP}" stroke-linejoin="{LINE_JOIN}">{body}</g>
+    <g class="motion-stage" stroke-linecap="{LINE_CAP}" stroke-linejoin="{LINE_JOIN}">{body}</g>
 </svg>
 '''
 
@@ -167,7 +372,7 @@ def svg_document(title, description, width, height, body):
 def write(name, title, description, width, height, body):
     path = Path(name)
     output_name = f"{path.stem}{SUFFIX}{path.suffix}"
-    (OUT / output_name).write_text(svg_document(title, description, width, height, body), encoding="utf-8")
+    (OUT / output_name).write_text(svg_document(title, description, width, height, body, path.stem), encoding="utf-8")
 
 
 def node(x, y, width, height, lines, active=False, accent=False, small=False):

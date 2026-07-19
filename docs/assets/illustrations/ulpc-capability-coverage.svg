@@ -2,6 +2,106 @@
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">ULPC coverage of indie sprite needs</title>
   <desc id="figure-desc">A categorical matrix rates fifteen needs as none, low, partial, high, or full coverage without implying false numeric precision.</desc>
+  <style>
+        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
+        .motion-enter {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 38ms);
+        }
+        .motion-grow {
+            transform-box: fill-box; transform-origin: left center;
+            animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(120ms + var(--i) * 55ms);
+        }
+        .motion-ring {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 100ms);
+        }
+        .motion-draw {
+            stroke-dasharray: 1200; stroke-dashoffset: 1200;
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(160ms + var(--i) * 38ms);
+        }
+        .motion-highlight {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
+            animation-delay: 1250ms;
+        }
+        .motion-active-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-active 2200ms ease-in-out 1500ms infinite;
+        }
+        .motion-flow-loop {
+            stroke-dasharray: 10 8;
+            animation: svg-flow 1100ms linear 1300ms infinite;
+        }
+        .motion-light-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-light 2600ms ease-in-out 1200ms infinite;
+        }
+        .motion-enter.motion-highlight {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
+        }
+        .motion-ring.motion-highlight {
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
+        }
+        .motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out 1500ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
+        }
+        .motion-draw.motion-flow-loop {
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-flow 1100ms linear 1300ms infinite;
+            animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
+        }
+        .motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out 1200ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        @keyframes svg-enter {
+            from { opacity: 0; transform: translateY(10px) scale(.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes svg-grow {
+            from { opacity: .35; transform: scaleX(0); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+        @keyframes svg-ring {
+            from { opacity: 0; transform: scale(.72); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes svg-draw {
+            from { opacity: .25; stroke-dashoffset: 1200; }
+            to { opacity: 1; stroke-dashoffset: 0; }
+        }
+        @keyframes svg-highlight {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.045); filter: brightness(1.12); }
+        }
+        @keyframes svg-active {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: .82; }
+        }
+        @keyframes svg-flow { to { stroke-dashoffset: -36; } }
+        @keyframes svg-light {
+            0%, 100% { transform: scale(1); opacity: .88; }
+            50% { transform: scale(1.12); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .motion-stage * {
+                animation: none !important; opacity: 1 !important; transform: none !important;
+                filter: none !important; stroke-dashoffset: 0 !important;
+            }
+        }
+</style>
   <rect width="1000" height="670" fill="#FFFFFF" />
-  <g stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="start">CAPABILITY COVERAGE</text><text x="420" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle">None</text><line x1="420" y1="72" x2="420" y2="630" stroke="#7C8CA0" stroke-width="1" /><text x="545" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle">Low</text><line x1="545" y1="72" x2="545" y2="630" stroke="#7C8CA0" stroke-width="1" /><text x="670" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle">Partial</text><line x1="670" y1="72" x2="670" y2="630" stroke="#7C8CA0" stroke-width="1" /><text x="795" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle">High</text><line x1="795" y1="72" x2="795" y2="630" stroke="#7C8CA0" stroke-width="1" /><text x="920" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle">Full</text><line x1="920" y1="72" x2="920" y2="630" stroke="#7C8CA0" stroke-width="1" /><rect x="20" y="74" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="96" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Modular characters</text><circle cx="920" cy="92" r="9" fill="#15803D" /><circle cx="920" cy="92" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" /><text x="35" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Real-time recolor</text><circle cx="920" cy="128" r="9" fill="#15803D" /><circle cx="920" cy="128" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" /><rect x="20" y="146" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">License / credits</text><circle cx="920" cy="164" r="9" fill="#15803D" /><circle cx="920" cy="164" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" /><text x="35" y="204" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Animation preview</text><circle cx="795" cy="200" r="9" fill="#15803D" /><circle cx="795" cy="200" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" /><rect x="20" y="218" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="240" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Reproducible build</text><circle cx="795" cy="236" r="9" fill="#15803D" /><circle cx="795" cy="236" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" /><text x="35" y="276" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Export to files</text><circle cx="670" cy="272" r="9" fill="#B45309" /><circle cx="670" cy="272" r="14" fill="none" stroke="#B45309" stroke-width="2" opacity="0.25" /><rect x="20" y="290" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="312" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Sourcing breadth</text><circle cx="545" cy="308" r="9" fill="#B45309" /><circle cx="545" cy="308" r="14" fill="none" stroke="#B45309" stroke-width="2" opacity="0.25" /><text x="35" y="348" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Style flexibility</text><circle cx="545" cy="344" r="9" fill="#B45309" /><circle cx="545" cy="344" r="14" fill="none" stroke="#B45309" stroke-width="2" opacity="0.25" /><rect x="20" y="362" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Animation authoring</text><circle cx="420" cy="380" r="9" fill="#B91C1C" /><circle cx="420" cy="380" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><text x="35" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Non-character assets</text><circle cx="420" cy="416" r="9" fill="#B91C1C" /><circle cx="420" cy="416" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><rect x="20" y="434" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="456" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Engine-native import</text><circle cx="420" cy="452" r="9" fill="#B91C1C" /><circle cx="420" cy="452" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><text x="35" y="492" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Live link to engine</text><circle cx="420" cy="488" r="9" fill="#B91C1C" /><circle cx="420" cy="488" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><rect x="20" y="506" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="528" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">CLI / automation</text><circle cx="420" cy="524" r="9" fill="#B91C1C" /><circle cx="420" cy="524" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><text x="35" y="564" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Persistent project</text><circle cx="420" cy="560" r="9" fill="#B91C1C" /><circle cx="420" cy="560" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><rect x="20" y="578" width="950" height="32" rx="5" fill="#F4F6F8" /><text x="35" y="600" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start">Collaboration</text><circle cx="420" cy="596" r="9" fill="#B91C1C" /><circle cx="420" cy="596" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" /><text x="500" y="654" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#5D6B7E" text-anchor="middle">Qualitative categories · positions are not percentages</text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="start" style="--i:0" class="motion-enter">CAPABILITY COVERAGE</text><text x="420" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:1" class="motion-enter">None</text><line x1="420" y1="72" x2="420" y2="630" stroke="#7C8CA0" stroke-width="1" style="--i:2" class="motion-draw" /><text x="545" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:3" class="motion-enter">Low</text><line x1="545" y1="72" x2="545" y2="630" stroke="#7C8CA0" stroke-width="1" style="--i:4" class="motion-draw" /><text x="670" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:5" class="motion-enter">Partial</text><line x1="670" y1="72" x2="670" y2="630" stroke="#7C8CA0" stroke-width="1" style="--i:6" class="motion-draw" /><text x="795" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:7" class="motion-enter">High</text><line x1="795" y1="72" x2="795" y2="630" stroke="#7C8CA0" stroke-width="1" style="--i:8" class="motion-draw" /><text x="920" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:9" class="motion-enter">Full</text><line x1="920" y1="72" x2="920" y2="630" stroke="#7C8CA0" stroke-width="1" style="--i:10" class="motion-draw" /><rect x="20" y="74" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:11" class="motion-enter" /><text x="35" y="96" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:12" class="motion-enter">Modular characters</text><circle cx="920" cy="92" r="9" fill="#15803D" style="--i:0" class="motion-enter motion-highlight" /><circle cx="920" cy="92" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" style="--i:14" class="motion-enter" /><text x="35" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:15" class="motion-enter">Real-time recolor</text><circle cx="920" cy="128" r="9" fill="#15803D" style="--i:1" class="motion-enter motion-highlight" /><circle cx="920" cy="128" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" style="--i:17" class="motion-enter" /><rect x="20" y="146" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:18" class="motion-enter" /><text x="35" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:19" class="motion-enter">License / credits</text><circle cx="920" cy="164" r="9" fill="#15803D" style="--i:2" class="motion-enter motion-highlight" /><circle cx="920" cy="164" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" style="--i:21" class="motion-enter" /><text x="35" y="204" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:22" class="motion-enter">Animation preview</text><circle cx="795" cy="200" r="9" fill="#15803D" style="--i:3" class="motion-enter" /><circle cx="795" cy="200" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><rect x="20" y="218" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:24" class="motion-enter" /><text x="35" y="240" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Reproducible build</text><circle cx="795" cy="236" r="9" fill="#15803D" style="--i:4" class="motion-enter" /><circle cx="795" cy="236" r="14" fill="none" stroke="#15803D" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><text x="35" y="276" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Export to files</text><circle cx="670" cy="272" r="9" fill="#B45309" style="--i:5" class="motion-enter" /><circle cx="670" cy="272" r="14" fill="none" stroke="#B45309" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><rect x="20" y="290" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:24" class="motion-enter" /><text x="35" y="312" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Sourcing breadth</text><circle cx="545" cy="308" r="9" fill="#B45309" style="--i:6" class="motion-enter" /><circle cx="545" cy="308" r="14" fill="none" stroke="#B45309" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><text x="35" y="348" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Style flexibility</text><circle cx="545" cy="344" r="9" fill="#B45309" style="--i:7" class="motion-enter" /><circle cx="545" cy="344" r="14" fill="none" stroke="#B45309" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><rect x="20" y="362" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:24" class="motion-enter" /><text x="35" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Animation authoring</text><circle cx="420" cy="380" r="9" fill="#B91C1C" style="--i:8" class="motion-enter" /><circle cx="420" cy="380" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><text x="35" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Non-character assets</text><circle cx="420" cy="416" r="9" fill="#B91C1C" style="--i:9" class="motion-enter" /><circle cx="420" cy="416" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><rect x="20" y="434" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:24" class="motion-enter" /><text x="35" y="456" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Engine-native import</text><circle cx="420" cy="452" r="9" fill="#B91C1C" style="--i:10" class="motion-enter" /><circle cx="420" cy="452" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><text x="35" y="492" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Live link to engine</text><circle cx="420" cy="488" r="9" fill="#B91C1C" style="--i:11" class="motion-enter" /><circle cx="420" cy="488" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><rect x="20" y="506" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:24" class="motion-enter" /><text x="35" y="528" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">CLI / automation</text><circle cx="420" cy="524" r="9" fill="#B91C1C" style="--i:12" class="motion-enter" /><circle cx="420" cy="524" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><text x="35" y="564" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Persistent project</text><circle cx="420" cy="560" r="9" fill="#B91C1C" style="--i:13" class="motion-enter" /><circle cx="420" cy="560" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><rect x="20" y="578" width="950" height="32" rx="5" fill="#F4F6F8" style="--i:24" class="motion-enter" /><text x="35" y="600" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1F2937" text-anchor="start" style="--i:24" class="motion-enter">Collaboration</text><circle cx="420" cy="596" r="9" fill="#B91C1C" style="--i:14" class="motion-enter" /><circle cx="420" cy="596" r="14" fill="none" stroke="#B91C1C" stroke-width="2" opacity="0.25" style="--i:24" class="motion-enter" /><text x="500" y="654" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--i:24" class="motion-enter">Qualitative categories · positions are not percentages</text></g>
 </svg>

@@ -51,6 +51,7 @@ Before authoring, identify the destination. Ask only if the target changes the i
 | Profile | Default implementation |
 | --- | --- |
 | `docs-inline` | Presentation attributes; no script, `foreignObject`, external assets, or embedded `<style>`; avoid filters and masks |
+| `docs-animated` | Self-contained external SVG via `<img>`; embedded CSS allowed; no script/SMIL/external resources; reduced-motion fallback required |
 | `web-inline` | Semantic groups, CSS variables/classes allowed, scoped IDs, optional restrained CSS animation |
 | `standalone` | Self-contained SVG; embedded style/fonts only when licensing and portability allow |
 | `office` | Inline attributes, editable `<text>`, simple geometry; avoid markers, filters, masks, and fragile CSS |
@@ -162,7 +163,7 @@ python scripts/validate_svg.py path/to/illustration.svg --profile docs-inline
 python scripts/validate_theme.py path/to/theme.json
 ```
 
-Profiles: `docs-inline`, `web-inline`, `standalone`, `office`, `print`, `icon`.
+Profiles: `docs-inline`, `docs-animated`, `web-inline`, `standalone`, `office`, `print`, `icon`.
 
 Fix malformed XML, duplicate IDs, dangling references, unsafe external resources, missing accessible names, and
 profile violations before visual review. The validator is a baseline, not proof of quality.

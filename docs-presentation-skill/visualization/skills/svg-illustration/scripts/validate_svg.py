@@ -36,6 +36,7 @@ PROFILE_FORBIDDEN = {
         "animateTransform",
         "set",
     },
+    "docs-animated": {"script", "foreignObject", "animate", "animateMotion", "animateTransform", "set"},
     "web-inline": {"script", "foreignObject"},
     "standalone": {"script", "foreignObject"},
     "office": {

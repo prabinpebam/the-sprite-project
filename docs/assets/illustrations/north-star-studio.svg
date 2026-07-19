@@ -2,6 +2,106 @@
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">North Star product architecture</title>
   <desc id="figure-desc">Three specialized producers feed one project and five shared capabilities, then scene composition and a shared export pipeline.</desc>
+  <style>
+        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
+        .motion-enter {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 38ms);
+        }
+        .motion-grow {
+            transform-box: fill-box; transform-origin: left center;
+            animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(120ms + var(--i) * 55ms);
+        }
+        .motion-ring {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 100ms);
+        }
+        .motion-draw {
+            stroke-dasharray: 1200; stroke-dashoffset: 1200;
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(160ms + var(--i) * 38ms);
+        }
+        .motion-highlight {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
+            animation-delay: 1250ms;
+        }
+        .motion-active-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-active 2200ms ease-in-out 1500ms infinite;
+        }
+        .motion-flow-loop {
+            stroke-dasharray: 10 8;
+            animation: svg-flow 1100ms linear 1300ms infinite;
+        }
+        .motion-light-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-light 2600ms ease-in-out 1200ms infinite;
+        }
+        .motion-enter.motion-highlight {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
+        }
+        .motion-ring.motion-highlight {
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
+        }
+        .motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out 1500ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
+        }
+        .motion-draw.motion-flow-loop {
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-flow 1100ms linear 1300ms infinite;
+            animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
+        }
+        .motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out 1200ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        @keyframes svg-enter {
+            from { opacity: 0; transform: translateY(10px) scale(.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes svg-grow {
+            from { opacity: .35; transform: scaleX(0); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+        @keyframes svg-ring {
+            from { opacity: 0; transform: scale(.72); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes svg-draw {
+            from { opacity: .25; stroke-dashoffset: 1200; }
+            to { opacity: 1; stroke-dashoffset: 0; }
+        }
+        @keyframes svg-highlight {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.045); filter: brightness(1.12); }
+        }
+        @keyframes svg-active {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: .82; }
+        }
+        @keyframes svg-flow { to { stroke-dashoffset: -36; } }
+        @keyframes svg-light {
+            0%, 100% { transform: scale(1); opacity: .88; }
+            50% { transform: scale(1.12); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .motion-stage * {
+                animation: none !important; opacity: 1 !important; transform: none !important;
+                filter: none !important; stroke-dashoffset: 0 !important;
+            }
+        }
+</style>
   <rect width="1000" height="500" fill="#FFFFFF" />
-  <g stroke-linecap="round" stroke-linejoin="round"><text x="500" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle">SPECIALIZED PRODUCERS, ONE SHARED STUDIO</text><rect x="50" y="48" width="270" height="62" rx="10" fill="#6D28D9" stroke="#6D28D9" stroke-width="2" /><text x="185.0" y="74.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle"><tspan x="185.0" dy="0">Character generator</tspan><tspan x="185.0" dy="17">MVP starts here</tspan></text><path d="M 185 110 V 142" stroke="#64748B" stroke-width="2" /><rect x="365" y="48" width="270" height="62" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2" /><text x="500.0" y="74.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1F2937" text-anchor="middle"><tspan x="500.0" dy="0">Environment &amp; terrain</tspan><tspan x="500.0" dy="17">second producer</tspan></text><path d="M 500 110 V 142" stroke="#64748B" stroke-width="2" /><rect x="680" y="48" width="270" height="62" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2" /><text x="815.0" y="74.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1F2937" text-anchor="middle"><tspan x="815.0" dy="0">Structures &amp; props</tspan><tspan x="815.0" dy="17">world completion</tspan></text><path d="M 815 110 V 142" stroke="#64748B" stroke-width="2" /><path d="M 185 142 H 815" stroke="#64748B" stroke-width="2" fill="none" /><path d="M 500 142 V 155" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" /><polygon points="495,155 500,165 505,155" fill="#6D28D9" /><rect x="355" y="165" width="290" height="70" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2" /><text x="500.0" y="195.54" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1F2937" text-anchor="middle"><tspan x="500.0" dy="0">One versioned project</tspan><tspan x="500.0" dy="19">assets · recipes · tokens · licenses</tspan></text><path d="M 500 235 V 260" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" /><polygon points="495,260 500,270 505,260" fill="#6D28D9" /><rect x="35" y="270" width="930" height="100" rx="10" fill="#FAFAFC" stroke="#64748B" stroke-width="1" /><text x="65" y="296" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="start">SHARED CAPABILITIES</text><rect x="65" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" /><text x="144.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle">Token coherence</text><rect x="243" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" /><text x="322.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle">Manual editor</text><rect x="421" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" /><text x="500.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle">Animation</text><rect x="599" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" /><text x="678.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle">Material maps</text><rect x="777" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" /><text x="856.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle">Provenance</text><path d="M 500 370 V 388 H 305 V 392" stroke="#64748B" stroke-width="2" fill="none" /><path d="M 500 388 H 695 V 392" stroke="#64748B" stroke-width="2" fill="none" /><path d="M 305 392 V 392" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" /><polygon points="300,392 305,402 310,392" fill="#6D28D9" /><path d="M 695 392 V 392" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" /><polygon points="690,392 695,402 700,392" fill="#6D28D9" /><rect x="155" y="402" width="300" height="62" rx="10" fill="#DCFCE7" stroke="#15803D" stroke-width="2" /><text x="305.0" y="428.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#14532D" text-anchor="middle"><tspan x="305.0" dy="0">Scene &amp; composition</tspan><tspan x="305.0" dy="17">verify the whole world</tspan></text><rect x="545" y="402" width="300" height="62" rx="10" fill="#DCFCE7" stroke="#15803D" stroke-width="2" /><text x="695.0" y="428.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#14532D" text-anchor="middle"><tspan x="695.0" dy="0">Shared export pipeline</tspan><tspan x="695.0" dy="17">files · engines · live link · CLI</tspan></text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="500" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:0" class="motion-enter">SPECIALIZED PRODUCERS, ONE SHARED STUDIO</text><rect x="50" y="48" width="270" height="62" rx="10" fill="#6D28D9" stroke="#6D28D9" stroke-width="2" style="--i:1" class="motion-enter" /><text x="185.0" y="74.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle" style="--i:2" class="motion-enter"><tspan x="185.0" dy="0">Character generator</tspan><tspan x="185.0" dy="17">MVP starts here</tspan></text><path d="M 185 110 V 142" stroke="#64748B" stroke-width="2" style="--i:3" class="motion-draw" /><rect x="365" y="48" width="270" height="62" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2" style="--i:4" class="motion-enter" /><text x="500.0" y="74.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:5" class="motion-enter"><tspan x="500.0" dy="0">Environment &amp; terrain</tspan><tspan x="500.0" dy="17">second producer</tspan></text><path d="M 500 110 V 142" stroke="#64748B" stroke-width="2" style="--i:6" class="motion-draw" /><rect x="680" y="48" width="270" height="62" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2" style="--i:7" class="motion-enter" /><text x="815.0" y="74.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:8" class="motion-enter"><tspan x="815.0" dy="0">Structures &amp; props</tspan><tspan x="815.0" dy="17">world completion</tspan></text><path d="M 815 110 V 142" stroke="#64748B" stroke-width="2" style="--i:9" class="motion-draw" /><path d="M 185 142 H 815" stroke="#64748B" stroke-width="2" fill="none" style="--i:10" class="motion-draw" /><path d="M 500 142 V 155" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" style="--i:11" class="motion-draw" /><polygon points="495,155 500,165 505,155" fill="#6D28D9" style="--i:12" class="motion-enter" /><rect x="355" y="165" width="290" height="70" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2" style="--i:13" class="motion-enter" /><text x="500.0" y="195.54" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:14" class="motion-enter"><tspan x="500.0" dy="0">One versioned project</tspan><tspan x="500.0" dy="19">assets · recipes · tokens · licenses</tspan></text><path d="M 500 235 V 260" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" style="--i:15" class="motion-draw" /><polygon points="495,260 500,270 505,260" fill="#6D28D9" style="--i:16" class="motion-enter" /><rect x="35" y="270" width="930" height="100" rx="10" fill="#FAFAFC" stroke="#64748B" stroke-width="1" style="--i:17" class="motion-enter" /><text x="65" y="296" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="start" style="--i:18" class="motion-enter">SHARED CAPABILITIES</text><rect x="65" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" style="--i:19" class="motion-enter" /><text x="144.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle" style="--i:20" class="motion-enter">Token coherence</text><rect x="243" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" style="--i:21" class="motion-enter" /><text x="322.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle" style="--i:22" class="motion-enter">Manual editor</text><rect x="421" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" style="--i:23" class="motion-enter" /><text x="500.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle" style="--i:24" class="motion-enter">Animation</text><rect x="599" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" style="--i:24" class="motion-enter" /><text x="678.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle" style="--i:24" class="motion-enter">Material maps</text><rect x="777" y="316" width="158" height="28" rx="14" fill="#DDD6FE" stroke="#DDD6FE" stroke-width="1" style="--i:24" class="motion-enter" /><text x="856.0" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle" style="--i:24" class="motion-enter">Provenance</text><path d="M 500 370 V 388 H 305 V 392" stroke="#64748B" stroke-width="2" fill="none" style="--i:24" class="motion-draw" /><path d="M 500 388 H 695 V 392" stroke="#64748B" stroke-width="2" fill="none" style="--i:24" class="motion-draw" /><path d="M 305 392 V 392" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" style="--i:24" class="motion-draw" /><polygon points="300,392 305,402 310,392" fill="#6D28D9" style="--i:24" class="motion-enter" /><path d="M 695 392 V 392" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" style="--i:24" class="motion-draw" /><polygon points="690,392 695,402 700,392" fill="#6D28D9" style="--i:24" class="motion-enter" /><rect x="155" y="402" width="300" height="62" rx="10" fill="#DCFCE7" stroke="#15803D" stroke-width="2" style="--i:24" class="motion-enter" /><text x="305.0" y="428.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#14532D" text-anchor="middle" style="--i:24" class="motion-enter"><tspan x="305.0" dy="0">Scene &amp; composition</tspan><tspan x="305.0" dy="17">verify the whole world</tspan></text><rect x="545" y="402" width="300" height="62" rx="10" fill="#DCFCE7" stroke="#15803D" stroke-width="2" style="--i:24" class="motion-enter" /><text x="695.0" y="428.82" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#14532D" text-anchor="middle" style="--i:24" class="motion-enter"><tspan x="695.0" dy="0">Shared export pipeline</tspan><tspan x="695.0" dy="17">files · engines · live link · CLI</tspan></text></g>
 </svg>

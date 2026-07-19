@@ -35,3 +35,28 @@ the image's `data-src-light` and `data-src-dark` attributes whenever its theme c
 
 After changing colors or appearance, render representative sparse and dense figures in both modes. Heavier strokes,
 different fonts, larger radii, or tighter density can introduce visual defects even when the JSON passes validation.
+
+## Motion Profiles
+
+Every generated SVG includes a complete static/reduced-motion state. Entry and finite highlights normally finish
+within 2.5 seconds. Infinite loops are limited to subjects that represent ongoing behavior.
+
+| Illustration | Entry | Highlight | Loop |
+| --- | --- | --- | --- |
+| Product architecture | producer/system nodes settle; connectors draw | final pipeline emphasis | none |
+| Composition data flow | sources, project, targets settle; paths draw | shared project focus | none |
+| Token resolution | theme rows and swatches reveal in order | resolved colors pulse twice | none |
+| MVP expansion | rings assemble from the core outward | core pulses twice | none |
+| Character journey | steps enter in sequence; connectors draw | final in-game step pulses | none |
+| North Star studio | layers settle; architecture routes draw | project/output emphasis | none |
+| Delivery roadmap | milestones enter in phase order | active phase emphasis | active-status pulse |
+| GitHub stars | bars grow from the logarithmic baseline | leading project emphasis | none |
+| Horse timing | duration bars grow from zero | timing comparison settles | none |
+| LPC shadow guide | swatches/geometry settle | light direction focus | slow light-source pulse |
+| Capability coverage | rows and status markers reveal | strongest covered needs pulse | none |
+| License obligations | ladder and ordered rows reveal | obligation ordering settles | none |
+| Pipeline pain ranking | ranks enter in order | top two problems pulse | none |
+| Manual vs live link | both workflows assemble; arrows draw | live target emphasis | directional live-link flow |
+
+The roadmap, light source, and live link are the only loops because each depicts an ongoing state or process. All
+other emphasis is finite so documentation remains readable and calm.

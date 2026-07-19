@@ -40,6 +40,17 @@ For sanitized documentation fragments such as this repository’s Slate pages:
 - keep all visible text in native `<text>` elements;
 - provide nearby prose/table alternatives for complex visuals.
 
+### `docs-animated`
+
+For self-contained SVG files embedded through `<img>` in documentation:
+
+- embedded `<style>` is allowed because it remains isolated inside the SVG file;
+- use finite CSS entry/highlight animations and only semantically justified loops;
+- include `prefers-reduced-motion: reduce` rules that expose the complete static state;
+- do not use scripts, event attributes, SMIL, `foreignObject`, external fonts/images, or remote references;
+- preserve a meaningful static first/final state because image hosts, print, and exports may not animate;
+- test the actual documentation host: external SVG cannot inherit page CSS variables or application motion state.
+
 ### `web-inline`
 
 - use semantic classes and CSS custom properties where they improve theming;
@@ -197,7 +208,8 @@ Best for theming and accessibility. Ensure scoped IDs and sanitized content.
 ### `<img src="...svg" alt="...">`
 
 Best for isolation and caching. Put the accessible text in `alt`; do not rely on internal SVG semantics being
-announced.
+announced. Embedded SVG CSS animations can run in supporting browsers, but the file is isolated from host styles;
+provide theme variants and reduced-motion behavior inside each asset.
 
 ### `<object data="...svg">`
 

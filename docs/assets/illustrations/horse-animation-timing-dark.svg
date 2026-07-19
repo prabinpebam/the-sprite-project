@@ -2,6 +2,106 @@
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">Original horse animation timing</title>
   <desc id="figure-desc">Walk and eat use 150 millisecond frames, four-frame gallop uses 100 milliseconds, and eleven-frame gallop uses 50 milliseconds.</desc>
+  <style>
+        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
+        .motion-enter {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 38ms);
+        }
+        .motion-grow {
+            transform-box: fill-box; transform-origin: left center;
+            animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(120ms + var(--i) * 55ms);
+        }
+        .motion-ring {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(100ms + var(--i) * 100ms);
+        }
+        .motion-draw {
+            stroke-dasharray: 1200; stroke-dashoffset: 1200;
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
+            animation-delay: calc(160ms + var(--i) * 38ms);
+        }
+        .motion-highlight {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
+            animation-delay: 1250ms;
+        }
+        .motion-active-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-active 2200ms ease-in-out 1500ms infinite;
+        }
+        .motion-flow-loop {
+            stroke-dasharray: 10 8;
+            animation: svg-flow 1100ms linear 1300ms infinite;
+        }
+        .motion-light-loop {
+            transform-box: fill-box; transform-origin: center;
+            animation: svg-light 2600ms ease-in-out 1200ms infinite;
+        }
+        .motion-enter.motion-highlight {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
+        }
+        .motion-ring.motion-highlight {
+            animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
+            animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
+        }
+        .motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out 1500ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
+        }
+        .motion-draw.motion-flow-loop {
+            animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-flow 1100ms linear 1300ms infinite;
+            animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
+        }
+        .motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out 1200ms infinite;
+            animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        @keyframes svg-enter {
+            from { opacity: 0; transform: translateY(10px) scale(.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes svg-grow {
+            from { opacity: .35; transform: scaleX(0); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+        @keyframes svg-ring {
+            from { opacity: 0; transform: scale(.72); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes svg-draw {
+            from { opacity: .25; stroke-dashoffset: 1200; }
+            to { opacity: 1; stroke-dashoffset: 0; }
+        }
+        @keyframes svg-highlight {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.045); filter: brightness(1.12); }
+        }
+        @keyframes svg-active {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: .82; }
+        }
+        @keyframes svg-flow { to { stroke-dashoffset: -36; } }
+        @keyframes svg-light {
+            0%, 100% { transform: scale(1); opacity: .88; }
+            50% { transform: scale(1.12); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .motion-stage * {
+                animation: none !important; opacity: 1 !important; transform: none !important;
+                filter: none !important; stroke-dashoffset: 0 !important;
+            }
+        }
+</style>
   <rect width="1000" height="320" fill="#19151F" />
-  <g stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#C9C1D4" text-anchor="start">FRAME DURATION</text><text x="955" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="end">shorter = faster</text><line x1="280.0" y1="50" x2="280.0" y2="270" stroke="#756A82" stroke-width="1" /><text x="280.0" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle">0 ms</text><line x1="466.66666666666663" y1="50" x2="466.66666666666663" y2="270" stroke="#756A82" stroke-width="1" /><text x="466.66666666666663" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle">50 ms</text><line x1="653.3333333333333" y1="50" x2="653.3333333333333" y2="270" stroke="#756A82" stroke-width="1" /><text x="653.3333333333333" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle">100 ms</text><line x1="840.0" y1="50" x2="840.0" y2="270" stroke="#756A82" stroke-width="1" /><text x="840.0" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle">150 ms</text><text x="30" y="89" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start">Walk (4 frames)</text><rect x="280" y="70" width="560.0" height="26" rx="5" fill="#A78BFA" stroke="#A78BFA" stroke-width="0" /><text x="852.0" y="89" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start">150 ms · 6.6 fps</text><text x="30" y="141" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start">Eat (4 frames)</text><rect x="280" y="122" width="560.0" height="26" rx="5" fill="#A78BFA" stroke="#A78BFA" stroke-width="0" /><text x="852.0" y="141" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start">150 ms · 6.6 fps</text><text x="30" y="193" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start">Gallop (4 frames)</text><rect x="280" y="174" width="373.3333333333333" height="26" rx="5" fill="#C4B5FD" stroke="#A78BFA" stroke-width="0" /><text x="665.3333333333333" y="193" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start">100 ms · 10 fps</text><text x="30" y="245" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start">Gallop (11 frames)</text><rect x="280" y="226" width="186.66666666666666" height="26" rx="5" fill="#C4B5FD" stroke="#A78BFA" stroke-width="0" /><text x="478.66666666666663" y="245" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start">50 ms · 20 fps</text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--i:0" class="motion-enter">FRAME DURATION</text><text x="955" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="end" style="--i:1" class="motion-enter">shorter = faster</text><line x1="280.0" y1="50" x2="280.0" y2="270" stroke="#756A82" stroke-width="1" style="--i:2" class="motion-draw" /><text x="280.0" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:3" class="motion-enter">0 ms</text><line x1="466.66666666666663" y1="50" x2="466.66666666666663" y2="270" stroke="#756A82" stroke-width="1" style="--i:4" class="motion-draw" /><text x="466.66666666666663" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:5" class="motion-enter">50 ms</text><line x1="653.3333333333333" y1="50" x2="653.3333333333333" y2="270" stroke="#756A82" stroke-width="1" style="--i:6" class="motion-draw" /><text x="653.3333333333333" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:7" class="motion-enter">100 ms</text><line x1="840.0" y1="50" x2="840.0" y2="270" stroke="#756A82" stroke-width="1" style="--i:8" class="motion-draw" /><text x="840.0" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:9" class="motion-enter">150 ms</text><text x="30" y="89" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:10" class="motion-enter">Walk (4 frames)</text><rect x="280" y="70" width="560.0" height="26" rx="5" fill="#A78BFA" stroke="#A78BFA" stroke-width="0" style="--i:11" class="motion-grow" /><text x="852.0" y="89" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start" style="--i:12" class="motion-enter">150 ms · 6.6 fps</text><text x="30" y="141" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:13" class="motion-enter">Eat (4 frames)</text><rect x="280" y="122" width="560.0" height="26" rx="5" fill="#A78BFA" stroke="#A78BFA" stroke-width="0" style="--i:14" class="motion-grow" /><text x="852.0" y="141" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start" style="--i:15" class="motion-enter">150 ms · 6.6 fps</text><text x="30" y="193" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:16" class="motion-enter">Gallop (4 frames)</text><rect x="280" y="174" width="373.3333333333333" height="26" rx="5" fill="#C4B5FD" stroke="#A78BFA" stroke-width="0" style="--i:17" class="motion-grow" /><text x="665.3333333333333" y="193" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start" style="--i:18" class="motion-enter">100 ms · 10 fps</text><text x="30" y="245" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:19" class="motion-enter">Gallop (11 frames)</text><rect x="280" y="226" width="186.66666666666666" height="26" rx="5" fill="#C4B5FD" stroke="#A78BFA" stroke-width="0" style="--i:20" class="motion-grow" /><text x="478.66666666666663" y="245" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="start" style="--i:21" class="motion-enter">50 ms · 20 fps</text></g>
 </svg>
