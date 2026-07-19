@@ -59,42 +59,7 @@
 </dl>
 
 <figure class="slate-figure">
-  <svg viewBox="0 0 700 210" role="img" aria-labelledby="tok-title tok-desc"
-       xmlns="http://www.w3.org/2000/svg">
-    <title id="tok-title">Token resolution through ramps to palette</title>
-    <desc id="tok-desc">A token 'foliage.mid' points to the green ramp at a mid step, which resolves to a
-      specific palette color. Rebinding the token to a different ramp recolors everything using it.</desc>
-    <text x="10" y="24" font-size="13" fill="currentColor">Token</text>
-    <rect x="10" y="34" width="150" height="30" rx="5" fill="#7C3AED"></rect>
-    <text x="85" y="54" font-size="12" text-anchor="middle" fill="#ffffff">foliage.mid</text>
-    <text x="180" y="53" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
-    <text x="220" y="24" font-size="13" fill="currentColor">Green ramp</text>
-    <g>
-      <rect x="220" y="34" width="30" height="30" fill="#1e3a1e"></rect>
-      <rect x="250" y="34" width="30" height="30" fill="#2f5a2a"></rect>
-      <rect x="280" y="34" width="30" height="30" fill="#4a8b3a" stroke="#ffffff" stroke-width="2"></rect>
-      <rect x="310" y="34" width="30" height="30" fill="#6fb84e"></rect>
-      <rect x="340" y="34" width="30" height="30" fill="#a5e06a"></rect>
-    </g>
-    <text x="400" y="53" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
-    <rect x="440" y="34" width="30" height="30" rx="4" fill="#4a8b3a"></rect>
-    <text x="490" y="54" font-size="12" fill="currentColor">resolved color</text>
-
-    <text x="10" y="120" font-size="13" fill="currentColor">Rebind the same token &#8594; autumn ramp</text>
-    <rect x="10" y="130" width="150" height="30" rx="5" fill="#7C3AED"></rect>
-    <text x="85" y="150" font-size="12" text-anchor="middle" fill="#ffffff">foliage.mid</text>
-    <text x="180" y="149" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
-    <g>
-      <rect x="220" y="130" width="30" height="30" fill="#5a2a12"></rect>
-      <rect x="250" y="130" width="30" height="30" fill="#8a4a1e"></rect>
-      <rect x="280" y="130" width="30" height="30" fill="#c67a2a" stroke="#ffffff" stroke-width="2"></rect>
-      <rect x="310" y="130" width="30" height="30" fill="#e0a54e"></rect>
-      <rect x="340" y="130" width="30" height="30" fill="#f0d06a"></rect>
-    </g>
-    <text x="400" y="149" font-size="16" fill="currentColor" fill-opacity="0.5">&#8594;</text>
-    <rect x="440" y="130" width="30" height="30" rx="4" fill="#c67a2a"></rect>
-    <text x="490" y="150" font-size="12" fill="currentColor">everything updates</text>
-  </svg>
+  <img src="../../assets/illustrations/token-resolution.svg" data-src-light="../../assets/illustrations/token-resolution.svg" data-src-dark="../../assets/illustrations/token-resolution-dark.svg" alt="The foliage.mid token resolving through summer and autumn color ramps to different palette colors." />
   <figcaption>A token resolves through a ramp to a palette color. Rebinding the token to another ramp recolors
      every asset that uses it - the mechanism behind project-wide theming.</figcaption>
 </figure>

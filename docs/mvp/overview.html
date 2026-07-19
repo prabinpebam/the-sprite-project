@@ -1,0 +1,119 @@
+<!-- MVP overview - immediate product scope and scalable foundation. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Build now · MVP</p>
+  <h1 class="slate-hero__title">The First Shippable Product</h1>
+  <p class="slate-hero__summary">A project-based, pack-driven LPC character generator that takes a developer from
+     composition to a reproducible, game-ready export with complete attribution.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Start with one complete journey: <strong>assemble a character, recolor it, preview its animations, save the
+     recipe, and export it for Godot with correct credits</strong>. Build that journey on versioned project, pack,
+     token, animation, provenance, and export contracts that future terrain and structures producers can reuse.
+     The MVP is the first product on the platform, not a disposable prototype or a miniature of every idea.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">The scope rule</p>
+  <p>Include a capability only when it is required to complete the character-to-engine journey or to prove a
+     shared contract needed by the <a href="../north-star/overview.html">North Star</a>.</p>
+</div>
+
+<h2>The one journey</h2>
+<figure class="slate-figure">
+  <img src="../assets/illustrations/mvp-character-journey.svg" data-src-light="../assets/illustrations/mvp-character-journey.svg" data-src-dark="../assets/illustrations/mvp-character-journey-dark.svg" alt="Seven-step character journey from project creation through composition, theming, preview, save, Godot export, and use in a game." />
+  <figcaption>The MVP succeeds only when a developer can take a saved character all the way into a game.</figcaption>
+</figure>
+
+<h2>Who it serves</h2>
+<p>The first user is a solo or small-team developer without a dedicated pixel artist who needs coherent animated
+   characters quickly, wants legally usable output, and is willing to use the LPC visual style. Godot is the first
+   engine target so the product can validate an engine-ready handoff rather than stop at a generic PNG.</p>
+
+<h2>Included</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Local projects</h3>
+    <p class="slate-card__body">Create, rename, save, reopen, and deterministically rebuild a project containing
+       multiple character recipes and one shared theme.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Pack-driven catalog</h3>
+    <p class="slate-card__body">One curated starter pack, loaded through a versioned manifest rather than embedded
+       in UI code. A second test pack must load without renderer changes.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Character composition</h3>
+    <p class="slate-card__body">One humanoid body type with skin, hair, headwear, torso, legs, feet, and a small
+       tool or weapon selection. Pack data controls compatibility and draw order.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Animation preview</h3>
+    <p class="slate-card__body">Idle and walk in four directions, with play, pause, direction, speed, pixel-perfect
+       zoom, and clear animation-coverage warnings.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Token recoloring</h3>
+    <p class="slate-card__body">A small semantic set for skin, hair, primary and secondary cloth, leather, and
+       metal, supporting a project theme plus per-character overrides.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Reproducible recipes</h3>
+    <p class="slate-card__body">Recipes store stable asset references and token choices, not rendered pixels, so
+       the same project and pack versions produce the same result.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Two export adapters</h3>
+    <p class="slate-card__body">Generic PNG plus animation JSON, and a Godot-oriented export that removes manual
+       frame slicing. Engine details remain outside the renderer.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Attribution by construction</h3>
+    <p class="slate-card__body">Every source layer carries author, source, and license metadata. Export computes
+       human-readable and machine-readable credits from the selected assets.</p>
+  </article>
+</div>
+
+<h2>Shared foundations built now</h2>
+<p>Only contracts with a demonstrated role in both the MVP and the long-term product are generalized.</p>
+<table>
+  <thead><tr><th>Foundation</th><th>MVP use</th><th>Later extension</th></tr></thead>
+  <tbody>
+    <tr><td>Versioned project</td><td>Contains character recipes and a theme</td><td>Adds terrain, props, and scenes</td></tr>
+    <tr><td>Pack manifest</td><td>Describes character layers and licenses</td><td>Describes biome, structure, and community packs</td></tr>
+    <tr><td>Shared asset identity</td><td>References selected sprite layers</td><td>References every generated or imported asset</td></tr>
+    <tr><td>Animation descriptor</td><td>Idle and walk frame cycles</td><td>Animated terrain, props, effects, and authored motion</td></tr>
+    <tr><td>Token resolver</td><td>Recolors character regions</td><td>Rethemes complete worlds</td></tr>
+    <tr><td>Provenance model</td><td>Generates character credits</td><td>Merges attribution across a whole project</td></tr>
+    <tr><td>Headless renderer</td><td>Composes and recolors character frames</td><td>Supports CLI, automation, and additional producers</td></tr>
+    <tr><td>Export adapter</td><td>Emits generic and Godot output</td><td>Adds Unity, live-link, and pipeline targets</td></tr>
+  </tbody>
+</table>
+
+<h2>Explicitly deferred</h2>
+<p>Terrain generation, structures and props, scene composition, manual pixel editing, animation authoring,
+   mounts and creatures, material maps, user-facing pack creation, a marketplace, Unity integration, live sync,
+   CLI/API access, cloud accounts, and collaboration remain outside the MVP.</p>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Do not build a universal framework yet</p>
+  <p>Version the proven contracts, but wait for a second real producer to reveal what is genuinely shared. The MVP
+     does not need a plugin runtime, node graph, generic scene editor, or speculative generator framework.</p>
+</div>
+
+<h2>Definition of done</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Create and compose</p><p>A new user creates a project and assembles a character from at least five content slots.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Theme and preview</p><p>They apply a shared theme, override one token, and preview idle and walk in four directions.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Save and reproduce</p><p>They close and reopen the project and receive the same rendered character.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Export and integrate</p><p>They export the character, animation metadata, and credits, then use it in Godot without manual slicing.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Prove extensibility</p><p>A second test pack loads without changing the renderer or composition code.</p></li>
+</ol>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Next</p>
+  <p>Follow the <a href="../planning/overview.html">delivery roadmap</a> from the initial technical spike through
+     user validation and the first post-MVP expansion.</p>
+</div>

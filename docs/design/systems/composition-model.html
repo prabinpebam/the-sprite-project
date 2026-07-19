@@ -22,48 +22,7 @@
    license format.</p>
 
 <figure class="slate-figure">
-  <svg viewBox="0 0 720 260" role="img" aria-labelledby="comp-title comp-desc"
-       xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-    <title id="comp-title">Composition data flow</title>
-    <desc id="comp-desc">Three generators write assets into a shared project; the token system styles them; the
-      scene composes them; the export pipeline emits files, a live link, and CLI output.</desc>
-    <g font-size="11">
-      <rect x="10" y="16" width="150" height="40" rx="7" fill="#7C3AED"></rect>
-      <text x="85" y="41" text-anchor="middle" fill="#ffffff">Character gen</text>
-      <rect x="10" y="66" width="150" height="40" rx="7" fill="#7C3AED"></rect>
-      <text x="85" y="91" text-anchor="middle" fill="#ffffff">Environment gen</text>
-      <rect x="10" y="116" width="150" height="40" rx="7" fill="#7C3AED"></rect>
-      <text x="85" y="141" text-anchor="middle" fill="#ffffff">Structures gen</text>
-    </g>
-    <g stroke="currentColor" stroke-opacity="0.4">
-      <line x1="160" y1="36" x2="250" y2="86"></line>
-      <line x1="160" y1="86" x2="250" y2="86"></line>
-      <line x1="160" y1="136" x2="250" y2="86"></line>
-    </g>
-    <g font-size="12">
-      <rect x="250" y="60" width="180" height="52" rx="8" fill="#7C3AED" fill-opacity="0.18" stroke="#7C3AED"></rect>
-      <text x="340" y="82" text-anchor="middle" fill="currentColor">Project</text>
-      <text x="340" y="100" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">assets · tokens · licenses</text>
-    </g>
-    <g stroke="currentColor" stroke-opacity="0.4">
-      <line x1="340" y1="112" x2="340" y2="150"></line>
-    </g>
-    <g font-size="11">
-      <rect x="250" y="152" width="180" height="38" rx="7" fill="none" stroke="#7C3AED" stroke-width="2"></rect>
-      <text x="340" y="176" text-anchor="middle" fill="currentColor">Scene / composition</text>
-    </g>
-    <g stroke="currentColor" stroke-opacity="0.4">
-      <line x1="430" y1="86" x2="500" y2="86"></line>
-    </g>
-    <g font-size="11">
-      <rect x="500" y="40" width="200" height="38" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
-      <text x="600" y="64" text-anchor="middle" fill="currentColor">Export: files</text>
-      <rect x="500" y="86" width="200" height="38" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
-      <text x="600" y="110" text-anchor="middle" fill="currentColor">Export: live link</text>
-      <rect x="500" y="132" width="200" height="38" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.5"></rect>
-      <text x="600" y="156" text-anchor="middle" fill="currentColor">Export: CLI / API</text>
-    </g>
-  </svg>
+  <img src="../../assets/illustrations/composition-data-flow.svg" data-src-light="../../assets/illustrations/composition-data-flow.svg" data-src-dark="../../assets/illustrations/composition-data-flow-dark.svg" alt="Character, environment, and structures generators writing to one project with scene composition and three export adapters." />
   <figcaption>Generators feed one project; the scene composes assets; a single export pipeline emits files, a live
      link, and CLI output.</figcaption>
 </figure>

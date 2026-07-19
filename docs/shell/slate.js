@@ -110,11 +110,19 @@
       if ((localStorage.getItem('slate-theme-pref') || def) === 'auto') applyTheme('auto', false);
     });
   }
+  function syncThemedImages(actual, root = document) {
+    const attr = actual === 'dark' ? 'data-src-dark' : 'data-src-light';
+    root.querySelectorAll('img[data-src-light][data-src-dark]').forEach(img => {
+      const src = img.getAttribute(attr);
+      if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
+  }
   function applyTheme(pref, persist = true) {
     state.themePref = pref;
     if (persist) localStorage.setItem('slate-theme-pref', pref);
     const actual = resolveTheme(pref);
     document.documentElement.setAttribute('data-theme', actual);
+    syncThemedImages(actual);
     const light = $('#hljs-light'), darkS = $('#hljs-dark');
     if (light) light.disabled = (actual === 'dark');
     if (darkS) darkS.disabled = (actual === 'light');
@@ -247,9 +255,12 @@
     });
     // Images (resolve against contentRoot for display)
     container.querySelectorAll('img').forEach(img => {
-      const src = img.getAttribute('src');
-      if (src && !/^https?:/.test(src) && !src.startsWith('data:')) img.src = joinRoot(resolvePath(basePath, src));
+      ['src', 'data-src-light', 'data-src-dark'].forEach(attr => {
+        const src = img.getAttribute(attr);
+        if (src && !/^https?:/.test(src) && !src.startsWith('data:')) img.setAttribute(attr, joinRoot(resolvePath(basePath, src)));
+      });
     });
+    syncThemedImages(document.documentElement.getAttribute('data-theme') || 'light', container);
     // Heading IDs + permalink anchors
     container.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
       if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
@@ -574,11 +585,33 @@
     let min = Infinity; for (const f of folder.files) min = Math.min(min, f.order ?? Infinity);
     for (const [, c] of folder.children) min = Math.min(min, folderMinOrder(c)); return min;
   }
+  function navFolderStateKey() {
+    return `slate-nav-folder-state-v1:${location.pathname}:${state.projectName}`;
+  }
+  function readNavFolderState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(navFolderStateKey()) || '{}');
+      return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+    } catch (_) { return {}; }
+  }
+  function persistNavFolderState() {
+    const saved = {};
+    $$('.nav-folder[data-folder-path]').forEach(folder => {
+      saved[folder.dataset.folderPath] = folder.classList.contains('expanded');
+    });
+    try { localStorage.setItem(navFolderStateKey(), JSON.stringify(saved)); } catch (_) {}
+  }
+  function setFolderExpanded(folder, expanded) {
+    folder.classList.toggle('expanded', expanded);
+    const header = folder.querySelector(':scope > .nav-folder-header');
+    if (header) header.setAttribute('aria-expanded', String(expanded));
+  }
   function renderNav() {
-    const nav = $('.nav-tree'); nav.innerHTML = ''; const tree = state.fileTree;
+    const nav = $('.nav-tree'); nav.innerHTML = ''; const tree = state.fileTree; const folderState = readNavFolderState();
     const rootFiles = [...tree.files].sort((a, b) => { if (a.filename.toLowerCase() === 'readme.md') return -1; if (b.filename.toLowerCase() === 'readme.md') return 1; return (a.order ?? Infinity) - (b.order ?? Infinity) || a.title.localeCompare(b.title); });
     rootFiles.forEach(f => nav.appendChild(makeNavItem(f)));
-    [...tree.children.entries()].sort((a, b) => folderMinOrder(a[1]) - folderMinOrder(b[1]) || a[0].localeCompare(b[0])).forEach(([n, f]) => nav.appendChild(makeNavFolder(n, f)));
+    [...tree.children.entries()].sort((a, b) => folderMinOrder(a[1]) - folderMinOrder(b[1]) || a[0].localeCompare(b[0])).forEach(([n, f]) => nav.appendChild(makeNavFolder(n, f, '', folderState)));
+    persistNavFolderState();
   }
   function makeNavItem(file) {
     const a = document.createElement('a');
@@ -590,17 +623,23 @@
     a.addEventListener('click', (e) => { if (modClick(e)) return; e.preventDefault(); navigateTo(file.path); });
     return a;
   }
-  function makeNavFolder(name, folder) {
-    const group = document.createElement('div'); group.className = 'nav-folder expanded';
-    const header = document.createElement('button'); header.className = 'nav-folder-header';
+  function makeNavFolder(name, folder, parentPath, folderState) {
+    const folderPath = parentPath ? parentPath + '/' + name : name;
+    const expanded = folderState[folderPath] === true;
+    const group = document.createElement('div'); group.className = 'nav-folder'; group.dataset.folderPath = folderPath;
+    const header = document.createElement('button'); header.className = 'nav-folder-header'; header.setAttribute('aria-expanded', String(expanded));
     header.innerHTML = `<span class="material-symbols-outlined nav-chevron" aria-hidden="true">chevron_right</span><span class="material-symbols-outlined nav-folder-icon" aria-hidden="true">folder</span><span class="nav-folder-text">${esc(humanize(name))}</span>`;
-    header.addEventListener('click', () => group.classList.toggle('expanded'));
+    setFolderExpanded(group, expanded);
+    header.addEventListener('click', () => { setFolderExpanded(group, !group.classList.contains('expanded')); persistNavFolderState(); });
     const content = document.createElement('div'); content.className = 'nav-folder-content';
     [...folder.files].sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity) || a.title.localeCompare(b.title)).forEach(f => content.appendChild(makeNavItem(f)));
-    [...folder.children.entries()].sort((a, b) => folderMinOrder(a[1]) - folderMinOrder(b[1]) || a[0].localeCompare(b[0])).forEach(([n, f]) => content.appendChild(makeNavFolder(n, f)));
+    [...folder.children.entries()].sort((a, b) => folderMinOrder(a[1]) - folderMinOrder(b[1]) || a[0].localeCompare(b[0])).forEach(([n, f]) => content.appendChild(makeNavFolder(n, f, folderPath, folderState)));
     group.appendChild(header); group.appendChild(content); return group;
   }
-  function setAllFolders(expanded) { $$('.nav-folder').forEach(f => f.classList.toggle('expanded', expanded)); }
+  function setAllFolders(expanded) {
+    $$('.nav-folder').forEach(folder => setFolderExpanded(folder, expanded));
+    persistNavFolderState();
+  }
 
   /* ==========================================================
      STATUS + LAST-UPDATED METADATA

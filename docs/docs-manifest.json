@@ -3,32 +3,36 @@
   "entries": [
     { "path": "landing.html", "title": "Overview", "order": 0, "icon": "home" },
 
-    { "path": "research/overview.html", "title": "Research Overview", "order": 10, "icon": "science" },
-    { "path": "research/market-research/indie-sprite-pipeline.html", "title": "Indie 2D Sprite Pipeline", "order": 11, "badge": "new" },
-    { "path": "research/context/lpc-foundations.html", "title": "LPC Foundations", "order": 12 },
-    { "path": "research/character-generators/ulpc-generator.html", "title": "Universal LPC Generator", "order": 13, "badge": "flagship" },
-    { "path": "research/character-generators/ulpc-capabilities-gaps.html", "title": "ULPC - Capabilities & Gaps", "order": 13.5, "badge": "new" },
-    { "path": "research/character-generators/vitruvian-studio.html", "title": "Vitruvian LPC Studio", "order": 14 },
-    { "path": "research/developer-tooling/lpcg.html", "title": "lpcg (Rust lib + CLI)", "order": 15 },
-    { "path": "research/developer-tooling/phaser-lpc-character.html", "title": "Phaser 3 LPC Character", "order": 16 },
-    { "path": "research/art-sources/lpc-revised.html", "title": "LPC Revised (ElizaWy)", "order": 17 },
-    { "path": "research/art-sources/lpc-style-guide.html", "title": "LPC Revised Style Guide", "order": 18 },
-    { "path": "research/art-sources/lpc-pirates.html", "title": "LPC Pirates", "order": 19 },
-    { "path": "research/art-sources/lpc-horses.html", "title": "LPC Horses & Rework", "order": 20 },
-    { "path": "research/broader-libraries/kenney.html", "title": "Kenney.nl", "order": 21 },
+    { "path": "mvp/overview.html", "title": "MVP Scope", "order": 10, "icon": "rocket_launch", "badge": "active" },
 
-    { "path": "design/overview.html", "title": "Design Overview", "order": 30, "icon": "draw" },
-    { "path": "design/scenarios-and-flows.html", "title": "Scenarios, Capabilities & Task Flows", "order": 30.5, "badge": "new" },
-    { "path": "design/generators/character-generator.html", "title": "Character Generator (Expanded)", "order": 31, "badge": "proposal" },
-    { "path": "design/generators/environment-generator.html", "title": "Environment & Terrain Generator", "order": 32, "badge": "proposal" },
-    { "path": "design/generators/structures-props.html", "title": "Structures & Props Generator", "order": 33, "badge": "proposal" },
-    { "path": "design/systems/composition-model.html", "title": "How It Comes Together", "order": 34, "badge": "proposal" },
-    { "path": "design/systems/token-coherence.html", "title": "Token-Based Coherence", "order": 35, "badge": "proposal" },
-    { "path": "design/systems/manual-editing.html", "title": "Manual Edit & Create", "order": 36, "badge": "proposal" },
-    { "path": "design/systems/material-maps.html", "title": "Material & Lighting Maps", "order": 37, "badge": "proposal" },
+    { "path": "planning/overview.html", "title": "Delivery Phases", "order": 20, "icon": "checklist", "badge": "active" },
 
-    { "path": "planning/overview.html", "title": "Planning Overview", "order": 40, "icon": "checklist", "badge": "planned" },
+    { "path": "north-star/overview.html", "title": "North Star", "order": 30, "icon": "flag", "badge": "vision" },
 
-    { "path": "execution/overview.html", "title": "Execution Overview", "order": 50, "icon": "rocket_launch", "badge": "planned" }
+    { "path": "design/overview.html", "title": "North Star Details", "order": 40, "icon": "draw" },
+    { "path": "design/scenarios-and-flows.html", "title": "Scenarios, Capabilities & Task Flows", "order": 40.5 },
+    { "path": "design/generators/character-generator.html", "title": "Character Generator (Expanded)", "order": 41, "badge": "vision" },
+    { "path": "design/generators/environment-generator.html", "title": "Environment & Terrain Generator", "order": 42, "badge": "vision" },
+    { "path": "design/generators/structures-props.html", "title": "Structures & Props Generator", "order": 43, "badge": "vision" },
+    { "path": "design/systems/composition-model.html", "title": "How It Comes Together", "order": 44, "badge": "vision" },
+    { "path": "design/systems/token-coherence.html", "title": "Token-Based Coherence", "order": 45, "badge": "vision" },
+    { "path": "design/systems/manual-editing.html", "title": "Manual Edit & Create", "order": 46, "badge": "vision" },
+    { "path": "design/systems/material-maps.html", "title": "Material & Lighting Maps", "order": 47, "badge": "vision" },
+
+    { "path": "research/overview.html", "title": "Evidence Base", "order": 60, "icon": "science" },
+    { "path": "research/market-research/indie-sprite-pipeline.html", "title": "Indie 2D Sprite Pipeline", "order": 61 },
+    { "path": "research/context/lpc-foundations.html", "title": "LPC Foundations", "order": 62 },
+    { "path": "research/character-generators/ulpc-generator.html", "title": "Universal LPC Generator", "order": 63, "badge": "flagship" },
+    { "path": "research/character-generators/ulpc-capabilities-gaps.html", "title": "ULPC - Capabilities & Gaps", "order": 63.5 },
+    { "path": "research/character-generators/vitruvian-studio.html", "title": "Vitruvian LPC Studio", "order": 64 },
+    { "path": "research/developer-tooling/lpcg.html", "title": "lpcg (Rust lib + CLI)", "order": 65 },
+    { "path": "research/developer-tooling/phaser-lpc-character.html", "title": "Phaser 3 LPC Character", "order": 66 },
+    { "path": "research/art-sources/lpc-revised.html", "title": "LPC Revised (ElizaWy)", "order": 67 },
+    { "path": "research/art-sources/lpc-style-guide.html", "title": "LPC Revised Style Guide", "order": 68 },
+    { "path": "research/art-sources/lpc-pirates.html", "title": "LPC Pirates", "order": 69 },
+    { "path": "research/art-sources/lpc-horses.html", "title": "LPC Horses & Rework", "order": 70 },
+    { "path": "research/broader-libraries/kenney.html", "title": "Kenney.nl", "order": 71 },
+
+    { "path": "execution/overview.html", "title": "Build Record", "order": 90, "icon": "history", "badge": "next" }
   ]
 }

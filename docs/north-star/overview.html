@@ -1,0 +1,95 @@
+<!-- North Star overview - durable long-term product direction. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Long-term direction · North Star</p>
+  <h1 class="slate-hero__title">A Coherent World-Asset Studio</h1>
+  <p class="slate-hero__summary">One project where developers generate, adapt, compose, and ship an entire
+     visually coherent 2D world without stitching together disconnected tools and asset sources.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>The North Star is a <strong>family of asset producers</strong> for characters, environments, structures, and
+     props, joined by one project model, token language, editor, provenance system, composition surface, and export
+     pipeline. The <a href="../mvp/overview.html">MVP</a> begins with character generation, but it establishes the
+     shared contracts that let later producers join without becoming separate products.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">North Star, not current scope</p>
+  <p>This page protects the destination while the <a href="../planning/overview.html">delivery roadmap</a> controls
+     sequencing. Features described here are not commitments for the first release.</p>
+</div>
+
+<h2>The complete product</h2>
+<figure class="slate-figure">
+  <img src="../assets/illustrations/north-star-studio.svg" data-src-light="../assets/illustrations/north-star-studio.svg" data-src-dark="../assets/illustrations/north-star-studio-dark.svg" alt="Three specialized asset producers feeding one project, shared studio capabilities, scene composition, and a shared export pipeline." />
+  <figcaption>The character MVP is the first producer; later capabilities expand around shared project contracts.</figcaption>
+</figure>
+
+<h2>The user promise</h2>
+<p>A developer can move from an idea to a coherent, animated, engine-ready world while retaining control over
+   style, source attribution, and output. Generation handles repetitive construction; manual editing handles the
+   exceptions; shared tokens keep every result visually related.</p>
+
+<h2>Product pillars</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card slate-card--interactive">
+    <a href="../design/generators/character-generator.html">
+      <h3 class="slate-card__title">Extensible producers</h3>
+      <p class="slate-card__body">Characters, terrain, structures, and props are produced through specialized
+         workflows but enter the project through shared asset and pack contracts.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="../design/systems/token-coherence.html">
+      <h3 class="slate-card__title">Coherence by construction</h3>
+      <p class="slate-card__body">Semantic color and material tokens make project-wide visual consistency a
+         property of the system rather than a manual cleanup task.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="../design/systems/manual-editing.html">
+      <h3 class="slate-card__title">Generation with control</h3>
+      <p class="slate-card__body">A token-aware editor lets artists change generated work, create missing assets,
+         and feed those results back into reusable packs.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="../design/systems/composition-model.html">
+      <h3 class="slate-card__title">One project and pipeline</h3>
+      <p class="slate-card__body">Assets share project, animation, provenance, composition, and export models so
+         the product behaves as one studio rather than a bundle of generators.</p>
+    </a>
+  </article>
+</div>
+
+<h2>Complete capability horizon</h2>
+<table>
+  <thead><tr><th>Area</th><th>North Star capability</th><th>Where it begins</th></tr></thead>
+  <tbody>
+    <tr><td>Characters</td><td>Humanoids, themed packs, creatures, mounts, and rider composition</td><td>MVP humanoid producer</td></tr>
+    <tr><td>World generation</td><td>Autotiled terrain, transitions, biomes, buildings, and props</td><td>Post-MVP second producer</td></tr>
+    <tr><td>Visual language</td><td>Project-wide themes across all generated and edited assets</td><td>MVP character tokens</td></tr>
+    <tr><td>Editing</td><td>Pixel, animation, and map editing without leaving the project</td><td>Deferred until generation is proven</td></tr>
+    <tr><td>Composition</td><td>Place and verify complete scenes with anchors and depth sorting</td><td>Shared asset fields in MVP</td></tr>
+    <tr><td>Lighting</td><td>Coordinated normal, specular, and emissive maps</td><td>Deferred shared pipeline</td></tr>
+    <tr><td>Delivery</td><td>Files, engine-native resources, live links, CLI, API, and CI</td><td>MVP generic and Godot adapters</td></tr>
+    <tr><td>Legal safety</td><td>Automatic project-wide source and license accounting</td><td>MVP provenance model</td></tr>
+  </tbody>
+</table>
+
+<h2>Durable principles</h2>
+<dl class="slate-defs">
+  <dt>One project</dt><dd>New producers join the same project; they do not become isolated applications.</dd>
+  <dt>Data before exceptions</dt><dd>Packs encode slots, layers, compatibility, animation coverage, palette mappings, and licenses.</dd>
+  <dt>Headless core</dt><dd>Composition and export remain usable without the graphical interface, enabling later automation.</dd>
+  <dt>Provenance never detaches</dt><dd>Authorship and license information travel with every source asset and every export.</dd>
+  <dt>Expand after evidence</dt><dd>Shared abstractions are extracted from working producers, not invented in anticipation of them.</dd>
+</dl>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Detailed design reference</p>
+  <p>The existing <a href="../design/overview.html">design proposals</a> explore each generator and shared system.
+     They explain the destination; the roadmap decides when each part earns implementation.</p>
+</div>

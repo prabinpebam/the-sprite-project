@@ -201,6 +201,7 @@ button { font-family: inherit; font-size: inherit; border: none; background: non
 .header {
     grid-area: header;
     display: flex;
+    min-width: 0;
     align-items: center;
     gap: var(--space-l);
     padding: 0 var(--space-l);
@@ -236,7 +237,7 @@ button { font-family: inherit; font-size: inherit; border: none; background: non
     border-radius: var(--radius-md);
 }
 .header-spacer { flex: 1; }
-.search-container { position: relative; flex: 1; max-width: 480px; }
+.search-container { position: relative; flex: 1; min-width: 0; max-width: 480px; }
 .search-box {
     display: flex; align-items: center; gap: var(--space-s);
     height: 32px; padding: 0 var(--space-m);
@@ -345,7 +346,7 @@ button { font-family: inherit; font-size: inherit; border: none; background: non
 /* ============================================================
    6. MAIN CONTENT AREA
    ============================================================ */
-.content { grid-area: content; overflow-y: auto; overflow-x: hidden; background: var(--color-neutral-bg-1); scroll-behavior: smooth; }
+.content { grid-area: content; min-width: 0; overflow-y: auto; overflow-x: hidden; background: var(--color-neutral-bg-1); scroll-behavior: smooth; }
 .document { max-width: var(--content-max-w); margin: 0 auto; padding: var(--space-xxxl) var(--space-xxxxl); overflow-wrap: break-word; transition: opacity 0.18s var(--curve-ease); }
 .document.is-fading { opacity: 0; }
 

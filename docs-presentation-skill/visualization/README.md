@@ -1,13 +1,18 @@
-# chart-visualization-skills-en
+# Visualization Skills
+
+Static documentation visuals are SVG-first. Read [`ROUTING.md`](ROUTING.md) for the ownership
+boundary: `svg-illustration` owns final static assets and visual QA; AntV skills remain available
+for specialist chart, graph, table, and editor knowledge or genuinely interactive deliverables.
+
+The AntV directories below are an English translation of
+[`antvis/chart-visualization-skills`](https://github.com/antvis/chart-visualization-skills).
 
 An **English translation** of the `skills/` from
 [antvis/chart-visualization-skills](https://github.com/antvis/chart-visualization-skills)
 (originally authored primarily in Chinese).
 
-This repository exists so the skill documentation can be inspected, modified, and extended
-in English. All content is a faithful translation - code, API names, identifiers, file
-paths, links, and markdown structure are preserved unchanged; only human-language prose,
-headings, table text, code comments, and example data values were translated.
+The translated content is retained so its specialist knowledge can be consulted without making
+AntV-generated artwork the default static output.
 
 ## Attribution & License
 
@@ -30,6 +35,8 @@ notice and permission notice are retained in `LICENSE`, as the license requires.
 | [`icon-retrieval`](./skills/icon-retrieval) | Icon retrieval helper |
 | [`infographic-creator`](./skills/infographic-creator) | Infographic creation |
 | [`narrative-text-visualization`](./skills/narrative-text-visualization) | Narrative-text visualization |
+| [`svg-illustration`](./skills/svg-illustration) | **Default static owner:** accessible charts, illustrations, diagrams, subjects, scenes, maps, and generative vector work |
+| [`svg-theme-system`](./skills/svg-theme-system) | Semantic color themes, light/dark variants, brand customization, and casual/formal/sharp/simple/friendly appearance presets |
 
 ## Layout
 

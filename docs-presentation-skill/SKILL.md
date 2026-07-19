@@ -1,7 +1,7 @@
 ---
 name: docs-presentation
 title: Documentation-Presentation (Slate)
-description: Turn raw content into a beautiful, navigable, visual-first static documentation site. Use when asked to format, organize, or present provided content (notes, transcripts, Markdown, extracted docs) as structured, viewable pages, or to build a documentation site/viewer from content. Strongly biases toward visual representation - charts, diagrams, infographics, and data visuals - using the bundled AntV visualization skills.
+description: Turn raw content into a beautiful, navigable, visual-first static documentation site. Use when asked to format, organize, or present provided content (notes, transcripts, Markdown, extracted docs) as structured, viewable pages, or to build a documentation site/viewer from content. Uses custom validated SVG for static visuals and specialist AntV knowledge only when advanced chart, graph, table, or editor semantics are needed.
 version: 0.2.0
 ---
 
@@ -84,33 +84,26 @@ Use this skill when the user asks to:
 
 ## Visualization decision matrix - content shape → visual → skill
 
-Choose the visual whose shape matches the data, then author it with the linked skill. All visuals
-are embedded as **figures** (see "Embedding a visualization").
+Choose the visual whose shape matches the content. Follow the centralized
+[visualization ownership policy](visualization/ROUTING.md): `svg-illustration` owns final static
+assets; AntV skills supply specialist semantics or own genuinely interactive deliverables. All
+static visuals are embedded as **figures** (see "Embedding a visualization").
 
 | If the content is… | Represent it as | Use skill |
 | --- | --- | --- |
-| A time series / trend | `line` (trend) or `area` (cumulative); `dual-axes` for two units | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Category comparison | `bar` / `column`; `radar` for multi-dimension | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Parts of a whole | `pie`; `treemap` for hierarchical proportion | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Distribution / frequency | `histogram`, `boxplot`, `violin` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Correlation | `scatter` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Flow / conversion | `sankey`, `funnel`, `flow-diagram` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Hierarchy / tree | `organization-chart`, `mind-map`, `treemap` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Cause & effect | `fishbone-diagram` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Progress / percentage | `liquid` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Text frequency | `word-cloud` | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
-| Rich statistical chart (custom marks, scales, interactions) | AntV **G2** chart, exported to SVG/PNG | [antv-g2-chart](visualization/skills/antv-g2-chart/SKILL.md) |
-| Network / graph relationships | AntV **G6** graph, exported to SVG/PNG | [antv-g6-graph](visualization/skills/antv-g6-graph/SKILL.md) |
-| Pivot table / spreadsheet | AntV **S2**, exported to image or `spreadsheet` chart | [antv-s2-expert](visualization/skills/antv-s2-expert/SKILL.md) |
-| Node/edge diagram (architecture, workflow) | AntV **X6**, exported to SVG/PNG | [antv-x6-editor](visualization/skills/antv-x6-editor/SKILL.md) |
-| Insight-dense narrative (entities + metrics) | Narrative-text (T8) visualization | [narrative-text-visualization](visualization/skills/narrative-text-visualization/SKILL.md) |
-| Summary poster of key facts | Infographic | [infographic-creator](visualization/skills/infographic-creator/SKILL.md) |
+| Static trend, comparison, proportion, distribution, correlation, or progress | Accessible chart SVG; consult G2 for nontrivial encoding/scale/transform choices | [svg-illustration](visualization/skills/svg-illustration/SKILL.md) |
+| Static flow, conversion, hierarchy, cause/effect, architecture, lifecycle, or roadmap | Art-directed SVG whose geometry mirrors the concept | [svg-illustration](visualization/skills/svg-illustration/SKILL.md) |
+| Static infographic, narrative visual, annotated scene, mechanism, object, person, or map | Custom accessible SVG illustration | [svg-illustration](visualization/skills/svg-illustration/SKILL.md) |
+| Interactive statistical chart or advanced statistical implementation | AntV **G2** runtime | [antv-g2-chart](visualization/skills/antv-g2-chart/SKILL.md) |
+| Dense or interactive network / graph | AntV **G6** runtime | [antv-g6-graph](visualization/skills/antv-g6-graph/SKILL.md) |
+| Interactive pivot table / multidimensional analysis | AntV **S2** runtime | [antv-s2-expert](visualization/skills/antv-s2-expert/SKILL.md) |
+| Interactive node/edge editor | AntV **X6** runtime | [antv-x6-editor](visualization/skills/antv-x6-editor/SKILL.md) |
+| Quick disposable chart/infographic prototype | AntV API/DSL, explicitly not the final docs asset | [chart-visualization](visualization/skills/chart-visualization/SKILL.md) |
 | Need an icon for a card/tile/infographic | Icon lookup | [icon-retrieval](visualization/skills/icon-retrieval/SKILL.md) |
 
-**Default, lowest-friction path:** for standard charts, use
-[chart-visualization](visualization/skills/chart-visualization/SKILL.md) - it calls the AntV
-GPT-Vis API and returns a chart **image**, which you save into `assets/charts/` and embed as a
-figure.
+**Default static path:** use [svg-illustration](visualization/skills/svg-illustration/SKILL.md),
+save the source data or deterministic generator when appropriate, validate the SVG, render it in
+the real docs context, and inspect it before delivery. Never ship an uninspected library export.
 
 ## Embedding a visualization in a page
 
@@ -177,19 +170,20 @@ prose - and flag the gap to the user.
 
 ## Visualization skills (bundled)
 
-Vendored under [`visualization/`](visualization/README.md) - an English port of AntV
-`chart-visualization-skills` (MIT). Read the linked `SKILL.md` for each before authoring that
-visual type.
+Bundled under [`visualization/`](visualization/README.md). Use
+[`visualization/ROUTING.md`](visualization/ROUTING.md) to avoid duplicated responsibilities.
+AntV skills retain their MIT attribution and act as specialists; the project-authored SVG skill
+owns final static documentation visuals.
 
 | Skill | Use for | Path |
 | --- | --- | --- |
-| chart-visualization | Standard charts via the GPT-Vis API → returns an image (default path) | [visualization/skills/chart-visualization/SKILL.md](visualization/skills/chart-visualization/SKILL.md) |
-| antv-g2-chart | Custom statistical charts (marks, scales, transforms, interactions) | [visualization/skills/antv-g2-chart/SKILL.md](visualization/skills/antv-g2-chart/SKILL.md) |
-| antv-g6-graph | Graph / network visualization | [visualization/skills/antv-g6-graph/SKILL.md](visualization/skills/antv-g6-graph/SKILL.md) |
-| antv-s2-expert | Pivot tables & spreadsheets | [visualization/skills/antv-s2-expert/SKILL.md](visualization/skills/antv-s2-expert/SKILL.md) |
-| antv-x6-editor | Node/edge diagrams (architecture, workflows) | [visualization/skills/antv-x6-editor/SKILL.md](visualization/skills/antv-x6-editor/SKILL.md) |
-| infographic-creator | Infographic posters from text | [visualization/skills/infographic-creator/SKILL.md](visualization/skills/infographic-creator/SKILL.md) |
-| narrative-text-visualization | Insight narratives with inline mini-charts (T8) | [visualization/skills/narrative-text-visualization/SKILL.md](visualization/skills/narrative-text-visualization/SKILL.md) |
+| svg-illustration | **Default static owner:** charts, diagrams, infographics, subjects, scenes, maps, validation, and QA | [visualization/skills/svg-illustration/SKILL.md](visualization/skills/svg-illustration/SKILL.md) |
+| svg-theme-system | Semantic color themes, light/dark variants, brand customization, and visual personality presets | [visualization/skills/svg-theme-system/SKILL.md](visualization/skills/svg-theme-system/SKILL.md) |
+| antv-g2-chart | Statistical specialist; final owner only for interactive G2 | [visualization/skills/antv-g2-chart/SKILL.md](visualization/skills/antv-g2-chart/SKILL.md) |
+| antv-g6-graph | Graph-layout specialist; final owner only for interactive/dense G6 | [visualization/skills/antv-g6-graph/SKILL.md](visualization/skills/antv-g6-graph/SKILL.md) |
+| antv-s2-expert | Final owner for interactive pivot/cross-analysis tables | [visualization/skills/antv-s2-expert/SKILL.md](visualization/skills/antv-s2-expert/SKILL.md) |
+| antv-x6-editor | Final owner for interactive node/edge editors | [visualization/skills/antv-x6-editor/SKILL.md](visualization/skills/antv-x6-editor/SKILL.md) |
+| chart-visualization / infographic / T8 | Opt-in prototypes, not default static output | [visualization/README.md](visualization/README.md) |
 | icon-retrieval | Find icons for cards/tiles/infographics | [visualization/skills/icon-retrieval/SKILL.md](visualization/skills/icon-retrieval/SKILL.md) |
 
 Attribution: original work © 2025 AntV Visualization Team, MIT License. See
@@ -229,13 +223,15 @@ these files MUST be kept when the skill is copied.
       justified exception).
 - [ ] Every visualization is a figure with meaningful `alt`, a caption, and an underlying data
       table (or prose) alternative.
+- [ ] Every static SVG passes its production-profile validator and has been rendered and visually
+  inspected at the actual documentation width.
 - [ ] Visualization assets are saved under `assets/` and referenced by relative path (no
       unresolved remote-only images).
 - [ ] Only catalog components + embedded static visuals used; no inline styles/scripts/iframes.
 - [ ] TL;DR present on every page.
 - [ ] Every page is in the manifest, in a sensible order.
 - [ ] All internal links resolve; all images have alt text and resolve.
-- [ ] Renders in light and dark (tokens guarantee contrast; check chart images read in both).
+- [ ] Renders legibly in light, dark, narrow, and wide documentation contexts as applicable.
 - [ ] Manifest validates against `schema/manifest.schema.json`; config (if any) against
       `schema/config.schema.json`.
 - [ ] No fabricated facts or data - everything traces to the inputs.

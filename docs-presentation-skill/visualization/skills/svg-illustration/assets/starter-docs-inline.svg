@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"
+     role="img" aria-labelledby="starter-title starter-desc"
+     preserveAspectRatio="xMidYMid meet">
+  <title id="starter-title">Illustration title</title>
+  <desc id="starter-desc">Replace this with the essential takeaway and reading order.</desc>
+  <rect x="24" y="24" width="752" height="402" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="2" />
+  <g id="starter-primary-subject">
+    <path d="M180 225 C260 120 540 120 620 225 C540 330 260 330 180 225 Z"
+          fill="#ede9fe" stroke="#6d28d9" stroke-width="3" />
+    <text x="400" y="220" text-anchor="middle" fill="#2e1065" font-family="Arial, sans-serif"
+          font-size="26" font-weight="700">Primary subject</text>
+    <text x="400" y="254" text-anchor="middle" fill="#4c1d95" font-family="Arial, sans-serif"
+          font-size="16">Replace the template geometry with a concept-led composition.</text>
+  </g>
+</svg>

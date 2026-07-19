@@ -32,7 +32,7 @@ docs-presentation-skill/
   demo/             # a runnable content root that exercises the framework
   components/       # component catalog: one example per component (few-shot patterns)
   templates/        # page + landing scaffolds the agent fills in
-  visualization/    # bundled AntV chart/graph/infographic skills (MIT) - visual-first authoring
+  visualization/    # SVG-first static authoring + specialist AntV knowledge (MIT where noted)
   assets/icons/     # system icon set (no emoji)
   schema/           # JSON Schemas for manifest + config
   examples/         # a worked before/after conversion + example manifest
@@ -42,7 +42,7 @@ docs-presentation-skill/
 
 Read [`SKILL.md`](SKILL.md). You never edit `shell/`. **Bias heavily toward visuals**: for any
 data, trend, comparison, proportion, process, hierarchy, or relationship, produce a visualization
-using the bundled [`visualization/`](visualization/README.md) skills and embed it as a figure,
+using the bundled [`visualization/`](visualization/README.md) routing and embed it as a figure,
 *before* falling back to prose. You compose pages from [`components/`](components/README.md) using
 [`templates/`](templates/page.html), then write a `docs-manifest.json` validated by
 [`schema/manifest.schema.json`](schema/manifest.schema.json).
