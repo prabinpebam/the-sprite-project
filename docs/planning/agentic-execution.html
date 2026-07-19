@@ -1,0 +1,124 @@
+<!-- Agentic execution plan - unattended MVP delivery contract. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Delivery · Autonomous operating plan</p>
+  <h1 class="slate-hero__title">Agentic MVP Execution</h1>
+  <p class="slate-hero__summary">A dependency-driven program for delivering the character-to-Godot MVP with
+     agents owning research, implementation, validation, evidence, and recovery while human involvement remains
+     limited to decisions that cannot responsibly be automated.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>Agents execute eleven evidence-gated work packages from bootstrap through release validation. They may make
+     reversible technical decisions, install project-local tools, and reject unsuitable assets without waiting.
+     Human input is required only for the starter-content legal policy, observed user validation, credentials or
+     signing, and final release approval. The machine-readable source of truth is
+     <a href="../../agentic-execution-plan.json">agentic-execution-plan.json</a>.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Unattended default</p>
+  <p>When the owner is unavailable, continue through every unblocked package, record assumptions, prefer the most
+     reversible compliant choice, and quarantine uncertain content. Never wait for a preference that has a safe
+     default; never infer legal approval, publish externally, or weaken a validation gate.</p>
+</div>
+
+<h2>Operating contract</h2>
+<dl class="slate-defs">
+  <dt>Plan from dependencies</dt><dd>Run any package whose prerequisites and required inputs are satisfied; parallelize independent packages.</dd>
+  <dt>Prove claims with artifacts</dt><dd>A package completes only when its commands pass and its declared evidence exists. Prose or screenshots alone do not satisfy a gate.</dd>
+  <dt>Keep the core headless</dt><dd>Composition, recoloring, provenance, persistence, and export remain executable without the product UI.</dd>
+  <dt>Prefer reversible defaults</dt><dd>Use adapters, versioned schemas, local fixtures, and project-local tools so later decisions do not invalidate the core.</dd>
+  <dt>Escalate precisely</dt><dd>Ask one bounded question only when every compliant fallback is exhausted or the decision is legally or commercially irreversible.</dd>
+  <dt>Leave a resumable record</dt><dd>After every package, update the build record with commands, results, artifacts, decisions, open risks, and the next runnable package.</dd>
+</dl>
+
+<h2>Fixed defaults</h2>
+<table>
+  <thead><tr><th>Decision</th><th>Unattended default</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td>Product shape</td><td>Local-first browser application; no account or service dependency</td><td>Matches the MVP and keeps projects portable.</td></tr>
+    <tr><td>Implementation</td><td>TypeScript, Vite, Canvas 2D, JSON Schema, Vitest, and Playwright</td><td>One language across headless browser rendering, UI, contracts, and tests.</td></tr>
+    <tr><td>Package manager</td><td>npm with a committed lockfile</td><td>Already available and requires no additional global tooling.</td></tr>
+    <tr><td>Project format</td><td>Readable versioned JSON with stable pack and asset identifiers</td><td>Supports deterministic rebuilds and future migrations.</td></tr>
+    <tr><td>Godot target</td><td>Godot 4.x, generated text resources plus PNG and import metadata</td><td>Diffable, testable, and avoids an MVP editor plugin.</td></tr>
+    <tr><td>Godot runtime</td><td>Download a pinned portable binary into an ignored project-local tool directory</td><td>The runtime is absent locally but does not require owner intervention.</td></tr>
+    <tr><td>Starter content</td><td>Prefer CC0 or OGA-BY; quarantine ambiguous or conflicting entries</td><td>Minimizes distribution and DRM ambiguity while preserving provenance.</td></tr>
+    <tr><td>Rendering</td><td>Integer-coordinate nearest-neighbor composition; deterministic PNG encoding</td><td>Protects pixel art and makes golden output meaningful.</td></tr>
+  </tbody>
+</table>
+
+<h2>Execution graph</h2>
+<table>
+  <thead><tr><th>Package</th><th>Outcome</th><th>Depends on</th><th>Gate</th></tr></thead>
+  <tbody>
+    <tr><td>WP-00 · Bootstrap</td><td>Runnable workspace, checks, artifact directories, and portable-tool automation</td><td>None</td><td>Clean install and all empty-slice checks pass.</td></tr>
+    <tr><td>WP-01 · Source intake</td><td>Pinned candidate corpus, inventory, checksums, provenance, and quarantine report</td><td>WP-00</td><td>At least one technically complete candidate subset; no unknown provenance in the allowed set.</td></tr>
+    <tr><td>WP-02 · Contracts</td><td>Minimal schemas and fixtures for packs, recipes, animations, palettes, provenance, and exports</td><td>WP-00; informed by WP-01</td><td>Valid and intentionally invalid fixtures prove every invariant.</td></tr>
+    <tr><td>WP-03 · Composition</td><td>Headless layer loading, compatibility, ordering, frame extraction, and deterministic composition</td><td>WP-01, WP-02</td><td>Real layers produce pixel-tested idle and walk frames in four directions.</td></tr>
+    <tr><td>WP-04 · Recoloring</td><td>Semantic ramps, per-asset mappings or masks, and project/character overrides</td><td>WP-03</td><td>Body, hair, cloth, leather, and metal fixtures recolor without outline or transparency corruption.</td></tr>
+    <tr><td>WP-05 · Provenance</td><td>Selected-layer license evaluation and exact machine/human credit generation</td><td>WP-01, WP-02</td><td>Every output traces to source records; incompatible or unknown terms fail closed.</td></tr>
+    <tr><td>WP-06 · Generic delivery</td><td>Spritesheet PNG, animation JSON, credits, deterministic project save/reopen, and CLI harness</td><td>WP-04, WP-05</td><td>Two clean runs are byte-identical and a reopened project reproduces the same output.</td></tr>
+    <tr><td>WP-07 · Godot adapter</td><td>Generated Godot 4 resources and an automated fixture project</td><td>WP-06</td><td>Headless Godot imports the export and verifies all named animations without manual slicing.</td></tr>
+    <tr><td>WP-08 · Product workflow</td><td>Accessible local project, catalog, composition, token, preview, save, and export UI</td><td>WP-06; WP-07 contract stable</td><td>Playwright completes the full journey using real content and verifies visible canvas output.</td></tr>
+    <tr><td>WP-09 · Extensibility</td><td>Structurally independent second pack and migration/recovery fixtures</td><td>WP-06, WP-08</td><td>No renderer branch or core change is needed to load and export the second pack.</td></tr>
+    <tr><td>WP-10 · Release evidence</td><td>Cross-browser checks, failure recovery, user observations, license approval, and release candidate</td><td>WP-07, WP-08, WP-09</td><td>Every MVP definition-of-done claim has reproducible evidence and required human approvals.</td></tr>
+  </tbody>
+</table>
+
+<h2>Parallel execution</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Bootstrap once</p><p>WP-00 establishes commands, boundaries, evidence locations, and deterministic local tooling.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Run discovery and contracts together</p><p>WP-01 inventories real art while WP-02 drafts schemas from known requirements. Reconcile them before either gate closes.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Prove the headless chain</p><p>WP-03 and WP-04 establish rendering; WP-05 can progress independently from the same source inventory. WP-06 joins them.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Prove engine delivery before polishing UI</p><p>WP-07 validates the export contract. WP-08 may scaffold around stable domain APIs but cannot invent renderer or license behavior.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Attack assumptions</p><p>WP-09 uses a second pack to expose false abstractions. WP-10 validates the actual user and distribution claims.</p></li>
+</ol>
+
+<h2>Agent recovery rules</h2>
+<table>
+  <thead><tr><th>Failure</th><th>Required response</th></tr></thead>
+  <tbody>
+    <tr><td>Candidate asset has unclear provenance</td><td>Quarantine it, retain the evidence trail, select the next compatible candidate, and continue.</td></tr>
+    <tr><td>Palette substitution damages pixels</td><td>Add explicit ramp metadata or a mask for that asset. If still unsafe, mark it non-themeable rather than using fuzzy replacement.</td></tr>
+    <tr><td>Pack layouts differ</td><td>Represent the difference in pack data if it is a real source property. Reject the asset if describing it would require arbitrary executable hooks.</td></tr>
+    <tr><td>Godot text resources are unstable</td><td>Fall back to PNG plus generated import script inside the adapter; do not move Godot concerns into the renderer.</td></tr>
+    <tr><td>A deterministic comparison fails</td><td>Stop downstream work, isolate nondeterministic inputs or encoders, add a regression fixture, and rerun the same gate.</td></tr>
+    <tr><td>A package is blocked by human approval</td><td>Mark only that gate blocked and continue every package that can use quarantined fixtures or non-shipping outputs.</td></tr>
+    <tr><td>Scope pressure appears</td><td>Apply the MVP inclusion rule. Record the request in deferred work; do not expand the active package.</td></tr>
+  </tbody>
+</table>
+
+<h2>What is needed from the owner</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card">
+    <h3 class="slate-card__title">Required before shipping · Content policy</h3>
+    <p class="slate-card__body">Accept or replace the proposed starter policy: ship only assets whose chosen license path is CC0 or OGA-BY and whose authorship/source chain is complete. External legal review is the appropriate escalation if broader licenses are required.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Required for validation · Human sessions</h3>
+    <p class="slate-card__body">Provide access to three target developers, or act as one participant, for observed character-to-Godot sessions. Agents prepare the build, script, capture, and issue synthesis.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Required for distribution · Authority</h3>
+    <p class="slate-card__body">Provide secrets directly to the relevant terminal when signing, store access, domain control, or publishing credentials are eventually required. Agents must never request secrets through chat.</p>
+  </article>
+  <article class="slate-card">
+    <h3 class="slate-card__title">Required at the final gate · Release approval</h3>
+    <p class="slate-card__body">Review the evidence index, unresolved risks, content policy, and user-validation findings, then explicitly approve or reject public release.</p>
+  </article>
+</div>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">No response behavior</p>
+  <p>Until these inputs arrive, agents may complete technical implementation with non-shipping fixtures, prepare the
+     candidate starter set, automate Godot validation, and stage a release candidate locally. They must not claim
+     legal clearance, fabricate user observations, expose credentials, publish, deploy, or push remote changes.</p>
+</div>
+
+<h2>Phase 1 is complete when</h2>
+<p>WP-00 through WP-06 have produced one real, legally traceable recipe that composes idle and walk in four
+   directions, applies semantic recoloring, saves and rebuilds deterministically, and emits PNG, animation metadata,
+   and exact credits through a headless command. That evidence, rather than completion percentage, authorizes the
+   product UI and release work.</p>

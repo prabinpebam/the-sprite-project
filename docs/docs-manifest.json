@@ -6,6 +6,7 @@
     { "path": "mvp/overview.html", "title": "MVP Scope", "order": 10, "icon": "rocket_launch", "badge": "active" },
 
     { "path": "planning/overview.html", "title": "Delivery Phases", "order": 20, "icon": "checklist", "badge": "active" },
+    { "path": "planning/agentic-execution.html", "title": "Agentic Execution", "order": 21, "icon": "account_tree", "badge": "run" },
 
     { "path": "north-star/overview.html", "title": "North Star", "order": 30, "icon": "flag", "badge": "vision" },
 

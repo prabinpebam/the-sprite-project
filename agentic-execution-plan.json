@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "planVersion": "1.0.0",
+  "name": "The Sprite Project MVP",
+  "mode": "local-only-unattended",
+  "objective": "Deliver and validate the project-based LPC character-to-Godot MVP without requiring routine owner availability.",
+  "sourceDocuments": [
+    "docs/mvp/overview.html",
+    "docs/planning/overview.html",
+    "docs/planning/agentic-execution.html"
+  ],
+  "executionPolicy": {
+    "continueWithoutOwner": true,
+    "parallelizeIndependentWork": true,
+    "requireExecutableEvidence": true,
+    "publishOrDeploy": false,
+    "pushRemoteChanges": false,
+    "requestSecretsInChat": false,
+    "legalApprovalMayBeInferred": false,
+    "unattendedDecisionRule": "Choose the most reversible compliant option, record it, and continue.",
+    "blockedDecisionRule": "Block only the affected gate; continue all packages that can use quarantined or non-shipping fixtures.",
+    "scopeRule": "Implement only behavior required by the MVP journey or by a shared contract demonstrated in the MVP."
+  },
+  "defaults": {
+    "application": "local-first browser application",
+    "language": "TypeScript",
+    "buildTool": "Vite",
+    "packageManager": "npm",
+    "rendering": "Canvas 2D with integer coordinates and nearest-neighbor sampling",
+    "schema": "JSON Schema draft 2020-12",
+    "unitTests": "Vitest",
+    "browserTests": "Playwright",
+    "godot": "Pinned portable Godot 4.x runtime with generated text resources",
+    "assetPolicy": "Prefer CC0 or OGA-BY with complete provenance; quarantine uncertainty",
+    "artifactRoot": "artifacts/execution",
+    "decisionLog": "docs/execution/overview.html"
+  },
+  "ownerInputs": [
+    {
+      "id": "OWNER-01",
+      "when": "before shipping starter content",
+      "request": "Accept or replace the proposed CC0/OGA-BY starter-content policy after reviewing the candidate provenance report.",
+      "noResponseFallback": "Keep candidate assets quarantined and continue with non-shipping fixtures.",
+      "cannotBeAutomatedBecause": "Legal and commercial risk acceptance belongs to the owner or qualified counsel."
+    },
+    {
+      "id": "OWNER-02",
+      "when": "release validation",
+      "request": "Provide access to three target developers, or participate as one, for observed character-to-Godot sessions.",
+      "noResponseFallback": "Complete automated validation and mark the user-validation release gate blocked.",
+      "cannotBeAutomatedBecause": "Agents cannot fabricate independent user behavior or observations."
+    },
+    {
+      "id": "OWNER-03",
+      "when": "signing or publishing",
+      "request": "Enter required credentials directly into the relevant terminal or trusted provider UI.",
+      "noResponseFallback": "Produce a local release candidate without publishing.",
+      "cannotBeAutomatedBecause": "Secrets must not pass through model context and external changes require explicit authority."
+    },
+    {
+      "id": "OWNER-04",
+      "when": "final release gate",
+      "request": "Approve or reject public release after reviewing evidence, unresolved risks, content policy, and user findings.",
+      "noResponseFallback": "Do not release.",
+      "cannotBeAutomatedBecause": "Release is an irreversible product and risk decision."
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP-00",
+      "title": "Bootstrap implementation workspace",
+      "dependsOn": [],
+      "canRunInParallelWith": [],
+      "actions": [
+        "Create the TypeScript/Vite workspace and module boundaries for contracts, core, adapters, app, and tests.",
+        "Pin dependencies and commit an npm lockfile.",
+        "Add format, lint, typecheck, unit, integration, and browser test commands.",
+        "Automate download and checksum verification of a project-local portable Godot runtime.",
+        "Create ignored generated-artifact and local-tool directories."
+      ],
+      "evidence": [
+        "npm ci succeeds from a clean dependency directory",
+        "all baseline checks execute successfully",
+        "module-boundary checks prevent UI imports in core modules",
+        "portable Godot reports the pinned version"
+      ],
+      "gate": "A clean checkout can install, verify, and run the empty product slice without global tools beyond Node, npm, Python, and Git."
+    },
+    {
+      "id": "WP-01",
+      "title": "Inventory and qualify source content",
+      "dependsOn": ["WP-00"],
+      "canRunInParallelWith": ["WP-02"],
+      "actions": [
+        "Pin candidate upstream revisions and record retrieval URLs and checksums.",
+        "Generate an inventory of dimensions, transparency, frame coverage, categories, variants, authors, sources, and license options.",
+        "Select the smallest candidate body, hair, torso, legs, feet, and optional equipment subset covering idle and walk in four directions.",
+        "Separate allowed, rejected, and quarantined records with machine-readable reasons.",
+        "Produce a candidate provenance report for OWNER-01."
+      ],
+      "evidence": [
+        "source-lock.json",
+        "asset-inventory.json",
+        "candidate-provenance-report.html",
+        "checksums verify on a second retrieval",
+        "allowed records contain no unknown author, source, or chosen license"
+      ],
+      "gate": "At least one technically complete starter subset exists and every allowed source has a complete provenance chain."
+    },
+    {
+      "id": "WP-02",
+      "title": "Define minimum versioned contracts",
+      "dependsOn": ["WP-00"],
+      "canRunInParallelWith": ["WP-01"],
+      "actions": [
+        "Define schemas for project, pack, asset identity, character recipe, animation, palette mapping, provenance, and export request/result.",
+        "Add stable identifiers, schema versions, pack versions, and explicit coordinate/frame semantics.",
+        "Create valid, boundary, and intentionally invalid fixtures.",
+        "Generate TypeScript types from or validate them against the schemas.",
+        "Reconcile the schemas against WP-01 real source properties before closing the gate."
+      ],
+      "evidence": [
+        "all schemas pass metaschema validation",
+        "all valid fixtures pass",
+        "all invalid fixtures fail for the intended reason",
+        "schema/type drift check passes"
+      ],
+      "gate": "The minimum contracts describe the real starter subset without UI-owned metadata or executable pack hooks."
+    },
+    {
+      "id": "WP-03",
+      "title": "Prove deterministic composition",
+      "dependsOn": ["WP-01", "WP-02"],
+      "canRunInParallelWith": ["WP-05"],
+      "actions": [
+        "Load manifests and assets through stable identifiers.",
+        "Validate compatibility, animation coverage, frame geometry, and draw order.",
+        "Extract and compose idle and walk frames in four directions on integer coordinates.",
+        "Encode PNG output deterministically.",
+        "Add pixel-level and golden-image tests using real source layers."
+      ],
+      "evidence": [
+        "headless composition command",
+        "golden frame set",
+        "pixel-diff report",
+        "two runs produce identical hashes"
+      ],
+      "gate": "One real recipe composes all required frames with zero unexpected pixel differences and repeatable hashes."
+    },
+    {
+      "id": "WP-04",
+      "title": "Prove semantic recoloring",
+      "dependsOn": ["WP-03"],
+      "canRunInParallelWith": ["WP-05"],
+      "actions": [
+        "Define semantic ramps for skin, hair, primary cloth, secondary cloth, leather, and metal.",
+        "Attach exact source-color mappings or explicit masks to assets rather than relying on fuzzy matching.",
+        "Implement project-theme resolution and per-character overrides.",
+        "Verify alpha, outlines, highlights, and unrelated equal-valued pixels remain correct.",
+        "Mark unsafe assets non-themeable or reject them."
+      ],
+      "evidence": [
+        "recolor fixtures for every material class",
+        "before/after palette audit",
+        "pixel assertions for protected regions",
+        "theme and override resolution tests"
+      ],
+      "gate": "Representative materials recolor across every required frame without corrupting protected pixels or transparency."
+    },
+    {
+      "id": "WP-05",
+      "title": "Build provenance and credits engine",
+      "dependsOn": ["WP-01", "WP-02"],
+      "canRunInParallelWith": ["WP-03", "WP-04"],
+      "actions": [
+        "Resolve selected assets to immutable provenance records.",
+        "Implement a fail-closed policy evaluator for unknown, conflicting, or disallowed license paths.",
+        "Generate normalized machine-readable credits and concise human-readable credits.",
+        "Deduplicate authors and sources without losing per-asset traceability.",
+        "Test mixed selections and rejected-policy cases."
+      ],
+      "evidence": [
+        "credits.json",
+        "CREDITS.txt",
+        "selection-to-source trace report",
+        "negative policy tests"
+      ],
+      "gate": "Every selected layer is traceable in both credit formats and uncertainty prevents export rather than producing incomplete credits."
+    },
+    {
+      "id": "WP-06",
+      "title": "Join the headless delivery slice",
+      "dependsOn": ["WP-04", "WP-05"],
+      "canRunInParallelWith": [],
+      "actions": [
+        "Implement versioned local project persistence and deterministic save/reopen.",
+        "Expose the core through a CLI harness used by tests and future automation.",
+        "Export spritesheet PNG, animation JSON, credits, and a build manifest from one recipe.",
+        "Normalize timestamps, paths, object ordering, and encoder settings.",
+        "Run the complete slice twice in clean artifact directories and compare hashes."
+      ],
+      "evidence": [
+        "saved project fixture",
+        "spritesheet PNG",
+        "animation JSON",
+        "credits JSON and text",
+        "build manifest with hashes",
+        "clean-run comparison report"
+      ],
+      "gate": "One real, traceable recipe saves, reopens, recolors, composes, and exports byte-identically without UI code."
+    },
+    {
+      "id": "WP-07",
+      "title": "Validate Godot 4 delivery",
+      "dependsOn": ["WP-06"],
+      "canRunInParallelWith": ["WP-08"],
+      "actions": [
+        "Define the Godot adapter contract outside the renderer.",
+        "Generate PNG and diffable Godot 4 text resources for SpriteFrames and AnimatedSprite2D use.",
+        "Create a fixture project that imports the generated output.",
+        "Run Godot headlessly to assert animation names, frame counts, directions, speeds, and texture regions.",
+        "Use an adapter-local import script fallback if generated text resources prove unstable."
+      ],
+      "evidence": [
+        "Godot fixture project",
+        "generated text resources",
+        "headless import log",
+        "runtime assertions for every animation"
+      ],
+      "gate": "A clean Godot 4 fixture imports and plays every required animation without manual slicing or edited metadata."
+    },
+    {
+      "id": "WP-08",
+      "title": "Build the complete product workflow",
+      "dependsOn": ["WP-06"],
+      "canRunInParallelWith": ["WP-07"],
+      "actions": [
+        "Build local project create, rename, save, reopen, and recovery flows.",
+        "Build pack catalog, compatibility warnings, slot selection, and deterministic recipe editing.",
+        "Build pixel-perfect preview controls for animation, direction, speed, pause, and zoom.",
+        "Build project-theme and per-character token controls.",
+        "Build generic and Godot export flows using adapters without duplicating domain logic.",
+        "Add keyboard, focus, accessible-name, hit-testing, clipping, and visible-canvas checks."
+      ],
+      "evidence": [
+        "Playwright journey test",
+        "DOM and canvas-state capture",
+        "desktop and mobile screenshots",
+        "keyboard-only journey",
+        "save/reopen recovery tests"
+      ],
+      "gate": "An automated browser completes the full MVP journey against real content and verifies visible rendered output, persistence, and exports."
+    },
+    {
+      "id": "WP-09",
+      "title": "Prove second-pack extensibility",
+      "dependsOn": ["WP-06", "WP-08"],
+      "canRunInParallelWith": [],
+      "actions": [
+        "Select a structurally independent second pack or fixture with a meaningful layout or metadata difference.",
+        "Describe source differences through existing pack contracts.",
+        "Run composition, recoloring where declared, provenance, persistence, generic export, and UI flows.",
+        "Reject abstractions that require pack-specific branches in the core.",
+        "Add project migration and missing-pack recovery fixtures."
+      ],
+      "evidence": [
+        "second-pack manifest and fixtures",
+        "core source diff showing no pack-specific behavior",
+        "second-pack end-to-end report",
+        "migration and recovery results"
+      ],
+      "gate": "The second pack loads and exports without renderer or composition changes, and damaged project states recover predictably."
+    },
+    {
+      "id": "WP-10",
+      "title": "Assemble release evidence",
+      "dependsOn": ["WP-07", "WP-08", "WP-09"],
+      "canRunInParallelWith": [],
+      "actions": [
+        "Run clean-install, browser, performance, failure-recovery, and deterministic export suites.",
+        "Prepare and conduct observed target-developer sessions when OWNER-02 is available.",
+        "Resolve critical journey failures and repeat affected sessions or tests.",
+        "Bind every MVP definition-of-done claim to commands and artifacts in an evidence index.",
+        "Prepare the candidate content report for OWNER-01 and release dossier for OWNER-04.",
+        "Keep the release local until explicit publishing authority and credentials are provided."
+      ],
+      "evidence": [
+        "release-evidence-index.json",
+        "clean-install report",
+        "cross-browser report",
+        "performance and recovery reports",
+        "user-session findings or an explicit blocked marker",
+        "approved content policy or an explicit blocked marker",
+        "local release candidate"
+      ],
+      "gate": "All automated MVP claims pass, required human evidence is present, unresolved risks are accepted, and the owner explicitly approves release."
+    }
+  ],
+  "completionRule": "The MVP is complete only when every work-package gate passes and OWNER-01, OWNER-02, and OWNER-04 are satisfied. OWNER-03 is required only for a distribution channel that needs credentials or signing."
+}
