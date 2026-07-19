@@ -9,10 +9,10 @@
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p>The GitHub Pages PWA is the complete required product, not a demo. Cross-browser downloads, project archives,
-     IndexedDB, and offline use form the baseline. Chromium filesystem APIs may reduce manual steps without changing
-     the promise. Electron or a backend may be added later only behind shared adapters and only when accepted flows
-     cannot be completed reliably inside the browser boundary.</p>
+    <p>The GitHub Pages PWA is the complete required product, not a demo. Portable Electron is an accepted optional
+      host, specified through <a href="../../execution/updates/upd-001-dual-host-mvp.html">UPD-001</a>, for project
+      folders and direct exports. Both hosts use shared adapters and canonical data. Backends remain deferred until a
+      funded product update requires one.</p>
 </aside>
 
 <h2>Capability tiers</h2>
@@ -21,7 +21,7 @@
   <tbody>
     <tr><td>Baseline web</td><td>Supported production browsers</td><td>Projects, packs, composition, theming, preview, archive backup, generic/Godot download, offline use</td><td>May define customer promises and completion gates.</td></tr>
     <tr><td>Progressive web</td><td>Capability-detected browsers</td><td>User-approved directory writes, share target, file association, richer install integration</td><td>May remove friction but must retain a baseline fallback.</td></tr>
-    <tr><td>Future desktop</td><td>Optional installed host after a new ADR</td><td>Continuous watchers, direct engine live link, local subprocesses, large pack libraries</td><td>Must reuse the product core and preserve project portability.</td></tr>
+    <tr><td>Accepted desktop</td><td>Portable Windows x64 after UPD-001 verification</td><td>Project folders, Save/Save As, recent folders, direct export directories</td><td>Must reuse the product core and preserve exact portability and output parity.</td></tr>
     <tr><td>Future backend</td><td>Optional funded service after a new ADR</td><td>Account sync, collaboration, private entitlements, marketplace transactions</td><td>Must have an operating budget, privacy model, migration plan, and offline degradation.</td></tr>
   </tbody>
 </table>
@@ -68,14 +68,15 @@ interface HostCapabilities {
    <code>window.electron</code>, browser name, filesystem paths, or backend presence. The UI presents capabilities
    from the host and always retains the documented fallback where one exists.</p>
 
-<h2>Desktop adoption triggers</h2>
-<p>A desktop host is justified only when at least one accepted user flow requires a capability below and browser
-   alternatives fail its objective oracle in representative use:</p>
+<h2>Desktop scope and future expansion triggers</h2>
+<p>ADR-002 accepts the portable desktop host for local file convenience. UPD-001 includes project folders, atomic
+  Save/Save As, recent folders, portable archives, direct generic/Godot directory export, and safe unsaved close.
+  Additional desktop capabilities still require a new formal update when an accepted user flow needs:</p>
 <ul>
   <li>Continuous filesystem watching for a measured live-link workflow.</li>
   <li>Launching or controlling a local engine, converter, or build process.</li>
   <li>Managing project or pack data that repeatedly exceeds practical browser quotas.</li>
-  <li>Editing arbitrary local files in place where archive import/export creates unacceptable verified friction.</li>
+  <li>Editing or watching arbitrary local content-pack folders beyond an approved project root.</li>
   <li>Operating in controlled offline environments where browser installation and storage policy cannot be relied on.</li>
 </ul>
 <p>Installer size, memory, packaging, signing, notarization, update hosting, security boundaries, and cross-platform
@@ -119,6 +120,7 @@ interface HostCapabilities {
 
 <div class="slate-callout slate-callout--tip" role="note">
   <p class="slate-callout__title">Default answer</p>
-  <p>When evidence is incomplete, improve the static PWA and project portability first. Infrastructure is a response
-     to a proven product constraint, not a prerequisite for ambition.</p>
+    <p>When a requirement changes, run the <a href="../../governance/product-update-pipeline.html">Product Update
+      Pipeline</a> first. Improve the web baseline or desktop adapter according to the derived promise and host flows;
+      do not add infrastructure from implementation preference alone.</p>
 </div>

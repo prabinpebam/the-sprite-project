@@ -1,0 +1,15 @@
+# UPD-001 Execution Plan
+
+| ID | Depends on | Trace records | Gate | Status |
+|---|---|---|---|---|
+| WP-UPD001-SPEC | None | `CP-WEB-LOCAL-WORKSPACE`, `CP-DESKTOP-PORTABLE-WORKSPACE`, `CP-CROSS-HOST-PORTABILITY`, `CP-LOCAL-DATA-CUSTODY` | Update envelope, impact analysis, ADR-002, traceability, exclusions, and release gate pass review | specified |
+| WP-UPD001-HOST-ADAPTERS | `WP-UPD001-SPEC` | `IA-HOST`, `IA-PROJECT-DOCUMENT`, `UC-DESKTOP-SEE-HOST`, `UC-SEE-DATA-LOCATION` | Domain modules have no browser or Electron dependency and host contract tests pass | specified |
+| WP-UPD001-WEB-REPOSITORY | `WP-UPD001-HOST-ADAPTERS` | `TF-WEB-PROJECT-LIBRARY`, `TF-WEB-AUTOSAVE-REOPEN`, `UC-WEB-AUTOSAVE-IDB`, `UC-WEB-INSPECT-STORAGE` | IndexedDB library, revisions, snapshots, migration, and failure recovery pass actual-UI flows | specified |
+| WP-UPD001-ARCHIVES | `WP-UPD001-HOST-ADAPTERS` | `TF-WEB-BACKUP-RESTORE`, `IA-PROJECT-ARCHIVE`, `UC-WEB-EXPORT-ARCHIVE`, `UC-WEB-IMPORT-ARCHIVE` | Archive validation, conflicts, migration, malicious fixtures, and exact round trip pass | specified |
+| WP-UPD001-WEB-OFFLINE | `WP-UPD001-WEB-REPOSITORY` | `TF-WEB-OFFLINE`, `UC-WEB-WORK-OFFLINE` | Published-subpath PWA completes declared flows with network disconnected | specified |
+| WP-UPD001-ELECTRON-SHELL | `WP-UPD001-HOST-ADAPTERS` | `TF-DESKTOP-PORTABLE-LAUNCH`, `UC-DESKTOP-LAUNCH-PORTABLE`, `VIEW-HOST-START` | Packaged portable Windows app launches with secure renderer and typed IPC checks | specified |
+| WP-UPD001-DESKTOP-FILES | `WP-UPD001-ELECTRON-SHELL`, `WP-UPD001-ARCHIVES` | `TF-DESKTOP-PROJECT-FOLDER`, `TF-DESKTOP-DIRECT-EXPORT`, `TF-DESKTOP-UNSAVED-CLOSE`, `IA-PROJECT-FOLDER` | Folder lifecycle, atomic writes, failures, direct exports, and unsaved close pass packaged Electron UI flows | specified |
+| WP-UPD001-CROSS-HOST | `WP-UPD001-WEB-REPOSITORY`, `WP-UPD001-DESKTOP-FILES` | `TF-CROSS-HOST-WEB-TO-DESKTOP`, `TF-CROSS-HOST-DESKTOP-TO-WEB`, `UC-CROSS-HOST-IDENTICAL-OUTPUT` | Bidirectional archive and output parity pass from real web and packaged Electron UIs | specified |
+| WP-UPD001-REGRESSION | `WP-UPD001-CROSS-HOST`, `WP-UPD001-WEB-OFFLINE` | `TF-DATA-CUSTODY`, `EB-DATA-NETWORK` | All affected RUN-MVP-001 baseline flows pass on affected hosts with zero severity 0-2 issues | specified |
+
+Implementation may begin only after UPD-001 is approved as a complete specified boundary. Packages advance by evidence, not completion estimates.

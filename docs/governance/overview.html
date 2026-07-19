@@ -1,0 +1,85 @@
+<!-- Product governance hub. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Governance · Product change control</p>
+  <h1 class="slate-hero__title">Product Governance</h1>
+  <p class="slate-hero__summary">How customer promises become scoped, designed, implemented, validated, and
+     recorded without silently rewriting verified product history.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p><strong>Every product or requirement change uses the formal Product Update Pipeline.</strong> Start with the
+     requested customer outcome, freeze the verified baseline, classify impact, derive scenarios and user-can
+     statements, derive task flows, design IA/navigation/views/UI, assign objective behavior oracles, close scope,
+     reconcile ADRs, execute by traceable work packages, and verify through the actual UI. No feature bypasses it.</p>
+</aside>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Binding rule</p>
+  <p>A request in chat, an ADR, a mockup, a code branch, or an implementation idea is not yet a product requirement.
+     It enters scope only through a versioned update with complete traceability and deliberate exclusions.</p>
+</div>
+
+<h2>Governance system</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card slate-card--interactive">
+    <a href="product-update-pipeline.html">
+      <h3 class="slate-card__title">Product Update Pipeline <span class="slate-badge slate-badge--success">Required</span></h3>
+      <p class="slate-card__body">The end-to-end change procedure, artifacts, statuses, approval boundary,
+         implementation handoff, evidence requirements, and anti-bypass rules.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="../execution/updates/upd-001-dual-host-mvp.html">
+      <h3 class="slate-card__title">UPD-001 · Dual-Host MVP <span class="slate-badge slate-badge--warning">Specified</span></h3>
+      <p class="slate-card__body">The first governed product evolution: a GitHub Pages/IndexedDB web workspace and
+         portable Electron local-file workspace over one shared product core.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="../execution/mvp-delivery.html">
+      <h3 class="slate-card__title">Verified MVP baseline</h3>
+      <p class="slate-card__body">The immutable prior promise-to-evidence record that updates inherit from but do
+         not rewrite.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="../architecture/overview.html">
+      <h3 class="slate-card__title">Architecture decisions</h3>
+      <p class="slate-card__body">ADRs define platform constraints and technical direction; product updates define
+         the user outcomes and flows that justify them.</p>
+    </a>
+  </article>
+</div>
+
+<h2>Current product records</h2>
+<table>
+  <thead><tr><th>Record</th><th>Baseline</th><th>Status</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>MVP / RUN-MVP-001</code></td><td><code>f29c9f9</code></td><td><span class="slate-badge slate-badge--success">Verified</span></td><td>Historical browser MVP evidence; immutable.</td></tr>
+    <tr><td><code>UPD-001</code></td><td><code>f29c9f9 / RUN-MVP-001</code></td><td><span class="slate-badge slate-badge--warning">Specified</span></td><td>Dual-host evolution; no new behavior is implemented or verified yet.</td></tr>
+    <tr><td><code>ADR-001</code></td><td>None</td><td><span class="slate-badge slate-badge--success">Accepted</span></td><td>GitHub Pages remains the complete required zero-server web baseline.</td></tr>
+    <tr><td><code>ADR-002</code></td><td>ADR-001</td><td><span class="slate-badge slate-badge--success">Accepted</span></td><td>Portable Electron is an optional second host over the shared core.</td></tr>
+  </tbody>
+</table>
+
+<h2>Separation of concerns</h2>
+<dl class="slate-defs">
+  <dt>Product update</dt><dd>Defines what becomes true for users, complete experience scope, exclusions, and evidence.</dd>
+  <dt>ADR</dt><dd>Defines why a technical or platform direction is accepted and what would supersede it.</dd>
+  <dt>Execution package</dt><dd>Defines dependency-ordered implementation work mapped to product trace IDs.</dd>
+  <dt>Evidence run</dt><dd>Records observed product behavior and promotes status only when objective gates pass.</dd>
+  <dt>Verified baseline</dt><dd>Preserves historical truth for regression, migration, and rollback.</dd>
+</dl>
+
+<h2>No-bypass policy</h2>
+<ul>
+  <li>No new UI control without a task-flow step and expected behavior.</li>
+  <li>No new task flow without a user-can statement and scenario.</li>
+  <li>No new scenario without a customer promise.</li>
+  <li>No infrastructure or platform feature without an affected product update and reconciled ADR.</li>
+  <li>No removal or changed meaning without impact classification, migration, consequence, and authority.</li>
+  <li>No verified status from code completion, screenshots alone, unit tests alone, or prose.</li>
+  <li>No rewriting prior evidence to reduce the apparent scope of a new update.</li>
+</ul>

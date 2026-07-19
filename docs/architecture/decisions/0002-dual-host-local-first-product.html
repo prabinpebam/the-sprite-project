@@ -1,0 +1,159 @@
+<!-- ADR-002 - accepted dual-host local-first product decision. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture decision · ADR-002</p>
+  <h1 class="slate-hero__title">Dual-Host Local-First Product</h1>
+  <p class="slate-hero__summary">Keep the complete zero-server GitHub Pages experience and add a portable Electron
+     host for convenient project-folder and export-folder operations over the same product core.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p><strong>Accepted on 2026-07-19; implementation pending through UPD-001.</strong> Web remains the required,
+     zero-install, zero-server product. Portable Electron becomes an optional Windows x64 host for local file
+     convenience and future desktop expansion. Project, pack, rendering, provenance, and export contracts remain
+     host-neutral. Electron uses a sandboxed renderer and narrow typed preload API.</p>
+</aside>
+
+<dl class="slate-defs">
+  <dt>Decision ID</dt><dd>ADR-002</dd>
+  <dt>Status</dt><dd><span class="slate-badge slate-badge--success">Accepted</span></dd>
+  <dt>Decision date</dt><dd>2026-07-19</dd>
+  <dt>Implementation status</dt><dd><span class="slate-badge slate-badge--warning">Specified in UPD-001</span></dd>
+  <dt>Related decision</dt><dd><a href="0001-zero-server-web-platform.html">ADR-001 · Zero-Server Web Platform</a></dd>
+  <dt>Supersedes</dt><dd>Nothing; ADR-001 remains binding for the web baseline</dd>
+</dl>
+
+<h2>Context</h2>
+<p>The browser product provides immediate, free access and can manage ordinary work through IndexedDB, archives,
+   downloads, and optional PWA installation. Some local workflows are materially more convenient with native file
+   operations: opening a durable project folder, atomic Save and Save As, recent folders, and writing repeated
+   generic or Godot exports directly into a selected directory. The product owner has accepted both distributions as
+   part of the evolving MVP.</p>
+
+<h2>Decision</h2>
+<ul>
+  <li>Maintain GitHub Pages/PWA as a complete required product with no Electron dependency.</li>
+  <li>Add a portable Electron Windows x64 distribution as an optional second host.</li>
+  <li>Reuse one React interface and TypeScript domain core, with host-specific repository and export adapters.</li>
+  <li>Keep canonical project, archive, pack, provenance, rendering, and export schemas independent of host.</li>
+  <li>Store Electron-only state such as recent folders and permission context outside the project document.</li>
+  <li>Use project folders for desktop persistence and <code>.spriteproject</code> archives for cross-host transfer.</li>
+  <li>Distribute portable ZIP artifacts through GitHub Releases; do not add an update server.</li>
+  <li>Defer live link, process launch, installers, auto-update, signing, macOS, and Linux to later formal updates.</li>
+</ul>
+
+<h2>Electron security boundary</h2>
+<table>
+  <thead><tr><th>Rule</th><th>Requirement</th></tr></thead>
+  <tbody>
+    <tr><td>Renderer isolation</td><td><code>contextIsolation: true</code>, <code>nodeIntegration: false</code>, sandbox enabled where compatible.</td></tr>
+    <tr><td>Preload surface</td><td>Expose only typed project, dialog, export, and host-status methods; never raw <code>ipcRenderer</code>, <code>fs</code>, shell, or process.</td></tr>
+    <tr><td>Path authority</td><td>Operate only within locations selected or approved by the user for the active action.</td></tr>
+    <tr><td>Payload validation</td><td>Validate IPC channel, schema, size, path, overwrite policy, and project revision in the main process.</td></tr>
+    <tr><td>Writes</td><td>Use temporary files and atomic replacement; incomplete output never appears complete.</td></tr>
+    <tr><td>Navigation</td><td>Block unexpected navigation and window creation; open explicit external links through a controlled handler.</td></tr>
+    <tr><td>Content</td><td>Treat project archives, packs, images, and imported metadata as untrusted input.</td></tr>
+  </tbody>
+</table>
+
+<h2>Shared adapter model</h2>
+<pre><code>interface HostPlatform {
+  kind: 'web' | 'desktop'
+  projects: ProjectRepository
+  packs: PackRepository
+  archives: ProjectArchiveService
+  exports: ExportSink
+  capabilities: HostCapabilities
+}
+
+// Domain and renderer depend on none of these host implementations.
+</code></pre>
+<table>
+  <thead><tr><th>Concern</th><th>Web adapter</th><th>Electron adapter</th></tr></thead>
+  <tbody>
+    <tr><td>Projects</td><td>IndexedDB revisions and snapshots</td><td>Canonical local project folders</td></tr>
+    <tr><td>Preferences</td><td>localStorage / IndexedDB settings</td><td>Host settings outside project folder</td></tr>
+    <tr><td>Backup</td><td>Download/import archive</td><td>Export/open archive</td></tr>
+    <tr><td>Generic/Godot delivery</td><td>Download; optional supported directory write</td><td>Direct selected-directory write or archive</td></tr>
+    <tr><td>Offline</td><td>Cached PWA after first load</td><td>Intrinsic local operation</td></tr>
+    <tr><td>Updates</td><td>GitHub Pages/service worker lifecycle</td><td>Manual replacement of portable ZIP in UPD-001</td></tr>
+  </tbody>
+</table>
+
+<h2>Portable project folder</h2>
+<pre><code>project-name/
+  sprite-project.json
+  packs.lock.json
+  recipes/
+  imported/
+  provenance/
+  exports/
+  .sprite-cache/
+</code></pre>
+<p>The project folder and archive represent the same canonical semantics. Absolute paths, recent history, window
+   geometry, permission handles, and host capabilities do not enter the canonical document. Caches are disposable;
+   user-owned imports and provenance are portable.</p>
+
+<h2>Consequences</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Benefits</p>
+    <ul>
+      <li>Zero-install discovery remains available to everyone</li>
+      <li>Desktop users gain ordinary project-folder semantics</li>
+      <li>Repeated engine export avoids download and extraction friction</li>
+      <li>Future watchers and local tool integration have a safe host boundary</li>
+      <li>No application server or update server is introduced</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Costs and risks</p>
+    <ul>
+      <li>Two host adapters and packaging surfaces require regression coverage</li>
+      <li>Unsigned portable Windows builds may show SmartScreen warnings</li>
+      <li>Electron increases artifact size and security-maintenance responsibility</li>
+      <li>Cross-host migration and parity become permanent product obligations</li>
+      <li>Desktop convenience must not degrade the web baseline</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Alternatives considered</h2>
+<table>
+  <thead><tr><th>Alternative</th><th>Decision</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td>Web only indefinitely</td><td><span class="slate-badge">Rejected as sole direction</span></td><td>Does not provide the accepted local-folder convenience and future desktop expansion boundary.</td></tr>
+    <tr><td>Electron replaces web</td><td><span class="slate-badge">Rejected</span></td><td>Would sacrifice zero-install and zero-server accessibility.</td></tr>
+    <tr><td>Separate web and desktop products</td><td><span class="slate-badge">Rejected</span></td><td>Would duplicate logic, drift project semantics, and multiply validation.</td></tr>
+    <tr><td>Tauri now</td><td><span class="slate-badge">Deferred</span></td><td>Smaller binaries are attractive, but Electron minimizes host integration risk for the existing TypeScript/React product.</td></tr>
+    <tr><td>One core with two adapters</td><td><span class="slate-badge slate-badge--success">Accepted</span></td><td>Preserves reach, portability, and one product contract.</td></tr>
+  </tbody>
+</table>
+
+<h2>Verification obligations</h2>
+<ul>
+  <li>Run every new Electron flow through packaged UI automation, not a browser substitute.</li>
+  <li>Run affected verified creative flows on web and Electron.</li>
+  <li>Round-trip real projects web → Electron → web and Electron → web → Electron.</li>
+  <li>Assert semantic project, render, provenance, generic export, and Godot export parity.</li>
+  <li>Test migration from the verified localStorage MVP into IndexedDB and project-folder/archive formats.</li>
+  <li>Test invalid IPC, traversal, permission denial, partial write, external modification, and unsaved close.</li>
+  <li>Verify the portable artifact on a clean supported Windows environment without admin rights.</li>
+</ul>
+
+<h2>Revisit triggers</h2>
+<ul>
+  <li>Portable distribution friction materially blocks adoption and a funded signing/installer plan exists.</li>
+  <li>Electron artifact size or memory becomes a measured product blocker.</li>
+  <li>macOS or Linux demand becomes an accepted promise with packaging and signing resources.</li>
+  <li>A proven workflow requires live watching or process control, triggering a new scoped update.</li>
+  <li>Security maintenance cannot be sustained, requiring another host strategy or withdrawal.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Product specification</p>
+  <p>ADR-002 is implemented only through the complete
+     <a href="../../execution/updates/upd-001-dual-host-mvp.html">UPD-001 promise-to-evidence model</a>. This ADR
+     authorizes direction; it does not prove user experience.</p>
+</div>

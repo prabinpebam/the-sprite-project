@@ -10,15 +10,18 @@
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
    <p><strong>The MVP gate is verified.</strong> The foundation, character-to-Godot vertical slice, second-pack
-       extensibility test, recovery behavior, and actual-UI task flows now have executable evidence. Phase 4 is the
-       next product boundary; no broader work is implied until its content-ecosystem promise is specified.</p>
+   extensibility test, recovery behavior, and actual-UI task flows now have executable evidence. The active next
+   boundary is <a href="../execution/updates/upd-001-dual-host-mvp.html">UPD-001 · Dual-Host Local-First MVP</a>,
+   currently specified and awaiting implementation. Phase 4 follows only after this update is verified or
+   deliberately rescheduled.</p>
 </aside>
 
 <div class="slate-callout slate-callout--info" role="note">
   <p class="slate-callout__title">Current position</p>
    <p><strong>Phases 1 through 3 are complete for the objective MVP scope.</strong> Review the generated
        <a href="../execution/mvp-delivery.html">delivery tracker</a> for the complete promise-to-evidence chain and
-       resolved anomaly history.</p>
+        resolved anomaly history. Every subsequent requirement enters through the
+        <a href="../governance/product-update-pipeline.html">Product Update Pipeline</a>.</p>
 </div>
 
 <h2>The delivery path</h2>
@@ -56,6 +59,15 @@
    and observe developers integrating exported characters into actual game projects.</p>
 <p><strong>Exit gate:</strong> the second pack requires no renderer changes, saved projects reproduce reliably,
    and target users complete the character-to-engine journey without assistance.</p>
+
+<h2>MVP evolution · Dual-host local-first <span class="slate-badge slate-badge--warning">Specified</span></h2>
+<p><a href="../execution/updates/upd-001-dual-host-mvp.html">UPD-001</a> evolves the verified baseline into two
+   complementary hosts over one product core: a GitHub Pages web workspace using IndexedDB and local preferences,
+   and a portable Electron Windows workspace using project folders and direct export directories. It includes
+   project archives, migration from current localStorage persistence, exact cross-host parity, secure Electron IPC,
+   and fresh regression evidence for affected MVP flows.</p>
+<p><strong>Exit gate:</strong> all 11 new web, desktop, cross-host, and shared flows and all 40 objective behaviors
+   pass; affected baseline flows regress cleanly; project and export parity are exact; no severity 0-2 issue remains.</p>
 
 <h2>Phase 4 · Open the content ecosystem <span class="slate-badge slate-badge--warning">Next</span></h2>
 <p>Only after the pack contract survives the MVP, add pack validation and authoring workflows, broaden humanoid

@@ -1,0 +1,134 @@
+<!-- Formal product update pipeline. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Governance · Required workflow</p>
+  <h1 class="slate-hero__title">Product Update Pipeline</h1>
+  <p class="slate-hero__summary">The mandatory derivation and evidence path for every change to product scope,
+     requirements, hosts, behavior, information architecture, UI, quality, or exclusions.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>A product update moves through <strong>request → baseline → impact → customer promise → scenarios → user-can
+     statements → task flows → IA/navigation/views/UI → objective behaviors → exclusions → ADRs → execution →
+     actual-UI evidence → release</strong>. The traceability validator must pass before implementation. Verified
+     status comes only from generated evidence. The previous verified baseline remains intact.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Canonical automation</p>
+  <p>The repository skill <code>.github/skills/agentic-product-delivery/</code> defines this workflow, its traceability
+     model, validators, and evidence rules. Update artifacts live under <code>delivery/updates/UPD-NNN-name/</code>.</p>
+</div>
+
+<h2>What triggers an update</h2>
+<p>Create or revise a formal update whenever a request changes any of the following:</p>
+<ul>
+  <li>Customer promise, target user, quality expectation, or recovery expectation</li>
+  <li>Scenario, user-can capability, task flow, branch, or terminal outcome</li>
+  <li>Information object, navigation destination, view, dialog, UI control, status, or feedback</li>
+  <li>Supported host, browser, platform, offline behavior, storage, filesystem, backend, or distribution</li>
+  <li>Project, pack, archive, provenance, export, or migration contract</li>
+  <li>Explicit inclusion, exclusion, deferral, or removal</li>
+  <li>Objective behavior oracle or completion gate</li>
+</ul>
+<p>Bug fixes that restore an already specified and verified oracle may stay inside that record. If the expected
+   behavior itself changes, it is a product update.</p>
+
+<h2>Pipeline stages</h2>
+<ol class="slate-steps slate-steps--timeline">
+  <li class="slate-step"><p class="slate-step__title">1 · Capture request</p><p>Assign <code>UPD-NNN</code>. Preserve the owner's language, rationale, constraints, date, source, and decision authority. Do not begin with a feature list.</p></li>
+  <li class="slate-step"><p class="slate-step__title">2 · Freeze baseline</p><p>Record exact Git revision, evidence run, statuses, trace counts, accepted ADRs, and rollback surface. Mark it immutable.</p></li>
+  <li class="slate-step"><p class="slate-step__title">3 · Analyze impact</p><p>Classify every affected promise, flow, contract, exclusion, and implementation area as retained, changed, added, superseded, removed, or unaffected.</p></li>
+  <li class="slate-step"><p class="slate-step__title">4 · Define customer promise</p><p>State user, context, trigger, observable outcome, quality, recovery, constraints, and required evidence. Avoid solution language until the outcome is clear.</p></li>
+  <li class="slate-step"><p class="slate-step__title">5 · Derive scenarios</p><p>Cover first use, returning use, alternatives, failure, recovery, offline, migration, accessibility, and every declared host.</p></li>
+  <li class="slate-step"><p class="slate-step__title">6 · Derive user-can statements</p><p>Create atomic observable powers. Each scenario has capabilities; every capability serves a scenario.</p></li>
+  <li class="slate-step"><p class="slate-step__title">7 · Derive task flows</p><p>Define entry, preconditions, visible actions, system responses, branches, cancellation, recovery, outputs, and completion. Split by user intent, not screen.</p></li>
+  <li class="slate-step"><p class="slate-step__title">8 · Design the experience</p><p>Derive information architecture, navigation, views, dialogs, controls, status surfaces, responsive behavior, and accessibility. Remove interface with no flow.</p></li>
+  <li class="slate-step"><p class="slate-step__title">9 · Define objective behavior</p><p>Give every material step an <code>EB-*</code> oracle: visible state, focus, pixels, persistence, file bytes, downstream import, error, recovery, or absence of anomalies.</p></li>
+  <li class="slate-step"><p class="slate-step__title">10 · Close scope</p><p>Record every plausible adjacent expectation as included or an explicit <code>OUT-*</code> decision with consequence and disposition.</p></li>
+  <li class="slate-step"><p class="slate-step__title">11 · Reconcile architecture</p><p>Add or supersede ADRs, host adapters, security boundaries, data formats, migrations, deployment, and rollback rules. ADRs support product scope; they do not replace it.</p></li>
+  <li class="slate-step"><p class="slate-step__title">12 · Validate and approve specification</p><p>Run the traceability validator. Review request fidelity, impact, completeness, exclusions, architecture, work packages, and release arithmetic. Approval permits implementation, not verification.</p></li>
+  <li class="slate-step"><p class="slate-step__title">13 · Execute by dependency</p><p>Implement vertical user flows through work packages mapped to trace IDs. After each edit, run the narrowest falsifying check and corresponding actual-UI flow.</p></li>
+  <li class="slate-step"><p class="slate-step__title">14 · Capture actual behavior</p><p>Drive visible controls on real declared hosts. Capture raw UI, pixels, accessibility, files, migrations, IPC, console, network, filesystem, downstream tools, and anomalies.</p></li>
+  <li class="slate-step"><p class="slate-step__title">15 · Verify and release</p><p>Require 100% traceability, new and changed flows, behavior oracles, affected regression, migration, parity, and zero unresolved severity 0-2 issues. Preserve the new baseline.</p></li>
+</ol>
+
+<h2>Required update record</h2>
+<table>
+  <thead><tr><th>Artifact</th><th>Purpose</th><th>Source of truth</th></tr></thead>
+  <tbody>
+    <tr><td><code>baseline.json</code></td><td>Immutable prior revision, run, counts, and inherited claims</td><td>Git and prior evidence</td></tr>
+    <tr><td><code>change-proposal.md</code></td><td>Request, outcome, constraints, authority, and requested status</td><td>Owner request</td></tr>
+    <tr><td><code>impact-analysis.md</code></td><td>Retained, changed, added, superseded, removed, and unaffected surfaces</td><td>Baseline comparison</td></tr>
+    <tr><td><code>traceability.json</code></td><td>Canonical promises through evidence graph and statuses</td><td>Machine-readable model</td></tr>
+    <tr><td>Generated specification pages</td><td>Human-reviewable promises, scenarios, capabilities, flows, experience, scope, decisions, and execution</td><td><code>traceability.json</code></td></tr>
+    <tr><td><code>release-gate.md</code></td><td>Completion arithmetic, host gates, migration, rollout, and rollback</td><td>Objective acceptance policy</td></tr>
+    <tr><td><code>evidence/</code></td><td>Runs, screenshots, captures, files, logs, migrations, parity, and anomalies</td><td>Observed execution</td></tr>
+  </tbody>
+</table>
+
+<h2>Status model</h2>
+<table>
+  <thead><tr><th>Update status</th><th>Meaning</th><th>May implement?</th><th>May claim shipped?</th></tr></thead>
+  <tbody>
+    <tr><td>Proposed</td><td>Request captured; derivation incomplete</td><td>No, except labeled risk probes</td><td>No</td></tr>
+    <tr><td>Specified</td><td>Complete validated graph; awaiting approval or execution</td><td>After approval</td><td>No</td></tr>
+    <tr><td>Approved</td><td>Boundary authorized for execution</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Implemented</td><td>Code exists and supporting checks pass</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Verified</td><td>All release gates have generated evidence</td><td>Maintenance only</td><td>Yes, within exact scope</td></tr>
+    <tr><td>Rejected</td><td>Decision declined with rationale</td><td>No</td><td>No</td></tr>
+    <tr><td>Superseded</td><td>A later update replaces the contract</td><td>Only through replacement</td><td>Historical only</td></tr>
+  </tbody>
+</table>
+
+<h2>Traceability gate</h2>
+<dl class="slate-defs">
+  <dt>Promise coverage</dt><dd>Every <code>CP</code> has scenarios and transitive expected behaviors.</dd>
+  <dt>Scenario coverage</dt><dd>Every <code>SC</code> has one or more user-can capabilities.</dd>
+  <dt>Capability coverage</dt><dd>Every <code>UC</code> participates in one or more task flows.</dd>
+  <dt>Flow coverage</dt><dd>Every <code>TF</code> has steps, views, UI, navigation where applicable, and behavior oracles.</dd>
+  <dt>Interface necessity</dt><dd>Every view, control, and route serves a flow; unused interface is removed or excluded.</dd>
+  <dt>Scope closure</dt><dd>Every plausible expectation is included or deliberately excluded.</dd>
+  <dt>Execution mapping</dt><dd>Every work package delivers trace IDs and has an executable gate.</dd>
+</dl>
+<pre><code>node .github/skills/agentic-product-delivery/scripts/validate-traceability.mjs \
+  delivery/updates/UPD-NNN-name/traceability.json</code></pre>
+<p>The required update-level gate also checks the immutable baseline, folder/ID agreement, required artifacts,
+   host classification, status promotion, exclusions, work packages, and evidence ownership:</p>
+<pre><code>node .github/skills/agentic-product-delivery/scripts/validate-product-update.mjs \
+  delivery/updates/UPD-NNN-name</code></pre>
+
+<h2>Multi-host rule</h2>
+<p>Every promise, scenario, capability, and flow declares <code>web</code>, <code>desktop</code>,
+   <code>cross-host</code>, or <code>shared</code>. Host convenience may differ, but canonical project semantics,
+   pack locks, rendering, provenance, and export contracts cannot diverge silently. Cross-host round trip and output
+   parity are product behaviors, not only integration tests.</p>
+
+<h2>Change within an active update</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Amend request</p><p>Record the new source and rationale in the change proposal or revision history.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Re-run impact</p><p>Identify newly affected and invalidated records, implementation, evidence, migration, and exclusions.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Re-derive downstream</p><p>Start from changed promises; never patch only the requested UI control or flow step.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Invalidate status</p><p>Changed and affected records return below verified until fresh evidence passes.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Regenerate review pages</p><p>Human-readable documentation remains generated from the canonical graph.</p></li>
+</ol>
+
+<h2>Formal review checklist</h2>
+<ul>
+  <li>Does the update reproduce the owner request without adding hidden promises?</li>
+  <li>Is the baseline exact, immutable, and usable for rollback?</li>
+  <li>Did impact analysis include product, UX, data, architecture, security, operations, migration, and evidence?</li>
+  <li>Can every UI element be traced to a flow, capability, scenario, and promise?</li>
+  <li>Are failure, recovery, cancellation, accessibility, offline, and host boundaries explicit?</li>
+  <li>Are plausible adjacent expectations closed by scope or exclusion?</li>
+  <li>Do execution packages map to trace IDs and runnable gates?</li>
+  <li>Does release require fresh actual-UI evidence rather than implementation claims?</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Current example</p>
+  <p><a href="../execution/updates/upd-001-dual-host-mvp.html">UPD-001 · Dual-Host Local-First MVP</a> is the
+     first application of this pipeline. It preserves the verified web MVP, derives new host promises, and keeps all
+     new records at <em>specified</em> until implementation and evidence exist.</p>
+</div>

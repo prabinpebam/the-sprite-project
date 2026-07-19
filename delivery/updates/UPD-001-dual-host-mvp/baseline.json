@@ -1,0 +1,30 @@
+{
+  "updateId": "UPD-001",
+  "baseline": {
+    "name": "Character-to-Godot MVP",
+    "gitRevision": "f29c9f9b8ea69df0f225f1b025b44cd7f30cc1bb",
+    "evidenceRunId": "RUN-MVP-001",
+    "traceabilityModel": "delivery/mvp/traceability.json",
+    "status": "verified",
+    "recordCount": 167,
+    "verifiedFlowCount": 12,
+    "verifiedBehaviorCount": 37
+  },
+  "policy": {
+    "immutable": true,
+    "inheritVerifiedStatus": false,
+    "changedRecordsRequireNewEvidence": true,
+    "affectedRetainedFlowsRequireRegression": true
+  },
+  "retainedProductClaims": [
+    "CP-QUICK-START",
+    "CP-CREATIVE-CONTROL",
+    "CP-REPRODUCIBLE-WORK",
+    "CP-GAME-READY-DELIVERY",
+    "CP-LEGAL-CONFIDENCE"
+  ],
+  "retainedArchitectureDecisions": [
+    "ADR-001 Zero-Server Web Platform"
+  ],
+  "note": "UPD-001 layers new host and persistence promises above this baseline. It does not rewrite or invalidate prior evidence."
+}

@@ -20,6 +20,8 @@ Deliver a bounded product stage from promise to verified user experience. The wo
 8. Automate flows through visible, enabled, hit-testable controls using browser or computer-use automation. Do not inject state, call internal functions, or bypass the interface.
 9. A flow passes only when all declared user-visible, artifact, persistence, accessibility, and failure-state expectations pass with no unexplained anomalies.
 10. Continue unattended through reversible decisions. Ask for human input only for secrets, legal/risk acceptance, independent human observations, destructive external actions, or irreversible publication.
+11. Never edit a verified baseline to make a new requirement appear previously verified. Create a versioned product update that references the baseline and starts new or changed records below `verified`.
+12. No product requirement, feature, platform, UI control, or architectural capability may enter implementation outside the formal update pipeline.
 
 ## Required Artifact Set
 
@@ -38,7 +40,37 @@ Create a user-inspectable delivery area appropriate to the repository, normally 
 - `decisions.md` - dated reversible and irreversible decisions
 - `issues.md` - anomalies with severity, trace IDs, disposition, and verification run
 
+For a change to a verified or approved product stage, create `delivery/updates/<update-id>/` with the same artifact
+set plus:
+
+- `change-proposal.md` - request, rationale, source, constraints, and decision authority
+- `impact-analysis.md` - retained, changed, added, removed, and superseded records and contracts
+- `baseline.json` - immutable baseline revision, evidence run, and inherited record IDs
+- `release-gate.md` - objective completion arithmetic and rollout/rollback conditions
+
 Use [the traceability model](./references/traceability-model.md) and [execution and UX validation](./references/execution-and-validation.md). Copy or adapt [the starter model](./assets/traceability.template.json).
+For changes after a baseline exists, also use [product update governance](./references/product-update-governance.md).
+
+## Product Update Gate
+
+Before modifying implementation for a new or changed requirement:
+
+1. Assign a stable update ID such as `UPD-001` and identify the exact baseline commit and evidence run.
+2. Record the requested outcome and constraints without translating it directly into features.
+3. Classify every affected baseline record as retained, changed, superseded, removed, or unaffected.
+4. Derive new or changed `CP` promises, then `SC`, `UC`, `TF`, experience architecture, and `EB` records in order.
+5. Record plausible adjacent expectations as explicit `OUT` decisions.
+6. Reconcile architecture decisions. Add or supersede ADRs before implementation when platform boundaries change.
+7. Validate the complete update envelope and traceability model with zero omissions or orphans:
+
+```bash
+node .github/skills/agentic-product-delivery/scripts/validate-product-update.mjs \
+	delivery/updates/UPD-NNN-name
+```
+
+8. Approve the specified update boundary. Only then dispatch implementation work packages.
+9. Verify changed and regression flows through the real UI on every affected host.
+10. Promote update status from `specified` to `verified` only from generated evidence; preserve the baseline record permanently.
 
 ## Derivation Workflow
 

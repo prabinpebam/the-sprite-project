@@ -9,10 +9,10 @@
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p>The product is a <strong>zero-server, local-first web application hosted on GitHub Pages</strong>. Static files
-     arrive from GitHub Pages; projects, packs, rendering, autosave, and exports remain on the user's device.
-     Accepted decisions live in immutable ADRs, while platform pages document the current implementation contract.
-     Desktop and backend capabilities remain explicit future options with evidence-based adoption triggers.</p>
+    <p>The product has <strong>two accepted local-first hosts over one core</strong>: a complete zero-server web app on
+      GitHub Pages and an optional portable Electron app for local file convenience. The web host is verified today;
+      Electron is specified through UPD-001 but not yet implemented. Accepted decisions live in immutable ADRs,
+      while platform pages document the current implementation contract.</p>
 </aside>
 
 <div class="slate-callout slate-callout--info" role="note">
@@ -31,6 +31,13 @@
       <h3 class="slate-card__title">ADR-001 · Zero-server web platform <span class="slate-badge slate-badge--success">Accepted</span></h3>
       <p class="slate-card__body">The binding decision, alternatives considered, consequences, constraints, and
          evidence that would justify revisiting it.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="decisions/0002-dual-host-local-first-product.html">
+      <h3 class="slate-card__title">ADR-002 · Dual-host product <span class="slate-badge slate-badge--success">Accepted</span></h3>
+      <p class="slate-card__body">Portable Electron joins the complete web baseline through shared host adapters,
+         canonical project formats, and mandatory cross-host parity.</p>
     </a>
   </article>
   <article class="slate-card slate-card--interactive">
@@ -77,7 +84,7 @@
   <dt>Portable ownership</dt><dd>Browser persistence improves continuity; a versioned project archive gives the user durable custody.</dd>
   <dt>One product core</dt><dd>Storage, filesystem, and download behavior sit behind adapters; rendering and project rules never fork by host.</dd>
   <dt>Progressive capability</dt><dd>Chromium-only filesystem APIs may improve a workflow but cannot become a baseline requirement.</dd>
-  <dt>Evidence before infrastructure</dt><dd>Desktop or backend investment begins only when verified user flows cannot meet their promise inside this boundary.</dd>
+  <dt>Formal product updates</dt><dd>Host and infrastructure work begins only from a complete promise-to-evidence update; ADRs cannot bypass product derivation.</dd>
 </dl>
 
 <h2>Decision lifecycle</h2>

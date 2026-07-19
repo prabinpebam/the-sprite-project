@@ -1,0 +1,520 @@
+{
+  "modelVersion": "1.0.0",
+  "update": {
+    "id": "UPD-001",
+    "title": "Dual-Host Local-First MVP",
+    "status": "specified",
+    "requestedAt": "2026-07-19",
+    "baselineRevision": "f29c9f9b8ea69df0f225f1b025b44cd7f30cc1bb",
+    "baselineEvidenceRun": "RUN-MVP-001",
+    "hosts": ["web", "desktop", "cross-host"]
+  },
+  "stage": {
+    "id": "STAGE-MVP-EVOLUTION-001",
+    "name": "Dual-Host Local-First MVP",
+    "status": "specified",
+    "targetUser": "Solo and small-team game developers who need zero-install access or convenient local file workflows without a hosted account service",
+    "qualityGate": "Every new or changed task flow passes through the actual UI on its declared host, every affected baseline flow passes regression, and cross-host project and output parity is exact"
+  },
+  "sources": [
+    "delivery/updates/UPD-001-dual-host-mvp/change-proposal.md",
+    "delivery/updates/UPD-001-dual-host-mvp/impact-analysis.md",
+    "delivery/mvp/traceability.json",
+    "docs/architecture/decisions/0001-zero-server-web-platform.html",
+    "docs/architecture/decisions/0002-dual-host-local-first-product.html"
+  ],
+  "promises": [
+    {
+      "id": "CP-WEB-LOCAL-WORKSPACE",
+      "status": "specified",
+      "host": "web",
+      "statement": "A developer can open the GitHub Pages product without installation, manage ordinary projects locally, and continue without an application server.",
+      "user": "A developer who wants immediate browser access",
+      "context": "Using the published GitHub Pages application on a supported browser",
+      "trigger": "They need to create or continue sprite work",
+      "outcome": "Projects are listed, opened, autosaved, recovered, and backed up locally through IndexedDB and portable archives",
+      "quality": "Ordinary project work survives browser restart, exposes storage status, and never depends on paid infrastructure",
+      "recovery": "The user can restore snapshots or import a project archive when browser state is damaged or cleared",
+      "evidence": "Web project-library, persistence, backup, offline, and data-custody flows pass on the published-subpath build"
+    },
+    {
+      "id": "CP-DESKTOP-PORTABLE-WORKSPACE",
+      "status": "specified",
+      "host": "desktop",
+      "statement": "A developer can run a portable Electron edition locally and use ordinary project folders and export folders without repetitive browser downloads.",
+      "user": "A developer who prefers direct local file operations",
+      "context": "Using the portable Windows x64 Electron ZIP without an installer",
+      "trigger": "They need durable folders, direct saving, or repeated engine exports",
+      "outcome": "The user creates or opens a project folder, saves atomically, recovers safely, and writes generic or Godot output into a selected directory",
+      "quality": "The portable host requires no administrator rights and exposes only narrow user-approved filesystem operations",
+      "recovery": "Save conflicts, missing folders, external changes, and unsaved close attempts fail visibly without losing the last known-good project",
+      "evidence": "Portable launch, folder lifecycle, direct export, and unsaved-close flows pass in packaged Electron"
+    },
+    {
+      "id": "CP-CROSS-HOST-PORTABILITY",
+      "status": "specified",
+      "host": "cross-host",
+      "statement": "A developer can move the same project between web and desktop without changing its creative meaning, provenance, or generated output.",
+      "user": "A developer alternating between browser convenience and desktop file access",
+      "context": "Transferring a versioned .spriteproject archive or opening an equivalent project folder",
+      "trigger": "They switch host or device",
+      "outcome": "Both hosts load the same project schema, pack locks, recipes, themes, credits, and export contract",
+      "quality": "Semantic project data, render hashes, credits, and engine metadata remain identical across hosts",
+      "recovery": "Unsupported versions and missing packs fail closed with an intact source archive and actionable resolution",
+      "evidence": "Web-to-desktop and desktop-to-web round trips pass with exact parity assertions"
+    },
+    {
+      "id": "CP-LOCAL-DATA-CUSTODY",
+      "status": "specified",
+      "host": "shared",
+      "statement": "A developer retains custody of project and art data without an account or silent upload.",
+      "user": "A developer responsible for preserving creative work",
+      "context": "Working in either host",
+      "trigger": "They inspect storage, back up work, or choose where files are written",
+      "outcome": "The product states where data lives, provides portable backup, and performs no undeclared project-data transfer",
+      "quality": "Storage and destination status are visible before destructive or external operations",
+      "recovery": "A user-owned archive or project folder restores work independently of one browser profile or app session",
+      "evidence": "Data-custody and cross-host flows pass with zero undeclared network or filesystem activity"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SC-WEB-FIRST-PROJECT",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "First-time browser user",
+      "startingState": "GitHub Pages app loaded with no IndexedDB projects",
+      "intent": "Create and retain a first project",
+      "environment": "Supported desktop browser",
+      "success": "Project appears in the library and survives reload",
+      "interruptions": ["Storage persistence denied", "Tab closed during autosave", "Duplicate project name"]
+    },
+    {
+      "id": "SC-WEB-PROJECT-LIBRARY",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE"],
+      "actor": "Returning browser user",
+      "startingState": "Several IndexedDB projects",
+      "intent": "Find, open, rename, or remove a project",
+      "environment": "Same browser origin",
+      "success": "The selected operation affects only the intended project",
+      "interruptions": ["Delete cancelled", "Older tab revision", "Missing installed pack"]
+    },
+    {
+      "id": "SC-WEB-BACKUP-RESTORE",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-CROSS-HOST-PORTABILITY", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Browser user protecting work",
+      "startingState": "Valid local project",
+      "intent": "Create a portable backup and restore it after storage loss",
+      "environment": "Browser with download and file input support",
+      "success": "Imported project reproduces the original semantic and render state",
+      "interruptions": ["Conflicting project ID", "Corrupt archive", "Unsupported future version"]
+    },
+    {
+      "id": "SC-WEB-OFFLINE",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE"],
+      "actor": "Installed PWA user",
+      "startingState": "App and required packs loaded once online",
+      "intent": "Continue ordinary work without network access",
+      "environment": "Offline supported browser",
+      "success": "Installed projects and packs remain usable and exports download locally",
+      "interruptions": ["Optional pack was never installed", "Update waiting", "External source link unavailable"]
+    },
+    {
+      "id": "SC-DESKTOP-PORTABLE-LAUNCH",
+      "status": "specified",
+      "host": "desktop",
+      "promiseIds": ["CP-DESKTOP-PORTABLE-WORKSPACE"],
+      "actor": "Windows developer",
+      "startingState": "Downloaded portable Electron ZIP",
+      "intent": "Launch without installation or administrator rights",
+      "environment": "Supported Windows x64 machine",
+      "success": "The app opens and identifies the desktop host and available file capabilities",
+      "interruptions": ["SmartScreen warning", "Read-only extraction location", "Missing recent folder"]
+    },
+    {
+      "id": "SC-DESKTOP-PROJECT-FOLDER",
+      "status": "specified",
+      "host": "desktop",
+      "promiseIds": ["CP-DESKTOP-PORTABLE-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Desktop developer",
+      "startingState": "Portable app open",
+      "intent": "Create, open, save, and relocate a project folder",
+      "environment": "Local filesystem",
+      "success": "Canonical files are written atomically and reopen with the same render",
+      "interruptions": ["Permission denied", "Folder moved", "External modification", "Disk full"]
+    },
+    {
+      "id": "SC-DESKTOP-DIRECT-EXPORT",
+      "status": "specified",
+      "host": "desktop",
+      "promiseIds": ["CP-DESKTOP-PORTABLE-WORKSPACE"],
+      "actor": "Godot developer",
+      "startingState": "Complete project open in Electron",
+      "intent": "Write engine files directly to a selected directory",
+      "environment": "Local project and export folders",
+      "success": "Expected generic or Godot files appear with matching hashes",
+      "interruptions": ["Destination unavailable", "Overwrite conflict", "Partial write"]
+    },
+    {
+      "id": "SC-DESKTOP-UNSAVED-CLOSE",
+      "status": "specified",
+      "host": "desktop",
+      "promiseIds": ["CP-DESKTOP-PORTABLE-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Desktop developer with edits",
+      "startingState": "Dirty project and close request",
+      "intent": "Choose whether to save, discard, or continue editing",
+      "environment": "Electron window",
+      "success": "The exact selected action occurs without accidental loss",
+      "interruptions": ["Save fails", "Cancel close", "Folder permission revoked"]
+    },
+    {
+      "id": "SC-CROSS-HOST-HANDOFF",
+      "status": "specified",
+      "host": "cross-host",
+      "promiseIds": ["CP-CROSS-HOST-PORTABILITY", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Developer using both hosts",
+      "startingState": "Project authored in one host",
+      "intent": "Continue in the other host",
+      "environment": "Web archive and desktop project-folder adapters",
+      "success": "Project, packs, preview, credits, and exports are semantically identical",
+      "interruptions": ["Missing pack", "Version mismatch", "Project ID conflict"]
+    },
+    {
+      "id": "SC-DATA-CUSTODY",
+      "status": "specified",
+      "host": "shared",
+      "promiseIds": ["CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Privacy- and backup-conscious developer",
+      "startingState": "Project open on either host",
+      "intent": "Understand where data lives and create a user-owned copy",
+      "environment": "Web or desktop storage view",
+      "success": "Data location, persistence, destination, and backup action are explicit",
+      "interruptions": ["Persistence denied", "Backup cancelled", "Destination unavailable"]
+    }
+  ],
+  "capabilities": [
+    { "id": "UC-WEB-OPEN-ZERO-INSTALL", "status": "specified", "host": "web", "statement": "User can open the production app from GitHub Pages without an account or installation.", "scenarioIds": ["SC-WEB-FIRST-PROJECT"] },
+    { "id": "UC-WEB-CREATE-PROJECT", "status": "specified", "host": "web", "statement": "User can create a project in the IndexedDB-backed library.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-LIST-PROJECTS", "status": "specified", "host": "web", "statement": "User can list local projects with name, update time, pack state, and recovery status.", "scenarioIds": ["SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-OPEN-PROJECT", "status": "specified", "host": "web", "statement": "User can open one project from the browser library without affecting others.", "scenarioIds": ["SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-RENAME-PROJECT", "status": "specified", "host": "web", "statement": "User can rename a browser project while preserving its stable ID and content.", "scenarioIds": ["SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-DELETE-PROJECT", "status": "specified", "host": "web", "statement": "User can delete one browser project only after explicit confirmation.", "scenarioIds": ["SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-AUTOSAVE-IDB", "status": "specified", "host": "web", "statement": "User can rely on transactional IndexedDB autosave with visible status and snapshots.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-RESTORE-SESSION", "status": "specified", "host": "web", "statement": "User can reload or restart the browser and continue the exact saved project state.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-EXPORT-ARCHIVE", "status": "specified", "host": "web", "statement": "User can download a versioned .spriteproject backup.", "scenarioIds": ["SC-WEB-BACKUP-RESTORE", "SC-DATA-CUSTODY", "SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-WEB-IMPORT-ARCHIVE", "status": "specified", "host": "web", "statement": "User can inspect and import a valid .spriteproject archive with explicit conflict handling.", "scenarioIds": ["SC-WEB-BACKUP-RESTORE", "SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-WEB-INSPECT-STORAGE", "status": "specified", "host": "web", "statement": "User can inspect approximate usage, quota, persistence state, and disposable cache choices.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-DATA-CUSTODY"] },
+    { "id": "UC-WEB-WORK-OFFLINE", "status": "specified", "host": "web", "statement": "User can complete installed project workflows offline after the first successful load.", "scenarioIds": ["SC-WEB-OFFLINE"] },
+    { "id": "UC-DESKTOP-LAUNCH-PORTABLE", "status": "specified", "host": "desktop", "statement": "User can launch the portable Windows x64 Electron app without installation or administrator rights.", "scenarioIds": ["SC-DESKTOP-PORTABLE-LAUNCH"] },
+    { "id": "UC-DESKTOP-SEE-HOST", "status": "specified", "host": "desktop", "statement": "User can see that the desktop host and local file capabilities are active.", "scenarioIds": ["SC-DESKTOP-PORTABLE-LAUNCH", "SC-DATA-CUSTODY"] },
+    { "id": "UC-DESKTOP-CREATE-FOLDER", "status": "specified", "host": "desktop", "statement": "User can create a canonical project folder in a chosen location.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER"] },
+    { "id": "UC-DESKTOP-OPEN-FOLDER", "status": "specified", "host": "desktop", "statement": "User can open a compatible project folder and see validation before editing.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER", "SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-DESKTOP-SAVE-ATOMIC", "status": "specified", "host": "desktop", "statement": "User can save canonical files atomically with visible dirty, saving, saved, and failed states.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER", "SC-DESKTOP-UNSAVED-CLOSE"] },
+    { "id": "UC-DESKTOP-SAVE-AS", "status": "specified", "host": "desktop", "statement": "User can relocate a project through Save As without silently changing its semantic identity.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER"] },
+    { "id": "UC-DESKTOP-OPEN-RECENT", "status": "specified", "host": "desktop", "statement": "User can open a recent valid project folder and remove stale entries.", "scenarioIds": ["SC-DESKTOP-PORTABLE-LAUNCH", "SC-DESKTOP-PROJECT-FOLDER"] },
+    { "id": "UC-DESKTOP-DIRECT-EXPORT", "status": "specified", "host": "desktop", "statement": "User can write generic or Godot output directly into a selected directory.", "scenarioIds": ["SC-DESKTOP-DIRECT-EXPORT"] },
+    { "id": "UC-DESKTOP-CLOSE-SAFELY", "status": "specified", "host": "desktop", "statement": "User can choose Save, Discard, or Cancel when closing a dirty project.", "scenarioIds": ["SC-DESKTOP-UNSAVED-CLOSE"] },
+    { "id": "UC-CROSS-HOST-WEB-TO-DESKTOP", "status": "specified", "host": "cross-host", "statement": "User can export a web project archive and continue it in Electron.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-CROSS-HOST-DESKTOP-TO-WEB", "status": "specified", "host": "cross-host", "statement": "User can export a desktop project archive and continue it in the web app.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-CROSS-HOST-IDENTICAL-OUTPUT", "status": "specified", "host": "cross-host", "statement": "User receives identical semantic project data, render hashes, credits, and export metadata from either host.", "scenarioIds": ["SC-CROSS-HOST-HANDOFF"] },
+    { "id": "UC-SEE-DATA-LOCATION", "status": "specified", "host": "shared", "statement": "User can see whether project data lives in IndexedDB, a project folder, or a selected export destination.", "scenarioIds": ["SC-DATA-CUSTODY"] }
+  ],
+  "informationArchitecture": [
+    { "id": "IA-HOST", "status": "specified", "name": "Host context", "contains": ["host type", "version", "capabilities", "distribution channel"] },
+    { "id": "IA-PROJECT-SUMMARY", "status": "specified", "name": "Project summary", "contains": ["stable ID", "name", "updated time", "pack state", "revision", "recovery state"] },
+    { "id": "IA-PROJECT-DOCUMENT", "status": "specified", "name": "Canonical project document", "contains": ["schema version", "recipes", "theme", "pack locks", "provenance references"] },
+    { "id": "IA-PROJECT-REPOSITORY", "status": "specified", "name": "Project repository", "contains": ["projects", "revisions", "snapshots", "migration state"] },
+    { "id": "IA-PROJECT-ARCHIVE", "status": "specified", "name": "Portable project archive", "contains": ["manifest", "project", "pack locks", "owned imports", "provenance", "checksums"] },
+    { "id": "IA-PROJECT-FOLDER", "status": "specified", "name": "Desktop project folder", "contains": ["project JSON", "pack lock", "recipes", "imports", "exports", "cache"] },
+    { "id": "IA-STORAGE-STATUS", "status": "specified", "name": "Storage status", "contains": ["location", "persistence", "usage", "quota", "last save", "last snapshot"] },
+    { "id": "IA-EXPORT-DESTINATION", "status": "specified", "name": "Export destination", "contains": ["target host", "directory", "overwrite policy", "result files", "hashes"] }
+  ],
+  "navigation": [
+    { "id": "NAV-PROJECTS", "status": "specified", "label": "Projects", "destination": "VIEW-PROJECTS", "backBehavior": "Returns to the previously open project without discarding edits" },
+    { "id": "NAV-WORKSPACE", "status": "specified", "label": "Workspace", "destination": "VIEW-WORKSPACE", "backBehavior": "Returns to the current creative view" },
+    { "id": "NAV-STORAGE", "status": "specified", "label": "Storage & Backup", "destination": "VIEW-STORAGE", "backBehavior": "Returns without changing project data" },
+    { "id": "NAV-EXPORT", "status": "specified", "label": "Export", "destination": "VIEW-EXPORT", "backBehavior": "No output is written until commanded" },
+    { "id": "NAV-DESKTOP-FILE", "status": "specified", "label": "File", "destination": "VIEW-DESKTOP-FILE", "backBehavior": "Native dialog cancellation leaves the project unchanged" }
+  ],
+  "views": [
+    { "id": "VIEW-HOST-START", "status": "specified", "name": "Host start", "informationIds": ["IA-HOST", "IA-PROJECT-SUMMARY"], "purpose": "Identify host capabilities and offer appropriate entry actions" },
+    { "id": "VIEW-PROJECTS", "status": "specified", "name": "Project library", "informationIds": ["IA-PROJECT-SUMMARY", "IA-PROJECT-REPOSITORY"], "purpose": "List and manage local projects" },
+    { "id": "VIEW-WORKSPACE", "status": "specified", "name": "Creative workspace", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-STORAGE-STATUS"], "purpose": "Retain the verified compose, theme, preview, and export workflow" },
+    { "id": "VIEW-STORAGE", "status": "specified", "name": "Storage and backup", "informationIds": ["IA-STORAGE-STATUS", "IA-PROJECT-ARCHIVE"], "purpose": "Explain data custody, manage archives, and expose recovery state" },
+    { "id": "VIEW-ARCHIVE-IMPORT", "status": "specified", "name": "Archive import", "informationIds": ["IA-PROJECT-ARCHIVE", "IA-PROJECT-DOCUMENT"], "purpose": "Inspect, validate, migrate, and resolve archive conflicts before commit" },
+    { "id": "VIEW-EXPORT", "status": "specified", "name": "Export", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-EXPORT-DESTINATION"], "purpose": "Generate downloads or direct desktop directory output" },
+    { "id": "VIEW-DESKTOP-FILE", "status": "specified", "name": "Desktop file operations", "informationIds": ["IA-PROJECT-FOLDER", "IA-PROJECT-SUMMARY"], "purpose": "Create, open, save, relocate, and archive local project folders" },
+    { "id": "VIEW-UNSAVED-DIALOG", "status": "specified", "name": "Unsaved changes confirmation", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-STORAGE-STATUS"], "purpose": "Resolve Save, Discard, or Cancel before close" }
+  ],
+  "uiElements": [
+    { "id": "UI-HOST-IDENTITY", "status": "specified", "viewId": "VIEW-HOST-START", "role": "status", "name": "Active host and capabilities" },
+    { "id": "UI-PROJECT-LIBRARY", "status": "specified", "viewId": "VIEW-PROJECTS", "role": "list", "name": "Local projects" },
+    { "id": "UI-WEB-NEW-PROJECT", "status": "specified", "viewId": "VIEW-PROJECTS", "role": "button", "name": "New project" },
+    { "id": "UI-PROJECT-CARD", "status": "specified", "viewId": "VIEW-PROJECTS", "role": "button", "name": "Open project" },
+    { "id": "UI-PROJECT-RENAME", "status": "specified", "viewId": "VIEW-PROJECTS", "role": "button", "name": "Rename project" },
+    { "id": "UI-PROJECT-DELETE", "status": "specified", "viewId": "VIEW-PROJECTS", "role": "button", "name": "Delete project" },
+    { "id": "UI-WORKSPACE-EDIT", "status": "specified", "viewId": "VIEW-WORKSPACE", "role": "control", "name": "Creative edit" },
+    { "id": "UI-SAVE-STATUS", "status": "specified", "viewId": "VIEW-WORKSPACE", "role": "status", "name": "Project save status" },
+    { "id": "UI-STORAGE-STATUS", "status": "specified", "viewId": "VIEW-STORAGE", "role": "status", "name": "Storage status" },
+    { "id": "UI-DATA-LOCATION", "status": "specified", "viewId": "VIEW-STORAGE", "role": "region", "name": "Data location" },
+    { "id": "UI-EXPORT-ARCHIVE", "status": "specified", "viewId": "VIEW-STORAGE", "role": "button", "name": "Export project backup" },
+    { "id": "UI-IMPORT-ARCHIVE", "status": "specified", "viewId": "VIEW-STORAGE", "role": "button", "name": "Import project backup" },
+    { "id": "UI-IMPORT-SUMMARY", "status": "specified", "viewId": "VIEW-ARCHIVE-IMPORT", "role": "region", "name": "Archive summary" },
+    { "id": "UI-IMPORT-CONFLICT", "status": "specified", "viewId": "VIEW-ARCHIVE-IMPORT", "role": "radiogroup", "name": "Import conflict action" },
+    { "id": "UI-OFFLINE-STATUS", "status": "specified", "viewId": "VIEW-HOST-START", "role": "status", "name": "Offline availability" },
+    { "id": "UI-DESKTOP-RECENT", "status": "specified", "viewId": "VIEW-HOST-START", "role": "list", "name": "Recent project folders" },
+    { "id": "UI-DESKTOP-CREATE-FOLDER", "status": "specified", "viewId": "VIEW-DESKTOP-FILE", "role": "button", "name": "Create project folder" },
+    { "id": "UI-DESKTOP-OPEN-FOLDER", "status": "specified", "viewId": "VIEW-DESKTOP-FILE", "role": "button", "name": "Open project folder" },
+    { "id": "UI-DESKTOP-SAVE", "status": "specified", "viewId": "VIEW-DESKTOP-FILE", "role": "button", "name": "Save" },
+    { "id": "UI-DESKTOP-SAVE-AS", "status": "specified", "viewId": "VIEW-DESKTOP-FILE", "role": "button", "name": "Save As" },
+    { "id": "UI-DESKTOP-OPEN-ARCHIVE", "status": "specified", "viewId": "VIEW-DESKTOP-FILE", "role": "button", "name": "Open project backup" },
+    { "id": "UI-DESKTOP-EXPORT-DIR", "status": "specified", "viewId": "VIEW-EXPORT", "role": "button", "name": "Choose export folder" },
+    { "id": "UI-EXPORT-GENERIC", "status": "specified", "viewId": "VIEW-EXPORT", "role": "button", "name": "Export generic files" },
+    { "id": "UI-EXPORT-GODOT", "status": "specified", "viewId": "VIEW-EXPORT", "role": "button", "name": "Export Godot files" },
+    { "id": "UI-CLOSE-WINDOW", "status": "specified", "viewId": "VIEW-WORKSPACE", "role": "button", "name": "Close window" },
+    { "id": "UI-UNSAVED-CHOICE", "status": "specified", "viewId": "VIEW-UNSAVED-DIALOG", "role": "group", "name": "Save Discard or Cancel" }
+  ],
+  "expectedBehaviors": [
+    { "id": "EB-WEB-LIBRARY-LOAD", "status": "specified", "flowId": "TF-WEB-PROJECT-LIBRARY", "stepIds": ["S1"], "oracle": "Projects view lists exactly the IndexedDB projects ordered by updated time and shows name, pack state, save state, and last update." },
+    { "id": "EB-WEB-LIBRARY-CREATE", "status": "specified", "flowId": "TF-WEB-PROJECT-LIBRARY", "stepIds": ["S2"], "oracle": "New project commits one valid IndexedDB record and adds one selected library item without changing existing projects." },
+    { "id": "EB-WEB-LIBRARY-OPEN", "status": "specified", "flowId": "TF-WEB-PROJECT-LIBRARY", "stepIds": ["S3"], "oracle": "Open project loads the selected stable ID and exact render while every other project remains unchanged." },
+    { "id": "EB-WEB-LIBRARY-RENAME", "status": "specified", "flowId": "TF-WEB-PROJECT-LIBRARY", "stepIds": ["S4"], "oracle": "Rename changes only the project name, preserves stable ID and render hash, and updates the library after transaction success." },
+    { "id": "EB-WEB-LIBRARY-DELETE", "status": "specified", "flowId": "TF-WEB-PROJECT-LIBRARY", "stepIds": ["S5"], "oracle": "Delete requires explicit project-name confirmation; Cancel changes nothing and Confirm removes only the selected project and declared snapshots." },
+    { "id": "EB-WEB-AUTOSAVE-DIRTY", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S1"], "oracle": "A semantic edit changes status from Saved to Unsaved then Saving without blocking continued editing." },
+    { "id": "EB-WEB-AUTOSAVE-COMMIT", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S2"], "oracle": "One atomic IndexedDB transaction advances revision, retains the prior known-good snapshot, and changes status to Saved only after read-back." },
+    { "id": "EB-WEB-AUTOSAVE-REOPEN", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S3"], "oracle": "Browser reload restores exact project ID, recipe, theme, preview state, revision, and render hash." },
+    { "id": "EB-WEB-STORAGE-STATUS", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S4"], "oracle": "Storage view reports IndexedDB location, persistence result, approximate usage and quota, latest revision, and snapshot time without promising cloud backup." },
+    { "id": "EB-WEB-ARCHIVE-EXPORT", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S1"], "oracle": "Export downloads one .spriteproject archive with versioned manifest, project, pack locks, provenance, owned imports, and verified checksums." },
+    { "id": "EB-WEB-ARCHIVE-INSPECT", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S2"], "oracle": "Import validates entries, expansion bounds, checksums, schema versions, project summary, and required packs before enabling commit." },
+    { "id": "EB-WEB-ARCHIVE-CONFLICT", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S3"], "oracle": "An existing project ID requires Replace, Import as copy, or Cancel; no option is precommitted before user activation." },
+    { "id": "EB-WEB-ARCHIVE-RESTORE", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S4"], "oracle": "After browser project storage is cleared, import restores exact semantic data, render hash, credits, and export metadata." },
+    { "id": "EB-WEB-OFFLINE-START", "status": "specified", "flowId": "TF-WEB-OFFLINE", "stepIds": ["S1"], "oracle": "After one online load, an offline restart opens the cached app shell and visibly reports Offline." },
+    { "id": "EB-WEB-OFFLINE-PROJECT", "status": "specified", "flowId": "TF-WEB-OFFLINE", "stepIds": ["S2"], "oracle": "An installed project and all installed pack content open and render with zero failed required network requests." },
+    { "id": "EB-WEB-OFFLINE-EXPORT", "status": "specified", "flowId": "TF-WEB-OFFLINE", "stepIds": ["S3"], "oracle": "Generic and Godot downloads complete offline with the same hashes as the online project." },
+    { "id": "EB-DESKTOP-LAUNCH", "status": "specified", "flowId": "TF-DESKTOP-PORTABLE-LAUNCH", "stepIds": ["S1"], "oracle": "The extracted Windows x64 executable launches without installation or administrator rights and identifies its version." },
+    { "id": "EB-DESKTOP-CAPABILITIES", "status": "specified", "flowId": "TF-DESKTOP-PORTABLE-LAUNCH", "stepIds": ["S2"], "oracle": "Host status identifies Desktop and exposes folder actions while the renderer has no direct Node.js globals." },
+    { "id": "EB-DESKTOP-RECENT", "status": "specified", "flowId": "TF-DESKTOP-PORTABLE-LAUNCH", "stepIds": ["S3"], "oracle": "Recent list shows valid user-opened project folders; selecting a missing entry reports it and offers removal without creating files." },
+    { "id": "EB-DESKTOP-FOLDER-CREATE", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S1"], "oracle": "Create folder writes the canonical project structure only inside the user-selected empty or approved location." },
+    { "id": "EB-DESKTOP-FOLDER-SAVE", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S2"], "oracle": "Save writes a temporary validated document then atomically replaces the target; failure preserves the prior file and dirty state." },
+    { "id": "EB-DESKTOP-FOLDER-OPEN", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S3"], "oracle": "Open validates schema, pack locks, references, and external revision before exposing the project for editing." },
+    { "id": "EB-DESKTOP-FOLDER-SAVE-AS", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S4"], "oracle": "Save As writes a complete new folder, preserves semantic project identity unless Copy is chosen, and leaves the source untouched." },
+    { "id": "EB-DESKTOP-EXPORT-DESTINATION", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S1"], "oracle": "Choose export folder displays the resolved user-selected destination and overwrite policy before writing." },
+    { "id": "EB-DESKTOP-EXPORT-GENERIC", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S2"], "oracle": "Generic export writes exactly spritesheet, animations, build manifest, machine credits, and human credits with expected hashes." },
+    { "id": "EB-DESKTOP-EXPORT-GODOT", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S3"], "oracle": "Godot export adds valid SpriteFrames and instructions; a real pinned Godot fixture loads all declared animations without manual slicing." },
+    { "id": "EB-DESKTOP-EXPORT-FAILURE", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S4"], "oracle": "Permission, conflict, or partial-write failure identifies the destination and leaves no result that appears complete." },
+    { "id": "EB-DESKTOP-CLOSE-PROMPT", "status": "specified", "flowId": "TF-DESKTOP-UNSAVED-CLOSE", "stepIds": ["S1"], "oracle": "Closing a dirty project blocks window destruction and presents Save, Discard, and Cancel with project name." },
+    { "id": "EB-DESKTOP-CLOSE-CANCEL", "status": "specified", "flowId": "TF-DESKTOP-UNSAVED-CLOSE", "stepIds": ["S2"], "oracle": "Cancel returns focus to the unchanged project and keeps the dirty state." },
+    { "id": "EB-DESKTOP-CLOSE-SAVE", "status": "specified", "flowId": "TF-DESKTOP-UNSAVED-CLOSE", "stepIds": ["S3"], "oracle": "Save closes only after atomic persistence succeeds; save failure keeps the window open with recovery actions." },
+    { "id": "EB-DESKTOP-CLOSE-DISCARD", "status": "specified", "flowId": "TF-DESKTOP-UNSAVED-CLOSE", "stepIds": ["S4"], "oracle": "Discard closes without writing and the next open loads the last saved revision." },
+    { "id": "EB-CROSS-WEB-EXPORT", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S1"], "oracle": "Web exports a valid archive whose manifest names the baseline schema, packs, checksums, and no browser-specific state." },
+    { "id": "EB-CROSS-DESKTOP-OPEN", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S2"], "oracle": "Electron opens the web archive after validation and reports exact project, pack, migration, and source summary." },
+    { "id": "EB-CROSS-WEB-DESKTOP-PARITY", "status": "specified", "flowId": "TF-CROSS-HOST-WEB-TO-DESKTOP", "stepIds": ["S3"], "oracle": "Desktop render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the web source." },
+    { "id": "EB-CROSS-DESKTOP-EXPORT", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S1"], "oracle": "Electron exports a portable archive without absolute paths, permission handles, recent entries, or host-only settings." },
+    { "id": "EB-CROSS-WEB-IMPORT", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S2"], "oracle": "Web validates and imports the desktop archive transactionally with explicit conflict handling." },
+    { "id": "EB-CROSS-DESKTOP-WEB-PARITY", "status": "specified", "flowId": "TF-CROSS-HOST-DESKTOP-TO-WEB", "stepIds": ["S3"], "oracle": "Web render hash, selected assets, resolved tokens, credits, animation JSON, and Godot metadata equal the desktop source." },
+    { "id": "EB-DATA-LOCATION", "status": "specified", "flowId": "TF-DATA-CUSTODY", "stepIds": ["S1"], "oracle": "Storage view states IndexedDB for web or the exact approved project folder for desktop and explicitly says no cloud backup is active." },
+    { "id": "EB-DATA-BACKUP", "status": "specified", "flowId": "TF-DATA-CUSTODY", "stepIds": ["S2"], "oracle": "Backup action produces a user-owned archive and reports completion only after its bytes and checksums are generated." },
+    { "id": "EB-DATA-NETWORK", "status": "specified", "flowId": "TF-DATA-CUSTODY", "stepIds": ["S3"], "oracle": "Creating, editing, saving, backing up, and exporting project data causes zero undeclared project-data network requests." }
+  ],
+  "flows": [
+    {
+      "id": "TF-WEB-PROJECT-LIBRARY",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"],
+      "capabilityIds": ["UC-WEB-OPEN-ZERO-INSTALL", "UC-WEB-CREATE-PROJECT", "UC-WEB-LIST-PROJECTS", "UC-WEB-OPEN-PROJECT", "UC-WEB-RENAME-PROJECT", "UC-WEB-DELETE-PROJECT"],
+      "preconditions": ["GitHub Pages application loaded"],
+      "completion": "Browser project library manages several projects without cross-project mutation",
+      "steps": [
+        { "id": "S1", "action": "Open Projects", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-LIBRARY", "navigationId": "NAV-PROJECTS", "expectedBehaviorIds": ["EB-WEB-LIBRARY-LOAD"] },
+        { "id": "S2", "action": "Create a project", "viewId": "VIEW-PROJECTS", "uiId": "UI-WEB-NEW-PROJECT", "expectedBehaviorIds": ["EB-WEB-LIBRARY-CREATE"] },
+        { "id": "S3", "action": "Open another project", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-CARD", "expectedBehaviorIds": ["EB-WEB-LIBRARY-OPEN"] },
+        { "id": "S4", "action": "Rename selected project", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-RENAME", "expectedBehaviorIds": ["EB-WEB-LIBRARY-RENAME"] },
+        { "id": "S5", "action": "Cancel then confirm deletion", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-DELETE", "expectedBehaviorIds": ["EB-WEB-LIBRARY-DELETE"] }
+      ]
+    },
+    {
+      "id": "TF-WEB-AUTOSAVE-REOPEN",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"],
+      "capabilityIds": ["UC-WEB-AUTOSAVE-IDB", "UC-WEB-RESTORE-SESSION", "UC-WEB-INSPECT-STORAGE"],
+      "preconditions": ["IndexedDB project open"],
+      "completion": "Semantic edit persists transactionally and restores exactly",
+      "steps": [
+        { "id": "S1", "action": "Make a semantic edit", "viewId": "VIEW-WORKSPACE", "uiId": "UI-WORKSPACE-EDIT", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-WEB-AUTOSAVE-DIRTY"] },
+        { "id": "S2", "action": "Observe autosave", "viewId": "VIEW-WORKSPACE", "uiId": "UI-SAVE-STATUS", "expectedBehaviorIds": ["EB-WEB-AUTOSAVE-COMMIT"] },
+        { "id": "S3", "action": "Reload and reopen project", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-CARD", "navigationId": "NAV-PROJECTS", "expectedBehaviorIds": ["EB-WEB-AUTOSAVE-REOPEN"] },
+        { "id": "S4", "action": "Inspect storage state", "viewId": "VIEW-STORAGE", "uiId": "UI-STORAGE-STATUS", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-WEB-STORAGE-STATUS"] }
+      ]
+    },
+    {
+      "id": "TF-WEB-BACKUP-RESTORE",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-BACKUP-RESTORE"],
+      "capabilityIds": ["UC-WEB-EXPORT-ARCHIVE", "UC-WEB-IMPORT-ARCHIVE"],
+      "preconditions": ["Valid browser project"],
+      "completion": "Archive restores the project after browser project storage is cleared",
+      "steps": [
+        { "id": "S1", "action": "Export project backup", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-WEB-ARCHIVE-EXPORT"] },
+        { "id": "S2", "action": "Choose backup for import", "viewId": "VIEW-STORAGE", "uiId": "UI-IMPORT-ARCHIVE", "expectedBehaviorIds": ["EB-WEB-ARCHIVE-INSPECT"] },
+        { "id": "S3", "action": "Resolve project ID conflict", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-CONFLICT", "expectedBehaviorIds": ["EB-WEB-ARCHIVE-CONFLICT"] },
+        { "id": "S4", "action": "Import after clearing project storage", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-WEB-ARCHIVE-RESTORE"] }
+      ]
+    },
+    {
+      "id": "TF-WEB-OFFLINE",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-OFFLINE"],
+      "capabilityIds": ["UC-WEB-WORK-OFFLINE", "UC-WEB-OPEN-PROJECT"],
+      "preconditions": ["App and selected packs loaded online once"],
+      "completion": "Installed project workflow and exports complete offline",
+      "steps": [
+        { "id": "S1", "action": "Restart while offline", "viewId": "VIEW-HOST-START", "uiId": "UI-OFFLINE-STATUS", "expectedBehaviorIds": ["EB-WEB-OFFLINE-START"] },
+        { "id": "S2", "action": "Open installed project", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-CARD", "navigationId": "NAV-PROJECTS", "expectedBehaviorIds": ["EB-WEB-OFFLINE-PROJECT"] },
+        { "id": "S3", "action": "Export files offline", "viewId": "VIEW-EXPORT", "uiId": "UI-EXPORT-GENERIC", "navigationId": "NAV-EXPORT", "expectedBehaviorIds": ["EB-WEB-OFFLINE-EXPORT"] }
+      ]
+    },
+    {
+      "id": "TF-DESKTOP-PORTABLE-LAUNCH",
+      "status": "specified",
+      "host": "desktop",
+      "scenarioIds": ["SC-DESKTOP-PORTABLE-LAUNCH"],
+      "capabilityIds": ["UC-DESKTOP-LAUNCH-PORTABLE", "UC-DESKTOP-SEE-HOST", "UC-DESKTOP-OPEN-RECENT"],
+      "preconditions": ["Portable Windows x64 ZIP extracted"],
+      "completion": "Desktop host opens with correct capabilities and recent-folder state",
+      "steps": [
+        { "id": "S1", "action": "Launch portable executable", "viewId": "VIEW-HOST-START", "uiId": "UI-HOST-IDENTITY", "expectedBehaviorIds": ["EB-DESKTOP-LAUNCH"] },
+        { "id": "S2", "action": "Inspect host capabilities", "viewId": "VIEW-HOST-START", "uiId": "UI-HOST-IDENTITY", "expectedBehaviorIds": ["EB-DESKTOP-CAPABILITIES"] },
+        { "id": "S3", "action": "Inspect and open recent folder", "viewId": "VIEW-HOST-START", "uiId": "UI-DESKTOP-RECENT", "expectedBehaviorIds": ["EB-DESKTOP-RECENT"] }
+      ]
+    },
+    {
+      "id": "TF-DESKTOP-PROJECT-FOLDER",
+      "status": "specified",
+      "host": "desktop",
+      "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER"],
+      "capabilityIds": ["UC-DESKTOP-CREATE-FOLDER", "UC-DESKTOP-OPEN-FOLDER", "UC-DESKTOP-SAVE-ATOMIC", "UC-DESKTOP-SAVE-AS", "UC-DESKTOP-OPEN-RECENT"],
+      "preconditions": ["Desktop host active"],
+      "completion": "Project folder creates, saves, opens, and relocates without semantic drift",
+      "steps": [
+        { "id": "S1", "action": "Create project folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-CREATE-FOLDER", "navigationId": "NAV-DESKTOP-FILE", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-CREATE"] },
+        { "id": "S2", "action": "Edit and save project", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-SAVE", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-SAVE"] },
+        { "id": "S3", "action": "Close then open folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-OPEN-FOLDER", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-OPEN"] },
+        { "id": "S4", "action": "Save As to another folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-SAVE-AS", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-SAVE-AS"] }
+      ]
+    },
+    {
+      "id": "TF-DESKTOP-DIRECT-EXPORT",
+      "status": "specified",
+      "host": "desktop",
+      "scenarioIds": ["SC-DESKTOP-DIRECT-EXPORT"],
+      "capabilityIds": ["UC-DESKTOP-DIRECT-EXPORT"],
+      "preconditions": ["Complete desktop project"],
+      "completion": "Generic and Godot outputs are written safely to selected directory",
+      "steps": [
+        { "id": "S1", "action": "Choose export folder", "viewId": "VIEW-EXPORT", "uiId": "UI-DESKTOP-EXPORT-DIR", "navigationId": "NAV-EXPORT", "expectedBehaviorIds": ["EB-DESKTOP-EXPORT-DESTINATION"] },
+        { "id": "S2", "action": "Export generic files", "viewId": "VIEW-EXPORT", "uiId": "UI-EXPORT-GENERIC", "expectedBehaviorIds": ["EB-DESKTOP-EXPORT-GENERIC"] },
+        { "id": "S3", "action": "Export Godot files", "viewId": "VIEW-EXPORT", "uiId": "UI-EXPORT-GODOT", "expectedBehaviorIds": ["EB-DESKTOP-EXPORT-GODOT"] },
+        { "id": "S4", "action": "Attempt export to unavailable destination", "viewId": "VIEW-EXPORT", "uiId": "UI-DESKTOP-EXPORT-DIR", "expectedBehaviorIds": ["EB-DESKTOP-EXPORT-FAILURE"] }
+      ]
+    },
+    {
+      "id": "TF-DESKTOP-UNSAVED-CLOSE",
+      "status": "specified",
+      "host": "desktop",
+      "scenarioIds": ["SC-DESKTOP-UNSAVED-CLOSE"],
+      "capabilityIds": ["UC-DESKTOP-SAVE-ATOMIC", "UC-DESKTOP-CLOSE-SAFELY"],
+      "preconditions": ["Dirty desktop project"],
+      "completion": "Save, Discard, and Cancel each produce the exact selected outcome",
+      "steps": [
+        { "id": "S1", "action": "Request window close", "viewId": "VIEW-WORKSPACE", "uiId": "UI-CLOSE-WINDOW", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-DESKTOP-CLOSE-PROMPT"] },
+        { "id": "S2", "action": "Choose Cancel", "viewId": "VIEW-UNSAVED-DIALOG", "uiId": "UI-UNSAVED-CHOICE", "expectedBehaviorIds": ["EB-DESKTOP-CLOSE-CANCEL"] },
+        { "id": "S3", "action": "Request close and choose Save", "viewId": "VIEW-UNSAVED-DIALOG", "uiId": "UI-UNSAVED-CHOICE", "expectedBehaviorIds": ["EB-DESKTOP-CLOSE-SAVE"] },
+        { "id": "S4", "action": "Request close and choose Discard", "viewId": "VIEW-UNSAVED-DIALOG", "uiId": "UI-UNSAVED-CHOICE", "expectedBehaviorIds": ["EB-DESKTOP-CLOSE-DISCARD"] }
+      ]
+    },
+    {
+      "id": "TF-CROSS-HOST-WEB-TO-DESKTOP",
+      "status": "specified",
+      "host": "cross-host",
+      "scenarioIds": ["SC-CROSS-HOST-HANDOFF"],
+      "capabilityIds": ["UC-WEB-EXPORT-ARCHIVE", "UC-CROSS-HOST-WEB-TO-DESKTOP", "UC-CROSS-HOST-IDENTICAL-OUTPUT", "UC-DESKTOP-OPEN-FOLDER"],
+      "preconditions": ["Verified project in web"],
+      "completion": "Electron continues the web project with exact parity",
+      "steps": [
+        { "id": "S1", "action": "Export web project archive", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-CROSS-WEB-EXPORT"] },
+        { "id": "S2", "action": "Open archive in Electron", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-OPEN-ARCHIVE", "navigationId": "NAV-DESKTOP-FILE", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-OPEN"] },
+        { "id": "S3", "action": "Inspect imported summary and export", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-CROSS-WEB-DESKTOP-PARITY"] }
+      ]
+    },
+    {
+      "id": "TF-CROSS-HOST-DESKTOP-TO-WEB",
+      "status": "specified",
+      "host": "cross-host",
+      "scenarioIds": ["SC-CROSS-HOST-HANDOFF"],
+      "capabilityIds": ["UC-CROSS-HOST-DESKTOP-TO-WEB", "UC-CROSS-HOST-IDENTICAL-OUTPUT", "UC-WEB-IMPORT-ARCHIVE"],
+      "preconditions": ["Verified project folder in Electron"],
+      "completion": "Web continues the desktop project with exact parity",
+      "steps": [
+        { "id": "S1", "action": "Export desktop project backup", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-EXPORT"] },
+        { "id": "S2", "action": "Import backup in web", "viewId": "VIEW-STORAGE", "uiId": "UI-IMPORT-ARCHIVE", "expectedBehaviorIds": ["EB-CROSS-WEB-IMPORT"] },
+        { "id": "S3", "action": "Inspect imported summary and export", "viewId": "VIEW-ARCHIVE-IMPORT", "uiId": "UI-IMPORT-SUMMARY", "expectedBehaviorIds": ["EB-CROSS-DESKTOP-WEB-PARITY"] }
+      ]
+    },
+    {
+      "id": "TF-DATA-CUSTODY",
+      "status": "specified",
+      "host": "shared",
+      "scenarioIds": ["SC-DATA-CUSTODY"],
+      "capabilityIds": ["UC-SEE-DATA-LOCATION", "UC-WEB-EXPORT-ARCHIVE", "UC-DESKTOP-SEE-HOST"],
+      "preconditions": ["Project open on web or desktop"],
+      "completion": "User sees storage location and owns a portable backup with no undeclared transfer",
+      "steps": [
+        { "id": "S1", "action": "Open Storage and inspect data location", "viewId": "VIEW-STORAGE", "uiId": "UI-DATA-LOCATION", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-DATA-LOCATION"] },
+        { "id": "S2", "action": "Export project backup", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "expectedBehaviorIds": ["EB-DATA-BACKUP"] },
+        { "id": "S3", "action": "Complete local edit save and export", "viewId": "VIEW-WORKSPACE", "uiId": "UI-SAVE-STATUS", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-DATA-NETWORK"] }
+      ]
+    }
+  ],
+  "exclusions": [
+    { "id": "OUT-UPD001-CLOUD-SYNC", "status": "excluded", "expectation": "Automatically synchronize projects between devices", "reason": "UPD-001 provides manual archive portability without adding a funded backend", "consequence": "Users transfer .spriteproject files themselves", "disposition": "Future backend update after accepted customer promise and operating plan" },
+    { "id": "OUT-UPD001-COLLABORATION", "status": "excluded", "expectation": "Share or co-edit projects in real time", "reason": "Collaboration requires identity, coordination, retention, and conflict services outside the zero-server boundary", "consequence": "No shared live project state", "disposition": "North Star backend stage" },
+    { "id": "OUT-UPD001-LIVE-LINK", "status": "excluded", "expectation": "Continuously watch and update a running Godot project", "reason": "This update establishes safe direct export folders but does not yet specify watcher lifecycle or engine coordination", "consequence": "User runs direct export again after edits", "disposition": "Future desktop expansion through formal update" },
+    { "id": "OUT-UPD001-PROCESS-LAUNCH", "status": "excluded", "expectation": "Launch or control Godot and other local tools", "reason": "Process execution expands security and lifecycle scope beyond convenient file operations", "consequence": "User launches tools independently", "disposition": "Future desktop expansion" },
+    { "id": "OUT-UPD001-AUTO-UPDATE", "status": "excluded", "expectation": "Electron updates itself automatically", "reason": "Portable GitHub Release artifacts avoid an update service and signing dependency in this increment", "consequence": "User downloads a newer portable ZIP manually", "disposition": "Revisit with signing and distribution plan" },
+    { "id": "OUT-UPD001-INSTALLER", "status": "excluded", "expectation": "Install Electron through MSI, Store, or system package", "reason": "The accepted promise is a portable app requiring no installation", "consequence": "No file associations, Start menu registration, or automatic uninstall", "disposition": "Future distribution update" },
+    { "id": "OUT-UPD001-MAC-LINUX", "status": "excluded", "expectation": "Provide portable macOS and Linux desktop builds", "reason": "Windows x64 is the first evidence surface and avoids claiming untested packaging and signing", "consequence": "macOS and Linux users use the web version", "disposition": "Add only through host-specific verified update" },
+    { "id": "OUT-UPD001-SIGNED-BINARY", "status": "excluded", "expectation": "Provide a trusted signed Windows binary", "reason": "Code-signing cost is not currently funded", "consequence": "Portable launch may show an accurate SmartScreen warning", "disposition": "Revisit when funding exists" },
+    { "id": "OUT-UPD001-CUSTOM-PACK-FOLDERS", "status": "excluded", "expectation": "Watch arbitrary local content-pack folders", "reason": "UPD-001 changes host and persistence, not pack authoring or watcher behavior", "consequence": "Both hosts use bundled or formally installed pack data", "disposition": "Content ecosystem update" },
+    { "id": "OUT-UPD001-HOST-DIVERGENCE", "status": "excluded", "expectation": "Allow web and desktop projects or rendering rules to diverge", "reason": "Two products would destroy portability and duplicate validation", "consequence": "Host-specific state remains outside canonical project data", "disposition": "Permanently rejected unless a future ADR supersedes one-product-core principle" }
+  ],
+  "workPackages": [
+    { "id": "WP-UPD001-SPEC", "status": "specified", "dependsOn": [], "traceIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-DESKTOP-PORTABLE-WORKSPACE", "CP-CROSS-HOST-PORTABILITY", "CP-LOCAL-DATA-CUSTODY"], "gate": "Update envelope, impact analysis, ADR-002, traceability, exclusions, and release gate pass review" },
+    { "id": "WP-UPD001-HOST-ADAPTERS", "status": "specified", "dependsOn": ["WP-UPD001-SPEC"], "traceIds": ["IA-HOST", "IA-PROJECT-DOCUMENT", "UC-DESKTOP-SEE-HOST", "UC-SEE-DATA-LOCATION"], "gate": "Domain modules have no browser or Electron dependency and host contract tests pass" },
+    { "id": "WP-UPD001-WEB-REPOSITORY", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-PROJECT-LIBRARY", "TF-WEB-AUTOSAVE-REOPEN", "UC-WEB-AUTOSAVE-IDB", "UC-WEB-INSPECT-STORAGE"], "gate": "IndexedDB library, revisions, snapshots, migration, and failure recovery pass actual-UI flows" },
+    { "id": "WP-UPD001-ARCHIVES", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-BACKUP-RESTORE", "IA-PROJECT-ARCHIVE", "UC-WEB-EXPORT-ARCHIVE", "UC-WEB-IMPORT-ARCHIVE"], "gate": "Archive validation, conflicts, migration, malicious fixtures, and exact round trip pass" },
+    { "id": "WP-UPD001-WEB-OFFLINE", "status": "specified", "dependsOn": ["WP-UPD001-WEB-REPOSITORY"], "traceIds": ["TF-WEB-OFFLINE", "UC-WEB-WORK-OFFLINE"], "gate": "Published-subpath PWA completes declared flows with network disconnected" },
+    { "id": "WP-UPD001-ELECTRON-SHELL", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-DESKTOP-PORTABLE-LAUNCH", "UC-DESKTOP-LAUNCH-PORTABLE", "VIEW-HOST-START"], "gate": "Packaged portable Windows app launches with secure renderer and typed IPC checks" },
+    { "id": "WP-UPD001-DESKTOP-FILES", "status": "specified", "dependsOn": ["WP-UPD001-ELECTRON-SHELL", "WP-UPD001-ARCHIVES"], "traceIds": ["TF-DESKTOP-PROJECT-FOLDER", "TF-DESKTOP-DIRECT-EXPORT", "TF-DESKTOP-UNSAVED-CLOSE", "IA-PROJECT-FOLDER"], "gate": "Folder lifecycle, atomic writes, failures, direct exports, and unsaved close pass packaged Electron UI flows" },
+    { "id": "WP-UPD001-CROSS-HOST", "status": "specified", "dependsOn": ["WP-UPD001-WEB-REPOSITORY", "WP-UPD001-DESKTOP-FILES"], "traceIds": ["TF-CROSS-HOST-WEB-TO-DESKTOP", "TF-CROSS-HOST-DESKTOP-TO-WEB", "UC-CROSS-HOST-IDENTICAL-OUTPUT"], "gate": "Bidirectional archive and output parity pass from real web and packaged Electron UIs" },
+    { "id": "WP-UPD001-REGRESSION", "status": "specified", "dependsOn": ["WP-UPD001-CROSS-HOST", "WP-UPD001-WEB-OFFLINE"], "traceIds": ["TF-DATA-CUSTODY", "EB-DATA-NETWORK"], "gate": "All affected RUN-MVP-001 baseline flows pass on affected hosts with zero severity 0-2 issues" }
+  ],
+  "runs": [],
+  "issues": [],
+  "decisions": [
+    { "id": "DEC-UPD001-DUAL-HOST", "status": "specified", "decision": "Keep GitHub Pages as the complete required web host and add portable Electron as an optional local-file host over one shared product core.", "reversible": true, "evidence": "Owner direction and ADR-002; implementation evidence pending." },
+    { "id": "DEC-UPD001-WEB-STORAGE", "status": "specified", "decision": "Use IndexedDB for project records and snapshots and localStorage only for small preferences, pointers, and migration markers.", "reversible": true, "evidence": "ADR-001 storage contract; migration and actual-UI evidence pending." },
+    { "id": "DEC-UPD001-PORTABLE-WINDOWS", "status": "specified", "decision": "Distribute the first Electron host as a portable Windows x64 ZIP through GitHub Releases without installer or automatic updates.", "reversible": true, "evidence": "Zero-server and zero-signing-cost constraints; packaged validation pending." },
+    { "id": "DEC-UPD001-SHARED-SCHEMA", "status": "specified", "decision": "Canonical project, pack, provenance, and export schemas remain host-neutral; host-only state is stored separately.", "reversible": false, "evidence": "Required to satisfy cross-host portability promise; parity evidence pending." }
+  ]
+}

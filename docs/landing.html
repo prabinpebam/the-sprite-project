@@ -17,6 +17,14 @@
       roadmap expands only through evidence-gated stages.</p>
 </aside>
 
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Current specified update · UPD-001</p>
+  <p>The verified web MVP is evolving into two local-first hosts over one core: GitHub Pages with IndexedDB for
+     zero-install access and portable Electron for project folders and direct exports. Review the complete
+     <a href="execution/updates/upd-001-dual-host-mvp.html">promise → scenario → user-can → flow → UI → evidence
+     specification</a>. Implementation and verification are still pending.</p>
+</div>
+
 <h2>Two horizons, one product</h2>
 <div class="slate-compare">
   <div class="slate-compare__col">
@@ -71,22 +79,29 @@
     </a>
   </article>
   <article class="slate-card slate-card--interactive">
+    <a href="governance/overview.html">
+      <h3 class="slate-card__title">4 · Product governance <span class="slate-badge slate-badge--success">Required</span></h3>
+      <p class="slate-card__body">The mandatory update pipeline from customer promise through scenarios, user-can
+         statements, task flows, IA/UI, objective evidence, and preserved baselines.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
     <a href="architecture/overview.html">
-      <h3 class="slate-card__title">4 · Product architecture <span class="slate-badge slate-badge--success">Current</span></h3>
+      <h3 class="slate-card__title">5 · Product architecture <span class="slate-badge slate-badge--success">Current</span></h3>
       <p class="slate-card__body">Accepted decisions and operational contracts for zero-server hosting, IndexedDB,
          portable projects, offline delivery, and future platform boundaries.</p>
     </a>
   </article>
   <article class="slate-card slate-card--interactive">
     <a href="north-star/overview.html">
-      <h3 class="slate-card__title">5 · North Star <span class="slate-badge slate-badge--info">Long term</span></h3>
+      <h3 class="slate-card__title">6 · North Star <span class="slate-badge slate-badge--info">Long term</span></h3>
       <p class="slate-card__body">The durable product promise, complete capability horizon, shared architecture,
          and principles that keep incremental delivery pointed at one destination.</p>
     </a>
   </article>
   <article class="slate-card slate-card--interactive">
     <a href="research/overview.html">
-      <h3 class="slate-card__title">6 · Evidence &amp; detailed design</h3>
+      <h3 class="slate-card__title">7 · Evidence &amp; detailed design</h3>
       <p class="slate-card__body">Research on the LPC ecosystem and indie workflow, plus detailed proposals for
          every generator and shared system in the long-term product.</p>
     </a>
@@ -102,6 +117,9 @@
   <dt>Architecture</dt>
   <dd><code>architecture/decisions/</code> preserves accepted rationale; <code>architecture/platform/</code> defines
     the current storage, delivery, offline, and host contracts.</dd>
+  <dt>Product change control</dt>
+  <dd><code>governance/</code> defines the mandatory update pipeline; <code>delivery/updates/</code> holds each
+    versioned request, baseline, derivation, execution plan, and evidence.</dd>
   <dt>Supporting knowledge</dt>
   <dd><code>research/</code> is the evidence base; <code>design/</code> contains detailed long-term proposals;
     <code>execution/</code> records what is actually built.</dd>

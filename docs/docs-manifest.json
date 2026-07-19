@@ -8,10 +8,14 @@
     { "path": "planning/overview.html", "title": "Delivery Phases", "order": 20, "icon": "checklist", "badge": "active" },
     { "path": "planning/agentic-execution.html", "title": "Agentic Execution", "order": 21, "icon": "account_tree", "badge": "run" },
 
+    { "path": "governance/overview.html", "title": "Product Governance", "order": 25, "icon": "policy", "badge": "required" },
+    { "path": "governance/product-update-pipeline.html", "title": "Product Update Pipeline", "order": 26, "badge": "required" },
+
     { "path": "north-star/overview.html", "title": "North Star", "order": 30, "icon": "flag", "badge": "vision" },
 
     { "path": "architecture/overview.html", "title": "Product Architecture", "order": 35, "icon": "architecture", "badge": "current" },
     { "path": "architecture/decisions/0001-zero-server-web-platform.html", "title": "ADR-001 - Zero-Server Web Platform", "order": 36, "badge": "accepted" },
+    { "path": "architecture/decisions/0002-dual-host-local-first-product.html", "title": "ADR-002 - Dual-Host Local-First Product", "order": 36.5, "badge": "accepted" },
     { "path": "architecture/platform/browser-storage-and-portability.html", "title": "Browser Storage & Project Portability", "order": 37 },
     { "path": "architecture/platform/github-pages-and-offline.html", "title": "GitHub Pages & Offline Delivery", "order": 38 },
     { "path": "architecture/platform/capability-boundaries.html", "title": "Capability Boundaries", "order": 39 },
@@ -41,6 +45,7 @@
     { "path": "research/broader-libraries/kenney.html", "title": "Kenney.nl", "order": 71 },
 
     { "path": "execution/overview.html", "title": "Build Record", "order": 90, "icon": "history", "badge": "active" },
-    { "path": "execution/mvp-delivery.html", "title": "MVP Delivery Tracker", "order": 91, "icon": "fact_check", "badge": "tracked" }
+    { "path": "execution/mvp-delivery.html", "title": "MVP Delivery Tracker", "order": 91, "icon": "fact_check", "badge": "verified" },
+    { "path": "execution/updates/upd-001-dual-host-mvp.html", "title": "UPD-001 - Dual-Host MVP", "order": 92, "icon": "difference", "badge": "specified" }
   ]
 }
