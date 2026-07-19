@@ -1,70 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420"
+<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420"
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">GitHub stars by project</title>
   <desc id="figure-desc">A logarithmic horizontal bar chart shows the Universal LPC Generator at 1,400 stars, LPC Revised at 191, and four projects with single-digit stars.</desc>
   <style>
-        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
-        .motion-enter {
+    .svg-play:target .motion-enter,
+    .svg-play:target .motion-grow,
+    .svg-play:target .motion-ring,
+    .svg-play:target .motion-draw { opacity: 0; }
+    .svg-play:target .motion-enter {
             transform-box: fill-box; transform-origin: center;
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 38ms);
         }
-        .motion-grow {
+        .svg-play:target .motion-grow {
             transform-box: fill-box; transform-origin: left center;
             animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(120ms + var(--i) * 55ms);
         }
-        .motion-ring {
+        .svg-play:target .motion-ring {
             transform-box: fill-box; transform-origin: center;
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 100ms);
         }
-        .motion-draw {
+        .svg-play:target .motion-draw {
             stroke-dasharray: 1200; stroke-dashoffset: 1200;
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(160ms + var(--i) * 38ms);
         }
-        .motion-highlight {
+        .svg-play:target .motion-highlight {
             transform-box: fill-box; transform-origin: center;
             animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
             animation-delay: 1250ms;
         }
-        .motion-active-loop {
+        .svg-play:target .motion-active-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-active 2200ms ease-in-out 1500ms infinite;
         }
-        .motion-flow-loop {
+        .svg-play:target .motion-flow-loop {
             stroke-dasharray: 10 8;
             animation: svg-flow 1100ms linear 1300ms infinite;
         }
-        .motion-light-loop {
+        .svg-play:target .motion-light-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-light 2600ms ease-in-out 1200ms infinite;
         }
-        .motion-enter.motion-highlight {
+        .svg-play:target .motion-enter.motion-highlight {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
         }
-        .motion-ring.motion-highlight {
+        .svg-play:target .motion-ring.motion-highlight {
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
         }
-        .motion-enter.motion-active-loop {
+        .svg-play:target .motion-enter.motion-active-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-active 2200ms ease-in-out 1500ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
         }
-        .motion-draw.motion-flow-loop {
+        .svg-play:target .motion-draw.motion-flow-loop {
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-flow 1100ms linear 1300ms infinite;
             animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
         }
-        .motion-enter.motion-light-loop {
+        .svg-play:target .motion-enter.motion-light-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-light 2600ms ease-in-out 1200ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        .svg-play:target .motion-sequence.motion-enter {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-highlight {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(500ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw.motion-flow-loop {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
         }
         @keyframes svg-enter {
             from { opacity: 0; transform: translateY(10px) scale(.985); }
@@ -103,5 +128,5 @@
         }
 </style>
   <rect width="1000" height="420" fill="#19151F" />
-  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--i:0" class="motion-enter">COMMUNITY TRACTION</text><text x="970" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="end" style="--i:1" class="motion-enter">logarithmic scale</text><line x1="300.0" y1="48" x2="300.0" y2="350" stroke="#756A82" stroke-width="1" style="--i:2" class="motion-draw" /><text x="300.0" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:3" class="motion-enter">1</text><line x1="490.7" y1="48" x2="490.7" y2="350" stroke="#756A82" stroke-width="1" style="--i:4" class="motion-draw" /><text x="490.7" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:5" class="motion-enter">10</text><line x1="681.4" y1="48" x2="681.4" y2="350" stroke="#756A82" stroke-width="1" style="--i:6" class="motion-draw" /><text x="681.4" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:7" class="motion-enter">100</text><line x1="872.1" y1="48" x2="872.1" y2="350" stroke="#756A82" stroke-width="1" style="--i:8" class="motion-draw" /><text x="872.1" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:9" class="motion-enter">1,000</text><text x="30" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:10" class="motion-enter">Universal LPC Generator</text><rect x="300" y="68" width="600.0" height="24" rx="5" fill="#A78BFA" stroke="#A78BFA" stroke-width="0" style="--i:11" class="motion-grow" /><text x="912.0" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--i:12" class="motion-enter">1,400</text><text x="30" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:13" class="motion-enter">LPC Revised</text><rect x="300" y="116" width="435.0" height="24" rx="5" fill="#C4B5FD" stroke="#C4B5FD" stroke-width="0" style="--i:14" class="motion-grow" /><text x="747.0172672020931" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--i:15" class="motion-enter">191</text><text x="30" y="182" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:16" class="motion-enter">Phaser 3 LPC Character</text><rect x="300" y="164" width="172.2" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--i:17" class="motion-grow" /><text x="484.2288432162787" y="182" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--i:18" class="motion-enter">8</text><text x="30" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:19" class="motion-enter">Vitruvian spritesheets</text><rect x="300" y="212" width="133.3" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--i:20" class="motion-grow" /><text x="445.3009966046094" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--i:21" class="motion-enter">5</text><text x="30" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:22" class="motion-enter">lpcg (Rust)</text><rect x="300" y="260" width="114.8" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--i:23" class="motion-grow" /><text x="426.81922881085245" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--i:24" class="motion-enter">4</text><text x="30" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--i:24" class="motion-enter">Gaurav0 fork</text><rect x="300" y="308" width="114.8" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--i:24" class="motion-grow" /><text x="426.81922881085245" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--i:24" class="motion-enter">4</text><text x="600" y="398" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:24" class="motion-enter">GitHub stars · log scale keeps small projects visible</text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--i:0" class="motion-enter">COMMUNITY TRACTION</text><text x="970" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="end" style="--i:1" class="motion-enter">logarithmic scale</text><line x1="300.0" y1="48" x2="300.0" y2="350" stroke="#756A82" stroke-width="1" style="--i:2" class="motion-draw" /><text x="300.0" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:3" class="motion-enter">1</text><line x1="490.7" y1="48" x2="490.7" y2="350" stroke="#756A82" stroke-width="1" style="--i:4" class="motion-draw" /><text x="490.7" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:5" class="motion-enter">10</text><line x1="681.4" y1="48" x2="681.4" y2="350" stroke="#756A82" stroke-width="1" style="--i:6" class="motion-draw" /><text x="681.4" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:7" class="motion-enter">100</text><line x1="872.1" y1="48" x2="872.1" y2="350" stroke="#756A82" stroke-width="1" style="--i:8" class="motion-draw" /><text x="872.1" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:9" class="motion-enter">1,000</text><text x="30" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--step:0;--i:0" class="motion-enter motion-sequence">Universal LPC Generator</text><rect x="300" y="68" width="600.0" height="24" rx="5" fill="#A78BFA" stroke="#A78BFA" stroke-width="0" style="--step:0;--i:0" class="motion-grow motion-sequence" /><text x="912.0" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--step:0;--i:0" class="motion-enter motion-sequence">1,400</text><text x="30" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--step:1;--i:1" class="motion-enter motion-sequence">LPC Revised</text><rect x="300" y="116" width="435.0" height="24" rx="5" fill="#C4B5FD" stroke="#C4B5FD" stroke-width="0" style="--step:1;--i:1" class="motion-grow motion-sequence" /><text x="747.0172672020931" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--step:1;--i:1" class="motion-enter motion-sequence">191</text><text x="30" y="182" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--step:2;--i:2" class="motion-enter motion-sequence">Phaser 3 LPC Character</text><rect x="300" y="164" width="172.2" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--step:2;--i:2" class="motion-grow motion-sequence" /><text x="484.2288432162787" y="182" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--step:2;--i:2" class="motion-enter motion-sequence">8</text><text x="30" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--step:3;--i:3" class="motion-enter motion-sequence">Vitruvian spritesheets</text><rect x="300" y="212" width="133.3" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--step:3;--i:3" class="motion-grow motion-sequence" /><text x="445.3009966046094" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--step:3;--i:3" class="motion-enter motion-sequence">5</text><text x="30" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--step:4;--i:4" class="motion-enter motion-sequence">lpcg (Rust)</text><rect x="300" y="260" width="114.8" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--step:4;--i:4" class="motion-grow motion-sequence" /><text x="426.81922881085245" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--step:4;--i:4" class="motion-enter motion-sequence">4</text><text x="30" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#F8F7FC" text-anchor="start" style="--step:5;--i:5" class="motion-enter motion-sequence">Gaurav0 fork</text><rect x="300" y="308" width="114.8" height="24" rx="5" fill="#4C3D68" stroke="#4C3D68" stroke-width="0" style="--step:5;--i:5" class="motion-grow motion-sequence" /><text x="426.81922881085245" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#F8F7FC" text-anchor="start" style="--step:5;--i:5" class="motion-enter motion-sequence">4</text><text x="600" y="398" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#C9C1D4" text-anchor="middle" style="--i:24" class="motion-enter">GitHub stars · log scale keeps small projects visible</text></g>
 </svg>

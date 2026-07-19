@@ -41,6 +41,10 @@ different fonts, larger radii, or tighter density can introduce visual defects e
 Every generated SVG includes a complete static/reduced-motion state. Entry and finite highlights normally finish
 within 2.5 seconds. Infinite loops are limited to subjects that represent ongoing behavior.
 
+SVG files are static at their base URL. Slate starts motion only after at least 30% of the figure enters the viewport
+by switching the source to `#svg-play`. Hovering or focusing a figure reveals a replay icon; replay removes and
+restores the fragment. Under reduced motion, figures remain static and replay is hidden.
+
 | Illustration | Entry | Highlight | Loop |
 | --- | --- | --- | --- |
 | Product architecture | producer/system nodes settle; connectors draw | final pipeline emphasis | none |

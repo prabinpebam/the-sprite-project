@@ -26,6 +26,7 @@
     landing: null,
     sidebarOpen: false,
     scrollSpyCleanup: null,
+    svgAnimationObserver: null,
     searchSel: -1,
     themePref: 'auto',
   };
@@ -113,7 +114,8 @@
   function syncThemedImages(actual, root = document) {
     const attr = actual === 'dark' ? 'data-src-dark' : 'data-src-light';
     root.querySelectorAll('img[data-src-light][data-src-dark]').forEach(img => {
-      const src = img.getAttribute(attr);
+      const base = (img.getAttribute(attr) || '').split('#')[0];
+      const src = img.dataset.svgPlayed === 'true' ? base + '#svg-play' : base;
       if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
     });
   }
@@ -345,6 +347,47 @@
       img.classList.add('slate-zoomable');
       img.addEventListener('click', () => openViewer(imgs, i));
     });
+  }
+
+  function svgBaseSource(img) {
+    const actual = document.documentElement.getAttribute('data-theme') || 'light';
+    const themed = img.getAttribute(actual === 'dark' ? 'data-src-dark' : 'data-src-light');
+    return (themed || img.getAttribute('src') || '').split('#')[0];
+  }
+
+  function playSvgAnimation(img) {
+    const base = svgBaseSource(img); if (!base) return;
+    img.dataset.svgPlayed = 'true';
+    img.setAttribute('src', base);
+    requestAnimationFrame(() => requestAnimationFrame(() => img.setAttribute('src', base + '#svg-play')));
+  }
+
+  function enhanceSvgAnimations(container) {
+    if (state.svgAnimationObserver) { state.svgAnimationObserver.disconnect(); state.svgAnimationObserver = null; }
+    const imgs = Array.from(container.querySelectorAll('img')).filter(img => /\.svg(?:#.*)?$/i.test(img.getAttribute('src') || ''));
+    if (!imgs.length) return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    imgs.forEach(img => {
+      const wrapper = document.createElement('div'); wrapper.className = 'slate-figure-media';
+      img.parentNode.insertBefore(wrapper, img); wrapper.appendChild(img);
+      const replay = document.createElement('button'); replay.type = 'button'; replay.className = 'slate-svg-replay';
+      replay.title = 'Replay animation'; replay.setAttribute('aria-label', 'Replay animation');
+      replay.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">replay</span>';
+      replay.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); playSvgAnimation(img); });
+      wrapper.appendChild(replay);
+      img.setAttribute('src', svgBaseSource(img));
+    });
+    if (reduced || !('IntersectionObserver' in window)) {
+      if (!reduced) imgs.forEach(playSvgAnimation);
+      return;
+    }
+    state.svgAnimationObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.3) return;
+        playSvgAnimation(entry.target); state.svgAnimationObserver.unobserve(entry.target);
+      });
+    }, { threshold: [0.3] });
+    imgs.forEach(img => state.svgAnimationObserver.observe(img));
   }
 
   // ---- Version history (REQ-CM-14) ----
@@ -746,6 +789,7 @@
     const parsed = new DOMParser().parseFromString(renderToHtml(path, entry.content), 'text/html');
     postProcess(parsed.body, path);
     while (parsed.body.firstChild) body.appendChild(parsed.body.firstChild);
+    enhanceSvgAnimations(body);
     // Pager appended after body
     article.insertAdjacentHTML('beforeend', renderPager(path));
     article.querySelectorAll('.pager a').forEach(a => a.addEventListener('click', (e) => { e.preventDefault(); navigateTo(a.dataset.path); }));

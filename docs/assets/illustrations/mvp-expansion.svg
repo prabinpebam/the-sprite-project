@@ -1,70 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470"
+<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470"
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">MVP expanding toward the North Star</title>
   <desc id="figure-desc">Concentric layers show the character MVP at the core, followed by the content ecosystem, world producers, and the complete studio.</desc>
   <style>
-        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
-        .motion-enter {
+    .svg-play:target .motion-enter,
+    .svg-play:target .motion-grow,
+    .svg-play:target .motion-ring,
+    .svg-play:target .motion-draw { opacity: 0; }
+    .svg-play:target .motion-enter {
             transform-box: fill-box; transform-origin: center;
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 38ms);
         }
-        .motion-grow {
+        .svg-play:target .motion-grow {
             transform-box: fill-box; transform-origin: left center;
             animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(120ms + var(--i) * 55ms);
         }
-        .motion-ring {
+        .svg-play:target .motion-ring {
             transform-box: fill-box; transform-origin: center;
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 100ms);
         }
-        .motion-draw {
+        .svg-play:target .motion-draw {
             stroke-dasharray: 1200; stroke-dashoffset: 1200;
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(160ms + var(--i) * 38ms);
         }
-        .motion-highlight {
+        .svg-play:target .motion-highlight {
             transform-box: fill-box; transform-origin: center;
             animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
             animation-delay: 1250ms;
         }
-        .motion-active-loop {
+        .svg-play:target .motion-active-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-active 2200ms ease-in-out 1500ms infinite;
         }
-        .motion-flow-loop {
+        .svg-play:target .motion-flow-loop {
             stroke-dasharray: 10 8;
             animation: svg-flow 1100ms linear 1300ms infinite;
         }
-        .motion-light-loop {
+        .svg-play:target .motion-light-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-light 2600ms ease-in-out 1200ms infinite;
         }
-        .motion-enter.motion-highlight {
+        .svg-play:target .motion-enter.motion-highlight {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
         }
-        .motion-ring.motion-highlight {
+        .svg-play:target .motion-ring.motion-highlight {
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
         }
-        .motion-enter.motion-active-loop {
+        .svg-play:target .motion-enter.motion-active-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-active 2200ms ease-in-out 1500ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
         }
-        .motion-draw.motion-flow-loop {
+        .svg-play:target .motion-draw.motion-flow-loop {
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-flow 1100ms linear 1300ms infinite;
             animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
         }
-        .motion-enter.motion-light-loop {
+        .svg-play:target .motion-enter.motion-light-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-light 2600ms ease-in-out 1200ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        .svg-play:target .motion-sequence.motion-enter {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-highlight {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(500ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw.motion-flow-loop {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
         }
         @keyframes svg-enter {
             from { opacity: 0; transform: translateY(10px) scale(.985); }
@@ -103,5 +128,5 @@
         }
 </style>
   <rect width="1000" height="470" fill="#FFFFFF" />
-  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="500" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:0" class="motion-enter">THE MVP CORE PERSISTS THROUGH EVERY EXPANSION</text><circle cx="300" cy="235" r="190" fill="#F4F6F8" stroke="#DDD6FE" stroke-width="2" style="--i:0" class="motion-ring" /><circle cx="300" cy="235" r="145" fill="#FAFAFC" stroke="#8B5CF6" stroke-width="2" style="--i:1" class="motion-ring" /><circle cx="300" cy="235" r="100" fill="#DDD6FE" stroke="#6D28D9" stroke-width="2" style="--i:2" class="motion-ring" /><circle cx="300" cy="235" r="55" fill="#6D28D9" stroke="#6D28D9" stroke-width="2" style="--i:3" class="motion-ring motion-highlight" /><text x="300" y="229" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:5" class="motion-enter"><tspan x="300" dy="0">Character</tspan><tspan x="300" dy="18">MVP</tspan></text><circle cx="580" cy="90" r="7" fill="#6D28D9" style="--i:4" class="motion-ring" /><path d="M 355.0 200.0 C 500 90 520 90 558 90" fill="none" stroke="#6D28D9" stroke-width="2" style="--i:7" class="motion-draw" /><text x="605" y="87" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:8" class="motion-enter">MVP core</text><text x="605" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:9" class="motion-enter">project · packs · tokens · export</text><circle cx="580" cy="180" r="7" fill="#6D28D9" style="--i:5" class="motion-ring" /><path d="M 400.0 221.6 C 500 180 520 180 558 180" fill="none" stroke="#6D28D9" stroke-width="2" style="--i:11" class="motion-draw" /><text x="605" y="177" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:12" class="motion-enter">Content ecosystem</text><text x="605" y="198" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:13" class="motion-enter">pack authoring · richer characters</text><circle cx="580" cy="270" r="7" fill="#8B5CF6" style="--i:6" class="motion-ring" /><path d="M 445.0 243.2 C 500 270 520 270 558 270" fill="none" stroke="#8B5CF6" stroke-width="2" style="--i:15" class="motion-draw" /><text x="605" y="267" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:16" class="motion-enter">World producers</text><text x="605" y="288" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:17" class="motion-enter">terrain · structures · composition</text><circle cx="580" cy="360" r="7" fill="#DDD6FE" style="--i:7" class="motion-ring" /><path d="M 490.0 264.8 C 500 360 520 360 558 360" fill="none" stroke="#DDD6FE" stroke-width="2" style="--i:19" class="motion-draw" /><text x="605" y="357" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:20" class="motion-enter">North Star studio</text><text x="605" y="378" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:21" class="motion-enter">editing · maps · live links · automation</text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="500" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:0" class="motion-enter">THE MVP CORE PERSISTS THROUGH EVERY EXPANSION</text><circle cx="300" cy="235" r="190" fill="#F4F6F8" stroke="#DDD6FE" stroke-width="2" style="--step:7;--i:7" class="motion-ring motion-sequence" /><circle cx="300" cy="235" r="145" fill="#FAFAFC" stroke="#8B5CF6" stroke-width="2" style="--step:6;--i:6" class="motion-ring motion-sequence" /><circle cx="300" cy="235" r="100" fill="#DDD6FE" stroke="#6D28D9" stroke-width="2" style="--step:5;--i:5" class="motion-ring motion-sequence" /><circle cx="300" cy="235" r="55" fill="#6D28D9" stroke="#6D28D9" stroke-width="2" style="--step:4;--i:4" class="motion-ring motion-sequence motion-highlight" /><text x="300" y="229" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" style="--i:5" class="motion-enter"><tspan x="300" dy="0">Character</tspan><tspan x="300" dy="18">MVP</tspan></text><circle cx="580" cy="90" r="7" fill="#6D28D9" style="--step:0;--i:0" class="motion-ring motion-sequence" /><path d="M 355.0 200.0 C 500 90 520 90 558 90" fill="none" stroke="#6D28D9" stroke-width="2" style="--i:7" class="motion-draw" /><text x="605" y="87" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:8" class="motion-enter">MVP core</text><text x="605" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:9" class="motion-enter">project · packs · tokens · export</text><circle cx="580" cy="180" r="7" fill="#6D28D9" style="--step:1;--i:1" class="motion-ring motion-sequence" /><path d="M 400.0 221.6 C 500 180 520 180 558 180" fill="none" stroke="#6D28D9" stroke-width="2" style="--i:11" class="motion-draw" /><text x="605" y="177" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:12" class="motion-enter">Content ecosystem</text><text x="605" y="198" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:13" class="motion-enter">pack authoring · richer characters</text><circle cx="580" cy="270" r="7" fill="#8B5CF6" style="--step:2;--i:2" class="motion-ring motion-sequence" /><path d="M 445.0 243.2 C 500 270 520 270 558 270" fill="none" stroke="#8B5CF6" stroke-width="2" style="--i:15" class="motion-draw" /><text x="605" y="267" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:16" class="motion-enter">World producers</text><text x="605" y="288" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:17" class="motion-enter">terrain · structures · composition</text><circle cx="580" cy="360" r="7" fill="#DDD6FE" style="--step:3;--i:3" class="motion-ring motion-sequence" /><path d="M 490.0 264.8 C 500 360 520 360 558 360" fill="none" stroke="#DDD6FE" stroke-width="2" style="--i:19" class="motion-draw" /><text x="605" y="357" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="start" style="--i:20" class="motion-enter">North Star studio</text><text x="605" y="378" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#5D6B7E" text-anchor="start" style="--i:21" class="motion-enter">editing · maps · live links · automation</text></g>
 </svg>

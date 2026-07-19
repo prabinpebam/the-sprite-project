@@ -44,68 +44,93 @@ DASH: list[float] = []
 
 
 MOTION_CSS = """
-        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
-        .motion-enter {
+    .svg-play:target .motion-enter,
+    .svg-play:target .motion-grow,
+    .svg-play:target .motion-ring,
+    .svg-play:target .motion-draw { opacity: 0; }
+    .svg-play:target .motion-enter {
             transform-box: fill-box; transform-origin: center;
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 38ms);
         }
-        .motion-grow {
+        .svg-play:target .motion-grow {
             transform-box: fill-box; transform-origin: left center;
             animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(120ms + var(--i) * 55ms);
         }
-        .motion-ring {
+        .svg-play:target .motion-ring {
             transform-box: fill-box; transform-origin: center;
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 100ms);
         }
-        .motion-draw {
+        .svg-play:target .motion-draw {
             stroke-dasharray: 1200; stroke-dashoffset: 1200;
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(160ms + var(--i) * 38ms);
         }
-        .motion-highlight {
+        .svg-play:target .motion-highlight {
             transform-box: fill-box; transform-origin: center;
             animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
             animation-delay: 1250ms;
         }
-        .motion-active-loop {
+        .svg-play:target .motion-active-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-active 2200ms ease-in-out 1500ms infinite;
         }
-        .motion-flow-loop {
+        .svg-play:target .motion-flow-loop {
             stroke-dasharray: 10 8;
             animation: svg-flow 1100ms linear 1300ms infinite;
         }
-        .motion-light-loop {
+        .svg-play:target .motion-light-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-light 2600ms ease-in-out 1200ms infinite;
         }
-        .motion-enter.motion-highlight {
+        .svg-play:target .motion-enter.motion-highlight {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
         }
-        .motion-ring.motion-highlight {
+        .svg-play:target .motion-ring.motion-highlight {
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
         }
-        .motion-enter.motion-active-loop {
+        .svg-play:target .motion-enter.motion-active-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-active 2200ms ease-in-out 1500ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
         }
-        .motion-draw.motion-flow-loop {
+        .svg-play:target .motion-draw.motion-flow-loop {
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-flow 1100ms linear 1300ms infinite;
             animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
         }
-        .motion-enter.motion-light-loop {
+        .svg-play:target .motion-enter.motion-light-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-light 2600ms ease-in-out 1200ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        .svg-play:target .motion-sequence.motion-enter {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-highlight {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(500ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw.motion-flow-loop {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
         }
         @keyframes svg-enter {
             from { opacity: 0; transform: translateY(10px) scale(.985); }
@@ -159,6 +184,26 @@ def add_motion_class(element: ET.Element, class_name: str) -> None:
     element.set("class", " ".join(classes))
 
 
+def set_sequence(element: ET.Element, step: int) -> None:
+    add_motion_class(element, "motion-sequence")
+    element.set("style", f"--step:{step};--i:{min(step, 24)}")
+
+
+def element_center(element: ET.Element) -> tuple[float, float]:
+    if element.tag == "circle":
+        return number(element, "cx"), number(element, "cy")
+    if element.tag in {"rect", "text"}:
+        return number(element, "x") + number(element, "width") / 2, number(element, "y") + number(element, "height") / 2
+    if element.tag == "line":
+        return (number(element, "x1") + number(element, "x2")) / 2, (number(element, "y1") + number(element, "y2")) / 2
+    source = element.attrib.get("points") or element.attrib.get("d") or ""
+    values = [float(value) for value in re.findall(r"-?\d+(?:\.\d+)?", source)]
+    if len(values) >= 2:
+        xs, ys = values[0::2], values[1::2]
+        return sum(xs) / len(xs), sum(ys) / len(ys)
+    return 0, 0
+
+
 def apply_motion(body: str, slug: str) -> str:
     root = ET.fromstring(f"<root>{body}</root>")
     children = list(root)
@@ -175,13 +220,57 @@ def apply_motion(body: str, slug: str) -> str:
             if element.tag == "rect" and number(element, "height") <= 30 and number(element, "width") > 5:
                 add_motion_class(element, "motion-grow")
                 element.attrib["class"] = element.attrib["class"].replace("motion-enter", "").strip()
+        row_y = [68 + index * 48 for index in range(6)] if slug == "github-stars" else [70 + index * 52 for index in range(4)]
+        for step, y in enumerate(row_y):
+            for element in children:
+                _, center_y = element_center(element)
+                if y - 8 <= center_y <= y + 32:
+                    set_sequence(element, step)
+
+    if slug in {"product-architecture", "north-star-studio"}:
+        for element in children:
+            _, y = element_center(element)
+            if element.tag in {"path", "line", "polygon"}:
+                step = 1 if y < 165 else 3 if y < 300 else 5
+            else:
+                step = 0 if y < 140 else 2 if y < 270 else 4 if y < 390 else 6
+            set_sequence(element, step)
+
+    if slug == "composition-data-flow":
+        for element in children:
+            x, y = element_center(element)
+            if element.tag in {"path", "line", "polygon"}:
+                step = 1 if x < 610 else 3
+            elif x < 300:
+                step = 0
+            elif x < 640 and y < 250:
+                step = 2
+            else:
+                step = 4
+            set_sequence(element, step)
+
+    if slug == "token-resolution":
+        for element in children:
+            x, y = element_center(element)
+            base = 0 if y < 180 else 5
+            if x < 245:
+                step = base
+            elif x < 305:
+                step = base + 1
+            elif x < 610:
+                step = base + 2
+            elif x < 675:
+                step = base + 3
+            else:
+                step = base + 4
+            set_sequence(element, step)
 
     if slug == "mvp-expansion":
         circles = [element for element in children if element.tag == "circle"]
-        for index, element in enumerate(circles):
+        for index, element in enumerate(sorted(circles, key=lambda item: number(item, "r"))):
             add_motion_class(element, "motion-ring")
             element.attrib["class"] = element.attrib["class"].replace("motion-enter", "").strip()
-            element.set("style", f"--i:{index}")
+            set_sequence(element, index)
         core = next((element for element in circles if number(element, "cx") == 300 and number(element, "r") == 55), None)
         if core is not None:
             add_motion_class(core, "motion-highlight")
@@ -193,7 +282,31 @@ def apply_motion(body: str, slug: str) -> str:
         if slug == "mvp-character-journey":
             for element in [item for item in circles if number(item, "cx") > 900]:
                 add_motion_class(element, "motion-highlight")
+            centers = [75 + index * 142 for index in range(7)]
+            for index, center in enumerate(centers):
+                step = index * 2
+                for element in children:
+                    if element.tag == "circle" and number(element, "cx") == center:
+                        set_sequence(element, step)
+                    if element.tag == "text" and number(element, "x") == center:
+                        set_sequence(element, step)
+            connector_paths = [element for element in children if element.tag == "path"]
+            connector_heads = [element for element in children if element.tag == "polygon"]
+            for index, element in enumerate(connector_paths):
+                set_sequence(element, index * 2 + 1)
+            for index, element in enumerate(connector_heads):
+                set_sequence(element, index * 2 + 1)
+            for element in children:
+                if element.tag in {"rect", "text"} and number(element, "y") >= 220:
+                    set_sequence(element, 14)
         else:
+            phase_centers = [95 + index * 162 for index in range(6)]
+            for index, center in enumerate(phase_centers):
+                for element in children:
+                    if element.tag == "circle" and number(element, "cx") == center:
+                        set_sequence(element, index)
+                    if element.tag == "text" and number(element, "x") == center:
+                        set_sequence(element, index)
             for element in [item for item in circles if number(item, "cx") == 95]:
                 add_motion_class(element, "motion-active-loop")
 
@@ -207,10 +320,22 @@ def apply_motion(body: str, slug: str) -> str:
             element.set("style", f"--i:{index}")
         for element in status[:3]:
             add_motion_class(element, "motion-highlight")
+        for step in range(15):
+            row_y = 92 + step * 36
+            for element in children:
+                _, y = element_center(element)
+                if row_y - 20 <= y <= row_y + 14:
+                    set_sequence(element, step)
 
     if slug == "lpc-license-obligations":
         for index, element in enumerate(item for item in children if item.tag == "circle"):
             element.set("style", f"--i:{index}")
+        for step in range(5):
+            row_y = 92 + step * 58
+            for element in children:
+                _, y = element_center(element)
+                if row_y - 22 <= y <= row_y + 14:
+                    set_sequence(element, step)
 
     if slug == "sprite-pipeline-pain-ranking":
         ranks = [element for element in children if element.tag == "circle"]
@@ -218,8 +343,45 @@ def apply_motion(body: str, slug: str) -> str:
             element.set("style", f"--i:{index}")
         for element in ranks[:2]:
             add_motion_class(element, "motion-highlight")
+        for step in range(10):
+            row_y = 70 + step * 48
+            for element in children:
+                _, y = element_center(element)
+                if row_y - 20 <= y <= row_y + 15:
+                    set_sequence(element, step)
+
+    if slug == "lpc-shadow-guide":
+        for element in children:
+            x, y = element_center(element)
+            if y >= 65:
+                set_sequence(element, 0 if x < 680 else 1)
 
     if slug == "manual-vs-live-link":
+        manual_centers = [100, 290, 480, 670, 860]
+        for index, center in enumerate(manual_centers):
+            step = index * 2
+            for element in children:
+                if element.tag == "rect" and number(element, "y") == 62 and number(element, "x") + number(element, "width") / 2 == center:
+                    set_sequence(element, step)
+                if element.tag == "text" and number(element, "x") == center and number(element, "y") > 60:
+                    set_sequence(element, step)
+        manual_paths = [element for element in children if element.tag == "path" and element.attrib.get("stroke") == RED]
+        manual_heads = [element for element in children if element.tag == "polygon" and element.attrib.get("fill") == RED]
+        for index, element in enumerate(manual_paths):
+            set_sequence(element, index * 2 + 1)
+        for index, element in enumerate(manual_heads):
+            set_sequence(element, index * 2 + 1)
+        for element in children:
+            if element.tag == "text" and number(element, "y") >= 180:
+                set_sequence(element, 9)
+            if element.tag in {"rect", "text"} and number(element, "x") in {100, 190} and number(element, "y") >= 210:
+                set_sequence(element, 10)
+            if element.tag == "path" and element.attrib.get("stroke") == GREEN:
+                set_sequence(element, 11)
+            if element.tag == "polygon" and element.attrib.get("fill") == GREEN:
+                set_sequence(element, 11)
+            if element.tag in {"rect", "text"} and number(element, "x") in {390, 640} and number(element, "y") >= 200:
+                set_sequence(element, 12)
         for element in children:
             if element.tag == "path" and element.attrib.get("stroke") == GREEN:
                 add_motion_class(element, "motion-flow-loop")
@@ -342,7 +504,7 @@ def svg_document(title, description, width, height, body, slug):
     desc_id = "figure-desc"
     if STROKE_SCALE == 1:
         body = apply_motion(body, slug)
-        return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
+        return f'''<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
      role="img" aria-labelledby="{title_id} {desc_id}" preserveAspectRatio="xMidYMid meet">
   <title id="{title_id}">{escape(title)}</title>
   <desc id="{desc_id}">{escape(description)}</desc>
@@ -358,7 +520,7 @@ def svg_document(title, description, width, height, body, slug):
             body,
         )
         body = apply_motion(body, slug)
-        return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
+        return f'''<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"
      role="img" aria-labelledby="{title_id} {desc_id}" preserveAspectRatio="xMidYMid meet">
   <title id="{title_id}">{escape(title)}</title>
   <desc id="{desc_id}">{escape(description)}</desc>

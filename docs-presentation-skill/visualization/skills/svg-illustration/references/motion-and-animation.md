@@ -52,6 +52,10 @@ Use entry motion when it establishes reading order, hierarchy, assembly, or caus
 Do not animate every label independently. Group labels with the mark or node they describe unless separate timing
 adds meaning.
 
+For flows, timelines, journeys, and pipelines, animate the semantic sequence rather than element types. A flow with
+nodes and connectors unfolds as `node → connector → node → connector`; each node's shape, icon, and label share one
+step. Parallel branches may enter together only when they are truly concurrent.
+
 ### Highlight animation
 
 Use highlight motion when the viewer should notice an active state, selected item, conclusion, outlier, current
@@ -189,6 +193,24 @@ Reduced motion preserves content and state while removing travel, zoom, parallax
 
 For external SVG through `<img>`, internal media queries follow the operating system, not necessarily an application toggle. Generate or host a static/reduced variant when the application owns motion preference.
 
+## Viewport Start and Replay
+
+Animations must start when the illustration becomes meaningfully visible, not when its HTML is parsed or fetched.
+
+For external SVG in documentation:
+
+1. Author the SVG as a complete static figure by default.
+2. Gate animation selectors behind a target state such as `.svg-play:target` on `<svg id="svg-play">`.
+3. Load the base URL without a fragment while the figure is offscreen.
+4. Use `IntersectionObserver` at roughly 30% visibility to switch the image source to `figure.svg#svg-play` once.
+5. Provide a visible-on-hover/focus replay icon overlay. Replay removes the fragment, then restores `#svg-play` on a
+  later animation frame so CSS animations restart.
+6. Preserve the current light/dark source when replaying.
+7. Disconnect old observers when navigating or replacing page content.
+
+Do not use arbitrary load delays as a substitute for viewport visibility. If `IntersectionObserver` is unavailable,
+play immediately as a functional fallback. Under reduced motion, keep the base static source and hide/disable replay.
+
 ## Taste Guardrails
 
 - Motion serves the message: no ambient blobs, particles, glow, flares, or breathing by default.
@@ -222,6 +244,8 @@ Entry: none | grouped fade/settle | stagger | grow | draw
 Highlight: none | pulse | halo | contrast | focus
 Loop: none | flow | active-status | orbit/cycle | light/preview
 Why each role matches the subject:
+Semantic sequence (when applicable):
+Viewport trigger and replay host:
 ```
 
 ## Profile Limits

@@ -1,70 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340"
+<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340"
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">Manual round-trip versus live asset linking</title>
   <desc id="figure-desc">The manual workflow requires edit, export, import, slice, and replay; a live link reduces it to one edit that propagates into the running engine.</desc>
   <style>
-        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
-        .motion-enter {
+    .svg-play:target .motion-enter,
+    .svg-play:target .motion-grow,
+    .svg-play:target .motion-ring,
+    .svg-play:target .motion-draw { opacity: 0; }
+    .svg-play:target .motion-enter {
             transform-box: fill-box; transform-origin: center;
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 38ms);
         }
-        .motion-grow {
+        .svg-play:target .motion-grow {
             transform-box: fill-box; transform-origin: left center;
             animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(120ms + var(--i) * 55ms);
         }
-        .motion-ring {
+        .svg-play:target .motion-ring {
             transform-box: fill-box; transform-origin: center;
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 100ms);
         }
-        .motion-draw {
+        .svg-play:target .motion-draw {
             stroke-dasharray: 1200; stroke-dashoffset: 1200;
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(160ms + var(--i) * 38ms);
         }
-        .motion-highlight {
+        .svg-play:target .motion-highlight {
             transform-box: fill-box; transform-origin: center;
             animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
             animation-delay: 1250ms;
         }
-        .motion-active-loop {
+        .svg-play:target .motion-active-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-active 2200ms ease-in-out 1500ms infinite;
         }
-        .motion-flow-loop {
+        .svg-play:target .motion-flow-loop {
             stroke-dasharray: 10 8;
             animation: svg-flow 1100ms linear 1300ms infinite;
         }
-        .motion-light-loop {
+        .svg-play:target .motion-light-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-light 2600ms ease-in-out 1200ms infinite;
         }
-        .motion-enter.motion-highlight {
+        .svg-play:target .motion-enter.motion-highlight {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
         }
-        .motion-ring.motion-highlight {
+        .svg-play:target .motion-ring.motion-highlight {
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
         }
-        .motion-enter.motion-active-loop {
+        .svg-play:target .motion-enter.motion-active-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-active 2200ms ease-in-out 1500ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
         }
-        .motion-draw.motion-flow-loop {
+        .svg-play:target .motion-draw.motion-flow-loop {
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-flow 1100ms linear 1300ms infinite;
             animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
         }
-        .motion-enter.motion-light-loop {
+        .svg-play:target .motion-enter.motion-light-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-light 2600ms ease-in-out 1200ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        .svg-play:target .motion-sequence.motion-enter {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-highlight {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(500ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw.motion-flow-loop {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
         }
         @keyframes svg-enter {
             from { opacity: 0; transform: translateY(10px) scale(.985); }
@@ -103,5 +128,5 @@
         }
 </style>
   <rect width="1000" height="340" fill="#19151F" />
-  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--i:0" class="motion-enter">MANUAL ROUND-TRIP</text><text x="970" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#F87171" text-anchor="end" style="--i:1" class="motion-enter">five handoffs per change</text><path d="M 160 92 H 220" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--i:2" class="motion-draw" /><polygon points="220,87 230,92 220,97" fill="#F87171" style="--i:3" class="motion-enter" /><path d="M 350 92 H 410" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--i:4" class="motion-draw" /><polygon points="410,87 420,92 410,97" fill="#F87171" style="--i:5" class="motion-enter" /><path d="M 540 92 H 600" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--i:6" class="motion-draw" /><polygon points="600,87 610,92 600,97" fill="#F87171" style="--i:7" class="motion-enter" /><path d="M 730 92 H 790" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--i:8" class="motion-draw" /><polygon points="790,87 800,92 790,97" fill="#F87171" style="--i:9" class="motion-enter" /><rect x="40" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--i:10" class="motion-enter" /><text x="100.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--i:11" class="motion-enter"><tspan x="100.0" dy="0">Edit</tspan></text><rect x="230" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--i:12" class="motion-enter" /><text x="290.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--i:13" class="motion-enter"><tspan x="290.0" dy="0">Export</tspan></text><rect x="420" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--i:14" class="motion-enter" /><text x="480.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--i:15" class="motion-enter"><tspan x="480.0" dy="0">Import</tspan></text><rect x="610" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--i:16" class="motion-enter" /><text x="670.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--i:17" class="motion-enter"><tspan x="670.0" dy="0">Slice</tspan></text><rect x="800" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--i:18" class="motion-enter" /><text x="860.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--i:19" class="motion-enter"><tspan x="860.0" dy="0">Replay</tspan></text><line x1="30" y1="157" x2="970" y2="157" stroke="#A79CB5" stroke-width="1" style="--i:20" class="motion-draw" /><text x="30" y="190" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--i:21" class="motion-enter">WITH A LIVE LINK</text><text x="970" y="190" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#4ADE80" text-anchor="end" style="--i:22" class="motion-enter">one edit, automatic propagation</text><rect x="100" y="220" width="180" height="70" rx="10" fill="#A78BFA" stroke="#A78BFA" stroke-width="2" style="--i:23" class="motion-enter" /><text x="190.0" y="250.54" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1D1235" text-anchor="middle" style="--i:24" class="motion-enter"><tspan x="190.0" dy="0">Edit asset</tspan><tspan x="190.0" dy="19">once</tspan></text><path d="M 280 255 H 380" fill="none" stroke="#4ADE80" stroke-width="3" stroke-linecap="round" style="--i:24" class="motion-draw motion-flow-loop" /><polygon points="380,250 390,255 380,260" fill="#4ADE80" style="--i:24" class="motion-enter" /><rect x="390" y="210" width="500" height="90" rx="10" fill="#193C2A" stroke="#4ADE80" stroke-width="2" style="--i:24" class="motion-enter" /><text x="640.0" y="250.54" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#DDFBE8" text-anchor="middle" style="--i:24" class="motion-enter"><tspan x="640.0" dy="0">Appears in the running engine</tspan><tspan x="640.0" dy="19">native files update · engine reimports</tspan></text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="30" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--i:0" class="motion-enter">MANUAL ROUND-TRIP</text><text x="970" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#F87171" text-anchor="end" style="--i:1" class="motion-enter">five handoffs per change</text><path d="M 160 92 H 220" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--step:1;--i:1" class="motion-draw motion-sequence" /><polygon points="220,87 230,92 220,97" fill="#F87171" style="--step:1;--i:1" class="motion-enter motion-sequence" /><path d="M 350 92 H 410" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--step:3;--i:3" class="motion-draw motion-sequence" /><polygon points="410,87 420,92 410,97" fill="#F87171" style="--step:3;--i:3" class="motion-enter motion-sequence" /><path d="M 540 92 H 600" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--step:5;--i:5" class="motion-draw motion-sequence" /><polygon points="600,87 610,92 600,97" fill="#F87171" style="--step:5;--i:5" class="motion-enter motion-sequence" /><path d="M 730 92 H 790" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" style="--step:7;--i:7" class="motion-draw motion-sequence" /><polygon points="790,87 800,92 790,97" fill="#F87171" style="--step:7;--i:7" class="motion-enter motion-sequence" /><rect x="40" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--step:0;--i:0" class="motion-enter motion-sequence" /><text x="100.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence"><tspan x="100.0" dy="0">Edit</tspan></text><rect x="230" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--step:2;--i:2" class="motion-enter motion-sequence" /><text x="290.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--step:2;--i:2" class="motion-enter motion-sequence"><tspan x="290.0" dy="0">Export</tspan></text><rect x="420" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--step:4;--i:4" class="motion-enter motion-sequence" /><text x="480.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--step:4;--i:4" class="motion-enter motion-sequence"><tspan x="480.0" dy="0">Import</tspan></text><rect x="610" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--step:6;--i:6" class="motion-enter motion-sequence" /><text x="670.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--step:6;--i:6" class="motion-enter motion-sequence"><tspan x="670.0" dy="0">Slice</tspan></text><rect x="800" y="62" width="120" height="60" rx="10" fill="#19151F" stroke="#4C3D68" stroke-width="2" style="--step:8;--i:8" class="motion-enter motion-sequence" /><text x="860.0" y="96.32" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#F8F7FC" text-anchor="middle" style="--step:8;--i:8" class="motion-enter motion-sequence"><tspan x="860.0" dy="0">Replay</tspan></text><line x1="30" y1="157" x2="970" y2="157" stroke="#A79CB5" stroke-width="1" style="--i:20" class="motion-draw" /><text x="30" y="190" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#C9C1D4" text-anchor="start" style="--step:9;--i:9" class="motion-enter motion-sequence">WITH A LIVE LINK</text><text x="970" y="190" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#4ADE80" text-anchor="end" style="--step:9;--i:9" class="motion-enter motion-sequence">one edit, automatic propagation</text><rect x="100" y="220" width="180" height="70" rx="10" fill="#A78BFA" stroke="#A78BFA" stroke-width="2" style="--step:10;--i:10" class="motion-enter motion-sequence" /><text x="190.0" y="250.54" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1D1235" text-anchor="middle" style="--step:10;--i:10" class="motion-enter motion-sequence"><tspan x="190.0" dy="0">Edit asset</tspan><tspan x="190.0" dy="19">once</tspan></text><path d="M 280 255 H 380" fill="none" stroke="#4ADE80" stroke-width="3" stroke-linecap="round" style="--step:11;--i:11" class="motion-draw motion-sequence motion-flow-loop" /><polygon points="380,250 390,255 380,260" fill="#4ADE80" style="--step:11;--i:11" class="motion-enter motion-sequence" /><rect x="390" y="210" width="500" height="90" rx="10" fill="#193C2A" stroke="#4ADE80" stroke-width="2" style="--step:12;--i:12" class="motion-enter motion-sequence" /><text x="640.0" y="250.54" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#DDFBE8" text-anchor="middle" style="--step:12;--i:12" class="motion-enter motion-sequence"><tspan x="640.0" dy="0">Appears in the running engine</tspan><tspan x="640.0" dy="19">native files update · engine reimports</tspan></text></g>
 </svg>

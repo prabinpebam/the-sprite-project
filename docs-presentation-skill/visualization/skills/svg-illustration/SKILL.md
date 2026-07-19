@@ -121,6 +121,10 @@ Use [composition and layout](./references/composition-and-layout.md).
 - Compose two to four atomic moves: establish, ordered reveal/change, proof emphasis, settle/hold.
 - Choose CSS, WAAPI, SMIL, or a host timeline from the production profile; use one deterministic clock.
 - Define first, proof, final, and reduced-motion states before implementation.
+- For flows and journeys, assign timing by semantic step (`node → connector → node`), grouping each node with its
+   label/icon instead of animating all rectangles, arrows, and text as separate object types.
+- For external documentation SVGs, remain static by default and let the host trigger `#svg-play` on viewport entry;
+   provide a hover/focus replay control.
 - Avoid ambient wobble, infinite decorative loops, random timing, and layout-property animation.
 
 ### 6. Construct in semantic layers

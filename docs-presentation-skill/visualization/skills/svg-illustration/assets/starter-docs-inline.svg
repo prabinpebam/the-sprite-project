@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"
+<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"
      role="img" aria-labelledby="starter-title starter-desc"
      preserveAspectRatio="xMidYMid meet">
   <title id="starter-title">Illustration title</title>
   <desc id="starter-desc">Replace this with the essential takeaway and reading order.</desc>
       <style>
-            #starter-primary-subject {
+            .svg-play:target #starter-primary-subject {
                   opacity: 0;
                   transform-box: fill-box;
                   transform-origin: center;
@@ -20,7 +20,7 @@
                   50% { transform: scale(1.025); }
             }
             @media (prefers-reduced-motion: reduce) {
-                  #starter-primary-subject { animation: none; opacity: 1; transform: none; }
+                  #starter-primary-subject { animation: none !important; opacity: 1 !important; transform: none !important; }
             }
       </style>
   <rect x="24" y="24" width="752" height="402" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="2" />

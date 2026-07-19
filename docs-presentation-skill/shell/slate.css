@@ -553,9 +553,16 @@ button { font-family: inherit; font-size: inherit; border: none; background: non
 
 /* - Figure - */
 .slate-figure { margin: 0 0 var(--space-l); }
+.slate-figure-media { position: relative; width: 100%; }
 .slate-figure img { display: block; width: 100%; border: 1px solid var(--color-neutral-stroke-2); border-radius: var(--radius-lg); margin: 0; }
 .slate-figure figcaption { font-size: var(--font-size-200); color: var(--color-neutral-fg-3); text-align: center; margin-top: var(--space-s); }
 .slate-zoomable { cursor: zoom-in; }
+.slate-svg-replay { position: absolute; top: var(--space-s); right: var(--space-s); display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--color-neutral-stroke-1); border-radius: 50%; color: var(--color-neutral-fg-1); background: color-mix(in srgb, var(--color-neutral-bg-1) 88%, transparent); box-shadow: var(--shadow-4); cursor: pointer; opacity: 0; transform: translateY(-2px); transition: opacity var(--duration-fast) var(--curve-ease), transform var(--duration-fast) var(--curve-ease), background var(--duration-fast) var(--curve-ease); }
+.slate-svg-replay .material-symbols-outlined { font-size: 18px; }
+.slate-figure-media:hover .slate-svg-replay, .slate-figure-media:focus-within .slate-svg-replay { opacity: 1; transform: none; }
+.slate-svg-replay:hover { background: var(--color-neutral-bg-1); }
+.slate-svg-replay:focus-visible { opacity: 1; transform: none; outline: 2px solid var(--color-brand-stroke); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .slate-svg-replay { display: none; transition: none; } }
 
 /* - Version history (pill + modal) - */
 .slate-history { display: none; }

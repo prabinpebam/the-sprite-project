@@ -1,70 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320"
+<svg id="svg-play" class="svg-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320"
      role="img" aria-labelledby="figure-title figure-desc" preserveAspectRatio="xMidYMid meet">
   <title id="figure-title">Standard LPC shadow color and direction</title>
   <desc id="figure-desc">Three swatches show the standard shadow at full and 120/256 alpha plus black for dark scenes; a diagram shows top-front-left light casting down-right.</desc>
   <style>
-        .motion-enter, .motion-grow, .motion-ring, .motion-draw { opacity: 0; }
-        .motion-enter {
+    .svg-play:target .motion-enter,
+    .svg-play:target .motion-grow,
+    .svg-play:target .motion-ring,
+    .svg-play:target .motion-draw { opacity: 0; }
+    .svg-play:target .motion-enter {
             transform-box: fill-box; transform-origin: center;
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 38ms);
         }
-        .motion-grow {
+        .svg-play:target .motion-grow {
             transform-box: fill-box; transform-origin: left center;
             animation: svg-grow 620ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(120ms + var(--i) * 55ms);
         }
-        .motion-ring {
+        .svg-play:target .motion-ring {
             transform-box: fill-box; transform-origin: center;
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(100ms + var(--i) * 100ms);
         }
-        .motion-draw {
+        .svg-play:target .motion-draw {
             stroke-dasharray: 1200; stroke-dashoffset: 1200;
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both;
             animation-delay: calc(160ms + var(--i) * 38ms);
         }
-        .motion-highlight {
+        .svg-play:target .motion-highlight {
             transform-box: fill-box; transform-origin: center;
             animation: svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 2;
             animation-delay: 1250ms;
         }
-        .motion-active-loop {
+        .svg-play:target .motion-active-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-active 2200ms ease-in-out 1500ms infinite;
         }
-        .motion-flow-loop {
+        .svg-play:target .motion-flow-loop {
             stroke-dasharray: 10 8;
             animation: svg-flow 1100ms linear 1300ms infinite;
         }
-        .motion-light-loop {
+        .svg-play:target .motion-light-loop {
             transform-box: fill-box; transform-origin: center;
             animation: svg-light 2600ms ease-in-out 1200ms infinite;
         }
-        .motion-enter.motion-highlight {
+        .svg-play:target .motion-enter.motion-highlight {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 38ms), 1250ms;
         }
-        .motion-ring.motion-highlight {
+        .svg-play:target .motion-ring.motion-highlight {
             animation: svg-ring 650ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-highlight 850ms cubic-bezier(.2,.7,.2,1) 1250ms 2;
             animation-delay: calc(100ms + var(--i) * 100ms), 1250ms;
         }
-        .motion-enter.motion-active-loop {
+        .svg-play:target .motion-enter.motion-active-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-active 2200ms ease-in-out 1500ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1500ms;
         }
-        .motion-draw.motion-flow-loop {
+        .svg-play:target .motion-draw.motion-flow-loop {
             animation: svg-draw 760ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-flow 1100ms linear 1300ms infinite;
             animation-delay: calc(160ms + var(--i) * 38ms), 1300ms;
         }
-        .motion-enter.motion-light-loop {
+        .svg-play:target .motion-enter.motion-light-loop {
             animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
                                  svg-light 2600ms ease-in-out 1200ms infinite;
             animation-delay: calc(100ms + var(--i) * 38ms), 1200ms;
+        }
+        .svg-play:target .motion-sequence.motion-enter {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw {
+            animation-delay: calc(140ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-highlight {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(500ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-draw.motion-flow-loop {
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-active-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-active 2200ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
+        }
+        .svg-play:target .motion-sequence.motion-enter.motion-light-loop {
+            animation: svg-enter 520ms cubic-bezier(.2,.7,.2,1) both,
+                                 svg-light 2600ms ease-in-out infinite;
+            animation-delay: calc(140ms + var(--step) * 140ms), calc(650ms + var(--step) * 140ms);
         }
         @keyframes svg-enter {
             from { opacity: 0; transform: translateY(10px) scale(.985); }
@@ -103,5 +128,5 @@
         }
 </style>
   <rect width="1000" height="320" fill="#FFFFFF" />
-  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="500" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:0" class="motion-enter">ONE LIGHT DIRECTION, TWO SHADOW MODES</text><rect x="50" y="70" width="170" height="130" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--i:1" class="motion-enter" /><rect x="70" y="90" width="130" height="66" rx="7" fill="#2A1722" fill-opacity="1" stroke="#64748B" stroke-width="1" style="--i:2" class="motion-enter" /><text x="135" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:3" class="motion-enter">Standard shadow</text><text x="135" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--i:4" class="motion-enter">#2a1722 · full</text><rect x="260" y="70" width="170" height="130" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--i:5" class="motion-enter" /><rect x="280" y="90" width="130" height="66" rx="7" fill="#2A1722" fill-opacity="0.469" stroke="#64748B" stroke-width="1" style="--i:6" class="motion-enter" /><text x="345" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:7" class="motion-enter">Standard alpha</text><text x="345" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--i:8" class="motion-enter">#2a1722 · 120/256</text><rect x="470" y="70" width="170" height="130" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--i:9" class="motion-enter" /><rect x="490" y="90" width="130" height="66" rx="7" fill="#000000" fill-opacity="1" stroke="#64748B" stroke-width="1" style="--i:10" class="motion-enter" /><text x="555" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:11" class="motion-enter">Dark scenes</text><text x="555" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--i:12" class="motion-enter">#000000</text><rect x="690" y="70" width="260" height="200" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--i:13" class="motion-enter" /><text x="820" y="94" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:14" class="motion-enter">LIGHTING GEOMETRY</text><circle cx="760" cy="135" r="20" fill="#F4D35E" style="--i:15" class="motion-enter motion-light-loop" /><path d="M 775 150 L 835 205" stroke="#B45309" stroke-width="3" fill="none" style="--i:16" class="motion-draw" /><polygon points="830,194 842,212 822,207" fill="#B45309" style="--i:17" class="motion-enter" /><rect x="800" y="135" width="70" height="70" rx="8" fill="#FFFFFF" stroke="#1F2937" stroke-width="2" style="--i:18" class="motion-enter" /><path d="M 820 205 L 885 238 L 850 250 L 795 218 Z" fill="#2A1722" opacity="0.469" style="--i:19" /><text x="820" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1F2937" text-anchor="middle" style="--i:20" class="motion-enter"><tspan x="820" dy="0">Light: top-front-left</tspan><tspan x="820" dy="17">Shadow: bottom-right</tspan></text></g>
+  <g class="motion-stage" stroke-linecap="round" stroke-linejoin="round"><text x="500" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--i:0" class="motion-enter">ONE LIGHT DIRECTION, TWO SHADOW MODES</text><rect x="50" y="70" width="170" height="130" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--step:0;--i:0" class="motion-enter motion-sequence" /><rect x="70" y="90" width="130" height="66" rx="7" fill="#2A1722" fill-opacity="1" stroke="#64748B" stroke-width="1" style="--step:0;--i:0" class="motion-enter motion-sequence" /><text x="135" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1F2937" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence">Standard shadow</text><text x="135" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence">#2a1722 · full</text><rect x="260" y="70" width="170" height="130" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--step:0;--i:0" class="motion-enter motion-sequence" /><rect x="280" y="90" width="130" height="66" rx="7" fill="#2A1722" fill-opacity="0.469" stroke="#64748B" stroke-width="1" style="--step:0;--i:0" class="motion-enter motion-sequence" /><text x="345" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1F2937" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence">Standard alpha</text><text x="345" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence">#2a1722 · 120/256</text><rect x="470" y="70" width="170" height="130" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--step:0;--i:0" class="motion-enter motion-sequence" /><rect x="490" y="90" width="130" height="66" rx="7" fill="#000000" fill-opacity="1" stroke="#64748B" stroke-width="1" style="--step:0;--i:0" class="motion-enter motion-sequence" /><text x="555" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1F2937" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence">Dark scenes</text><text x="555" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5D6B7E" text-anchor="middle" style="--step:0;--i:0" class="motion-enter motion-sequence">#000000</text><rect x="690" y="70" width="260" height="200" rx="10" fill="#F4F6F8" stroke="#64748B" stroke-width="1" style="--step:1;--i:1" class="motion-enter motion-sequence" /><text x="820" y="94" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#5D6B7E" text-anchor="middle" style="--step:1;--i:1" class="motion-enter motion-sequence">LIGHTING GEOMETRY</text><circle cx="760" cy="135" r="20" fill="#F4D35E" style="--step:1;--i:1" class="motion-enter motion-sequence motion-light-loop" /><path d="M 775 150 L 835 205" stroke="#B45309" stroke-width="3" fill="none" style="--step:1;--i:1" class="motion-draw motion-sequence" /><polygon points="830,194 842,212 822,207" fill="#B45309" style="--step:1;--i:1" class="motion-enter motion-sequence" /><rect x="800" y="135" width="70" height="70" rx="8" fill="#FFFFFF" stroke="#1F2937" stroke-width="2" style="--step:1;--i:1" class="motion-enter motion-sequence" /><path d="M 820 205 L 885 238 L 850 250 L 795 218 Z" fill="#2A1722" opacity="0.469" style="--step:1;--i:1" class="motion-sequence" /><text x="820" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1F2937" text-anchor="middle" style="--step:1;--i:1" class="motion-enter motion-sequence"><tspan x="820" dy="0">Light: top-front-left</tspan><tspan x="820" dy="17">Shadow: bottom-right</tspan></text></g>
 </svg>
