@@ -21,7 +21,7 @@ Deliver a bounded product stage from promise to verified user experience. The wo
 9. A flow passes only when all declared user-visible, artifact, persistence, accessibility, and failure-state expectations pass with no unexplained anomalies.
 10. Continue unattended through reversible decisions. Ask for human input only for secrets, legal/risk acceptance, independent human observations, destructive external actions, or irreversible publication.
 11. Never edit a verified baseline to make a new requirement appear previously verified. Create a versioned product update that references the baseline and starts new or changed records below `verified`.
-12. No product requirement, feature, platform, UI control, or architectural capability may enter implementation outside the formal update pipeline.
+12. Material changes to approved or verified product contracts must use the formal update pipeline. Routine execution, maintenance, and implementation within an existing contract must use the fast path and must not incur governance overhead.
 
 ## Required Artifact Set
 
@@ -40,8 +40,8 @@ Create a user-inspectable delivery area appropriate to the repository, normally 
 - `decisions.md` - dated reversible and irreversible decisions
 - `issues.md` - anomalies with severity, trace IDs, disposition, and verification run
 
-For a change to a verified or approved product stage, create `delivery/updates/<update-id>/` with the same artifact
-set plus:
+For a material change to a verified or approved product stage, create `delivery/updates/<update-id>/` with the same
+artifact set plus:
 
 - `change-proposal.md` - request, rationale, source, constraints, and decision authority
 - `impact-analysis.md` - retained, changed, added, removed, and superseded records and contracts
@@ -49,7 +49,53 @@ set plus:
 - `release-gate.md` - objective completion arithmetic and rollout/rollback conditions
 
 Use [the traceability model](./references/traceability-model.md) and [execution and UX validation](./references/execution-and-validation.md). Copy or adapt [the starter model](./assets/traceability.template.json).
-For changes after a baseline exists, also use [product update governance](./references/product-update-governance.md).
+For material product-contract changes after a baseline exists, also use
+[product update governance](./references/product-update-governance.md). Do not load or apply that workflow for
+routine Git operations, code maintenance, bug fixes that restore an existing oracle, or implementation of already
+specified work.
+
+## Governance Triage - Run First
+
+Default to the fast path. Use formal product-update governance only when the request materially changes at least one
+approved or verified contract:
+
+1. **Promise or scope:** what users are promised, who the product serves, or what is included/excluded.
+2. **Observable workflow:** a user capability, task-flow outcome/branch, required view, or objective behavior oracle.
+3. **Compatibility or risk boundary:** supported host, canonical data format, migration, privacy/legal posture,
+   security boundary, distribution model, or removal of existing behavior.
+
+If none changes, do the work directly. When uncertain, choose the fast path unless the change could make existing
+product documentation or evidence materially false.
+
+### Fast Path - No Product Update
+
+Do not create or run governance for:
+
+- `git status`, commit, push, branch, merge, tag, or release bookkeeping
+- formatting, typo fixes, link repairs, generated-doc refresh, or documentation clarification with no requirement change
+- refactors, dependency maintenance, build scripts, test infrastructure, or performance work within existing oracles
+- bug fixes that restore already specified behavior
+- adding tests or evidence for an unchanged contract
+- implementing work already covered by an approved update
+- visual polish that does not add/remove controls, change flow outcomes, or change an objective oracle
+- local development commands, server startup, packaging reruns, or artifact cleanup
+
+These tasks may still need normal engineering validation. They do not need a baseline freeze, impact analysis, new
+traceability graph, ADR, or update record.
+
+### Active-Update Amendment - Lightweight
+
+When an unverified active update needs a material clarification within its existing promise, amend that update:
+
+1. Record the request and impact delta.
+2. Re-derive only affected downstream records.
+3. Revalidate the update model.
+4. Do not create a second update unless the promise is independent or the rollout/rollback boundary differs.
+
+### Full Product Update
+
+Create a new `UPD-NNN` only for a material change to an approved/verified baseline or a distinct product promise with
+its own delivery and rollback boundary.
 
 ## Product Update Gate
 

@@ -3,17 +3,25 @@
 <header class="slate-hero">
   <p class="slate-hero__eyebrow">Governance · Required workflow</p>
   <h1 class="slate-hero__title">Product Update Pipeline</h1>
-  <p class="slate-hero__summary">The mandatory derivation and evidence path for every change to product scope,
-     requirements, hosts, behavior, information architecture, UI, quality, or exclusions.</p>
+  <p class="slate-hero__summary">The mandatory derivation and evidence path for material changes to approved or
+     verified product contracts, deliberately excluded from routine engineering work.</p>
 </header>
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p>A product update moves through <strong>request → baseline → impact → customer promise → scenarios → user-can
+  <p><strong>Run the materiality test first.</strong> Routine work takes the fast path. A qualifying product update
+     moves through <strong>request → baseline → impact → customer promise → scenarios → user-can
      statements → task flows → IA/navigation/views/UI → objective behaviors → exclusions → ADRs → execution →
      actual-UI evidence → release</strong>. The traceability validator must pass before implementation. Verified
      status comes only from generated evidence. The previous verified baseline remains intact.</p>
 </aside>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Governance has a cost</p>
+  <p>Baseline freezes, impact analysis, exhaustive derivation, ADR reconciliation, and evidence expansion are useful
+     only when product truth changes. Applying them to routine work slows delivery and obscures consequential
+     decisions. The default is direct execution with proportionate engineering validation.</p>
+</div>
 
 <div class="slate-callout slate-callout--info" role="note">
   <p class="slate-callout__title">Canonical automation</p>
@@ -21,19 +29,37 @@
      model, validators, and evidence rules. Update artifacts live under <code>delivery/updates/UPD-NNN-name/</code>.</p>
 </div>
 
-<h2>What triggers an update</h2>
-<p>Create or revise a formal update whenever a request changes any of the following:</p>
+<h2>Materiality test</h2>
+<p>Create or revise a formal update only when the request materially changes one or more of:</p>
 <ul>
-  <li>Customer promise, target user, quality expectation, or recovery expectation</li>
-  <li>Scenario, user-can capability, task flow, branch, or terminal outcome</li>
-  <li>Information object, navigation destination, view, dialog, UI control, status, or feedback</li>
-  <li>Supported host, browser, platform, offline behavior, storage, filesystem, backend, or distribution</li>
-  <li>Project, pack, archive, provenance, export, or migration contract</li>
-  <li>Explicit inclusion, exclusion, deferral, or removal</li>
-  <li>Objective behavior oracle or completion gate</li>
+  <li><strong>Promise or scope:</strong> customer outcome, target user, included/excluded behavior, quality, or recovery commitment</li>
+  <li><strong>Observable workflow:</strong> user capability, task-flow outcome or branch, required interface surface, or objective behavior oracle</li>
+  <li><strong>Compatibility or risk boundary:</strong> supported host, canonical data, migration, privacy/legal posture, security, distribution, or removal of behavior</li>
 </ul>
-<p>Bug fixes that restore an already specified and verified oracle may stay inside that record. If the expected
-   behavior itself changes, it is a product update.</p>
+<p>Use one discriminator: <strong>would completing the task make the approved product specification or its evidence
+   materially false or incomplete?</strong> If no, use the fast path.</p>
+
+<h2>Fast path · No governance</h2>
+<p>Do the work directly, validate proportionately, and do not create or amend a product update for:</p>
+<ul>
+  <li>Git status, commit, push, branch, merge, tag, or release bookkeeping</li>
+  <li>Formatting, typo, wording, link, or generated-document maintenance without requirement changes</li>
+  <li>Refactors, dependency maintenance, build/test tooling, development servers, packaging reruns, or artifact cleanup</li>
+  <li>Bug fixes that restore an existing expected behavior</li>
+  <li>Tests or evidence added for an unchanged contract</li>
+  <li>Implementation already authorized by an approved update</li>
+  <li>Performance, accessibility, or visual fixes that satisfy rather than change an existing oracle</li>
+</ul>
+
+<h2>Three governance lanes</h2>
+<table>
+  <thead><tr><th>Lane</th><th>Trigger</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td>Fast path</td><td>No material product-contract change</td><td>Implement and run only relevant engineering checks.</td></tr>
+    <tr><td>Active-update amendment</td><td>Material clarification inside the same unverified promise and rollout boundary</td><td>Record the delta, re-derive affected records, and revalidate the existing update.</td></tr>
+    <tr><td>Full product update</td><td>New promise or material change to approved/verified baseline</td><td>Create a new <code>UPD-NNN</code> and run the complete pipeline.</td></tr>
+  </tbody>
+</table>
 
 <h2>Pipeline stages</h2>
 <ol class="slate-steps slate-steps--timeline">

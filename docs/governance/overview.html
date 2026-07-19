@@ -9,16 +9,33 @@
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p><strong>Every product or requirement change uses the formal Product Update Pipeline.</strong> Start with the
-     requested customer outcome, freeze the verified baseline, classify impact, derive scenarios and user-can
-     statements, derive task flows, design IA/navigation/views/UI, assign objective behavior oracles, close scope,
-     reconcile ADRs, execute by traceable work packages, and verify through the actual UI. No feature bypasses it.</p>
+  <p><strong>Governance is exceptional overhead, not the default workflow.</strong> Use the fast path for routine
+     engineering, Git operations, maintenance, bug fixes, and implementation already inside an approved contract.
+     Use the formal Product Update Pipeline only for material changes to customer promise/scope, observable workflow
+     or objective oracles, or compatibility/risk boundaries.</p>
 </aside>
 
 <div class="slate-callout slate-callout--warning" role="note">
-  <p class="slate-callout__title">Binding rule</p>
-  <p>A request in chat, an ADR, a mockup, a code branch, or an implementation idea is not yet a product requirement.
-     It enters scope only through a versioned update with complete traceability and deliberate exclusions.</p>
+  <p class="slate-callout__title">Do not overapply governance</p>
+  <p>A commit, push, refactor, typo fix, test addition, dependency update, artifact cleanup, development command, or
+     bug fix that restores an existing expected behavior does <strong>not</strong> trigger governance. Apply only the
+     engineering validation appropriate to that task and keep moving.</p>
+</div>
+
+<h2>Choose the lightest lane</h2>
+<table>
+  <thead><tr><th>Lane</th><th>Use when</th><th>Examples</th><th>Required overhead</th></tr></thead>
+  <tbody>
+    <tr><td><span class="slate-badge slate-badge--success">Fast path</span></td><td>No material product-contract change</td><td>Commit/push, refactor, formatting, existing-oracle bug fix, tests, build tooling, implementation of approved scope</td><td>Implement and validate narrowly</td></tr>
+    <tr><td><span class="slate-badge slate-badge--warning">Amend update</span></td><td>Material clarification inside one active unverified promise</td><td>Adjust a branch, recovery behavior, or UI requirement already owned by UPD-001</td><td>Record impact delta, update affected derivation, revalidate</td></tr>
+    <tr><td><span class="slate-badge">Full update</span></td><td>New promise or material change to approved/verified baseline</td><td>Add Electron host, remove a capability, change canonical project format, add cloud sync</td><td>Complete versioned update pipeline</td></tr>
+  </tbody>
+</table>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Default decision</p>
+  <p>When uncertain, use the fast path unless completing the task would make the approved specification or its
+     evidence materially false or incomplete.</p>
 </div>
 
 <h2>Governance system</h2>
@@ -73,13 +90,13 @@
   <dt>Verified baseline</dt><dd>Preserves historical truth for regression, migration, and rollback.</dd>
 </dl>
 
-<h2>No-bypass policy</h2>
+<h2>Material-change policy</h2>
 <ul>
-  <li>No new UI control without a task-flow step and expected behavior.</li>
-  <li>No new task flow without a user-can statement and scenario.</li>
-  <li>No new scenario without a customer promise.</li>
-  <li>No infrastructure or platform feature without an affected product update and reconciled ADR.</li>
-  <li>No removal or changed meaning without impact classification, migration, consequence, and authority.</li>
+  <li>A materially new UI capability needs a task-flow step and expected behavior; implementation of an already specified control does not need a new update.</li>
+  <li>A materially new task-flow outcome needs a user-can statement and scenario; fixing the existing outcome does not.</li>
+  <li>A new customer outcome or target user needs a promise; internal technical work does not.</li>
+  <li>A material platform, compatibility, privacy, security, legal, or distribution change needs a product update and reconciled ADR.</li>
+  <li>Removal or changed meaning needs impact classification, migration, consequence, and authority.</li>
   <li>No verified status from code completion, screenshots alone, unit tests alone, or prose.</li>
   <li>No rewriting prior evidence to reduce the apparent scope of a new update.</li>
 </ul>

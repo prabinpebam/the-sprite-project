@@ -1,13 +1,53 @@
 # Product Update Governance
 
-Use this process whenever a request changes an approved or verified product promise, scenario, capability, flow,
-interface, platform, quality oracle, exclusion, or architecture contract.
+Use this process only when a request materially changes an approved or verified product contract. Governance is
+deliberate overhead: valuable for consequential scope changes and harmful when applied to routine work.
+
+## Materiality Test
+
+Default to normal engineering execution. A formal product update is required only when the request changes at least
+one of:
+
+- the customer promise, target user, included/excluded scope, or recovery expectation
+- an observable user capability, task-flow outcome/branch, required interface surface, or objective behavior oracle
+- a compatibility or risk boundary such as host support, canonical data, migration, privacy/legal posture, security,
+  distribution, or removal of existing behavior
+
+Ask one discriminator: **Would completing this task make the approved product specification or its evidence
+materially untrue or incomplete?** If no, use the fast path.
+
+## Fast Path - Explicit Non-Triggers
+
+Do not create, validate, or amend a product update for:
+
+- Git commands or repository bookkeeping, including commit and push
+- formatting, typo, link, wording, or generated-document maintenance that does not change requirements
+- refactoring or internal architecture that preserves public contracts
+- bug fixes that restore an existing expected behavior
+- dependency, build, CI/test, development-server, packaging, or tooling maintenance
+- tests and evidence for unchanged requirements
+- implementation already authorized by an approved update
+- performance, accessibility, or visual fixes that satisfy an existing oracle without changing it
+- cleanup of artifacts, caches, logs, fixtures, or ignored files
+
+Use ordinary scoped validation appropriate to the task. Do not freeze a baseline, create an ADR, derive scenarios, or
+generate traceability simply because files changed.
+
+## Three Governance Lanes
+
+| Lane | Use when | Required process |
+|---|---|---|
+| Fast path | No material product-contract change | Implement, validate narrowly, report |
+| Active-update amendment | Material change within the same unverified promise and rollout boundary | Record delta, update affected derivation, revalidate existing update |
+| Full product update | New/distinct promise or material change to approved/verified baseline | Complete `UPD-NNN` pipeline |
 
 ## Core Rule
 
 A verified baseline is historical evidence, not a living wish list. Never rewrite it to make a new decision appear
 previously implemented or tested. A product update references the baseline, derives a complete new change graph, and
 collects fresh evidence for every changed or affected behavior.
+
+This rule protects verified truth; it does not turn routine execution into product governance.
 
 ## Update Directory
 
