@@ -1,0 +1,2204 @@
+{
+  "modelVersion": "1.0.0",
+  "stage": {
+    "id": "STAGE-MVP",
+    "name": "Character-to-Godot MVP",
+    "status": "verified",
+    "targetUser": "Solo and small-team game developers without a dedicated pixel artist who accept the LPC visual language",
+    "qualityGate": "Every in-scope task flow and expected behavior passes through visible interaction in the production UI with no unresolved severity 0-2 anomaly"
+  },
+  "sources": [
+    "docs/mvp/overview.html",
+    "docs/planning/agentic-execution.html",
+    "docs/design/scenarios-and-flows.html",
+    "docs/design/generators/character-generator.html",
+    "docs/design/systems/token-coherence.html",
+    "docs/research/context/lpc-foundations.html"
+  ],
+  "promises": [
+    {
+      "id": "CP-QUICK-START",
+      "status": "verified",
+      "statement": "A developer can begin with a useful animated character instead of an empty art canvas.",
+      "user": "A developer without production-ready character art",
+      "context": "Starting a local game project or prototype",
+      "trigger": "They need a coherent playable character quickly",
+      "outcome": "A named local project contains a composed humanoid character using a curated pack and sensible defaults",
+      "quality": "The first useful preview requires no asset-format, frame-layout, or licensing knowledge",
+      "recovery": "The user can cancel creation, replace choices, or return to a valid starter composition",
+      "evidence": "TF-FIRST-PROJECT and TF-COMPOSE pass in the actual UI"
+    },
+    {
+      "id": "CP-CREATIVE-CONTROL",
+      "status": "verified",
+      "statement": "A developer can make the character fit their game while remaining visually coherent.",
+      "user": "A developer adapting a starter character",
+      "context": "Composing appearance and evaluating motion",
+      "trigger": "The default character does not match the intended role or palette",
+      "outcome": "The user selects compatible layers, applies semantic colors, overrides one character, and previews idle and walk in four directions",
+      "quality": "Every action updates a crisp pixel preview immediately and exposes coverage or compatibility problems before export",
+      "recovery": "Selections and overrides can be replaced, cleared, or reset without rebuilding the project",
+      "evidence": "TF-COMPOSE, TF-EDIT-COMPOSITION, TF-THEME, and TF-PREVIEW pass"
+    },
+    {
+      "id": "CP-REPRODUCIBLE-WORK",
+      "status": "verified",
+      "statement": "A developer can leave and return without losing the recipe or receiving a different character.",
+      "user": "A returning developer",
+      "context": "Continuing work in the same browser on the same device",
+      "trigger": "The page is reloaded or the project is reopened",
+      "outcome": "Project name, pack, layer recipe, theme, overrides, preview settings, and deterministic render are restored",
+      "quality": "The same project data and pack version produce the same rendered image and export hashes",
+      "recovery": "Invalid or obsolete saved data is rejected with a clear recovery path and never silently corrupts a valid project",
+      "evidence": "TF-SAVE-REOPEN and TF-RECOVER pass"
+    },
+    {
+      "id": "CP-GAME-READY-DELIVERY",
+      "status": "verified",
+      "statement": "A developer can take the character into a game without manually slicing frames or reverse-engineering animation metadata.",
+      "user": "A Godot 4 developer or a developer using generic sprite tooling",
+      "context": "The character is ready to integrate",
+      "trigger": "The user opens Export",
+      "outcome": "The product downloads either a generic package or a Godot 4 package containing a spritesheet, animation data, build manifest, and credits",
+      "quality": "Names, frame regions, direction cycles, speeds, dimensions, and hashes are explicit and machine-consumable",
+      "recovery": "Export is blocked with actionable readiness messages when required content is absent",
+      "evidence": "TF-EXPORT-GENERIC and TF-EXPORT-GODOT pass, and the Godot fixture consumes the package"
+    },
+    {
+      "id": "CP-LEGAL-CONFIDENCE",
+      "status": "verified",
+      "statement": "A developer can understand and carry forward the provenance and attribution attached to the chosen art.",
+      "user": "A developer responsible for shipping legally usable assets",
+      "context": "Selecting source art and exporting a character",
+      "trigger": "The user inspects an asset, credits, or an export package",
+      "outcome": "Every selected layer traces to pack, source, author, license, and chosen license path; exact merged credits ship with every export",
+      "quality": "Unknown or disallowed provenance fails closed rather than producing incomplete attribution",
+      "recovery": "The user can replace an affected layer with an eligible option",
+      "evidence": "TF-INSPECT-CREDITS and export flows pass"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SC-FIRST-USE",
+      "status": "verified",
+      "promiseIds": [
+        "CP-QUICK-START"
+      ],
+      "actor": "Jamie, a time-constrained solo developer",
+      "startingState": "No local Sprite Project data",
+      "intent": "Create the first useful character",
+      "environment": "Desktop browser",
+      "success": "A named project opens with a rendered starter character",
+      "interruptions": [
+        "Cancel project creation",
+        "Blank name",
+        "Reload before creation"
+      ]
+    },
+    {
+      "id": "SC-COMPOSE",
+      "status": "verified",
+      "promiseIds": [
+        "CP-QUICK-START",
+        "CP-CREATIVE-CONTROL"
+      ],
+      "actor": "Jamie",
+      "startingState": "Open project with starter recipe",
+      "intent": "Change appearance by slot",
+      "environment": "Desktop or tablet browser",
+      "success": "Compatible choices are reflected in the preview and recipe",
+      "interruptions": [
+        "Clear optional slot",
+        "Replace a selected asset",
+        "Unavailable animation coverage"
+      ]
+    },
+    {
+      "id": "SC-THEME",
+      "status": "verified",
+      "promiseIds": [
+        "CP-CREATIVE-CONTROL"
+      ],
+      "actor": "Sam, a solo indie developer",
+      "startingState": "Composed character",
+      "intent": "Match a project palette and personalize one character",
+      "environment": "Desktop browser",
+      "success": "Project tokens and character override visibly resolve",
+      "interruptions": [
+        "Invalid color entry",
+        "Reset override",
+        "Restore preset"
+      ]
+    },
+    {
+      "id": "SC-PREVIEW",
+      "status": "verified",
+      "promiseIds": [
+        "CP-CREATIVE-CONTROL"
+      ],
+      "actor": "Sam",
+      "startingState": "Composed and themed character",
+      "intent": "Judge supported motion before export",
+      "environment": "Desktop, tablet, or narrow browser",
+      "success": "Idle and walk play in every direction at chosen speed and zoom",
+      "interruptions": [
+        "Pause",
+        "Change direction",
+        "Reduced motion preference"
+      ]
+    },
+    {
+      "id": "SC-RETURN",
+      "status": "verified",
+      "promiseIds": [
+        "CP-REPRODUCIBLE-WORK"
+      ],
+      "actor": "Returning developer",
+      "startingState": "Previously saved local project",
+      "intent": "Continue without reconstructing work",
+      "environment": "Same browser and origin",
+      "success": "The complete recipe and identical preview restore",
+      "interruptions": [
+        "Reload",
+        "Open another local project",
+        "Rename project"
+      ]
+    },
+    {
+      "id": "SC-GENERIC-EXPORT",
+      "status": "verified",
+      "promiseIds": [
+        "CP-GAME-READY-DELIVERY",
+        "CP-LEGAL-CONFIDENCE"
+      ],
+      "actor": "Developer using generic sprite tooling",
+      "startingState": "Export-ready character",
+      "intent": "Download portable game assets",
+      "environment": "Browser with download support",
+      "success": "ZIP contains PNG, animation JSON, manifest, and credits",
+      "interruptions": [
+        "Missing required slot",
+        "Repeated export"
+      ]
+    },
+    {
+      "id": "SC-GODOT-EXPORT",
+      "status": "verified",
+      "promiseIds": [
+        "CP-GAME-READY-DELIVERY",
+        "CP-LEGAL-CONFIDENCE"
+      ],
+      "actor": "Godot 4 developer",
+      "startingState": "Export-ready character",
+      "intent": "Use the character without manual slicing",
+      "environment": "Browser plus Godot 4 project",
+      "success": "ZIP imports into the fixture with named animations and frame regions",
+      "interruptions": [
+        "Missing required slot",
+        "Inspect package before import"
+      ]
+    },
+    {
+      "id": "SC-CREDITS",
+      "status": "verified",
+      "promiseIds": [
+        "CP-LEGAL-CONFIDENCE"
+      ],
+      "actor": "Developer preparing a release",
+      "startingState": "Character uses several source layers",
+      "intent": "Understand and retain attribution",
+      "environment": "Compose and Export views",
+      "success": "Selected sources and merged obligations are visible and exported",
+      "interruptions": [
+        "Replace one credited layer",
+        "Switch packs"
+      ]
+    },
+    {
+      "id": "SC-RECOVERY",
+      "status": "verified",
+      "promiseIds": [
+        "CP-REPRODUCIBLE-WORK",
+        "CP-GAME-READY-DELIVERY"
+      ],
+      "actor": "Developer encountering incomplete or invalid state",
+      "startingState": "Missing required layer or unreadable saved record",
+      "intent": "Return to a safe usable state",
+      "environment": "Browser",
+      "success": "No invalid export occurs and an actionable recovery completes",
+      "interruptions": [
+        "Dismiss warning",
+        "Reset starter recipe"
+      ]
+    },
+    {
+      "id": "SC-SECOND-PACK",
+      "status": "verified",
+      "promiseIds": [
+        "CP-CREATIVE-CONTROL",
+        "CP-LEGAL-CONFIDENCE"
+      ],
+      "actor": "Developer seeking another visual set",
+      "startingState": "Open character using starter pack",
+      "intent": "Use another pack through the same workflow",
+      "environment": "Compose view",
+      "success": "Pack changes, compatible defaults load, and provenance/export update without a different workflow",
+      "interruptions": [
+        "Pack switch replaces incompatible selections",
+        "Return to starter pack"
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "UC-CREATE-PROJECT",
+      "status": "verified",
+      "statement": "User can create a named local project from a valid starter recipe.",
+      "scenarioIds": [
+        "SC-FIRST-USE"
+      ]
+    },
+    {
+      "id": "UC-CANCEL-CREATE",
+      "status": "verified",
+      "statement": "User can cancel project creation without creating data.",
+      "scenarioIds": [
+        "SC-FIRST-USE"
+      ]
+    },
+    {
+      "id": "UC-RENAME-PROJECT",
+      "status": "verified",
+      "statement": "User can rename the open project.",
+      "scenarioIds": [
+        "SC-FIRST-USE",
+        "SC-RETURN"
+      ]
+    },
+    {
+      "id": "UC-SELECT-PACK",
+      "status": "verified",
+      "statement": "User can select an installed content pack and receive compatible defaults.",
+      "scenarioIds": [
+        "SC-COMPOSE",
+        "SC-SECOND-PACK"
+      ]
+    },
+    {
+      "id": "UC-SELECT-LAYER",
+      "status": "verified",
+      "statement": "User can select an asset for each supported content slot.",
+      "scenarioIds": [
+        "SC-COMPOSE"
+      ]
+    },
+    {
+      "id": "UC-CLEAR-LAYER",
+      "status": "verified",
+      "statement": "User can clear or replace a selected layer; clearing a required layer exposes an exact readiness blocker until restored.",
+      "scenarioIds": [
+        "SC-COMPOSE",
+        "SC-RECOVERY"
+      ]
+    },
+    {
+      "id": "UC-SEE-COVERAGE",
+      "status": "verified",
+      "statement": "User can see required-slot, compatibility, and animation-coverage status before export.",
+      "scenarioIds": [
+        "SC-COMPOSE",
+        "SC-RECOVERY"
+      ]
+    },
+    {
+      "id": "UC-INSPECT-ASSET",
+      "status": "verified",
+      "statement": "User can inspect the selected asset's pack, author, source, license, and animation coverage.",
+      "scenarioIds": [
+        "SC-COMPOSE",
+        "SC-CREDITS"
+      ]
+    },
+    {
+      "id": "UC-APPLY-THEME",
+      "status": "verified",
+      "statement": "User can apply a complete project theme preset.",
+      "scenarioIds": [
+        "SC-THEME"
+      ]
+    },
+    {
+      "id": "UC-EDIT-TOKEN",
+      "status": "verified",
+      "statement": "User can edit semantic project color tokens using accessible color controls.",
+      "scenarioIds": [
+        "SC-THEME"
+      ]
+    },
+    {
+      "id": "UC-OVERRIDE-TOKEN",
+      "status": "verified",
+      "statement": "User can override a project token for the current character.",
+      "scenarioIds": [
+        "SC-THEME"
+      ]
+    },
+    {
+      "id": "UC-RESET-OVERRIDE",
+      "status": "verified",
+      "statement": "User can reset a character override to the project value.",
+      "scenarioIds": [
+        "SC-THEME"
+      ]
+    },
+    {
+      "id": "UC-SELECT-ANIMATION",
+      "status": "verified",
+      "statement": "User can select idle or walk animation.",
+      "scenarioIds": [
+        "SC-PREVIEW"
+      ]
+    },
+    {
+      "id": "UC-SELECT-DIRECTION",
+      "status": "verified",
+      "statement": "User can preview north, east, south, or west direction.",
+      "scenarioIds": [
+        "SC-PREVIEW"
+      ]
+    },
+    {
+      "id": "UC-CONTROL-PLAYBACK",
+      "status": "verified",
+      "statement": "User can play, pause, change speed, and change pixel-perfect zoom without layout shift.",
+      "scenarioIds": [
+        "SC-PREVIEW"
+      ]
+    },
+    {
+      "id": "UC-SAVE-PROJECT",
+      "status": "verified",
+      "statement": "User can explicitly save the complete project recipe locally.",
+      "scenarioIds": [
+        "SC-RETURN"
+      ]
+    },
+    {
+      "id": "UC-REOPEN-PROJECT",
+      "status": "verified",
+      "statement": "User can reload or reopen the saved project and receive the same render.",
+      "scenarioIds": [
+        "SC-RETURN"
+      ]
+    },
+    {
+      "id": "UC-RECOVER-PROJECT",
+      "status": "verified",
+      "statement": "User can recover from incomplete or unreadable local state without silent data loss.",
+      "scenarioIds": [
+        "SC-RECOVERY"
+      ]
+    },
+    {
+      "id": "UC-EXPORT-GENERIC",
+      "status": "verified",
+      "statement": "User can download a generic export package.",
+      "scenarioIds": [
+        "SC-GENERIC-EXPORT"
+      ]
+    },
+    {
+      "id": "UC-EXPORT-GODOT",
+      "status": "verified",
+      "statement": "User can download a Godot 4 export package with no manual frame slicing.",
+      "scenarioIds": [
+        "SC-GODOT-EXPORT"
+      ]
+    },
+    {
+      "id": "UC-SEE-READINESS",
+      "status": "verified",
+      "statement": "User can see export readiness and resolve each blocking item.",
+      "scenarioIds": [
+        "SC-GENERIC-EXPORT",
+        "SC-GODOT-EXPORT",
+        "SC-RECOVERY"
+      ]
+    },
+    {
+      "id": "UC-INSPECT-CREDITS",
+      "status": "verified",
+      "statement": "User can inspect exact merged credits for the current recipe before export.",
+      "scenarioIds": [
+        "SC-CREDITS"
+      ]
+    },
+    {
+      "id": "UC-EXPORT-CREDITS",
+      "status": "verified",
+      "statement": "User receives machine-readable and human-readable credits with every export.",
+      "scenarioIds": [
+        "SC-CREDITS",
+        "SC-GENERIC-EXPORT",
+        "SC-GODOT-EXPORT"
+      ]
+    },
+    {
+      "id": "UC-USE-SECOND-PACK",
+      "status": "verified",
+      "statement": "User can complete the same composition, preview, persistence, and export workflow with a second pack.",
+      "scenarioIds": [
+        "SC-SECOND-PACK"
+      ]
+    },
+    {
+      "id": "UC-KEYBOARD-WORKFLOW",
+      "status": "verified",
+      "statement": "User can complete the core create-to-export journey with keyboard-visible focus and no pointer-only control.",
+      "scenarioIds": [
+        "SC-FIRST-USE",
+        "SC-COMPOSE",
+        "SC-THEME",
+        "SC-PREVIEW",
+        "SC-GENERIC-EXPORT"
+      ]
+    }
+  ],
+  "informationArchitecture": [
+    {
+      "id": "IA-PROJECT",
+      "status": "verified",
+      "name": "Project",
+      "contains": [
+        "name",
+        "schema version",
+        "pack reference",
+        "characters",
+        "theme",
+        "timestamps"
+      ]
+    },
+    {
+      "id": "IA-CHARACTER",
+      "status": "verified",
+      "name": "Character recipe",
+      "contains": [
+        "stable id",
+        "name",
+        "slot selections",
+        "token overrides",
+        "preview state"
+      ]
+    },
+    {
+      "id": "IA-PACK",
+      "status": "verified",
+      "name": "Content pack",
+      "contains": [
+        "stable id",
+        "version",
+        "assets",
+        "slots",
+        "animations",
+        "provenance"
+      ]
+    },
+    {
+      "id": "IA-ASSET",
+      "status": "verified",
+      "name": "Layer asset",
+      "contains": [
+        "slot",
+        "pixel layer",
+        "draw order",
+        "coverage",
+        "palette bindings",
+        "source record"
+      ]
+    },
+    {
+      "id": "IA-THEME",
+      "status": "verified",
+      "name": "Semantic theme",
+      "contains": [
+        "skin",
+        "hair",
+        "primary cloth",
+        "secondary cloth",
+        "leather",
+        "metal"
+      ]
+    },
+    {
+      "id": "IA-ANIMATION",
+      "status": "verified",
+      "name": "Animation descriptor",
+      "contains": [
+        "idle",
+        "walk",
+        "four directions",
+        "frames",
+        "duration",
+        "regions"
+      ]
+    },
+    {
+      "id": "IA-PROVENANCE",
+      "status": "verified",
+      "name": "Provenance and credits",
+      "contains": [
+        "author",
+        "source",
+        "license options",
+        "chosen license",
+        "asset references"
+      ]
+    },
+    {
+      "id": "IA-EXPORT",
+      "status": "verified",
+      "name": "Export package",
+      "contains": [
+        "spritesheet",
+        "animation metadata",
+        "build manifest",
+        "credits",
+        "Godot resources when selected"
+      ]
+    }
+  ],
+  "navigation": [
+    {
+      "id": "NAV-PROJECT",
+      "status": "verified",
+      "label": "Project",
+      "destination": "VIEW-PROJECT",
+      "backBehavior": "Returns to the prior workflow view without discarding draft state"
+    },
+    {
+      "id": "NAV-COMPOSE",
+      "status": "verified",
+      "label": "Compose",
+      "destination": "VIEW-COMPOSE",
+      "backBehavior": "Project remains open"
+    },
+    {
+      "id": "NAV-THEME",
+      "status": "verified",
+      "label": "Theme",
+      "destination": "VIEW-THEME",
+      "backBehavior": "Recipe remains unchanged"
+    },
+    {
+      "id": "NAV-PREVIEW",
+      "status": "verified",
+      "label": "Preview",
+      "destination": "VIEW-PREVIEW",
+      "backBehavior": "Playback pauses only when reduced motion requires it"
+    },
+    {
+      "id": "NAV-EXPORT",
+      "status": "verified",
+      "label": "Export",
+      "destination": "VIEW-EXPORT",
+      "backBehavior": "No package is generated until commanded"
+    }
+  ],
+  "views": [
+    {
+      "id": "VIEW-PROJECT",
+      "status": "verified",
+      "name": "Project home",
+      "informationIds": [
+        "IA-PROJECT",
+        "IA-CHARACTER"
+      ],
+      "purpose": "Create, name, save, reopen, and recover local work"
+    },
+    {
+      "id": "VIEW-COMPOSE",
+      "status": "verified",
+      "name": "Composition workspace",
+      "informationIds": [
+        "IA-PROJECT",
+        "IA-CHARACTER",
+        "IA-PACK",
+        "IA-ASSET",
+        "IA-PROVENANCE"
+      ],
+      "purpose": "Choose packs and layers while inspecting compatibility and provenance"
+    },
+    {
+      "id": "VIEW-THEME",
+      "status": "verified",
+      "name": "Theme workspace",
+      "informationIds": [
+        "IA-PROJECT",
+        "IA-CHARACTER",
+        "IA-THEME"
+      ],
+      "purpose": "Apply project tokens and character overrides"
+    },
+    {
+      "id": "VIEW-PREVIEW",
+      "status": "verified",
+      "name": "Animation preview",
+      "informationIds": [
+        "IA-CHARACTER",
+        "IA-ANIMATION"
+      ],
+      "purpose": "Evaluate supported motion at pixel-perfect zoom"
+    },
+    {
+      "id": "VIEW-EXPORT",
+      "status": "verified",
+      "name": "Export and credits",
+      "informationIds": [
+        "IA-PROJECT",
+        "IA-CHARACTER",
+        "IA-ANIMATION",
+        "IA-PROVENANCE",
+        "IA-EXPORT"
+      ],
+      "purpose": "Resolve readiness, inspect credits, and produce generic or Godot packages"
+    }
+  ],
+  "uiElements": [
+    {
+      "id": "UI-NEW-PROJECT",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "button",
+      "name": "New project"
+    },
+    {
+      "id": "UI-PROJECT-NAME",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "textbox",
+      "name": "Project name"
+    },
+    {
+      "id": "UI-CANCEL-CREATE",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "button",
+      "name": "Cancel"
+    },
+    {
+      "id": "UI-CREATE-PROJECT",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "button",
+      "name": "Create project"
+    },
+    {
+      "id": "UI-RENAME-PROJECT",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "button",
+      "name": "Rename project"
+    },
+    {
+      "id": "UI-SAVE-PROJECT",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "button",
+      "name": "Save project"
+    },
+    {
+      "id": "UI-RECOVER-PROJECT",
+      "status": "verified",
+      "viewId": "VIEW-PROJECT",
+      "role": "button",
+      "name": "Restore safe project"
+    },
+    {
+      "id": "UI-PACK-SELECT",
+      "status": "verified",
+      "viewId": "VIEW-COMPOSE",
+      "role": "combobox",
+      "name": "Content pack"
+    },
+    {
+      "id": "UI-SLOT-LIST",
+      "status": "verified",
+      "viewId": "VIEW-COMPOSE",
+      "role": "tablist",
+      "name": "Character slots"
+    },
+    {
+      "id": "UI-ASSET-OPTION",
+      "status": "verified",
+      "viewId": "VIEW-COMPOSE",
+      "role": "radio",
+      "name": "Asset option"
+    },
+    {
+      "id": "UI-CLEAR-SLOT",
+      "status": "verified",
+      "viewId": "VIEW-COMPOSE",
+      "role": "button",
+      "name": "Clear selected slot"
+    },
+    {
+      "id": "UI-ASSET-DETAILS",
+      "status": "verified",
+      "viewId": "VIEW-COMPOSE",
+      "role": "region",
+      "name": "Asset details"
+    },
+    {
+      "id": "UI-COVERAGE-STATUS",
+      "status": "verified",
+      "viewId": "VIEW-COMPOSE",
+      "role": "status",
+      "name": "Composition status"
+    },
+    {
+      "id": "UI-THEME-PRESET",
+      "status": "verified",
+      "viewId": "VIEW-THEME",
+      "role": "radio",
+      "name": "Theme preset"
+    },
+    {
+      "id": "UI-TOKEN-COLOR",
+      "status": "verified",
+      "viewId": "VIEW-THEME",
+      "role": "textbox",
+      "name": "Token color"
+    },
+    {
+      "id": "UI-TOKEN-OVERRIDE",
+      "status": "verified",
+      "viewId": "VIEW-THEME",
+      "role": "checkbox",
+      "name": "Override for this character"
+    },
+    {
+      "id": "UI-RESET-OVERRIDE",
+      "status": "verified",
+      "viewId": "VIEW-THEME",
+      "role": "button",
+      "name": "Reset override"
+    },
+    {
+      "id": "UI-ANIMATION",
+      "status": "verified",
+      "viewId": "VIEW-PREVIEW",
+      "role": "radio",
+      "name": "Animation"
+    },
+    {
+      "id": "UI-DIRECTION",
+      "status": "verified",
+      "viewId": "VIEW-PREVIEW",
+      "role": "radio",
+      "name": "Direction"
+    },
+    {
+      "id": "UI-PLAYBACK",
+      "status": "verified",
+      "viewId": "VIEW-PREVIEW",
+      "role": "button",
+      "name": "Play or pause"
+    },
+    {
+      "id": "UI-SPEED",
+      "status": "verified",
+      "viewId": "VIEW-PREVIEW",
+      "role": "slider",
+      "name": "Playback speed"
+    },
+    {
+      "id": "UI-ZOOM",
+      "status": "verified",
+      "viewId": "VIEW-PREVIEW",
+      "role": "slider",
+      "name": "Preview zoom"
+    },
+    {
+      "id": "UI-READINESS",
+      "status": "verified",
+      "viewId": "VIEW-EXPORT",
+      "role": "status",
+      "name": "Export readiness"
+    },
+    {
+      "id": "UI-CREDITS",
+      "status": "verified",
+      "viewId": "VIEW-EXPORT",
+      "role": "region",
+      "name": "Credits preview"
+    },
+    {
+      "id": "UI-EXPORT-GENERIC",
+      "status": "verified",
+      "viewId": "VIEW-EXPORT",
+      "role": "button",
+      "name": "Download generic package"
+    },
+    {
+      "id": "UI-EXPORT-GODOT",
+      "status": "verified",
+      "viewId": "VIEW-EXPORT",
+      "role": "button",
+      "name": "Download Godot package"
+    }
+  ],
+  "expectedBehaviors": [
+    {
+      "id": "EB-FIRST-DIALOG",
+      "status": "verified",
+      "flowId": "TF-FIRST-PROJECT",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Activating New project opens a named dialog, focuses Project name, and leaves storage unchanged."
+    },
+    {
+      "id": "EB-FIRST-CANCEL",
+      "status": "verified",
+      "flowId": "TF-FIRST-PROJECT",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Cancel closes the dialog, returns focus to New project, and creates no project."
+    },
+    {
+      "id": "EB-FIRST-NAME",
+      "status": "verified",
+      "flowId": "TF-FIRST-PROJECT",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Project name accepts trimmed text; Create project remains disabled for whitespace-only input."
+    },
+    {
+      "id": "EB-FIRST-CREATE",
+      "status": "verified",
+      "flowId": "TF-FIRST-PROJECT",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Create project opens Project home with the exact name and a visible nonblank starter preview."
+    },
+    {
+      "id": "EB-COMPOSE-NAV",
+      "status": "verified",
+      "flowId": "TF-COMPOSE",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Compose navigation becomes current and the persistent preview remains nonblank without horizontal overflow."
+    },
+    {
+      "id": "EB-COMPOSE-PACK",
+      "status": "verified",
+      "flowId": "TF-COMPOSE",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Changing pack replaces incompatible selections with declared defaults and announces the change."
+    },
+    {
+      "id": "EB-COMPOSE-SLOT",
+      "status": "verified",
+      "flowId": "TF-COMPOSE",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Selecting each slot exposes only assets declared for that slot and identifies the selected asset."
+    },
+    {
+      "id": "EB-COMPOSE-ASSET",
+      "status": "verified",
+      "flowId": "TF-COMPOSE",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Selecting an asset changes visible preview pixels, selected state, recipe state, and status synchronously."
+    },
+    {
+      "id": "EB-EDIT-CLEAR",
+      "status": "verified",
+      "flowId": "TF-EDIT-COMPOSITION",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Clear removes an optional layer, changes preview pixels, and does not affect required layers."
+    },
+    {
+      "id": "EB-EDIT-REPLACE",
+      "status": "verified",
+      "flowId": "TF-EDIT-COMPOSITION",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Choosing another option replaces rather than stacks the slot and updates the selected control."
+    },
+    {
+      "id": "EB-ASSET-PROVENANCE",
+      "status": "verified",
+      "flowId": "TF-EDIT-COMPOSITION",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Asset details visibly names pack, author, source, chosen license, and idle/walk coverage for the selection."
+    },
+    {
+      "id": "EB-COVERAGE",
+      "status": "verified",
+      "flowId": "TF-EDIT-COMPOSITION",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Composition status lists zero blockers for a complete recipe and exact missing required slots for an incomplete recipe."
+    },
+    {
+      "id": "EB-THEME-NAV",
+      "status": "verified",
+      "flowId": "TF-THEME",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Theme navigation becomes current and exposes all six semantic token groups."
+    },
+    {
+      "id": "EB-THEME-PRESET",
+      "status": "verified",
+      "flowId": "TF-THEME",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Selecting a preset updates all token values and visibly changes the preview in one committed action."
+    },
+    {
+      "id": "EB-THEME-EDIT",
+      "status": "verified",
+      "flowId": "TF-THEME",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Entering a valid six-digit hex updates the named project token; invalid input exposes an inline error and does not change pixels."
+    },
+    {
+      "id": "EB-THEME-OVERRIDE",
+      "status": "verified",
+      "flowId": "TF-THEME",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Enabling an override stores a character value distinct from the project value and labels its source as Character."
+    },
+    {
+      "id": "EB-THEME-RESET",
+      "status": "verified",
+      "flowId": "TF-THEME",
+      "stepIds": [
+        "S5"
+      ],
+      "oracle": "Reset removes the override, restores the project token visibly, and disables Reset until another override exists."
+    },
+    {
+      "id": "EB-PREVIEW-NAV",
+      "status": "verified",
+      "flowId": "TF-PREVIEW",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Preview navigation becomes current and canvas dimensions remain stable during control changes."
+    },
+    {
+      "id": "EB-PREVIEW-ANIMATION",
+      "status": "verified",
+      "flowId": "TF-PREVIEW",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Idle exposes one stable pose; Walk advances through the declared four-frame cycle."
+    },
+    {
+      "id": "EB-PREVIEW-DIRECTION",
+      "status": "verified",
+      "flowId": "TF-PREVIEW",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Each direction control produces the declared orientation and remains selected through pause/play."
+    },
+    {
+      "id": "EB-PREVIEW-PLAY",
+      "status": "verified",
+      "flowId": "TF-PREVIEW",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Pause freezes the frame index; Play resumes from that index and accessible name reflects the next action."
+    },
+    {
+      "id": "EB-PREVIEW-SPEED",
+      "status": "verified",
+      "flowId": "TF-PREVIEW",
+      "stepIds": [
+        "S5"
+      ],
+      "oracle": "Changing speed updates the visible multiplier and measured frame interval within 20 percent."
+    },
+    {
+      "id": "EB-PREVIEW-ZOOM",
+      "status": "verified",
+      "flowId": "TF-PREVIEW",
+      "stepIds": [
+        "S6"
+      ],
+      "oracle": "Zoom changes by integer scale, uses nearest-neighbor pixels, and causes no overlap or page overflow."
+    },
+    {
+      "id": "EB-SAVE",
+      "status": "verified",
+      "flowId": "TF-SAVE-REOPEN",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Save writes the complete versioned project, changes status to Saved, and disables until another edit."
+    },
+    {
+      "id": "EB-RELOAD",
+      "status": "verified",
+      "flowId": "TF-SAVE-REOPEN",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Reload restores exact project name, selections, token values, overrides, preview state, and render hash."
+    },
+    {
+      "id": "EB-RENAME",
+      "status": "verified",
+      "flowId": "TF-SAVE-REOPEN",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Rename validates nonblank input, updates shell and saved record, and preserves character state."
+    },
+    {
+      "id": "EB-GENERIC-READY",
+      "status": "verified",
+      "flowId": "TF-EXPORT-GENERIC",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Export view shows Ready only when every required slot and provenance record is valid."
+    },
+    {
+      "id": "EB-GENERIC-DOWNLOAD",
+      "status": "verified",
+      "flowId": "TF-EXPORT-GENERIC",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Download produces one ZIP with spritesheet.png, animations.json, build-manifest.json, credits.json, and CREDITS.txt."
+    },
+    {
+      "id": "EB-GODOT-READY",
+      "status": "verified",
+      "flowId": "TF-EXPORT-GODOT",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Godot export command is enabled exactly when generic readiness passes and identifies Godot 4.x."
+    },
+    {
+      "id": "EB-GODOT-DOWNLOAD",
+      "status": "verified",
+      "flowId": "TF-EXPORT-GODOT",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Download adds character_sprite_frames.tres and README-GODOT.md whose regions and animation names match animations.json."
+    },
+    {
+      "id": "EB-CREDITS-VIEW",
+      "status": "verified",
+      "flowId": "TF-INSPECT-CREDITS",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Credits preview lists each unique selected asset source and chosen license with no unselected source."
+    },
+    {
+      "id": "EB-CREDITS-CHANGE",
+      "status": "verified",
+      "flowId": "TF-INSPECT-CREDITS",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Replacing a layer removes its obsolete source and adds the new source before export."
+    },
+    {
+      "id": "EB-RECOVERY-BLOCK",
+      "status": "verified",
+      "flowId": "TF-RECOVER",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Removing a required layer changes readiness to Blocked, lists the exact slot, and disables both downloads."
+    },
+    {
+      "id": "EB-RECOVERY-RESTORE",
+      "status": "verified",
+      "flowId": "TF-RECOVER",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Restore safe project replaces invalid state with valid defaults only after explicit activation and announces recovery."
+    },
+    {
+      "id": "EB-SECOND-PACK",
+      "status": "verified",
+      "flowId": "TF-SECOND-PACK",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Selecting the second pack updates pack ID, all compatible defaults, preview pixels, and provenance through the same controls."
+    },
+    {
+      "id": "EB-SECOND-EXPORT",
+      "status": "verified",
+      "flowId": "TF-SECOND-PACK",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "The second-pack recipe reaches Ready and downloads the same generic file contract without a pack-specific UI."
+    },
+    {
+      "id": "EB-KEYBOARD",
+      "status": "verified",
+      "flowId": "TF-KEYBOARD-JOURNEY",
+      "stepIds": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5"
+      ],
+      "oracle": "Keyboard-only interaction creates a project, changes a layer and theme, previews walk, and starts export with visible focus and no trap."
+    }
+  ],
+  "flows": [
+    {
+      "id": "TF-FIRST-PROJECT",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-FIRST-USE"
+      ],
+      "capabilityIds": [
+        "UC-CREATE-PROJECT",
+        "UC-CANCEL-CREATE"
+      ],
+      "preconditions": [
+        "No saved project"
+      ],
+      "completion": "Named project with starter render",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Activate New project",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-NEW-PROJECT",
+          "navigationId": "NAV-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-FIRST-DIALOG"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Cancel once and reopen",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-CANCEL-CREATE",
+          "expectedBehaviorIds": [
+            "EB-FIRST-CANCEL"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Enter a project name",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-PROJECT-NAME",
+          "expectedBehaviorIds": [
+            "EB-FIRST-NAME"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Create project",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-CREATE-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-FIRST-CREATE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-COMPOSE",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-COMPOSE"
+      ],
+      "capabilityIds": [
+        "UC-SELECT-PACK",
+        "UC-SELECT-LAYER"
+      ],
+      "preconditions": [
+        "Open valid project"
+      ],
+      "completion": "Complete visible recipe",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open Compose",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-COVERAGE-STATUS",
+          "navigationId": "NAV-COMPOSE",
+          "expectedBehaviorIds": [
+            "EB-COMPOSE-NAV"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Select content pack",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-PACK-SELECT",
+          "expectedBehaviorIds": [
+            "EB-COMPOSE-PACK"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Select each slot",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-SLOT-LIST",
+          "expectedBehaviorIds": [
+            "EB-COMPOSE-SLOT"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Choose an asset option",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-ASSET-OPTION",
+          "expectedBehaviorIds": [
+            "EB-COMPOSE-ASSET"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-EDIT-COMPOSITION",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-COMPOSE",
+        "SC-CREDITS"
+      ],
+      "capabilityIds": [
+        "UC-CLEAR-LAYER",
+        "UC-SEE-COVERAGE",
+        "UC-INSPECT-ASSET"
+      ],
+      "preconditions": [
+        "Complete composed character"
+      ],
+      "completion": "Edited recipe with accurate status and provenance",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Clear optional slot",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-CLEAR-SLOT",
+          "navigationId": "NAV-COMPOSE",
+          "expectedBehaviorIds": [
+            "EB-EDIT-CLEAR"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Choose replacement asset",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-ASSET-OPTION",
+          "expectedBehaviorIds": [
+            "EB-EDIT-REPLACE"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Inspect selected asset",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-ASSET-DETAILS",
+          "expectedBehaviorIds": [
+            "EB-ASSET-PROVENANCE"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Inspect composition status",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-COVERAGE-STATUS",
+          "expectedBehaviorIds": [
+            "EB-COVERAGE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-THEME",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-THEME"
+      ],
+      "capabilityIds": [
+        "UC-APPLY-THEME",
+        "UC-EDIT-TOKEN",
+        "UC-OVERRIDE-TOKEN",
+        "UC-RESET-OVERRIDE"
+      ],
+      "preconditions": [
+        "Open composed character"
+      ],
+      "completion": "Resolved project theme and optional character override",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open Theme",
+          "viewId": "VIEW-THEME",
+          "uiId": "UI-THEME-PRESET",
+          "navigationId": "NAV-THEME",
+          "expectedBehaviorIds": [
+            "EB-THEME-NAV"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Apply preset",
+          "viewId": "VIEW-THEME",
+          "uiId": "UI-THEME-PRESET",
+          "expectedBehaviorIds": [
+            "EB-THEME-PRESET"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Edit token color",
+          "viewId": "VIEW-THEME",
+          "uiId": "UI-TOKEN-COLOR",
+          "expectedBehaviorIds": [
+            "EB-THEME-EDIT"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Enable character override",
+          "viewId": "VIEW-THEME",
+          "uiId": "UI-TOKEN-OVERRIDE",
+          "expectedBehaviorIds": [
+            "EB-THEME-OVERRIDE"
+          ]
+        },
+        {
+          "id": "S5",
+          "action": "Reset character override",
+          "viewId": "VIEW-THEME",
+          "uiId": "UI-RESET-OVERRIDE",
+          "expectedBehaviorIds": [
+            "EB-THEME-RESET"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-PREVIEW",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-PREVIEW"
+      ],
+      "capabilityIds": [
+        "UC-SELECT-ANIMATION",
+        "UC-SELECT-DIRECTION",
+        "UC-CONTROL-PLAYBACK"
+      ],
+      "preconditions": [
+        "Open composed character"
+      ],
+      "completion": "Every required animation and direction inspected",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open Preview",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-ANIMATION",
+          "navigationId": "NAV-PREVIEW",
+          "expectedBehaviorIds": [
+            "EB-PREVIEW-NAV"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Select idle then walk",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-ANIMATION",
+          "expectedBehaviorIds": [
+            "EB-PREVIEW-ANIMATION"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Select every direction",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-DIRECTION",
+          "expectedBehaviorIds": [
+            "EB-PREVIEW-DIRECTION"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Pause and resume",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-PLAYBACK",
+          "expectedBehaviorIds": [
+            "EB-PREVIEW-PLAY"
+          ]
+        },
+        {
+          "id": "S5",
+          "action": "Change speed",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-SPEED",
+          "expectedBehaviorIds": [
+            "EB-PREVIEW-SPEED"
+          ]
+        },
+        {
+          "id": "S6",
+          "action": "Change zoom",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-ZOOM",
+          "expectedBehaviorIds": [
+            "EB-PREVIEW-ZOOM"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-SAVE-REOPEN",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-RETURN"
+      ],
+      "capabilityIds": [
+        "UC-SAVE-PROJECT",
+        "UC-REOPEN-PROJECT",
+        "UC-RENAME-PROJECT"
+      ],
+      "preconditions": [
+        "Modified project"
+      ],
+      "completion": "Reloaded project has identical state and render",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Save project",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-SAVE-PROJECT",
+          "navigationId": "NAV-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-SAVE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Reload page",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-SAVE-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-RELOAD"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Rename and save",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-RENAME-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-RENAME"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-EXPORT-GENERIC",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-GENERIC-EXPORT"
+      ],
+      "capabilityIds": [
+        "UC-EXPORT-GENERIC",
+        "UC-SEE-READINESS",
+        "UC-EXPORT-CREDITS"
+      ],
+      "preconditions": [
+        "Complete recipe"
+      ],
+      "completion": "Generic package downloaded and inspected",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open Export and inspect readiness",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-READINESS",
+          "navigationId": "NAV-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-GENERIC-READY"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Download generic package",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-EXPORT-GENERIC",
+          "expectedBehaviorIds": [
+            "EB-GENERIC-DOWNLOAD"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-EXPORT-GODOT",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-GODOT-EXPORT"
+      ],
+      "capabilityIds": [
+        "UC-EXPORT-GODOT",
+        "UC-SEE-READINESS",
+        "UC-EXPORT-CREDITS"
+      ],
+      "preconditions": [
+        "Complete recipe"
+      ],
+      "completion": "Godot package downloaded and fixture-validated",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Confirm Godot readiness",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-READINESS",
+          "navigationId": "NAV-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-GODOT-READY"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Download Godot package",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-EXPORT-GODOT",
+          "expectedBehaviorIds": [
+            "EB-GODOT-DOWNLOAD"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-INSPECT-CREDITS",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-CREDITS"
+      ],
+      "capabilityIds": [
+        "UC-INSPECT-CREDITS",
+        "UC-INSPECT-ASSET",
+        "UC-EXPORT-CREDITS"
+      ],
+      "preconditions": [
+        "Character uses selected layers"
+      ],
+      "completion": "Visible credits exactly match selected sources",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Inspect credits preview",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-CREDITS",
+          "navigationId": "NAV-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-CREDITS-VIEW"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Replace one layer and return",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-ASSET-OPTION",
+          "navigationId": "NAV-COMPOSE",
+          "expectedBehaviorIds": [
+            "EB-CREDITS-CHANGE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-RECOVER",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-RECOVERY"
+      ],
+      "capabilityIds": [
+        "UC-CLEAR-LAYER",
+        "UC-SEE-COVERAGE",
+        "UC-SEE-READINESS",
+        "UC-RECOVER-PROJECT"
+      ],
+      "preconditions": [
+        "Open project"
+      ],
+      "completion": "Invalid state is blocked then explicitly restored",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Remove a required layer and inspect Export",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-READINESS",
+          "navigationId": "NAV-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-RECOVERY-BLOCK"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Restore safe project",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-RECOVER-PROJECT",
+          "navigationId": "NAV-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-RECOVERY-RESTORE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-SECOND-PACK",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-SECOND-PACK"
+      ],
+      "capabilityIds": [
+        "UC-SELECT-PACK",
+        "UC-USE-SECOND-PACK"
+      ],
+      "preconditions": [
+        "Open valid project"
+      ],
+      "completion": "Second pack follows the same complete contract",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Select second pack",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-PACK-SELECT",
+          "navigationId": "NAV-COMPOSE",
+          "expectedBehaviorIds": [
+            "EB-SECOND-PACK"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Export second-pack recipe",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-EXPORT-GENERIC",
+          "navigationId": "NAV-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-SECOND-EXPORT"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-KEYBOARD-JOURNEY",
+      "status": "verified",
+      "scenarioIds": [
+        "SC-FIRST-USE",
+        "SC-COMPOSE",
+        "SC-THEME",
+        "SC-PREVIEW",
+        "SC-GENERIC-EXPORT"
+      ],
+      "capabilityIds": [
+        "UC-KEYBOARD-WORKFLOW"
+      ],
+      "preconditions": [
+        "No saved project",
+        "Keyboard input only"
+      ],
+      "completion": "Generic export command reached without pointer",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Create with keyboard",
+          "viewId": "VIEW-PROJECT",
+          "uiId": "UI-NEW-PROJECT",
+          "navigationId": "NAV-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-KEYBOARD"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Compose with keyboard",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-ASSET-OPTION",
+          "navigationId": "NAV-COMPOSE",
+          "expectedBehaviorIds": [
+            "EB-KEYBOARD"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Apply theme with keyboard",
+          "viewId": "VIEW-THEME",
+          "uiId": "UI-THEME-PRESET",
+          "navigationId": "NAV-THEME",
+          "expectedBehaviorIds": [
+            "EB-KEYBOARD"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Preview walk with keyboard",
+          "viewId": "VIEW-PREVIEW",
+          "uiId": "UI-PLAYBACK",
+          "navigationId": "NAV-PREVIEW",
+          "expectedBehaviorIds": [
+            "EB-KEYBOARD"
+          ]
+        },
+        {
+          "id": "S5",
+          "action": "Reach export with keyboard",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-EXPORT-GENERIC",
+          "navigationId": "NAV-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-KEYBOARD"
+          ]
+        }
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "OUT-TERRAIN",
+      "status": "excluded",
+      "expectation": "Generate terrain and autotiles",
+      "reason": "Reasonable for the North Star studio but not required to prove the complete character-to-engine promise",
+      "consequence": "MVP projects contain characters only",
+      "disposition": "Phase 5 second producer"
+    },
+    {
+      "id": "OUT-STRUCTURES",
+      "status": "excluded",
+      "expectation": "Generate buildings, structures, and props",
+      "reason": "Requires a distinct producer and perspective constraints unrelated to the first character journey",
+      "consequence": "No scene furnishing in MVP",
+      "disposition": "Phase 5 after terrain"
+    },
+    {
+      "id": "OUT-SCENE",
+      "status": "excluded",
+      "expectation": "Compose full scenes",
+      "reason": "One character does not need a scene graph to reach Godot",
+      "consequence": "Preview is character-only",
+      "disposition": "Phase 5 when multiple producers exist"
+    },
+    {
+      "id": "OUT-PIXEL-EDITOR",
+      "status": "excluded",
+      "expectation": "Edit or draw pixels manually",
+      "reason": "The promise is selection and semantic recoloring, not replacing a dedicated pixel editor",
+      "consequence": "Off-catalog art must be edited externally",
+      "disposition": "Phase 6"
+    },
+    {
+      "id": "OUT-ANIMATION-AUTHORING",
+      "status": "excluded",
+      "expectation": "Create or change animation frames",
+      "reason": "MVP consumes declared pack animations and only previews them",
+      "consequence": "Idle and walk timing can be selected only through pack data",
+      "disposition": "Phase 6"
+    },
+    {
+      "id": "OUT-MATERIAL-MAPS",
+      "status": "excluded",
+      "expectation": "Generate normal, specular, or emissive maps",
+      "reason": "Unlit character delivery is complete without speculative material inference",
+      "consequence": "Exports contain diffuse sprites only",
+      "disposition": "Phase 6 after manual editing"
+    },
+    {
+      "id": "OUT-MOUNTS",
+      "status": "excluded",
+      "expectation": "Build mounts or rider pairings",
+      "reason": "Requires different frames, masks, and compositing rules that do not prove the humanoid MVP",
+      "consequence": "Subject type is humanoid only",
+      "disposition": "Phase 4 after pack contract validation"
+    },
+    {
+      "id": "OUT-CREATURES",
+      "status": "excluded",
+      "expectation": "Build animals or non-humanoid creatures",
+      "reason": "Different animation contracts should be learned from a later real implementation",
+      "consequence": "No alternate skeletons",
+      "disposition": "Phase 4"
+    },
+    {
+      "id": "OUT-ADVANCED-ANIMATIONS",
+      "status": "excluded",
+      "expectation": "Preview spellcast, thrust, shoot, slash, hurt, run, climb, or jump",
+      "reason": "Idle and walk are sufficient to prove four-direction animation, export, and engine import",
+      "consequence": "Packs may carry only idle and walk in MVP",
+      "disposition": "Post-MVP content expansion"
+    },
+    {
+      "id": "OUT-WEAPONS",
+      "status": "excluded",
+      "expectation": "Use oversize animated weapons",
+      "reason": "Oversize sheets introduce frame geometry not needed by the first two animations",
+      "consequence": "Equipment is limited to non-oversize tools or decorative layers",
+      "disposition": "Phase 4"
+    },
+    {
+      "id": "OUT-CUSTOM-PACK-AUTHORING",
+      "status": "excluded",
+      "expectation": "Create, install, or validate user-authored packs",
+      "reason": "A second built-in pack proves the data boundary before exposing authoring UX",
+      "consequence": "Only bundled packs are selectable",
+      "disposition": "Phase 4"
+    },
+    {
+      "id": "OUT-UNITY",
+      "status": "excluded",
+      "expectation": "Export native Unity assets",
+      "reason": "Godot is the deliberately chosen engine proof and generic JSON remains portable",
+      "consequence": "Unity users consume the generic package manually",
+      "disposition": "Phase 4 export adapter"
+    },
+    {
+      "id": "OUT-LIVE-LINK",
+      "status": "excluded",
+      "expectation": "Automatically update a running engine project",
+      "reason": "A deterministic downloadable Godot package closes the MVP integration promise without filesystem permissions or plugins",
+      "consequence": "Users re-export after edits",
+      "disposition": "Phase 6"
+    },
+    {
+      "id": "OUT-CLI-API",
+      "status": "excluded",
+      "expectation": "Drive generation through a public CLI or API",
+      "reason": "The headless core is architecturally callable but the customer MVP is the interactive journey",
+      "consequence": "Automation is internal to tests only",
+      "disposition": "Phase 6"
+    },
+    {
+      "id": "OUT-BULK",
+      "status": "excluded",
+      "expectation": "Generate many randomized NPCs",
+      "reason": "Bulk policies and uniqueness controls are a separate user job",
+      "consequence": "Characters are composed one at a time",
+      "disposition": "Post-MVP automation stage"
+    },
+    {
+      "id": "OUT-CLOUD",
+      "status": "excluded",
+      "expectation": "Sync projects through an account or cloud service",
+      "reason": "Local persistence satisfies return use without identity, infrastructure, or privacy scope",
+      "consequence": "Projects remain in the current browser",
+      "disposition": "North Star"
+    },
+    {
+      "id": "OUT-COLLABORATION",
+      "status": "excluded",
+      "expectation": "Share or co-edit projects",
+      "reason": "The target user is solo/small-team and collaboration does not affect character correctness",
+      "consequence": "No multi-user state",
+      "disposition": "North Star"
+    },
+    {
+      "id": "OUT-MARKETPLACE",
+      "status": "excluded",
+      "expectation": "Browse or purchase community content",
+      "reason": "Pack consumption must prove stable before distribution economics",
+      "consequence": "No remote catalog",
+      "disposition": "After open pack ecosystem"
+    },
+    {
+      "id": "OUT-PROJECT-LIBRARY",
+      "status": "excluded",
+      "expectation": "Manage several saved projects in an in-app library",
+      "reason": "One named local project proves create, rename, save, reload, recovery, and deterministic rebuild without adding library lifecycle behavior",
+      "consequence": "Saving a newly created project replaces the current local saved project",
+      "disposition": "Post-MVP project-management stage"
+    },
+    {
+      "id": "OUT-MULTIPLE-CHARACTERS",
+      "status": "excluded",
+      "expectation": "Manage several character recipes inside one project",
+      "reason": "One complete character is sufficient to prove pack composition, project theming, persistence, export, and provenance end to end",
+      "consequence": "The MVP project contains one Hero recipe",
+      "disposition": "Post-MVP project-management stage"
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP-SPEC",
+      "status": "verified",
+      "dependsOn": [],
+      "traceIds": [
+        "CP-QUICK-START",
+        "CP-CREATIVE-CONTROL",
+        "CP-REPRODUCIBLE-WORK",
+        "CP-GAME-READY-DELIVERY",
+        "CP-LEGAL-CONFIDENCE",
+        "SC-FIRST-USE",
+        "SC-COMPOSE",
+        "SC-THEME",
+        "SC-PREVIEW",
+        "SC-RETURN",
+        "SC-GENERIC-EXPORT",
+        "SC-GODOT-EXPORT",
+        "SC-CREDITS",
+        "SC-RECOVERY",
+        "SC-SECOND-PACK"
+      ],
+      "gate": "Traceability validator passes"
+    },
+    {
+      "id": "WP-CORE",
+      "status": "verified",
+      "dependsOn": [
+        "WP-SPEC"
+      ],
+      "traceIds": [
+        "UC-SELECT-PACK",
+        "UC-SELECT-LAYER",
+        "UC-CLEAR-LAYER",
+        "UC-APPLY-THEME",
+        "UC-EDIT-TOKEN",
+        "UC-OVERRIDE-TOKEN",
+        "UC-RESET-OVERRIDE",
+        "UC-SEE-COVERAGE",
+        "UC-INSPECT-ASSET"
+      ],
+      "gate": "Deterministic pack, recipe, render, palette, and provenance checks pass"
+    },
+    {
+      "id": "WP-APP",
+      "status": "verified",
+      "dependsOn": [
+        "WP-CORE"
+      ],
+      "traceIds": [
+        "TF-FIRST-PROJECT",
+        "TF-COMPOSE",
+        "TF-EDIT-COMPOSITION",
+        "TF-THEME",
+        "TF-PREVIEW",
+        "TF-SAVE-REOPEN",
+        "TF-RECOVER",
+        "TF-KEYBOARD-JOURNEY"
+      ],
+      "gate": "Actual UI flows pass"
+    },
+    {
+      "id": "WP-EXPORT",
+      "status": "verified",
+      "dependsOn": [
+        "WP-CORE"
+      ],
+      "traceIds": [
+        "TF-EXPORT-GENERIC",
+        "TF-EXPORT-GODOT",
+        "TF-INSPECT-CREDITS"
+      ],
+      "gate": "Downloaded artifacts and Godot fixture pass"
+    },
+    {
+      "id": "WP-SECOND-PACK",
+      "status": "verified",
+      "dependsOn": [
+        "WP-CORE",
+        "WP-APP",
+        "WP-EXPORT"
+      ],
+      "traceIds": [
+        "TF-SECOND-PACK",
+        "UC-USE-SECOND-PACK"
+      ],
+      "gate": "Second pack completes the same UI and export contract without core branches"
+    }
+  ],
+  "runs": [
+    {
+      "id": "RUN-MVP-001",
+      "status": "verified",
+      "startedAt": "2026-07-19T11:02:36.000Z",
+      "durationMs": 13708,
+      "sourceRevision": "7d559ce plus recorded working-tree implementation",
+      "environment": {
+        "browser": "Playwright Chromium desktop plus 390x844 constrained viewport",
+        "productServer": "Vite development server owned by Playwright",
+        "engine": "Godot 4.7.1-stable official a13da4feb"
+      },
+      "flowIds": [
+        "TF-FIRST-PROJECT",
+        "TF-COMPOSE",
+        "TF-EDIT-COMPOSITION",
+        "TF-THEME",
+        "TF-PREVIEW",
+        "TF-SAVE-REOPEN",
+        "TF-EXPORT-GENERIC",
+        "TF-EXPORT-GODOT",
+        "TF-INSPECT-CREDITS",
+        "TF-RECOVER",
+        "TF-SECOND-PACK",
+        "TF-KEYBOARD-JOURNEY"
+      ],
+      "expectedBehaviorIds": [
+        "EB-FIRST-DIALOG",
+        "EB-FIRST-CANCEL",
+        "EB-FIRST-NAME",
+        "EB-FIRST-CREATE",
+        "EB-COMPOSE-NAV",
+        "EB-COMPOSE-PACK",
+        "EB-COMPOSE-SLOT",
+        "EB-COMPOSE-ASSET",
+        "EB-EDIT-CLEAR",
+        "EB-EDIT-REPLACE",
+        "EB-ASSET-PROVENANCE",
+        "EB-COVERAGE",
+        "EB-THEME-NAV",
+        "EB-THEME-PRESET",
+        "EB-THEME-EDIT",
+        "EB-THEME-OVERRIDE",
+        "EB-THEME-RESET",
+        "EB-PREVIEW-NAV",
+        "EB-PREVIEW-ANIMATION",
+        "EB-PREVIEW-DIRECTION",
+        "EB-PREVIEW-PLAY",
+        "EB-PREVIEW-SPEED",
+        "EB-PREVIEW-ZOOM",
+        "EB-SAVE",
+        "EB-RELOAD",
+        "EB-RENAME",
+        "EB-GENERIC-READY",
+        "EB-GENERIC-DOWNLOAD",
+        "EB-GODOT-READY",
+        "EB-GODOT-DOWNLOAD",
+        "EB-CREDITS-VIEW",
+        "EB-CREDITS-CHANGE",
+        "EB-RECOVERY-BLOCK",
+        "EB-RECOVERY-RESTORE",
+        "EB-SECOND-PACK",
+        "EB-SECOND-EXPORT",
+        "EB-KEYBOARD"
+      ],
+      "evidence": [
+        "playwright-results.json",
+        "report/index.html",
+        "artifacts/*/capture.json",
+        "artifacts/*/final.png",
+        "godot-validation.txt"
+      ],
+      "anomalies": []
+    }
+  ],
+  "issues": [
+    {
+      "id": "ISSUE-001",
+      "severity": 4,
+      "status": "verified",
+      "traceIds": [
+        "TF-PREVIEW",
+        "TF-SAVE-REOPEN"
+      ],
+      "disposition": "Resolved: narrowed ambiguous text locators to their owning control without changing product behavior.",
+      "verificationRunId": "RUN-MVP-001"
+    },
+    {
+      "id": "ISSUE-002",
+      "severity": 2,
+      "status": "verified",
+      "traceIds": [
+        "TF-KEYBOARD-JOURNEY",
+        "EB-KEYBOARD"
+      ],
+      "disposition": "Resolved: removed mobile top-bar and workflow-tab intrinsic widths that forced a 426px layout at a 390px viewport.",
+      "verificationRunId": "RUN-MVP-001"
+    },
+    {
+      "id": "ISSUE-003",
+      "severity": 3,
+      "status": "verified",
+      "traceIds": [
+        "TF-SAVE-REOPEN",
+        "EB-RELOAD"
+      ],
+      "disposition": "Resolved: test setup now clears storage once rather than deleting saved data on every reload.",
+      "verificationRunId": "RUN-MVP-001"
+    },
+    {
+      "id": "ISSUE-004",
+      "severity": 3,
+      "status": "verified",
+      "traceIds": [
+        "TF-SAVE-REOPEN",
+        "EB-RELOAD"
+      ],
+      "disposition": "Resolved: persistence capture waits for the selected composition render hash to commit before saving.",
+      "verificationRunId": "RUN-MVP-001"
+    },
+    {
+      "id": "ISSUE-005",
+      "severity": 2,
+      "status": "verified",
+      "traceIds": [
+        "TF-EXPORT-GODOT",
+        "EB-GODOT-DOWNLOAD"
+      ],
+      "disposition": "Resolved: fixture mirrors root package extraction and defers resource loading until Godot import remaps are initialized.",
+      "verificationRunId": "RUN-MVP-001"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "DEC-STACK",
+      "status": "verified",
+      "decision": "Use a local-first React and TypeScript Vite application with Canvas 2D, JSON contracts, Vitest, and Playwright.",
+      "reversible": true,
+      "evidence": "Browser rendering, local persistence, ZIP export, and actual-UI automation are all supported without a service."
+    },
+    {
+      "id": "DEC-CONTENT",
+      "status": "verified",
+      "decision": "Bundle two original CC0-compatible demonstration packs with complete project-authored provenance, while retaining the manifest contract needed for later reviewed LPC corpus intake.",
+      "reversible": true,
+      "evidence": "Eliminates unresolved third-party legal approval while proving composition, tokens, packs, attribution, and export end to end."
+    },
+    {
+      "id": "DEC-GODOT",
+      "status": "verified",
+      "decision": "Target Godot 4 text SpriteFrames resources in the MVP package and validate their declarations against the generic animation manifest.",
+      "reversible": true,
+      "evidence": "Text resources are diffable and require no editor plugin or manual slicing."
+    }
+  ]
+}

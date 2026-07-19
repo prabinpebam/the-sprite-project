@@ -1,0 +1,19 @@
+{
+  "modelVersion": "1.0.0",
+  "stage": { "id": "STAGE-MVP", "name": "MVP", "status": "specified" },
+  "sources": [],
+  "promises": [],
+  "scenarios": [],
+  "capabilities": [],
+  "flows": [],
+  "informationArchitecture": [],
+  "navigation": [],
+  "views": [],
+  "uiElements": [],
+  "expectedBehaviors": [],
+  "exclusions": [],
+  "workPackages": [],
+  "runs": [],
+  "issues": [],
+  "decisions": []
+}

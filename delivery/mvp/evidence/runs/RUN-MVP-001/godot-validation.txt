@@ -1,0 +1,3 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+GODOT_VALIDATION_PASS animations=8 walk_frames=4 texture=256x512 region=192,256,64,64

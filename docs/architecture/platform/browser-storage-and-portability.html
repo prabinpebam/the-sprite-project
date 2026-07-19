@@ -1,0 +1,152 @@
+<!-- Browser storage and project portability contract. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture · Platform contract</p>
+  <h1 class="slate-hero__title">Browser Storage &amp; Project Portability</h1>
+  <p class="slate-hero__summary">How local projects remain transactional, recoverable, inspectable, and portable
+     without accounts or a server database.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p><strong>IndexedDB is the canonical browser workspace.</strong> localStorage holds only preferences; optional
+     OPFS holds rebuildable large blobs; rolling snapshots protect autosave; and a versioned
+     <code>.spriteproject</code> archive lets users back up and move work independently of browser storage.</p>
+</aside>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">Browser storage is continuity, not custody</p>
+  <p>Persistence requests reduce eviction risk but cannot guarantee survival after site-data clearing, private
+     browsing, profile loss, or device failure. The product must make project archive export visible and routine.</p>
+</div>
+
+<h2>Storage ownership</h2>
+<table>
+  <thead><tr><th>Data class</th><th>Store</th><th>Authoritative?</th><th>Recovery</th></tr></thead>
+  <tbody>
+    <tr><td>Project records and recipes</td><td>IndexedDB</td><td>Yes, inside one browser profile</td><td>Snapshots and project archive</td></tr>
+    <tr><td>Project summaries and recents</td><td>IndexedDB index</td><td>Derived from projects</td><td>Rebuild index</td></tr>
+    <tr><td>Autosave snapshots</td><td>IndexedDB</td><td>Recovery history</td><td>Restore selected known-good revision</td></tr>
+    <tr><td>Pack manifests and provenance</td><td>IndexedDB</td><td>Installed local record</td><td>Reinstall from bundled file or archive</td></tr>
+    <tr><td>Pack images and large blobs</td><td>IndexedDB Blob initially; optional OPFS later</td><td>Only when imported content has no external copy</td><td>Include owned imports in archive</td></tr>
+    <tr><td>Generated thumbnails and caches</td><td>IndexedDB or OPFS</td><td>No</td><td>Regenerate deterministically</td></tr>
+    <tr><td>Theme and shell preferences</td><td>localStorage</td><td>No</td><td>Reset to defaults</td></tr>
+    <tr><td>Last-opened project pointer</td><td>localStorage</td><td>No</td><td>Open project library</td></tr>
+    <tr><td>Portable backup</td><td>Downloaded <code>.spriteproject</code></td><td>User-owned copy</td><td>Import into any compatible version</td></tr>
+  </tbody>
+</table>
+
+<h2>Repository boundary</h2>
+<p>Product code consumes asynchronous repositories rather than browser globals. This keeps project behavior testable
+   and leaves room for a future desktop repository without forking domain logic.</p>
+<pre><code>interface ProjectRepository {
+  list(): Promise&lt;ProjectSummary[]&gt;
+  create(project: SpriteProject): Promise&lt;void&gt;
+  load(id: string): Promise&lt;SpriteProject | null&gt;
+  save(project: SpriteProject, expectedRevision: number): Promise&lt;SaveResult&gt;
+  rename(id: string, name: string): Promise&lt;void&gt;
+  remove(id: string): Promise&lt;void&gt;
+  listSnapshots(id: string): Promise&lt;ProjectSnapshot[]&gt;
+  restore(id: string, snapshotId: string): Promise&lt;SpriteProject&gt;
+}
+
+interface ProjectArchiveService {
+  exportProject(id: string): Promise&lt;Uint8Array&gt;
+  inspectArchive(bytes: Uint8Array): Promise&lt;ArchiveSummary&gt;
+  importProject(bytes: Uint8Array, conflict: ConflictPolicy): Promise&lt;SpriteProject&gt;
+}</code></pre>
+
+<h2>IndexedDB logical schema</h2>
+<table>
+  <thead><tr><th>Object store</th><th>Key</th><th>Purpose</th><th>Important indexes</th></tr></thead>
+  <tbody>
+    <tr><td><code>projects</code></td><td>Project UUID</td><td>Current versioned project document and revision</td><td>name, updatedAt, pack IDs</td></tr>
+    <tr><td><code>snapshots</code></td><td>Project UUID + revision</td><td>Known-good recovery records</td><td>projectId, createdAt</td></tr>
+    <tr><td><code>packs</code></td><td>Pack ID + version</td><td>Manifest, provenance, checksums, install state</td><td>packId, installedAt</td></tr>
+    <tr><td><code>packBlobs</code></td><td>Checksum</td><td>Deduplicated images and imported binary content</td><td>pack reference count</td></tr>
+    <tr><td><code>migrations</code></td><td>Migration ID</td><td>Completed migration markers and diagnostics</td><td>completedAt</td></tr>
+    <tr><td><code>settings</code></td><td>Setting key</td><td>Larger structured settings inappropriate for localStorage</td><td>None</td></tr>
+  </tbody>
+</table>
+
+<h2>Save protocol</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Debounce edits</p><p>Collect rapid UI changes, but expose an immediate unsaved state and never hide write failures.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Validate</p><p>Validate schema, stable references, required packs, and serializability before opening the write transaction.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Check revision</p><p>Compare the expected revision to prevent an older tab from silently overwriting newer work.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Snapshot known-good state</p><p>Retain the prior valid project before replacing the current record.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Commit atomically</p><p>Write project, revision, indexes, and snapshot metadata in one IndexedDB transaction.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Verify and announce</p><p>Read back the stored revision, update visible status, and retain actionable diagnostics on failure.</p></li>
+</ol>
+
+<h2>Autosave and snapshots</h2>
+<ul>
+  <li>Autosave follows meaningful changes, not animation-frame or hover state.</li>
+  <li>Maintain a small rolling history by count and age; never let snapshots grow without a documented bound.</li>
+  <li>Create named checkpoints before schema migration, pack replacement, or destructive recovery.</li>
+  <li>Preview state may persist, but transient playback timers and derived pixels do not.</li>
+  <li>Generated output is reproducible and should not inflate project records.</li>
+  <li>Show <em>Unsaved</em>, <em>Saving</em>, <em>Saved</em>, and <em>Save failed</em> as distinct user-visible states.</li>
+</ul>
+
+<h2>Portable archive contract</h2>
+<pre><code>project-name.spriteproject
+  archive-manifest.json
+  project.json
+  packs.lock.json
+  recipes/
+  imported/
+  provenance/
+  README.txt</code></pre>
+<table>
+  <thead><tr><th>File</th><th>Rule</th></tr></thead>
+  <tbody>
+    <tr><td><code>archive-manifest.json</code></td><td>Archive format version, product version, project ID, checksums, and entry inventory.</td></tr>
+    <tr><td><code>project.json</code></td><td>Canonical versioned project data; no browser-specific keys or object URLs.</td></tr>
+    <tr><td><code>packs.lock.json</code></td><td>Exact pack IDs, versions, checksums, and whether each pack is bundled, installed, or embedded.</td></tr>
+    <tr><td><code>recipes/</code></td><td>Stable asset references and token choices, never rendered pixels as the source of truth.</td></tr>
+    <tr><td><code>imported/</code></td><td>User-owned content required to reproduce the project; omit rebuildable official pack data.</td></tr>
+    <tr><td><code>provenance/</code></td><td>Source and license records needed to preserve attribution independently of a remote URL.</td></tr>
+  </tbody>
+</table>
+
+<h2>Import and conflict handling</h2>
+<ul>
+  <li>Inspect and validate an archive before changing IndexedDB.</li>
+  <li>Reject path traversal, duplicate entries, unsupported compression, invalid checksums, and unbounded archive expansion.</li>
+  <li>Run migrations against a temporary copy; commit only after complete validation.</li>
+  <li>If the project ID already exists, offer <em>replace</em>, <em>import as copy</em>, or <em>cancel</em>; never guess.</li>
+  <li>Report missing packs before import and distinguish downloadable official packs from embedded or unavailable content.</li>
+  <li>Preserve the original archive when migration fails and provide diagnostics without exposing internal browser paths.</li>
+</ul>
+
+<h2>Quota and persistence</h2>
+<dl class="slate-defs">
+  <dt>Persistence request</dt><dd>Call <code>navigator.storage.persist()</code> after the user creates or imports meaningful work, and explain the result without promising immunity from deletion.</dd>
+  <dt>Usage estimate</dt><dd>Use <code>navigator.storage.estimate()</code> to show approximate use and quota in a storage-management view.</dd>
+  <dt>Warning thresholds</dt><dd>Warn before writes are likely to fail, prioritizing archive export and cache cleanup.</dd>
+  <dt>Eviction priority</dt><dd>Delete derived caches first, unused official pack blobs second, snapshots within policy third; never silently delete current projects or owned imports.</dd>
+  <dt>Private browsing</dt><dd>Detect or explain that storage may be temporary; encourage immediate archive export.</dd>
+</dl>
+
+<h2>Migration rules</h2>
+<ul>
+  <li>Project, pack, and archive versions are independent.</li>
+  <li>Migrations are ordered, deterministic, idempotent where practical, and covered by real old-version fixtures.</li>
+  <li>Never destructively rewrite the only valid copy; snapshot before migration.</li>
+  <li>Unsupported future versions fail closed with an explanation and preserve raw data.</li>
+  <li>Rendering after migration must reproduce the prior semantic result or record an explicit compatibility change.</li>
+</ul>
+
+<h2>Acceptance gates</h2>
+<table>
+  <thead><tr><th>ID</th><th>Objective behavior</th></tr></thead>
+  <tbody>
+    <tr><td><code>STOR-001</code></td><td>Multiple projects survive reload and browser restart with exact recipe and render hashes.</td></tr>
+    <tr><td><code>STOR-002</code></td><td>An interrupted write leaves the prior revision loadable and exposes recovery.</td></tr>
+    <tr><td><code>STOR-003</code></td><td>Archive round-trip after complete storage clearing reproduces project and export hashes.</td></tr>
+    <tr><td><code>STOR-004</code></td><td>Conflict choices produce replace, copied ID, or no change exactly as selected.</td></tr>
+    <tr><td><code>STOR-005</code></td><td>Quota pressure removes only declared disposable data and never silently loses current work.</td></tr>
+    <tr><td><code>STOR-006</code></td><td>Old fixtures migrate transactionally and a future-version fixture fails without mutation.</td></tr>
+  </tbody>
+</table>

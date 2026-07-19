@@ -1,0 +1,128 @@
+<!-- GitHub Pages deployment and PWA offline contract. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture · Platform contract</p>
+  <h1 class="slate-hero__title">GitHub Pages &amp; Offline Delivery</h1>
+  <p class="slate-hero__summary">How the product is built, hosted, updated, cached, and distributed with no
+     required application server or paid runtime infrastructure.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>GitHub Pages serves a static Vite PWA from the repository subpath. The service worker caches a versioned app
+     shell and compact official packs so installed users can work offline. No secret or server-only operation exists
+     in the bundle. Large optional packs may use GitHub Releases when repository delivery becomes unsuitable.</p>
+</aside>
+
+<h2>Zero-cost topology</h2>
+<table>
+  <thead><tr><th>Concern</th><th>Owner</th><th>Runtime cost</th></tr></thead>
+  <tbody>
+    <tr><td>Source and version history</td><td>GitHub repository</td><td>Free public repository</td></tr>
+    <tr><td>Production web files</td><td>GitHub Pages</td><td>No application-server charge</td></tr>
+    <tr><td>Application computation</td><td>User's browser</td><td>No hosted compute</td></tr>
+    <tr><td>Project database</td><td>User's IndexedDB</td><td>No hosted database</td></tr>
+    <tr><td>Offline cache</td><td>User's service-worker cache</td><td>No hosted runtime</td></tr>
+    <tr><td>Compact official packs</td><td>Versioned static files in Pages</td><td>Within repository and Pages limits</td></tr>
+    <tr><td>Larger optional packs</td><td>Public GitHub Releases when needed</td><td>No custom asset server</td></tr>
+    <tr><td>Project backup</td><td>User-downloaded archive</td><td>User-owned storage</td></tr>
+  </tbody>
+</table>
+
+<h2>Build contract</h2>
+<ul>
+  <li>Production output is static and contains no Node.js runtime dependency.</li>
+  <li>Vite uses a relative or repository-aware base path so assets resolve under <code>/the-sprite-project/</code>.</li>
+  <li>All application URLs, worker URLs, pack URLs, and icons are tested from the deployed subpath, not only <code>/</code>.</li>
+  <li>Client navigation uses static-host-compatible routing. A direct refresh may not depend on server rewrites GitHub Pages does not provide.</li>
+  <li>Builds are deterministic from the lockfile and fail on lint, type, unit, traceability, or production-bundle errors.</li>
+  <li>No environment value placed in the client bundle is treated as secret.</li>
+</ul>
+
+<h2>PWA asset classes</h2>
+<table>
+  <thead><tr><th>Class</th><th>Strategy</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td>HTML entry</td><td>Network first with cached fallback</td><td>Detect updates while retaining offline startup.</td></tr>
+    <tr><td>Hashed JavaScript and CSS</td><td>Cache first, immutable by URL</td><td>Content hashes make old and new builds coexist safely.</td></tr>
+    <tr><td>Manifest and icons</td><td>Stale while revalidate</td><td>Fast install metadata with eventual update.</td></tr>
+    <tr><td>Bundled starter packs</td><td>Cache first with checksum verification</td><td>Core creative workflows remain offline.</td></tr>
+    <tr><td>Optional pack index</td><td>Network first with last-known-good fallback</td><td>Discover updates without breaking installed content.</td></tr>
+    <tr><td>Optional pack binaries</td><td>On demand, then IndexedDB/OPFS</td><td>Avoid inflating every user's service-worker cache.</td></tr>
+    <tr><td>Generated exports</td><td>Never service-worker cached</td><td>User downloads are outputs, not application assets.</td></tr>
+  </tbody>
+</table>
+
+<h2>Offline promise</h2>
+<p>After one complete online load, the installed PWA must support every flow that does not inherently fetch a new
+   pack or open an external source link:</p>
+<ul>
+  <li>Open, create, rename, edit, autosave, recover, export, import, and delete local projects.</li>
+  <li>Use all installed packs and bundled starter content.</li>
+  <li>Compose, recolor, preview animations, inspect stored provenance, and generate generic or Godot packages.</li>
+  <li>Read local help required to complete those flows.</li>
+</ul>
+<p>Offline mode may block discovery or installation of a pack not already present. The UI must distinguish
+   <em>offline and unavailable</em> from <em>missing</em>, <em>invalid</em>, or <em>not licensed</em>.</p>
+
+<h2>Update lifecycle</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Discover</p><p>A new service worker installs beside the active version without interrupting the current session.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Protect work</p><p>Before activation, complete pending project transactions and create any migration checkpoint required.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Inform</p><p>Show the available version and whether reload is required; never replace an active editing session silently.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Activate</p><p>Reload only after user confirmation or at a safe startup boundary.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Migrate</p><p>Run transactional data migrations before opening projects; preserve the prior known-good state on failure.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Clean</p><p>Delete obsolete application caches only after the new shell starts successfully; do not delete project stores.</p></li>
+</ol>
+
+<h2>Pack distribution</h2>
+<dl class="slate-defs">
+  <dt>Bundled packs</dt><dd>Small, essential, versioned packs deployed with the application and included in the offline baseline.</dd>
+  <dt>Static pack index</dt><dd>A public JSON document containing pack ID, version, size, checksum, compatibility, source, and license summary.</dd>
+  <dt>Optional pack files</dt><dd>Immutable, versioned archives fetched on demand and verified before installation.</dd>
+  <dt>Large pack escape hatch</dt><dd>Move binaries to public GitHub Releases while keeping the index and checksums static; do not introduce a custom server only for file hosting.</dd>
+  <dt>Unavailable network</dt><dd>Installed packs continue working; unavailable remote packs retain metadata and an explicit retry state.</dd>
+</dl>
+
+<div class="slate-callout slate-callout--warning" role="note">
+  <p class="slate-callout__title">GitHub Pages is not an application backend</p>
+  <p>It cannot safely hold secrets, authenticate private content, process uploads, run jobs, coordinate collaboration,
+     or provide a transactional user database. Any future promise requiring those capabilities needs a separate ADR
+     and sustainable operating model.</p>
+</div>
+
+<h2>Privacy and security</h2>
+<ul>
+  <li>Project data and imported art are not uploaded by baseline workflows.</li>
+  <li>External source links are ordinary user-initiated navigation, not background data transfer.</li>
+  <li>Pack archives are untrusted input: validate checksums, entry paths, expansion size, manifest schema, and media formats.</li>
+  <li>Content Security Policy should restrict scripts and workers to shipped assets and disallow unexpected connections.</li>
+  <li>Telemetry is absent by default. Any later telemetry must be separately documented, disclosed, optional where appropriate, and server-funded.</li>
+  <li>Do not claim cloud backup, account recovery, or private hosting.</li>
+</ul>
+
+<h2>Operational limits</h2>
+<table>
+  <thead><tr><th>Risk</th><th>Response</th></tr></thead>
+  <tbody>
+    <tr><td>Repository or Pages size pressure</td><td>Keep the app shell compact, split optional packs, and move large immutable archives to Releases.</td></tr>
+    <tr><td>Pages bandwidth or policy pressure</td><td>Measure real use, reduce eager downloads, and revisit ADR-001 only when the free delivery model is demonstrably unsustainable.</td></tr>
+    <tr><td>Broken deployment</td><td>Retain a known-good build artifact and documented rollback commit; service-worker fallback keeps installed users productive.</td></tr>
+    <tr><td>Stale installed PWA</td><td>Show version/update state and retain compatibility with older project schemas until migration succeeds.</td></tr>
+    <tr><td>Subpath routing failure</td><td>Validate the actual Pages URL and every asset/worker request before release.</td></tr>
+    <tr><td>GitHub outage</td><td>Installed cached application and local projects continue; new installation and optional pack download wait.</td></tr>
+  </tbody>
+</table>
+
+<h2>Release gate</h2>
+<table>
+  <thead><tr><th>ID</th><th>Objective check</th></tr></thead>
+  <tbody>
+    <tr><td><code>WEB-001</code></td><td>A clean browser loads the published repository-subpath URL with zero failed application requests.</td></tr>
+    <tr><td><code>WEB-002</code></td><td>Installability audit passes with manifest, icons, secure context, and controlled service worker.</td></tr>
+    <tr><td><code>WEB-003</code></td><td>After one load, offline restart completes all declared offline task flows with zero network dependency.</td></tr>
+    <tr><td><code>WEB-004</code></td><td>An available update preserves unsaved work, activates deliberately, migrates safely, and removes only obsolete caches.</td></tr>
+    <tr><td><code>WEB-005</code></td><td>Every bundled and optional pack resolves from the Pages subpath or declared Release URL and passes checksum validation.</td></tr>
+    <tr><td><code>WEB-006</code></td><td>The production bundle contains no secret and sends no project data to an undeclared endpoint.</td></tr>
+  </tbody>
+</table>

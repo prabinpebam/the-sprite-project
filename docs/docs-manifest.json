@@ -10,6 +10,12 @@
 
     { "path": "north-star/overview.html", "title": "North Star", "order": 30, "icon": "flag", "badge": "vision" },
 
+    { "path": "architecture/overview.html", "title": "Product Architecture", "order": 35, "icon": "architecture", "badge": "current" },
+    { "path": "architecture/decisions/0001-zero-server-web-platform.html", "title": "ADR-001 - Zero-Server Web Platform", "order": 36, "badge": "accepted" },
+    { "path": "architecture/platform/browser-storage-and-portability.html", "title": "Browser Storage & Project Portability", "order": 37 },
+    { "path": "architecture/platform/github-pages-and-offline.html", "title": "GitHub Pages & Offline Delivery", "order": 38 },
+    { "path": "architecture/platform/capability-boundaries.html", "title": "Capability Boundaries", "order": 39 },
+
     { "path": "design/overview.html", "title": "North Star Details", "order": 40, "icon": "draw" },
     { "path": "design/scenarios-and-flows.html", "title": "Scenarios, Capabilities & Task Flows", "order": 40.5 },
     { "path": "design/generators/character-generator.html", "title": "Character Generator (Expanded)", "order": 41, "badge": "vision" },
@@ -34,6 +40,7 @@
     { "path": "research/art-sources/lpc-horses.html", "title": "LPC Horses & Rework", "order": 70 },
     { "path": "research/broader-libraries/kenney.html", "title": "Kenney.nl", "order": 71 },
 
-    { "path": "execution/overview.html", "title": "Build Record", "order": 90, "icon": "history", "badge": "next" }
+    { "path": "execution/overview.html", "title": "Build Record", "order": 90, "icon": "history", "badge": "active" },
+    { "path": "execution/mvp-delivery.html", "title": "MVP Delivery Tracker", "order": 91, "icon": "fact_check", "badge": "tracked" }
   ]
 }

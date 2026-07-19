@@ -1,0 +1,90 @@
+<!-- Architecture hub - durable decisions and evolving platform contracts. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture · Decision system</p>
+  <h1 class="slate-hero__title">Product Architecture</h1>
+  <p class="slate-hero__summary">Durable technical decisions, current platform contracts, and explicit triggers
+     for changing them as The Sprite Project grows from a browser MVP into a complete asset studio.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>The product is a <strong>zero-server, local-first web application hosted on GitHub Pages</strong>. Static files
+     arrive from GitHub Pages; projects, packs, rendering, autosave, and exports remain on the user's device.
+     Accepted decisions live in immutable ADRs, while platform pages document the current implementation contract.
+     Desktop and backend capabilities remain explicit future options with evidence-based adoption triggers.</p>
+</aside>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">How this section scales</p>
+  <p><code>decisions/</code> records why a choice was made and is superseded rather than rewritten.
+     <code>platform/</code> records the current operational contract and may evolve as accepted ADRs change it.
+     Product scope remains in the <a href="../mvp/overview.html">MVP</a> and
+     <a href="../north-star/overview.html">North Star</a>; verified implementation remains in
+     <a href="../execution/overview.html">Execution</a>.</p>
+</div>
+
+<h2>Current architecture</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card slate-card--interactive">
+    <a href="decisions/0001-zero-server-web-platform.html">
+      <h3 class="slate-card__title">ADR-001 · Zero-server web platform <span class="slate-badge slate-badge--success">Accepted</span></h3>
+      <p class="slate-card__body">The binding decision, alternatives considered, consequences, constraints, and
+         evidence that would justify revisiting it.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="platform/browser-storage-and-portability.html">
+      <h3 class="slate-card__title">Browser storage &amp; portability</h3>
+      <p class="slate-card__body">IndexedDB ownership, limited localStorage use, optional OPFS caching, autosave,
+         recovery, schema migration, quota handling, and portable project archives.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="platform/github-pages-and-offline.html">
+      <h3 class="slate-card__title">GitHub Pages &amp; offline delivery</h3>
+      <p class="slate-card__body">Static deployment, PWA caching, updates, pack distribution, URL constraints,
+         privacy, operational limits, and the zero-cost boundary.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
+    <a href="platform/capability-boundaries.html">
+      <h3 class="slate-card__title">Capability boundaries</h3>
+      <p class="slate-card__body">What the browser must deliver, progressive filesystem enhancements, and the
+         precise triggers for adding an optional desktop host or backend without splitting the product core.</p>
+    </a>
+  </article>
+</div>
+
+<h2>System shape</h2>
+<table>
+  <thead><tr><th>Layer</th><th>Responsibility</th><th>Current owner</th></tr></thead>
+  <tbody>
+    <tr><td>Static delivery</td><td>HTML, JavaScript, CSS, manifest, service worker, and bundled pack files</td><td>GitHub Pages</td></tr>
+    <tr><td>Product core</td><td>Project rules, pack contracts, composition, themes, provenance, and export adapters</td><td>Browser TypeScript</td></tr>
+    <tr><td>Workspace data</td><td>Projects, recipes, installed pack metadata, snapshots, and migration state</td><td>IndexedDB</td></tr>
+    <tr><td>Binary cache</td><td>Rebuildable imported pack images and generated intermediates</td><td>IndexedDB blobs or optional OPFS</td></tr>
+    <tr><td>Preferences</td><td>Theme, panel state, and last-opened project identifier</td><td>localStorage</td></tr>
+    <tr><td>User ownership</td><td>Backup, transfer, and cross-device restoration</td><td>Downloaded <code>.spriteproject</code> archive</td></tr>
+    <tr><td>Engine delivery</td><td>Generic and Godot packages generated without uploading project data</td><td>Browser download</td></tr>
+  </tbody>
+</table>
+
+<h2>Architecture principles</h2>
+<dl class="slate-defs">
+  <dt>Zero required server</dt><dd>No customer promise may silently depend on paid compute, a database, an account service, or a private API.</dd>
+  <dt>Local by default</dt><dd>Creative data remains on the device unless a future, separately accepted decision introduces an explicit transfer.</dd>
+  <dt>Portable ownership</dt><dd>Browser persistence improves continuity; a versioned project archive gives the user durable custody.</dd>
+  <dt>One product core</dt><dd>Storage, filesystem, and download behavior sit behind adapters; rendering and project rules never fork by host.</dd>
+  <dt>Progressive capability</dt><dd>Chromium-only filesystem APIs may improve a workflow but cannot become a baseline requirement.</dd>
+  <dt>Evidence before infrastructure</dt><dd>Desktop or backend investment begins only when verified user flows cannot meet their promise inside this boundary.</dd>
+</dl>
+
+<h2>Decision lifecycle</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Propose</p><p>Name the constraint, alternatives, affected promises, and objective evidence needed.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Accept or reject</p><p>Assign an ADR ID, owner, date, status, consequences, and revisit triggers.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Implement</p><p>Update platform contracts and traceable delivery scope without rewriting the historical rationale.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Verify</p><p>Exercise affected task flows in the actual delivery environment, including offline and recovery behavior.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Supersede</p><p>Keep the prior ADR intact, link the replacement, and migrate contracts and user data deliberately.</p></li>
+</ol>

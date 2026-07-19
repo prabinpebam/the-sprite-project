@@ -1,0 +1,136 @@
+<!-- ADR-001 - accepted zero-server web platform decision. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture decision · ADR-001</p>
+  <h1 class="slate-hero__title">Zero-Server Web Platform</h1>
+  <p class="slate-hero__summary">Adopt GitHub Pages as the required delivery surface and keep project storage,
+     rendering, packs, recovery, and export on the user's device without paid application infrastructure.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p><strong>Accepted on 2026-07-19.</strong> The production baseline is a static PWA hosted on GitHub Pages.
+     IndexedDB owns workspace data; localStorage owns only small preferences; portable project archives provide user
+     custody; all generation and export run client-side. Filesystem access is progressive enhancement. Electron and
+     backend services are deferred until objective task-flow evidence crosses defined revisit thresholds.</p>
+</aside>
+
+<dl class="slate-defs">
+  <dt>Decision ID</dt><dd>ADR-001</dd>
+  <dt>Status</dt><dd><span class="slate-badge slate-badge--success">Accepted</span></dd>
+  <dt>Decision date</dt><dd>2026-07-19</dd>
+  <dt>Owner</dt><dd>The Sprite Project</dd>
+  <dt>Scope</dt><dd>Product delivery, persistence, offline use, pack distribution, export, and future host boundaries</dd>
+  <dt>Supersedes</dt><dd>No prior ADR</dd>
+</dl>
+
+<h2>Context</h2>
+<p>The product needs an immediately accessible character and world-asset workspace, but the project owner cannot
+   fund application servers, databases, object-storage infrastructure, or always-on compute. The existing product
+   already composes, recolors, persists, and exports entirely in the browser. Long-term workflows may eventually
+   benefit from direct filesystem access, engine watchers, accounts, or collaboration, but those capabilities do not
+   justify making the present product dependent on infrastructure that cannot be operated sustainably.</p>
+
+<h3>Binding constraints</h3>
+<table>
+  <thead><tr><th>ID</th><th>Constraint</th><th>Architectural effect</th></tr></thead>
+  <tbody>
+    <tr><td><code>ARC-CON-001</code></td><td>No budget for required server hosting</td><td>Every baseline flow must run from static files after download.</td></tr>
+    <tr><td><code>ARC-CON-002</code></td><td>GitHub Pages is the available production host</td><td>Deployment must support a repository subpath and static routing.</td></tr>
+    <tr><td><code>ARC-CON-003</code></td><td>Users must retain creative work across sessions</td><td>Projects require transactional browser persistence, recovery, and portable backup.</td></tr>
+    <tr><td><code>ARC-CON-004</code></td><td>Projects and art should not require upload</td><td>Rendering, pack processing, provenance, and export stay client-side.</td></tr>
+    <tr><td><code>ARC-CON-005</code></td><td>Core behavior must remain extensible</td><td>Host capabilities sit behind adapters rather than entering domain code.</td></tr>
+    <tr><td><code>ARC-CON-006</code></td><td>Browser filesystem APIs are not uniform</td><td>No baseline promise may depend on a Chromium-only API.</td></tr>
+  </tbody>
+</table>
+
+<h2>Decision</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Ship a static PWA</p><p>GitHub Pages serves versioned HTML, JavaScript, CSS, the web manifest, service worker, and compact official packs.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Keep computation local</p><p>Composition, recoloring, provenance evaluation, project migration, archive creation, and engine export execute in the browser.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Use IndexedDB for workspace state</p><p>Projects, recipes, snapshots, installed pack metadata, and binary records live in transactional browser storage.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Limit localStorage</p><p>Only small non-authoritative preferences and pointers use synchronous key/value storage.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Guarantee portable custody</p><p>Users can export and import a versioned <code>.spriteproject</code> archive that does not depend on one browser profile.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Treat local filesystem access as optional</p><p>Supporting browsers may write to a user-approved directory; download and archive flows remain the cross-browser contract.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Defer infrastructure by evidence</p><p>Desktop and backend hosts require a new ADR tied to flows that demonstrably cannot meet their promise inside this platform.</p></li>
+</ol>
+
+<h2>Alternatives considered</h2>
+<table>
+  <thead><tr><th>Alternative</th><th>Decision</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td>Server-backed web application</td><td><span class="slate-badge">Rejected</span></td><td>Creates an unaffordable operational dependency for behavior already proven client-side.</td></tr>
+    <tr><td>Electron as the only product</td><td><span class="slate-badge">Rejected now</span></td><td>Adds installation, packaging, signing, and update friction before direct filesystem flows are in scope.</td></tr>
+    <tr><td>localStorage as the project database</td><td><span class="slate-badge">Rejected</span></td><td>Small synchronous storage lacks transactions, binary support, reliable indexing, and scalable recovery.</td></tr>
+    <tr><td>File System Access API as the baseline</td><td><span class="slate-badge">Rejected</span></td><td>Browser coverage is insufficient; it remains a progressive enhancement.</td></tr>
+    <tr><td>Static web plus local persistence</td><td><span class="slate-badge slate-badge--success">Accepted</span></td><td>Satisfies access, offline, privacy, export, and cost constraints with the existing product core.</td></tr>
+  </tbody>
+</table>
+
+<h2>Consequences</h2>
+<div class="slate-compare">
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Benefits</p>
+    <ul>
+      <li>Zero required runtime hosting cost</li>
+      <li>No account or network dependency for creative work</li>
+      <li>Private-by-default project data</li>
+      <li>Immediate browser access and optional PWA installation</li>
+      <li>Static deployment with a small operational surface</li>
+      <li>Shared core remains reusable by future hosts</li>
+    </ul>
+  </div>
+  <div class="slate-compare__col">
+    <p class="slate-compare__head">Costs and limits</p>
+    <ul>
+      <li>Browser storage can be cleared or denied persistence</li>
+      <li>No automatic cross-device synchronization</li>
+      <li>No continuous engine filesystem watcher</li>
+      <li>Pack sizes must respect static-site and browser-storage limits</li>
+      <li>Updates must coordinate with open local projects</li>
+      <li>Users need visible backup and recovery guidance</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Binding implementation rules</h2>
+<ul>
+  <li>Domain modules must not import IndexedDB, localStorage, service-worker, download, or filesystem APIs.</li>
+  <li>All persistent data has an explicit schema version and migration path.</li>
+  <li>Autosave uses transactional writes and never overwrites the last known-good snapshot before verification.</li>
+  <li>The product requests persistent storage but behaves correctly when the browser denies it.</li>
+  <li>Users can inspect storage status, export a backup, import a backup, and recover from an interrupted save.</li>
+  <li>The application shell and bundled starter content work offline after the first successful load.</li>
+  <li>No production secret, private key, or runtime configuration requiring secrecy enters the GitHub Pages bundle.</li>
+  <li>No product text may imply cloud backup, cross-device sync, or server custody while those capabilities do not exist.</li>
+</ul>
+
+<h2>Verification obligations</h2>
+<table>
+  <thead><tr><th>ID</th><th>Required evidence</th></tr></thead>
+  <tbody>
+    <tr><td><code>ARC-VER-001</code></td><td>Create, autosave, reload, list, rename, and delete projects through the actual deployed web UI.</td></tr>
+    <tr><td><code>ARC-VER-002</code></td><td>Export a <code>.spriteproject</code> archive, clear browser storage, import it, and reproduce the render and export hashes.</td></tr>
+    <tr><td><code>ARC-VER-003</code></td><td>Interrupt a save or migration and recover the last known-good project without silent data loss.</td></tr>
+    <tr><td><code>ARC-VER-004</code></td><td>Load once, disconnect the network, restart the installed PWA, and complete all offline-capable flows.</td></tr>
+    <tr><td><code>ARC-VER-005</code></td><td>Upgrade between two application/schema versions while preserving projects and showing update status.</td></tr>
+    <tr><td><code>ARC-VER-006</code></td><td>Verify GitHub Pages subpath asset resolution, service-worker scope, and refresh behavior.</td></tr>
+  </tbody>
+</table>
+
+<h2>Revisit triggers</h2>
+<p>This ADR remains accepted until one of these conditions is demonstrated with task-flow evidence:</p>
+<ul>
+  <li>A required workflow needs continuous filesystem watching or process control that downloads and user-approved directory access cannot satisfy.</li>
+  <li>Verified pack or project sizes repeatedly exceed browser storage and static-delivery limits for the target audience.</li>
+  <li>Cross-device recovery, collaboration, entitlement, or private distribution becomes an accepted customer promise.</li>
+  <li>GitHub Pages terms or limits no longer support the static product responsibly.</li>
+  <li>Security, accessibility, or browser support prevents a required flow from meeting its objective oracle.</li>
+</ul>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Related contracts</p>
+  <p>See <a href="../platform/browser-storage-and-portability.html">browser storage and portability</a>,
+     <a href="../platform/github-pages-and-offline.html">GitHub Pages and offline delivery</a>, and
+     <a href="../platform/capability-boundaries.html">capability boundaries</a>.</p>
+</div>

@@ -9,25 +9,34 @@
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p>The project is entering <a href="../planning/overview.html">Phase 1 · Prove the foundation</a>. No product
-  implementation is recorded yet. The <a href="../planning/agentic-execution.html">agentic execution plan</a>
-  now defines how that work is dispatched. This section grows only from verified outputs: schemas, a headless
-  composition slice, palette-mapping results, exports, tests, and decisions.</p>
+  <p>The scoped MVP is implemented and objectively verified: <strong>12 of 12 actual-UI task flows and 37 of 37
+     expected behaviors pass</strong>, two declarative packs use one renderer, generic and Godot packages download
+     through the UI, and Godot 4.7.1 loads the generated resource with exact animation and atlas assertions.</p>
 </aside>
 
-<div class="slate-callout slate-callout--info" role="note">
-  <p class="slate-callout__title">First record to create</p>
-  <p>Record WP-00 only after a clean install, all baseline checks, module-boundary validation, and the pinned
-     portable Godot version pass. The first end-to-end product record follows at WP-06: one real pack recipe
-     composed, recolored, saved, reopened, and exported with animation metadata and exact attribution.</p>
+<div class="slate-callout slate-callout--success" role="note">
+  <p class="slate-callout__title">Canonical run · RUN-MVP-001</p>
+  <p>Playwright drove every public workflow through visible controls with raw captures and screenshots, inspected
+     downloaded ZIP contents, reloaded persisted work, and checked mobile overflow. The UI-generated Godot package
+     then passed the pinned headless engine fixture. Five observed anomalies were repaired and reverified.</p>
+</div>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Inspect objective progress</p>
+  <p>The generated <a href="mvp-delivery.html">MVP Delivery Tracker</a> traces the customer promise through
+     scenarios, user-can statements, task flows, interface elements, expected behaviors, exclusions, and actual-UI
+     evidence. Its source is the machine-readable <code>delivery/mvp/traceability.json</code>.</p>
 </div>
 
 <h2>Current queue</h2>
 <table>
   <thead><tr><th>Work package</th><th>Status</th><th>Completion evidence</th></tr></thead>
   <tbody>
-    <tr><td>WP-00 · Bootstrap</td><td><span class="slate-badge slate-badge--warning">Next</span></td><td>Clean install, baseline checks, boundaries, portable Godot</td></tr>
-    <tr><td>WP-01 through WP-10</td><td><span class="slate-badge">Blocked by dependencies</span></td><td>See the work-package gates in the execution plan</td></tr>
+    <tr><td>WP-SPEC · Promise through objective behaviors</td><td><span class="slate-badge slate-badge--success">Verified</span></td><td>167 linked records; zero traceability gaps</td></tr>
+    <tr><td>WP-CORE · Packs, renderer, themes, provenance</td><td><span class="slate-badge slate-badge--success">Verified</span></td><td>Lint, five core tests, TypeScript, production build</td></tr>
+    <tr><td>WP-APP · Complete visible workflow</td><td><span class="slate-badge slate-badge--success">Verified</span></td><td>Project, compose, theme, preview, save/reopen, recovery, keyboard</td></tr>
+    <tr><td>WP-EXPORT · Generic and Godot delivery</td><td><span class="slate-badge slate-badge--success">Verified</span></td><td>ZIP inspection plus Godot 4.7.1 runtime assertions</td></tr>
+    <tr><td>WP-SECOND-PACK · Extensibility</td><td><span class="slate-badge slate-badge--success">Verified</span></td><td>Harbor Watch uses the same controls, renderer, and export contract</td></tr>
   </tbody>
 </table>
 

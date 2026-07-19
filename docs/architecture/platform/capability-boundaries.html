@@ -1,0 +1,124 @@
+<!-- Browser, progressive filesystem, desktop, and backend capability boundaries. Body fragment, one H1, TL;DR first. -->
+
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Architecture · Platform contract</p>
+  <h1 class="slate-hero__title">Capability Boundaries</h1>
+  <p class="slate-hero__summary">The baseline browser promise, optional filesystem enhancements, and the exact
+     evidence required before adding a desktop host or backend service.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p>The GitHub Pages PWA is the complete required product, not a demo. Cross-browser downloads, project archives,
+     IndexedDB, and offline use form the baseline. Chromium filesystem APIs may reduce manual steps without changing
+     the promise. Electron or a backend may be added later only behind shared adapters and only when accepted flows
+     cannot be completed reliably inside the browser boundary.</p>
+</aside>
+
+<h2>Capability tiers</h2>
+<table>
+  <thead><tr><th>Tier</th><th>Availability</th><th>Examples</th><th>Product rule</th></tr></thead>
+  <tbody>
+    <tr><td>Baseline web</td><td>Supported production browsers</td><td>Projects, packs, composition, theming, preview, archive backup, generic/Godot download, offline use</td><td>May define customer promises and completion gates.</td></tr>
+    <tr><td>Progressive web</td><td>Capability-detected browsers</td><td>User-approved directory writes, share target, file association, richer install integration</td><td>May remove friction but must retain a baseline fallback.</td></tr>
+    <tr><td>Future desktop</td><td>Optional installed host after a new ADR</td><td>Continuous watchers, direct engine live link, local subprocesses, large pack libraries</td><td>Must reuse the product core and preserve project portability.</td></tr>
+    <tr><td>Future backend</td><td>Optional funded service after a new ADR</td><td>Account sync, collaboration, private entitlements, marketplace transactions</td><td>Must have an operating budget, privacy model, migration plan, and offline degradation.</td></tr>
+  </tbody>
+</table>
+
+<h2>Baseline web contract</h2>
+<p>Every accepted product stage must remain complete on the baseline web platform unless a later ADR explicitly
+   changes the product boundary. Baseline capabilities include:</p>
+<ul>
+  <li>Open the product without installation or an account.</li>
+  <li>Create and manage local projects in IndexedDB.</li>
+  <li>Install supported public packs from static files and use installed packs offline.</li>
+  <li>Compose, edit, preview, validate provenance, and recover work locally.</li>
+  <li>Export and import portable <code>.spriteproject</code> archives.</li>
+  <li>Download generic and engine-oriented output packages.</li>
+  <li>Continue installed workflows offline after initial caching.</li>
+  <li>Inspect storage, persistence, version, and update state.</li>
+</ul>
+
+<h2>Progressive filesystem access</h2>
+<p>Where supported, the product may offer a directory picker and retain a permission handle for user-approved export.
+   This improves repeated engine delivery but does not become a required live link.</p>
+<table>
+  <thead><tr><th>Progressive action</th><th>Required fallback</th><th>Safety rule</th></tr></thead>
+  <tbody>
+    <tr><td>Write export into a selected directory</td><td>Download the same ZIP</td><td>Request access from a user gesture and show the exact destination.</td></tr>
+    <tr><td>Re-export to a retained directory handle</td><td>Choose again or download</td><td>Recheck permission before every write session.</td></tr>
+    <tr><td>Open a project archive through file association</td><td>Import file picker</td><td>Validate before modifying IndexedDB.</td></tr>
+    <tr><td>Install as a desktop-like PWA</td><td>Normal browser tab</td><td>Do not hide browser storage and backup limitations.</td></tr>
+  </tbody>
+</table>
+
+<h2>Shared host boundaries</h2>
+<pre><code>interface ProjectRepository { /* list, load, save, snapshot, restore */ }
+interface PackRepository { /* list, install, remove, read blobs */ }
+interface ExportSink { /* download or write generated files */ }
+interface PersistenceStatus { /* usage, quota, persistence, diagnostics */ }
+interface HostCapabilities {
+  directoryWrite: boolean
+  continuousWatch: boolean
+  processLaunch: boolean
+  cloudSync: boolean
+}</code></pre>
+<p>Domain and rendering modules consume project, pack, and export contracts. They do not branch on
+   <code>window.electron</code>, browser name, filesystem paths, or backend presence. The UI presents capabilities
+   from the host and always retains the documented fallback where one exists.</p>
+
+<h2>Desktop adoption triggers</h2>
+<p>A desktop host is justified only when at least one accepted user flow requires a capability below and browser
+   alternatives fail its objective oracle in representative use:</p>
+<ul>
+  <li>Continuous filesystem watching for a measured live-link workflow.</li>
+  <li>Launching or controlling a local engine, converter, or build process.</li>
+  <li>Managing project or pack data that repeatedly exceeds practical browser quotas.</li>
+  <li>Editing arbitrary local files in place where archive import/export creates unacceptable verified friction.</li>
+  <li>Operating in controlled offline environments where browser installation and storage policy cannot be relied on.</li>
+</ul>
+<p>Installer size, memory, packaging, signing, notarization, update hosting, security boundaries, and cross-platform
+   validation become part of that decision. GitHub Releases may distribute binaries without a custom server, but
+   signing and maintenance costs still require an explicit sustainable plan.</p>
+
+<h2>Backend adoption triggers</h2>
+<p>A backend is not justified by rendering, export, public pack discovery, or static documentation. It becomes a
+   candidate only when an accepted promise requires one or more of:</p>
+<ul>
+  <li>Automatic cross-device project synchronization or account recovery.</li>
+  <li>Concurrent collaboration, comments, shared history, or team permissions.</li>
+  <li>Private pack access, purchases, subscriptions, or entitlement enforcement.</li>
+  <li>Marketplace submissions requiring moderation and transaction records.</li>
+  <li>Server-owned jobs that cannot run acceptably or securely on the user's device.</li>
+</ul>
+<p>Before acceptance, a backend ADR must name funding, operator, data retention, privacy, authentication, abuse
+   response, backup, incident recovery, shutdown/export strategy, and behavior when the service is unavailable.</p>
+
+<h2>What remains deliberately absent</h2>
+<table>
+  <thead><tr><th>Capability</th><th>Current behavior</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Cloud backup</td><td>User exports a project archive</td><td>No backend or account promise exists.</td></tr>
+    <tr><td>Cross-device sync</td><td>User transfers and imports an archive</td><td>Manual portability is complete without recurring infrastructure.</td></tr>
+    <tr><td>Continuous Godot live link</td><td>User downloads or progressively writes a Godot package</td><td>Browser watchers and process control are not portable.</td></tr>
+    <tr><td>Private marketplace</td><td>Public static packs only</td><td>Entitlements and transactions require funded services.</td></tr>
+    <tr><td>Public CLI</td><td>Internal headless core supports automated validation</td><td>A user-facing CLI distribution and filesystem contract is separately scoped.</td></tr>
+  </tbody>
+</table>
+
+<h2>Decision test</h2>
+<ol class="slate-steps">
+  <li class="slate-step"><p class="slate-step__title">Name the user promise</p><p>Infrastructure cannot be proposed without a traceable scenario and task flow.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Try the baseline</p><p>Measure the GitHub Pages PWA flow with the real data size, browser, and downstream tool.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Try progressive capability</p><p>Use optional browser APIs only when a complete fallback remains viable.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Prove the gap</p><p>Capture objective failure or unacceptable friction rather than assuming native or cloud is better.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Price the lifecycle</p><p>Include build, signing, security, operations, migration, support, and shutdown, not only initial implementation.</p></li>
+  <li class="slate-step"><p class="slate-step__title">Write the next ADR</p><p>Define shared adapters, data portability, fallbacks, and supersession of affected rules before implementation.</p></li>
+</ol>
+
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Default answer</p>
+  <p>When evidence is incomplete, improve the static PWA and project portability first. Infrastructure is a response
+     to a proven product constraint, not a prerequisite for ambition.</p>
+</div>

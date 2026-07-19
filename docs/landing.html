@@ -5,16 +5,16 @@
 <header class="slate-hero">
   <p class="slate-hero__eyebrow">The Sprite Project</p>
     <h1 class="slate-hero__title">Build Now, Grow Toward the Vision</h1>
-    <p class="slate-hero__summary">A focused character-generator MVP starts implementation now while shared contracts
-      preserve a path to the complete world-asset studio.</p>
+    <p class="slate-hero__summary">A verified character-generator MVP runs as a zero-server, local-first web app
+      while shared contracts preserve a path to the complete world-asset studio.</p>
 </header>
 
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
-  <p>The documentation separates <strong>what we build now</strong> from <strong>where the product is going</strong>.
-      The active MVP delivers one character-to-Godot journey through an agent-owned, evidence-gated execution plan.
-      The roadmap then expands it through packs, world generators, composition, editing, lighting, and automation.
-      Research and detailed design remain the evidence and reference behind those decisions.</p>
+    <p>The documentation separates <strong>verified product scope</strong>, <strong>current architecture</strong>, and
+      <strong>long-term direction</strong>. The MVP completes one character-to-Godot journey. ADR-001 fixes the
+      sustainable delivery model: GitHub Pages, local browser storage, offline use, and no required server. The
+      roadmap expands only through evidence-gated stages.</p>
 </aside>
 
 <h2>Two horizons, one product</h2>
@@ -71,15 +71,22 @@
     </a>
   </article>
   <article class="slate-card slate-card--interactive">
+    <a href="architecture/overview.html">
+      <h3 class="slate-card__title">4 · Product architecture <span class="slate-badge slate-badge--success">Current</span></h3>
+      <p class="slate-card__body">Accepted decisions and operational contracts for zero-server hosting, IndexedDB,
+         portable projects, offline delivery, and future platform boundaries.</p>
+    </a>
+  </article>
+  <article class="slate-card slate-card--interactive">
     <a href="north-star/overview.html">
-      <h3 class="slate-card__title">4 · North Star <span class="slate-badge slate-badge--info">Long term</span></h3>
+      <h3 class="slate-card__title">5 · North Star <span class="slate-badge slate-badge--info">Long term</span></h3>
       <p class="slate-card__body">The durable product promise, complete capability horizon, shared architecture,
          and principles that keep incremental delivery pointed at one destination.</p>
     </a>
   </article>
   <article class="slate-card slate-card--interactive">
     <a href="research/overview.html">
-      <h3 class="slate-card__title">5 · Evidence &amp; detailed design</h3>
+      <h3 class="slate-card__title">6 · Evidence &amp; detailed design</h3>
       <p class="slate-card__body">Research on the LPC ecosystem and indie workflow, plus detailed proposals for
          every generator and shared system in the long-term product.</p>
     </a>
@@ -92,6 +99,9 @@
   <dd><code>mvp/</code> is the active product boundary; <code>north-star/</code> protects the complete destination.</dd>
   <dt>Sequencing</dt>
   <dd><code>planning/</code> contains delivery phases and evidence-based exit gates, beginning with implementation now.</dd>
+  <dt>Architecture</dt>
+  <dd><code>architecture/decisions/</code> preserves accepted rationale; <code>architecture/platform/</code> defines
+    the current storage, delivery, offline, and host contracts.</dd>
   <dt>Supporting knowledge</dt>
   <dd><code>research/</code> is the evidence base; <code>design/</code> contains detailed long-term proposals;
     <code>execution/</code> records what is actually built.</dd>
@@ -103,7 +113,7 @@
 </dl>
 
 <div class="slate-callout slate-callout--tip" role="note">
-  <p class="slate-callout__title">Immediate action</p>
-  <p>Begin <a href="planning/agentic-execution.html">WP-00 · Bootstrap</a>, then dispatch Phase 1 from the structured
-     work graph through the deterministic headless-delivery gate.</p>
+  <p class="slate-callout__title">Current platform decision</p>
+  <p>Read <a href="architecture/decisions/0001-zero-server-web-platform.html">ADR-001 · Zero-Server Web Platform</a>
+     before changing persistence, pack delivery, offline behavior, filesystem access, or deployment.</p>
 </div>

@@ -15,10 +15,24 @@
      The MVP is the first product on the platform, not a disposable prototype or a miniature of every idea.</p>
 </aside>
 
+<div class="slate-callout slate-callout--tip" role="note">
+  <p class="slate-callout__title">Verified implementation</p>
+  <p>The complete scoped journey is implemented in <code>product/</code>. The generated
+     <a href="../execution/mvp-delivery.html">MVP Delivery Tracker</a> records 12 passing actual-UI task flows,
+     37 verified behavior oracles, real Godot 4 import evidence, and every deliberate exclusion.</p>
+</div>
+
 <div class="slate-callout slate-callout--info" role="note">
   <p class="slate-callout__title">The scope rule</p>
   <p>Include a capability only when it is required to complete the character-to-engine journey or to prove a
      shared contract needed by the <a href="../north-star/overview.html">North Star</a>.</p>
+</div>
+
+<div class="slate-callout slate-callout--info" role="note">
+  <p class="slate-callout__title">Delivery architecture</p>
+  <p>The sustainable production host is defined by
+     <a href="../architecture/decisions/0001-zero-server-web-platform.html">ADR-001</a>: a static GitHub Pages PWA,
+     transactional browser storage, portable project archives, and no required backend.</p>
 </div>
 
 <h2>The one journey</h2>
@@ -36,8 +50,8 @@
 <div class="slate-card-grid" data-cols="2">
   <article class="slate-card">
     <h3 class="slate-card__title">Local projects</h3>
-    <p class="slate-card__body">Create, rename, save, reopen, and deterministically rebuild a project containing
-       multiple character recipes and one shared theme.</p>
+     <p class="slate-card__body">Create, rename, save, reopen, recover, and deterministically rebuild one local
+       project containing one character recipe and one shared theme.</p>
   </article>
   <article class="slate-card">
     <h3 class="slate-card__title">Pack-driven catalog</h3>
@@ -46,8 +60,8 @@
   </article>
   <article class="slate-card">
     <h3 class="slate-card__title">Character composition</h3>
-    <p class="slate-card__body">One humanoid body type with skin, hair, headwear, torso, legs, feet, and a small
-       tool or weapon selection. Pack data controls compatibility and draw order.</p>
+     <p class="slate-card__body">One humanoid body type with body, hair, optional headwear, torso, legs, and feet.
+       Pack data controls animation coverage, semantic colors, provenance, defaults, and draw order.</p>
   </article>
   <article class="slate-card">
     <h3 class="slate-card__title">Animation preview</h3>
