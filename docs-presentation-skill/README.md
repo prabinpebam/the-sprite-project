@@ -32,7 +32,7 @@ docs-presentation-skill/
   demo/             # a runnable content root that exercises the framework
   components/       # component catalog: one example per component (few-shot patterns)
   templates/        # page + landing scaffolds the agent fills in
-  visualization/    # SVG-first static authoring + specialist AntV knowledge (MIT where noted)
+  visualization/    # singular progressive SVG visualization pipeline
   assets/icons/     # system icon set (no emoji)
   schema/           # JSON Schemas for manifest + config
   examples/         # a worked before/after conversion + example manifest

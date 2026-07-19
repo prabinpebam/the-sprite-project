@@ -15,8 +15,8 @@ Edit `theme.json` to change:
 
 Start from the complete contract and preset values in:
 
-- `docs-presentation-skill/visualization/skills/svg-theme-system/assets/theme-template.json`
-- `docs-presentation-skill/visualization/skills/svg-theme-system/assets/presets.json`
+- `docs-presentation-skill/visualization/skills/svg-illustration/assets/theme-template.json`
+- `docs-presentation-skill/visualization/skills/svg-illustration/assets/presets.json`
 
 Theme changes do not alter labels, data, geometry, or factual colors such as the documented LPC ramps and shadow
 swatches.
@@ -24,7 +24,7 @@ swatches.
 ## Validate and Generate
 
 ```powershell
-python docs-presentation-skill/visualization/skills/svg-theme-system/scripts/validate_theme.py `
+python docs-presentation-skill/visualization/skills/svg-illustration/scripts/validate_theme.py `
   docs/assets/illustrations/theme.json
 
 python docs/assets/illustrations/generate.py --modes light dark

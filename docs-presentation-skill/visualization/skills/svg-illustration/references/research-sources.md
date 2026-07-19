@@ -66,6 +66,16 @@ must not be copied into deliverables without following their licenses.
 - Contribution: choose the rendering technology from the visual task; progressive skill loading; sandboxed previews;
   responsive sizing; theme support; separation of static SVG, interactive HTML, charts, Canvas, networks, and 3D.
 
+### AntV visualization skills
+
+- Source: <https://github.com/antvis/chart-visualization-skills>
+- Contribution retained: chart opportunity and form selection; scales and visual channels; explicit data
+  transforms; label collision strategy; small-multiple composition; graph-layout choice from topology; pivot-table
+  judgment; interactive-versus-static routing.
+- Consolidation choice: library APIs, generated-chart wrappers, editor-specific configuration, and hundreds of
+  implementation references were removed. Their useful general principles were rewritten in original form in
+  [data visualization](data-visualization.md).
+
 ## Libraries and Systems Reviewed
 
 ### Rough.js
@@ -91,6 +101,16 @@ must not be copied into deliverables without following their licenses.
 - Source: <https://github.com/svg/svgo>
 - Contribution: post-approval optimization should be configurable and must preserve `viewBox`, accessibility,
   references, and editability required by the delivery contract.
+
+### HyperFrames
+
+- Source: <https://github.com/heygen-com/hyperframes>
+- License: Apache-2.0.
+- Contribution retained: atomic motion vocabulary; time-coded phases; deterministic and seek-safe states; explicit
+  first/proof/final poses; staged reveals instead of front-loading; small motion-rule sets; compositor-friendly
+  channels; restrained easing and stagger; stillness as a design choice; frame sampling and bounding-box diagnostics.
+- Consolidation choice: no HyperFrames runtime, adapters, recipes, or source code are vendored. The SVG-specific
+  synthesis lives in [motion and animation](motion-and-animation.md).
 
 ## Standards and Authoritative Guidance
 
@@ -123,17 +143,20 @@ must not be copied into deliverables without following their licenses.
 
 ## What This Skill Adds
 
-The sources tend to specialize in one of four areas: dependable SVG syntax, iterative drawing, programmatic art,
-or formal diagrams. This skill combines those strengths with an original end-to-end model:
+The sources tend to specialize in dependable SVG syntax, iterative drawing, programmatic art, statistical charts,
+formal diagrams, themes, or motion. This skill combines those strengths with an original end-to-end model:
 
 1. route by the hardest representational problem;
 2. establish a production profile before selecting SVG features;
 3. model source truth and write a visual thesis;
 4. map conceptual verbs to spatial structures;
 5. use construction methods appropriate to diagrams, subjects, scenes, maps, icons, and generative work;
-6. validate markup and accessibility semantics;
-7. render in context and inspect conceptual as well as visual defects;
-8. optimize only after approval and preserve the editable master.
+6. select honest data encodings, scales, transforms, and graph/table structures;
+7. apply customizable semantic themes without changing content or geometry;
+8. add optional deterministic motion only when time clarifies the message;
+9. validate markup and accessibility semantics;
+10. render in context and inspect conceptual, visual, and temporal defects;
+11. optimize only after approval and preserve the editable master.
 
 The result is intentionally broader than an infographic template library and more art-directed than a generic
 diagram grammar, while retaining explicit escape routes to those tools when they are the better engine.

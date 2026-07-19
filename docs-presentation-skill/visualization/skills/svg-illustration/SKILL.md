@@ -1,6 +1,6 @@
 ---
 name: svg-illustration
-description: "Create polished, accessible, themeable SVG illustrations across conceptual diagrams, technical architecture, processes, infographics, editorial scenes, people, objects, maps, icons, patterns, and generative compositions. Use when a visual needs custom art direction, precise vector layout, reusable SVG, light/dark or brand themes, or a static illustration beyond standard charts. Routes to better tools when SVG is not the right medium. Requires concept-first composition, target compatibility, deterministic markup, and render-inspect-fix validation."
+description: "Singular visual pipeline for identifying visualization opportunities and creating polished, accessible, themeable, optionally animated SVGs: charts, data stories, diagrams, architecture, processes, infographics, editorial scenes, people, objects, maps, icons, patterns, and generative work. Use for visual explanation, custom vector art, deterministic data figures, brand/light/dark themes, visual personality, or tasteful SVG motion. Routes away when SVG is not the right medium and requires render-inspect-fix validation."
 ---
 
 # SVG Illustration
@@ -23,7 +23,9 @@ boxes. The geometry, hierarchy, color, and reading path must express the subject
 
 ## Route the Request
 
-Read [visual routing](./references/visual-routing.md) before choosing a format.
+Read [visual routing](./references/visual-routing.md) before choosing a format. If source material contains
+quantities, trends, distributions, flows, networks, or multidimensional analysis, also read
+[data visualization](./references/data-visualization.md) before selecting an encoding.
 
 Use this skill for custom static or lightly animated vector work where art direction and exact composition matter:
 
@@ -56,9 +58,10 @@ Before authoring, identify the destination. Ask only if the target changes the i
 | `icon` | Pixel-grid-aware viewBox, minimal paths, no text, tested at each target size |
 
 Read [production and embedding](./references/production-and-embedding.md) for exact constraints.
-For customizable colors, light/dark modes, and casual/formal/sharp/simple/friendly personalities, use the sibling
-[SVG theme system](../svg-theme-system/SKILL.md). It owns semantic color and appearance parameters; this skill keeps
-ownership of content, composition, and geometry.
+For customizable colors, light/dark modes, and casual/formal/sharp/simple/friendly personalities, read the internal
+[theme contract](./references/theme-contract.md). Keep semantic theme values separate from content and geometry.
+For optional animation, read [motion and animation](./references/motion-and-animation.md) only after the static
+composition is approved.
 
 ## Required Workflow
 
@@ -82,6 +85,7 @@ Visual form / metaphor:
 Production profile and final size:
 Color theme and required modes:
 Visual personality / preset:
+Motion purpose and runtime (or static):
 Accessibility mode: informative | complex | decorative
 ```
 
@@ -94,10 +98,12 @@ Use [composition and layout](./references/composition-and-layout.md).
 - Establish hierarchy with position and scale first, then typography and color.
 - Allocate safe margins and label space. Avoid uniform card grids unless equal comparison is genuinely the message.
 - For dense material, use multi-zoom structure: overview, grouped regions, then evidence-level detail.
+- For measured data, declare scale, domain, ordering, units, transformations, uncertainty, and qualitative versus
+   quantitative status before drawing marks.
 
 ### 4. Choose a visual language
 
-- Use `svg-theme-system` when the visual must be customizable or support multiple modes. Keep semantic theme values
+- Use the theme contract when the visual must be customizable or support multiple modes. Keep semantic theme values
    separate from content and geometry.
 - Derive a small palette from the product or subject; assign colors semantic roles rather than scattering literals.
 - Define type roles, spacing unit, stroke family, corner language, icon style, and depth model, or select a documented
@@ -107,7 +113,16 @@ Use [composition and layout](./references/composition-and-layout.md).
 - If illustrating a real subject, use [illustration techniques](./references/illustration-techniques.md): silhouette,
   proportions, anatomy/construction, perspective, overlap, lighting, then detail.
 
-### 5. Construct in semantic layers
+### 5. Plan optional motion
+
+- Finish and approve the static visual first.
+- State what motion proves: sequence, causality, state, direction, hierarchy, or attention.
+- Compose two to four atomic moves: establish, ordered reveal/change, proof emphasis, settle/hold.
+- Choose CSS, WAAPI, SMIL, or a host timeline from the production profile; use one deterministic clock.
+- Define first, proof, final, and reduced-motion states before implementation.
+- Avoid ambient wobble, infinite decorative loops, random timing, and layout-property animation.
+
+### 6. Construct in semantic layers
 
 Use stable, readable IDs and group by meaning rather than by element type.
 
@@ -138,12 +153,13 @@ Construction rules:
    data are the editable master; generated markup may be compact. Optimize delivery output only after validation.
 - For repeated or mathematical geometry, generate deterministically with fixed inputs and a fixed random seed.
 
-### 6. Validate structure
+### 7. Validate structure
 
 Run the bundled validator:
 
 ```powershell
 python scripts/validate_svg.py path/to/illustration.svg --profile docs-inline
+python scripts/validate_theme.py path/to/theme.json
 ```
 
 Profiles: `docs-inline`, `web-inline`, `standalone`, `office`, `print`, `icon`.
@@ -151,7 +167,7 @@ Profiles: `docs-inline`, `web-inline`, `standalone`, `office`, `print`, `icon`.
 Fix malformed XML, duplicate IDs, dangling references, unsafe external resources, missing accessible names, and
 profile violations before visual review. The validator is a baseline, not proof of quality.
 
-### 7. Render, inspect, and revise
+### 8. Render, inspect, and revise
 
 This step is mandatory.
 
@@ -159,7 +175,8 @@ This step is mandatory.
 2. Capture a PNG preview and inspect it visually.
 3. Test the smallest expected display size and at least one large size.
 4. For theme-aware work, test light, dark, and print/high-contrast contexts as applicable.
-5. Revise and repeat. Allow up to three focused correction rounds before reconsidering the composition.
+5. For animated work, capture first, proof, overlap/handoff, final-minus-hold, final, and reduced-motion states.
+6. Revise and repeat. Allow up to three focused correction rounds before reconsidering the composition.
 
 Inspect for:
 
@@ -174,7 +191,7 @@ Inspect for:
 
 Read [accessibility and validation](./references/accessibility-and-validation.md) for the full review protocol.
 
-### 8. Optimize and deliver
+### 9. Optimize and deliver
 
 - Remove editor metadata, unused definitions, hidden leftovers, and accidental precision.
 - Preserve `viewBox`, accessible naming, meaningful IDs, and editability unless the target forbids them.
@@ -197,14 +214,17 @@ Do not finish until every applicable statement is true:
 - The SVG is responsive, self-contained as required, and valid for its target profile.
 - Informative SVGs have a short accessible name; complex SVGs also have an adjacent structured description.
 - Animation is optional, purposeful, and has a reduced-motion/static fallback.
+- Data encodings, transforms, scales, and labels reproduce the source truth without invented precision.
 - The actual render has been inspected and corrected; no clipping, overlap, broken references, or blank output remains.
 
 ## References
 
 - [Visual routing](./references/visual-routing.md): choose SVG versus diagrams, charts, HTML, Canvas, or 3D.
+- [Data visualization](./references/data-visualization.md): find opportunities; choose encodings, scales, transforms, graph layouts, and analytical tables.
 - [Composition and layout](./references/composition-and-layout.md): visual arguments, hierarchy, patterns, geometry, and text.
 - [Illustration techniques](./references/illustration-techniques.md): organic subjects, objects, environments, perspective, and generative work.
 - [Production and embedding](./references/production-and-embedding.md): renderer profiles, responsive SVG, animation, optimization, and export.
-- [SVG theme system](../svg-theme-system/SKILL.md): customizable semantic colors, light/dark variants, and visual personalities.
+- [Theme contract](./references/theme-contract.md): customizable semantic colors, light/dark variants, and visual personalities.
+- [Motion and animation](./references/motion-and-animation.md): tasteful deterministic SVG choreography and frame validation.
 - [Accessibility and validation](./references/accessibility-and-validation.md): semantics, long descriptions, contrast, motion, and visual QA.
 - [Research sources](./references/research-sources.md): reviewed skills, frameworks, standards, and the ideas synthesized from each.
