@@ -35,6 +35,12 @@ Product owner approves the product direction. Architecture details remain subjec
 
 `specified` after traceability, impact, architecture, and execution plans pass validation. Implementation is a subsequent stage and must not be inferred from specification approval.
 
+## Binding Technical Sources
+
+- `implementation-contract.md` owns project schema version 2, legacy migration, repository revisions, snapshot/quota policy, archive limits, conflict semantics, Electron bridge/path authority, error codes, accessibility, and distribution details.
+- `quality-scenarios.md` owns measurable cross-cutting correctness, durability, security, compatibility, accessibility, capacity, performance, offline, release, and maintainability scenarios.
+- The implementation contract resolves details inside the accepted promise. It does not expand the user-facing product boundary or change the rollback baseline.
+
 ## Amendment A · Same project file on both hosts
 
 Owner clarification received 2026-07-19: files saved from web and Electron must be mutually compatible.

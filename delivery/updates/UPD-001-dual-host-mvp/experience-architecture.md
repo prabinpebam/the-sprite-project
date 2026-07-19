@@ -6,7 +6,7 @@
 |---|---|---|---|
 | IA-HOST | Host context | host type, version, capabilities, distribution channel | specified |
 | IA-PROJECT-SUMMARY | Project summary | stable ID, name, updated time, pack state, revision, recovery state | specified |
-| IA-PROJECT-DOCUMENT | Canonical project document | schema version, recipes, theme, pack locks, provenance references | specified |
+| IA-PROJECT-DOCUMENT | Canonical project document | schema version 2, stable project ID, active recipe ID, ordered recipe IDs, exact pack-lock references, theme, preview, timestamps, integer revision, provenance references | specified |
 | IA-PROJECT-REPOSITORY | Project repository | projects, revisions, snapshots, migration state | specified |
 | IA-PROJECT-ARCHIVE | Portable project archive | manifest, project, pack locks, owned imports, provenance, checksums | specified |
 | IA-PROJECT-FOLDER | Desktop project folder | project JSON, pack lock, recipes, imports, exports, cache | specified |
@@ -36,6 +36,9 @@
 | VIEW-EXPORT | Export | Generate downloads or direct desktop directory output | `IA-PROJECT-DOCUMENT`, `IA-EXPORT-DESTINATION` | specified |
 | VIEW-DESKTOP-FILE | Desktop file operations | Create, open, save, relocate, and archive local project folders | `IA-PROJECT-FOLDER`, `IA-PROJECT-SUMMARY` | specified |
 | VIEW-UNSAVED-DIALOG | Unsaved changes confirmation | Resolve Save, Discard, or Cancel before close | `IA-PROJECT-DOCUMENT`, `IA-STORAGE-STATUS` | specified |
+| VIEW-MIGRATION-RECOVERY | Legacy project migration | Show migration status and preserve/download legacy recovery data when migration cannot complete | `IA-PROJECT-DOCUMENT`, `IA-PROJECT-REPOSITORY`, `IA-STORAGE-STATUS` | specified |
+| VIEW-SNAPSHOT-RESTORE | Snapshot recovery | List known-good revisions and confirm restoration without losing the current graph | `IA-PROJECT-DOCUMENT`, `IA-PROJECT-REPOSITORY` | specified |
+| VIEW-SAVE-CONFLICT | Save conflict resolution | Resolve web revision or desktop fingerprint mismatch without silent overwrite | `IA-PROJECT-DOCUMENT`, `IA-STORAGE-STATUS` | specified |
 
 ## UI Inventory
 
@@ -67,6 +70,12 @@
 | UI-EXPORT-GODOT | `VIEW-EXPORT` | button | Export Godot files | specified |
 | UI-CLOSE-WINDOW | `VIEW-WORKSPACE` | button | Close window | specified |
 | UI-UNSAVED-CHOICE | `VIEW-UNSAVED-DIALOG` | group | Save Discard or Cancel | specified |
+| UI-MIGRATION-STATUS | `VIEW-MIGRATION-RECOVERY` | status | Project storage migration status | specified |
+| UI-MIGRATION-RECOVERY | `VIEW-MIGRATION-RECOVERY` | group | Migration recovery actions | specified |
+| UI-SNAPSHOT-LIST | `VIEW-SNAPSHOT-RESTORE` | list | Project recovery snapshots | specified |
+| UI-SNAPSHOT-RESTORE | `VIEW-SNAPSHOT-RESTORE` | button | Restore selected snapshot | specified |
+| UI-SAVE-CONFLICT | `VIEW-SAVE-CONFLICT` | group | Resolve save conflict | specified |
+| UI-STORAGE-RECOVERY | `VIEW-STORAGE` | group | Storage recovery actions | specified |
 
 ## Objective Expected Behaviors
 
@@ -81,6 +90,18 @@
 | EB-WEB-AUTOSAVE-COMMIT | `TF-WEB-AUTOSAVE-REOPEN` | `S2` | One atomic IndexedDB transaction advances revision, retains the prior known-good snapshot, and changes status to Saved only after read-back. | specified |
 | EB-WEB-AUTOSAVE-REOPEN | `TF-WEB-AUTOSAVE-REOPEN` | `S3` | Browser reload restores exact project ID, recipe, theme, preview state, revision, and render hash. | specified |
 | EB-WEB-STORAGE-STATUS | `TF-WEB-AUTOSAVE-REOPEN` | `S4` | Storage view reports IndexedDB location, persistence result, approximate usage and quota, latest revision, and snapshot time without promising cloud backup. | specified |
+| EB-WEB-MIGRATION-DETECT | `TF-WEB-LEGACY-MIGRATION` | `S1` | Startup with the exact legacy key and no verified marker announces Upgrading project storage before the library opens; startup without that state performs no migration. | specified |
+| EB-WEB-MIGRATION-COMMIT | `TF-WEB-LEGACY-MIGRATION` | `S2` | One IndexedDB transaction writes the schema-version-2 project, sole recipe, exact pack lock, untouched legacy recovery bytes, and pending marker while preserving all version-1 identity and creative values. | specified |
+| EB-WEB-MIGRATION-VERIFY | `TF-WEB-LEGACY-MIGRATION` | `S3` | Read-back validation proves semantic, render, credits, animation, and Godot parity before marking migration verified and removing the legacy project key; a subsequent start performs no second migration. | specified |
+| EB-WEB-MIGRATION-FAILURE | `TF-WEB-LEGACY-MIGRATION` | `S4` | Parse, validation, pack, quota, transaction, interruption, or parity failure commits no new current project, retains the legacy key unchanged, announces the stable error, and makes Retry and Download recovery data operable. | specified |
+| EB-WEB-SNAPSHOT-LIST | `TF-WEB-SNAPSHOT-RESTORE` | `S1` | Recovery view lists only valid snapshots newest first with revision, UTC time, reason, and protected status and retains at most the binding 20-per-project and 30-day policy. | specified |
+| EB-WEB-SNAPSHOT-RESTORE | `TF-WEB-SNAPSHOT-RESTORE` | `S2` | After explicit confirmation, restore snapshots the pre-restore graph, promotes exactly the selected valid graph to a new revision, reproduces its render, and announces completion; Cancel or revision mismatch changes nothing. | specified |
+| EB-WEB-QUOTA-WARNING | `TF-WEB-STORAGE-PRESSURE` | `S1` | At 80 percent estimated use, a pending crossing, 90 percent critical use, or QuotaExceededError, Storage reports observed use/quota and keeps the current project dirty until a safe action completes. | specified |
+| EB-WEB-QUOTA-CLEANUP | `TF-WEB-STORAGE-PRESSURE` | `S2` | Clear disposable data previews categories and estimated bytes, removes only caches, unreferenced official pack blobs, and snapshots allowed by policy in binding order, then reports exact categories removed without deleting current, owned, referenced, or last-known-good data. | specified |
+| EB-WEB-QUOTA-BACKUP | `TF-WEB-STORAGE-PRESSURE` | `S3` | When cleanup is insufficient, Export project backup produces a verified user-owned archive from the in-memory graph while the blocked save remains dirty; Cancel writes and deletes nothing. | specified |
+| EB-WEB-CONFLICT-FIRST-SAVE | `TF-WEB-SAVE-CONFLICT` | `S1` | The first tab commits revision N+1 and announces it through BroadcastChannel while the IndexedDB transaction remains the source of truth. | specified |
+| EB-WEB-CONFLICT-DETECT | `TF-WEB-SAVE-CONFLICT` | `S2` | The stale tab compares expected N with actual N+1 inside its write transaction, writes nothing, remains dirty, and opens conflict resolution even when the BroadcastChannel message was missed. | specified |
+| EB-WEB-CONFLICT-RESOLVE | `TF-WEB-SAVE-CONFLICT` | `S3` | Reload newer version, Overwrite with a named recovery snapshot, Save as copy with a new project ID, and Cancel each produce exactly the documented result; no choice is preselected, Escape cancels, and focus returns to the save trigger. | specified |
 | EB-WEB-ARCHIVE-EXPORT | `TF-WEB-BACKUP-RESTORE` | `S1` | Export downloads one .spriteproject archive with versioned manifest, project, pack locks, provenance, owned imports, and verified checksums. | specified |
 | EB-WEB-ARCHIVE-INSPECT | `TF-WEB-BACKUP-RESTORE` | `S2` | Import validates entries, expansion bounds, checksums, schema versions, project summary, and required packs before enabling commit. | specified |
 | EB-WEB-ARCHIVE-CONFLICT | `TF-WEB-BACKUP-RESTORE` | `S3` | An existing project ID requires Replace, Import as copy, or Cancel; no option is precommitted before user activation. | specified |
@@ -95,6 +116,8 @@
 | EB-DESKTOP-FOLDER-SAVE | `TF-DESKTOP-PROJECT-FOLDER` | `S2` | Save writes a temporary validated document then atomically replaces the target; failure preserves the prior file and dirty state. | specified |
 | EB-DESKTOP-FOLDER-OPEN | `TF-DESKTOP-PROJECT-FOLDER` | `S3` | Open validates schema, pack locks, references, and external revision before exposing the project for editing. | specified |
 | EB-DESKTOP-FOLDER-SAVE-AS | `TF-DESKTOP-PROJECT-FOLDER` | `S4` | Save As writes a complete new folder, preserves semantic project identity unless Copy is chosen, and leaves the source untouched. | specified |
+| EB-DESKTOP-EXTERNAL-DETECT | `TF-DESKTOP-PROJECT-FOLDER` | `S5` | Before Save, Electron compares SHA-256 fingerprints of all manifest-listed canonical entries to the open fingerprint; mismatch writes nothing, keeps dirty state, and opens conflict resolution. | specified |
+| EB-DESKTOP-EXTERNAL-RESOLVE | `TF-DESKTOP-PROJECT-FOLDER` | `S6` | Reload disk version, Overwrite after writing a host-only recovery copy, Save As, and Cancel each produce the documented result and preserve at least one complete disk or in-memory graph. | specified |
 | EB-DESKTOP-EXPORT-DESTINATION | `TF-DESKTOP-DIRECT-EXPORT` | `S1` | Choose export folder displays the resolved user-selected destination and overwrite policy before writing. | specified |
 | EB-DESKTOP-EXPORT-GENERIC | `TF-DESKTOP-DIRECT-EXPORT` | `S2` | Generic export writes exactly spritesheet, animations, build manifest, machine credits, and human credits with expected hashes. | specified |
 | EB-DESKTOP-EXPORT-GODOT | `TF-DESKTOP-DIRECT-EXPORT` | `S3` | Godot export adds valid SpriteFrames and instructions; a real pinned Godot fixture loads all declared animations without manual slicing. | specified |
@@ -114,3 +137,9 @@
 | EB-DATA-LOCATION | `TF-DATA-CUSTODY` | `S1` | Storage view states IndexedDB for web or the exact approved project folder for desktop and explicitly says no cloud backup is active. | specified |
 | EB-DATA-BACKUP | `TF-DATA-CUSTODY` | `S2` | Backup action produces a user-owned archive and reports completion only after its bytes and checksums are generated. | specified |
 | EB-DATA-NETWORK | `TF-DATA-CUSTODY` | `S3` | Creating, editing, saving, backing up, and exporting project data causes zero undeclared project-data network requests. | specified |
+
+## Binding Interaction Contracts
+
+- `implementation-contract.md` owns exact migration states, snapshot and quota behavior, conflict choices, stable error codes, Electron bridge/path authority, focus and keyboard behavior, status announcements, zoom/reflow, target size, and reduced motion.
+- `quality-scenarios.md` owns measurable accessibility, durability, security, compatibility, capacity, performance, offline, release, and maintainability evidence.
+- Tables in this file define the user-visible inventory. The binding contracts define behavior that cuts across more than one row and must not be reinterpreted per view.

@@ -89,7 +89,8 @@ interface ProjectArchiveService {
 <h2>Autosave and snapshots</h2>
 <ul>
   <li>Autosave follows meaningful changes, not animation-frame or hover state.</li>
-  <li>Maintain a small rolling history by count and age; never let snapshots grow without a documented bound.</li>
+  <li>Schedule autosave after 750 ms without another meaningful edit; manual Save, archive export, and close flush pending edits immediately.</li>
+  <li>Retain the newest 20 snapshots per project for at most 30 days and always keep at least one last-known-good snapshot after the second save.</li>
   <li>Create named checkpoints before schema migration, pack replacement, or destructive recovery.</li>
   <li>Preview state may persist, but transient playback timers and derived pixels do not.</li>
   <li>Generated output is reproducible and should not inflate project records.</li>
@@ -122,7 +123,7 @@ interface ProjectArchiveService {
   <li>Inspect and validate an archive before changing IndexedDB.</li>
   <li>Reject path traversal, duplicate entries, unsupported compression, invalid checksums, and unbounded archive expansion.</li>
   <li>Run migrations against a temporary copy; commit only after complete validation.</li>
-  <li>If the project ID already exists, offer <em>replace</em>, <em>import as copy</em>, or <em>cancel</em>; never guess.</li>
+  <li>If the project ID already exists, offer <em>replace</em>, <em>import as copy</em>, or <em>cancel</em>; never guess. Replace snapshots the old graph and preserves its recovery history. Copy creates a new project ID and revision zero while leaving the original unchanged.</li>
   <li>Report missing packs before import and distinguish downloadable official packs from embedded or unavailable content.</li>
   <li>Preserve the original archive when migration fails and provide diagnostics without exposing internal browser paths.</li>
 </ul>
@@ -131,8 +132,8 @@ interface ProjectArchiveService {
 <dl class="slate-defs">
   <dt>Persistence request</dt><dd>Call <code>navigator.storage.persist()</code> after the user creates or imports meaningful work, and explain the result without promising immunity from deletion.</dd>
   <dt>Usage estimate</dt><dd>Use <code>navigator.storage.estimate()</code> to show approximate use and quota in a storage-management view.</dd>
-  <dt>Warning thresholds</dt><dd>Warn before writes are likely to fail, prioritizing archive export and cache cleanup.</dd>
-  <dt>Eviction priority</dt><dd>Delete derived caches first, unused official pack blobs second, snapshots within policy third; never silently delete current projects or owned imports.</dd>
+  <dt>Warning thresholds</dt><dd>Warn at 80% estimated use or when a pending write would cross it. Enter critical mode at 90% or after <code>QuotaExceededError</code>.</dd>
+  <dt>Eviction priority</dt><dd>Delete derived caches first, unreferenced official pack blobs second, snapshots outside policy third, then oldest unprotected snapshots above the one-per-project floor. Never silently delete current projects, referenced packs, owned imports, provenance, retained migration recovery, or the last-known-good snapshot.</dd>
   <dt>Private browsing</dt><dd>Detect or explain that storage may be temporary; encourage immediate archive export.</dd>
 </dl>
 
@@ -143,6 +144,8 @@ interface ProjectArchiveService {
   <li>Never destructively rewrite the only valid copy; snapshot before migration.</li>
   <li>Unsupported future versions fail closed with an explanation and preserve raw data.</li>
   <li>Rendering after migration must reproduce the prior semantic result or record an explicit compatibility change.</li>
+  <li>The baseline browser migration reads only <code>the-sprite-project:mvp:project:v1</code>, validates and transforms version 1 to version 2, then writes project, recipe, pack lock, raw recovery bytes, and a pending marker in one IndexedDB transaction.</li>
+  <li>Read-back schema, semantic, render, provenance, and export checks complete before the legacy project key is removed. Failure commits nothing and offers Retry and Download recovery data.</li>
 </ul>
 
 <h2>Acceptance gates</h2>

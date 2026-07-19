@@ -48,8 +48,8 @@
   <thead><tr><th>Rule</th><th>Requirement</th></tr></thead>
   <tbody>
     <tr><td>Renderer isolation</td><td><code>contextIsolation: true</code>, <code>nodeIntegration: false</code>, sandbox enabled where compatible.</td></tr>
-    <tr><td>Preload surface</td><td>Expose only typed project, dialog, export, and host-status methods; never raw <code>ipcRenderer</code>, <code>fs</code>, shell, or process.</td></tr>
-    <tr><td>Path authority</td><td>Operate only within locations selected or approved by the user for the active action.</td></tr>
+    <tr><td>Preload surface</td><td>Expose one frozen, typed <code>window.spriteHost</code> bridge for host info, recents, native location choices, project read/save, archive inspect/write, and export write; never raw <code>ipcRenderer</code>, <code>fs</code>, shell, or process.</td></tr>
+    <tr><td>Path authority</td><td>Native dialogs and validated recent records mint opaque, session-scoped grants. Renderer display paths carry no authority and are never accepted back as filesystem targets.</td></tr>
     <tr><td>Payload validation</td><td>Validate IPC channel, schema, size, path, overwrite policy, and project revision in the main process.</td></tr>
     <tr><td>Writes</td><td>Use temporary files and atomic replacement; incomplete output never appears complete.</td></tr>
     <tr><td>Navigation</td><td>Block unexpected navigation and window creation; open explicit external links through a controlled handler.</td></tr>
@@ -83,7 +83,8 @@
 
 <h2>Portable project folder</h2>
 <pre><code>project-name/
-  sprite-project.json
+  archive-manifest.json
+  project.json
   packs.lock.json
   recipes/
   imported/

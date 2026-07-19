@@ -22,7 +22,11 @@
     "delivery/mvp/traceability.json",
     "docs/architecture/decisions/0001-zero-server-web-platform.html",
     "docs/architecture/decisions/0002-dual-host-local-first-product.html",
-    "docs/architecture/platform/project-file-compatibility.html"
+    "docs/architecture/platform/project-file-compatibility.html",
+    "docs/architecture/platform/browser-storage-and-portability.html",
+    "docs/architecture/platform/github-pages-and-offline.html",
+    "delivery/updates/UPD-001-dual-host-mvp/implementation-contract.md",
+    "delivery/updates/UPD-001-dual-host-mvp/quality-scenarios.md"
   ],
   "promises": [
     {
@@ -90,6 +94,54 @@
       "environment": "Supported desktop browser",
       "success": "Project appears in the library and survives reload",
       "interruptions": ["Storage persistence denied", "Tab closed during autosave", "Duplicate project name"]
+    },
+    {
+      "id": "SC-WEB-LEGACY-MIGRATION",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Returning verified-MVP browser user",
+      "startingState": "The exact legacy localStorage key contains one valid or damaged schema-version-1 project and no verified migration marker exists",
+      "intent": "Open the updated product without losing prior work",
+      "environment": "Same GitHub Pages origin with IndexedDB available",
+      "success": "A valid project migrates once to schema version 2 with parity, while failure leaves legacy bytes unchanged and downloadable",
+      "interruptions": ["Malformed legacy JSON", "Missing exact pack", "IndexedDB transaction failure", "Quota exceeded", "Browser closes during migration"]
+    },
+    {
+      "id": "SC-WEB-SNAPSHOT-RECOVERY",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Browser user recovering an unwanted or damaged edit",
+      "startingState": "A project has retained known-good snapshots",
+      "intent": "Inspect and restore an earlier project revision",
+      "environment": "Supported browser with the project repository available",
+      "success": "The selected snapshot becomes the current project only after confirmation and the pre-restore graph remains recoverable",
+      "interruptions": ["Restore cancelled", "Snapshot fails validation", "Current project changed in another tab"]
+    },
+    {
+      "id": "SC-WEB-STORAGE-PRESSURE",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Browser user whose local storage is approaching quota",
+      "startingState": "Estimated use is at least 80 percent or a write raises QuotaExceededError",
+      "intent": "Preserve current work and recover enough safe capacity",
+      "environment": "Supported browser with projects, packs, snapshots, and disposable caches",
+      "success": "Only previewed disposable data is removed or the blocked project is backed up; current and last-known-good work remain intact",
+      "interruptions": ["Estimate unavailable", "Cleanup is insufficient", "Backup cancelled", "Quota changes during cleanup"]
+    },
+    {
+      "id": "SC-WEB-CONCURRENT-EDIT",
+      "status": "specified",
+      "host": "web",
+      "promiseIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-LOCAL-DATA-CUSTODY"],
+      "actor": "Browser user with the same project open in two tabs",
+      "startingState": "Both tabs loaded the same project revision",
+      "intent": "Keep one tab from silently overwriting a newer save",
+      "environment": "Two same-origin supported browser tabs",
+      "success": "The stale save writes nothing and offers explicit reload, overwrite with checkpoint, save-as-copy, or cancel choices",
+      "interruptions": ["Broadcast message missed", "Conflict dialog cancelled", "Stored revision changes again before resolution"]
     },
     {
       "id": "SC-WEB-PROJECT-LIBRARY",
@@ -209,6 +261,10 @@
     { "id": "UC-WEB-DELETE-PROJECT", "status": "specified", "host": "web", "statement": "User can delete one browser project only after explicit confirmation.", "scenarioIds": ["SC-WEB-PROJECT-LIBRARY"] },
     { "id": "UC-WEB-AUTOSAVE-IDB", "status": "specified", "host": "web", "statement": "User can rely on transactional IndexedDB autosave with visible status and snapshots.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"] },
     { "id": "UC-WEB-RESTORE-SESSION", "status": "specified", "host": "web", "statement": "User can reload or restart the browser and continue the exact saved project state.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-WEB-PROJECT-LIBRARY"] },
+    { "id": "UC-WEB-MIGRATE-LEGACY", "status": "specified", "host": "web", "statement": "User can open the update and retain a verified-MVP localStorage project through one transactional, recoverable migration.", "scenarioIds": ["SC-WEB-LEGACY-MIGRATION"] },
+    { "id": "UC-WEB-RESTORE-SNAPSHOT", "status": "specified", "host": "web", "statement": "User can inspect and restore a known-good project snapshot without losing the pre-restore graph.", "scenarioIds": ["SC-WEB-SNAPSHOT-RECOVERY"] },
+    { "id": "UC-WEB-RECOVER-STORAGE", "status": "specified", "host": "web", "statement": "User can respond to quota pressure by previewing safe cleanup or exporting a backup without silent project loss.", "scenarioIds": ["SC-WEB-STORAGE-PRESSURE"] },
+    { "id": "UC-WEB-RESOLVE-SAVE-CONFLICT", "status": "specified", "host": "web", "statement": "User can resolve an older-tab revision conflict without silent overwrite.", "scenarioIds": ["SC-WEB-CONCURRENT-EDIT", "SC-WEB-PROJECT-LIBRARY"] },
     { "id": "UC-WEB-EXPORT-ARCHIVE", "status": "specified", "host": "web", "statement": "User can download a versioned .spriteproject backup.", "scenarioIds": ["SC-WEB-BACKUP-RESTORE", "SC-DATA-CUSTODY", "SC-CROSS-HOST-HANDOFF"] },
     { "id": "UC-WEB-IMPORT-ARCHIVE", "status": "specified", "host": "web", "statement": "User can inspect and import a valid .spriteproject archive with explicit conflict handling.", "scenarioIds": ["SC-WEB-BACKUP-RESTORE", "SC-CROSS-HOST-HANDOFF"] },
     { "id": "UC-WEB-INSPECT-STORAGE", "status": "specified", "host": "web", "statement": "User can inspect approximate usage, quota, persistence state, and disposable cache choices.", "scenarioIds": ["SC-WEB-FIRST-PROJECT", "SC-DATA-CUSTODY"] },
@@ -219,6 +275,7 @@
     { "id": "UC-DESKTOP-OPEN-FOLDER", "status": "specified", "host": "desktop", "statement": "User can open a compatible project folder and see validation before editing.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER", "SC-CROSS-HOST-HANDOFF"] },
     { "id": "UC-DESKTOP-SAVE-ATOMIC", "status": "specified", "host": "desktop", "statement": "User can save canonical files atomically with visible dirty, saving, saved, and failed states.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER", "SC-DESKTOP-UNSAVED-CLOSE"] },
     { "id": "UC-DESKTOP-SAVE-AS", "status": "specified", "host": "desktop", "statement": "User can relocate a project through Save As without silently changing its semantic identity.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER"] },
+    { "id": "UC-DESKTOP-RESOLVE-EXTERNAL-CHANGE", "status": "specified", "host": "desktop", "statement": "User can resolve a project-folder change made after open without silently overwriting disk or in-memory work.", "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER"] },
     { "id": "UC-DESKTOP-OPEN-RECENT", "status": "specified", "host": "desktop", "statement": "User can open a recent valid project folder and remove stale entries.", "scenarioIds": ["SC-DESKTOP-PORTABLE-LAUNCH", "SC-DESKTOP-PROJECT-FOLDER"] },
     { "id": "UC-DESKTOP-DIRECT-EXPORT", "status": "specified", "host": "desktop", "statement": "User can write generic or Godot output directly into a selected directory.", "scenarioIds": ["SC-DESKTOP-DIRECT-EXPORT"] },
     { "id": "UC-DESKTOP-CLOSE-SAFELY", "status": "specified", "host": "desktop", "statement": "User can choose Save, Discard, or Cancel when closing a dirty project.", "scenarioIds": ["SC-DESKTOP-UNSAVED-CLOSE"] },
@@ -231,7 +288,7 @@
   "informationArchitecture": [
     { "id": "IA-HOST", "status": "specified", "name": "Host context", "contains": ["host type", "version", "capabilities", "distribution channel"] },
     { "id": "IA-PROJECT-SUMMARY", "status": "specified", "name": "Project summary", "contains": ["stable ID", "name", "updated time", "pack state", "revision", "recovery state"] },
-    { "id": "IA-PROJECT-DOCUMENT", "status": "specified", "name": "Canonical project document", "contains": ["schema version", "recipes", "theme", "pack locks", "provenance references"] },
+    { "id": "IA-PROJECT-DOCUMENT", "status": "specified", "name": "Canonical project document", "contains": ["schema version 2", "stable project ID", "active recipe ID", "ordered recipe IDs", "exact pack-lock references", "theme", "preview", "timestamps", "integer revision", "provenance references"] },
     { "id": "IA-PROJECT-REPOSITORY", "status": "specified", "name": "Project repository", "contains": ["projects", "revisions", "snapshots", "migration state"] },
     { "id": "IA-PROJECT-ARCHIVE", "status": "specified", "name": "Portable project archive", "contains": ["manifest", "project", "pack locks", "owned imports", "provenance", "checksums"] },
     { "id": "IA-PROJECT-FOLDER", "status": "specified", "name": "Desktop project folder", "contains": ["project JSON", "pack lock", "recipes", "imports", "exports", "cache"] },
@@ -255,6 +312,9 @@
     { "id": "VIEW-EXPORT", "status": "specified", "name": "Export", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-EXPORT-DESTINATION"], "purpose": "Generate downloads or direct desktop directory output" },
     { "id": "VIEW-DESKTOP-FILE", "status": "specified", "name": "Desktop file operations", "informationIds": ["IA-PROJECT-FOLDER", "IA-PROJECT-SUMMARY"], "purpose": "Create, open, save, relocate, and archive local project folders" },
     { "id": "VIEW-UNSAVED-DIALOG", "status": "specified", "name": "Unsaved changes confirmation", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-STORAGE-STATUS"], "purpose": "Resolve Save, Discard, or Cancel before close" }
+    ,{ "id": "VIEW-MIGRATION-RECOVERY", "status": "specified", "name": "Legacy project migration", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-PROJECT-REPOSITORY", "IA-STORAGE-STATUS"], "purpose": "Show migration status and preserve/download legacy recovery data when migration cannot complete" }
+    ,{ "id": "VIEW-SNAPSHOT-RESTORE", "status": "specified", "name": "Snapshot recovery", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-PROJECT-REPOSITORY"], "purpose": "List known-good revisions and confirm restoration without losing the current graph" }
+    ,{ "id": "VIEW-SAVE-CONFLICT", "status": "specified", "name": "Save conflict resolution", "informationIds": ["IA-PROJECT-DOCUMENT", "IA-STORAGE-STATUS"], "purpose": "Resolve web revision or desktop fingerprint mismatch without silent overwrite" }
   ],
   "uiElements": [
     { "id": "UI-HOST-IDENTITY", "status": "specified", "viewId": "VIEW-HOST-START", "role": "status", "name": "Active host and capabilities" },
@@ -283,6 +343,12 @@
     { "id": "UI-EXPORT-GODOT", "status": "specified", "viewId": "VIEW-EXPORT", "role": "button", "name": "Export Godot files" },
     { "id": "UI-CLOSE-WINDOW", "status": "specified", "viewId": "VIEW-WORKSPACE", "role": "button", "name": "Close window" },
     { "id": "UI-UNSAVED-CHOICE", "status": "specified", "viewId": "VIEW-UNSAVED-DIALOG", "role": "group", "name": "Save Discard or Cancel" }
+    ,{ "id": "UI-MIGRATION-STATUS", "status": "specified", "viewId": "VIEW-MIGRATION-RECOVERY", "role": "status", "name": "Project storage migration status" }
+    ,{ "id": "UI-MIGRATION-RECOVERY", "status": "specified", "viewId": "VIEW-MIGRATION-RECOVERY", "role": "group", "name": "Migration recovery actions" }
+    ,{ "id": "UI-SNAPSHOT-LIST", "status": "specified", "viewId": "VIEW-SNAPSHOT-RESTORE", "role": "list", "name": "Project recovery snapshots" }
+    ,{ "id": "UI-SNAPSHOT-RESTORE", "status": "specified", "viewId": "VIEW-SNAPSHOT-RESTORE", "role": "button", "name": "Restore selected snapshot" }
+    ,{ "id": "UI-SAVE-CONFLICT", "status": "specified", "viewId": "VIEW-SAVE-CONFLICT", "role": "group", "name": "Resolve save conflict" }
+    ,{ "id": "UI-STORAGE-RECOVERY", "status": "specified", "viewId": "VIEW-STORAGE", "role": "group", "name": "Storage recovery actions" }
   ],
   "expectedBehaviors": [
     { "id": "EB-WEB-LIBRARY-LOAD", "status": "specified", "flowId": "TF-WEB-PROJECT-LIBRARY", "stepIds": ["S1"], "oracle": "Projects view lists exactly the IndexedDB projects ordered by updated time and shows name, pack state, save state, and last update." },
@@ -294,6 +360,18 @@
     { "id": "EB-WEB-AUTOSAVE-COMMIT", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S2"], "oracle": "One atomic IndexedDB transaction advances revision, retains the prior known-good snapshot, and changes status to Saved only after read-back." },
     { "id": "EB-WEB-AUTOSAVE-REOPEN", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S3"], "oracle": "Browser reload restores exact project ID, recipe, theme, preview state, revision, and render hash." },
     { "id": "EB-WEB-STORAGE-STATUS", "status": "specified", "flowId": "TF-WEB-AUTOSAVE-REOPEN", "stepIds": ["S4"], "oracle": "Storage view reports IndexedDB location, persistence result, approximate usage and quota, latest revision, and snapshot time without promising cloud backup." },
+    { "id": "EB-WEB-MIGRATION-DETECT", "status": "specified", "flowId": "TF-WEB-LEGACY-MIGRATION", "stepIds": ["S1"], "oracle": "Startup with the exact legacy key and no verified marker announces Upgrading project storage before the library opens; startup without that state performs no migration." },
+    { "id": "EB-WEB-MIGRATION-COMMIT", "status": "specified", "flowId": "TF-WEB-LEGACY-MIGRATION", "stepIds": ["S2"], "oracle": "One IndexedDB transaction writes the schema-version-2 project, sole recipe, exact pack lock, untouched legacy recovery bytes, and pending marker while preserving all version-1 identity and creative values." },
+    { "id": "EB-WEB-MIGRATION-VERIFY", "status": "specified", "flowId": "TF-WEB-LEGACY-MIGRATION", "stepIds": ["S3"], "oracle": "Read-back validation proves semantic, render, credits, animation, and Godot parity before marking migration verified and removing the legacy project key; a subsequent start performs no second migration." },
+    { "id": "EB-WEB-MIGRATION-FAILURE", "status": "specified", "flowId": "TF-WEB-LEGACY-MIGRATION", "stepIds": ["S4"], "oracle": "Parse, validation, pack, quota, transaction, interruption, or parity failure commits no new current project, retains the legacy key unchanged, announces the stable error, and makes Retry and Download recovery data operable." },
+    { "id": "EB-WEB-SNAPSHOT-LIST", "status": "specified", "flowId": "TF-WEB-SNAPSHOT-RESTORE", "stepIds": ["S1"], "oracle": "Recovery view lists only valid snapshots newest first with revision, UTC time, reason, and protected status and retains at most the binding 20-per-project and 30-day policy." },
+    { "id": "EB-WEB-SNAPSHOT-RESTORE", "status": "specified", "flowId": "TF-WEB-SNAPSHOT-RESTORE", "stepIds": ["S2"], "oracle": "After explicit confirmation, restore snapshots the pre-restore graph, promotes exactly the selected valid graph to a new revision, reproduces its render, and announces completion; Cancel or revision mismatch changes nothing." },
+    { "id": "EB-WEB-QUOTA-WARNING", "status": "specified", "flowId": "TF-WEB-STORAGE-PRESSURE", "stepIds": ["S1"], "oracle": "At 80 percent estimated use, a pending crossing, 90 percent critical use, or QuotaExceededError, Storage reports observed use/quota and keeps the current project dirty until a safe action completes." },
+    { "id": "EB-WEB-QUOTA-CLEANUP", "status": "specified", "flowId": "TF-WEB-STORAGE-PRESSURE", "stepIds": ["S2"], "oracle": "Clear disposable data previews categories and estimated bytes, removes only caches, unreferenced official pack blobs, and snapshots allowed by policy in binding order, then reports exact categories removed without deleting current, owned, referenced, or last-known-good data." },
+    { "id": "EB-WEB-QUOTA-BACKUP", "status": "specified", "flowId": "TF-WEB-STORAGE-PRESSURE", "stepIds": ["S3"], "oracle": "When cleanup is insufficient, Export project backup produces a verified user-owned archive from the in-memory graph while the blocked save remains dirty; Cancel writes and deletes nothing." },
+    { "id": "EB-WEB-CONFLICT-FIRST-SAVE", "status": "specified", "flowId": "TF-WEB-SAVE-CONFLICT", "stepIds": ["S1"], "oracle": "The first tab commits revision N+1 and announces it through BroadcastChannel while the IndexedDB transaction remains the source of truth." },
+    { "id": "EB-WEB-CONFLICT-DETECT", "status": "specified", "flowId": "TF-WEB-SAVE-CONFLICT", "stepIds": ["S2"], "oracle": "The stale tab compares expected N with actual N+1 inside its write transaction, writes nothing, remains dirty, and opens conflict resolution even when the BroadcastChannel message was missed." },
+    { "id": "EB-WEB-CONFLICT-RESOLVE", "status": "specified", "flowId": "TF-WEB-SAVE-CONFLICT", "stepIds": ["S3"], "oracle": "Reload newer version, Overwrite with a named recovery snapshot, Save as copy with a new project ID, and Cancel each produce exactly the documented result; no choice is preselected, Escape cancels, and focus returns to the save trigger." },
     { "id": "EB-WEB-ARCHIVE-EXPORT", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S1"], "oracle": "Export downloads one .spriteproject archive with versioned manifest, project, pack locks, provenance, owned imports, and verified checksums." },
     { "id": "EB-WEB-ARCHIVE-INSPECT", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S2"], "oracle": "Import validates entries, expansion bounds, checksums, schema versions, project summary, and required packs before enabling commit." },
     { "id": "EB-WEB-ARCHIVE-CONFLICT", "status": "specified", "flowId": "TF-WEB-BACKUP-RESTORE", "stepIds": ["S3"], "oracle": "An existing project ID requires Replace, Import as copy, or Cancel; no option is precommitted before user activation." },
@@ -308,6 +386,8 @@
     { "id": "EB-DESKTOP-FOLDER-SAVE", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S2"], "oracle": "Save writes a temporary validated document then atomically replaces the target; failure preserves the prior file and dirty state." },
     { "id": "EB-DESKTOP-FOLDER-OPEN", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S3"], "oracle": "Open validates schema, pack locks, references, and external revision before exposing the project for editing." },
     { "id": "EB-DESKTOP-FOLDER-SAVE-AS", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S4"], "oracle": "Save As writes a complete new folder, preserves semantic project identity unless Copy is chosen, and leaves the source untouched." },
+    { "id": "EB-DESKTOP-EXTERNAL-DETECT", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S5"], "oracle": "Before Save, Electron compares SHA-256 fingerprints of all manifest-listed canonical entries to the open fingerprint; mismatch writes nothing, keeps dirty state, and opens conflict resolution." },
+    { "id": "EB-DESKTOP-EXTERNAL-RESOLVE", "status": "specified", "flowId": "TF-DESKTOP-PROJECT-FOLDER", "stepIds": ["S6"], "oracle": "Reload disk version, Overwrite after writing a host-only recovery copy, Save As, and Cancel each produce the documented result and preserve at least one complete disk or in-memory graph." },
     { "id": "EB-DESKTOP-EXPORT-DESTINATION", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S1"], "oracle": "Choose export folder displays the resolved user-selected destination and overwrite policy before writing." },
     { "id": "EB-DESKTOP-EXPORT-GENERIC", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S2"], "oracle": "Generic export writes exactly spritesheet, animations, build manifest, machine credits, and human credits with expected hashes." },
     { "id": "EB-DESKTOP-EXPORT-GODOT", "status": "specified", "flowId": "TF-DESKTOP-DIRECT-EXPORT", "stepIds": ["S3"], "oracle": "Godot export adds valid SpriteFrames and instructions; a real pinned Godot fixture loads all declared animations without manual slicing." },
@@ -361,6 +441,62 @@
       ]
     },
     {
+      "id": "TF-WEB-LEGACY-MIGRATION",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-LEGACY-MIGRATION"],
+      "capabilityIds": ["UC-WEB-MIGRATE-LEGACY"],
+      "preconditions": ["The exact verified-MVP localStorage key exists", "No verified legacy migration marker exists"],
+      "completion": "A valid version-1 project exists once as a parity-checked version-2 graph or the untouched legacy bytes remain recoverable",
+      "steps": [
+        { "id": "S1", "action": "Open the updated web product", "viewId": "VIEW-MIGRATION-RECOVERY", "uiId": "UI-MIGRATION-STATUS", "expectedBehaviorIds": ["EB-WEB-MIGRATION-DETECT"] },
+        { "id": "S2", "action": "Observe the transactional migration", "viewId": "VIEW-MIGRATION-RECOVERY", "uiId": "UI-MIGRATION-STATUS", "expectedBehaviorIds": ["EB-WEB-MIGRATION-COMMIT"] },
+        { "id": "S3", "action": "Reopen the migrated project and restart", "viewId": "VIEW-PROJECTS", "uiId": "UI-PROJECT-CARD", "navigationId": "NAV-PROJECTS", "expectedBehaviorIds": ["EB-WEB-MIGRATION-VERIFY"] },
+        { "id": "S4", "action": "Trigger each migration failure and use recovery", "viewId": "VIEW-MIGRATION-RECOVERY", "uiId": "UI-MIGRATION-RECOVERY", "expectedBehaviorIds": ["EB-WEB-MIGRATION-FAILURE"] }
+      ]
+    },
+    {
+      "id": "TF-WEB-SNAPSHOT-RESTORE",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-SNAPSHOT-RECOVERY"],
+      "capabilityIds": ["UC-WEB-RESTORE-SNAPSHOT"],
+      "preconditions": ["An open project has at least one known-good snapshot"],
+      "completion": "The selected snapshot becomes a new current revision while the pre-restore graph remains recoverable",
+      "steps": [
+        { "id": "S1", "action": "Open project recovery history", "viewId": "VIEW-SNAPSHOT-RESTORE", "uiId": "UI-SNAPSHOT-LIST", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-WEB-SNAPSHOT-LIST"] },
+        { "id": "S2", "action": "Cancel, then confirm restore of one snapshot", "viewId": "VIEW-SNAPSHOT-RESTORE", "uiId": "UI-SNAPSHOT-RESTORE", "expectedBehaviorIds": ["EB-WEB-SNAPSHOT-RESTORE"] }
+      ]
+    },
+    {
+      "id": "TF-WEB-STORAGE-PRESSURE",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-STORAGE-PRESSURE"],
+      "capabilityIds": ["UC-WEB-INSPECT-STORAGE", "UC-WEB-RECOVER-STORAGE", "UC-WEB-EXPORT-ARCHIVE"],
+      "preconditions": ["Estimated browser storage is at or above warning threshold or a write raises QuotaExceededError"],
+      "completion": "Safe cleanup or backup completes without silent loss of current, owned, referenced, migration-recovery, or last-known-good data",
+      "steps": [
+        { "id": "S1", "action": "Inspect the storage warning", "viewId": "VIEW-STORAGE", "uiId": "UI-STORAGE-STATUS", "navigationId": "NAV-STORAGE", "expectedBehaviorIds": ["EB-WEB-QUOTA-WARNING"] },
+        { "id": "S2", "action": "Preview and clear disposable data", "viewId": "VIEW-STORAGE", "uiId": "UI-STORAGE-RECOVERY", "expectedBehaviorIds": ["EB-WEB-QUOTA-CLEANUP"] },
+        { "id": "S3", "action": "Export a project when cleanup is insufficient", "viewId": "VIEW-STORAGE", "uiId": "UI-EXPORT-ARCHIVE", "expectedBehaviorIds": ["EB-WEB-QUOTA-BACKUP"] }
+      ]
+    },
+    {
+      "id": "TF-WEB-SAVE-CONFLICT",
+      "status": "specified",
+      "host": "web",
+      "scenarioIds": ["SC-WEB-CONCURRENT-EDIT", "SC-WEB-PROJECT-LIBRARY"],
+      "capabilityIds": ["UC-WEB-AUTOSAVE-IDB", "UC-WEB-RESOLVE-SAVE-CONFLICT"],
+      "preconditions": ["Two same-origin tabs loaded the same project revision"],
+      "completion": "A stale tab cannot overwrite the newer revision without one explicit recovery choice",
+      "steps": [
+        { "id": "S1", "action": "Edit and save in the first tab", "viewId": "VIEW-WORKSPACE", "uiId": "UI-WORKSPACE-EDIT", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-WEB-CONFLICT-FIRST-SAVE"] },
+        { "id": "S2", "action": "Edit and attempt save from the stale tab", "viewId": "VIEW-WORKSPACE", "uiId": "UI-SAVE-STATUS", "expectedBehaviorIds": ["EB-WEB-CONFLICT-DETECT"] },
+        { "id": "S3", "action": "Exercise every conflict choice", "viewId": "VIEW-SAVE-CONFLICT", "uiId": "UI-SAVE-CONFLICT", "expectedBehaviorIds": ["EB-WEB-CONFLICT-RESOLVE"] }
+      ]
+    },
+    {
       "id": "TF-WEB-BACKUP-RESTORE",
       "status": "specified",
       "host": "web",
@@ -408,14 +544,16 @@
       "status": "specified",
       "host": "desktop",
       "scenarioIds": ["SC-DESKTOP-PROJECT-FOLDER"],
-      "capabilityIds": ["UC-DESKTOP-CREATE-FOLDER", "UC-DESKTOP-OPEN-FOLDER", "UC-DESKTOP-SAVE-ATOMIC", "UC-DESKTOP-SAVE-AS", "UC-DESKTOP-OPEN-RECENT"],
+      "capabilityIds": ["UC-DESKTOP-CREATE-FOLDER", "UC-DESKTOP-OPEN-FOLDER", "UC-DESKTOP-SAVE-ATOMIC", "UC-DESKTOP-SAVE-AS", "UC-DESKTOP-OPEN-RECENT", "UC-DESKTOP-RESOLVE-EXTERNAL-CHANGE"],
       "preconditions": ["Desktop host active"],
       "completion": "Project folder creates, saves, opens, and relocates without semantic drift",
       "steps": [
         { "id": "S1", "action": "Create project folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-CREATE-FOLDER", "navigationId": "NAV-DESKTOP-FILE", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-CREATE"] },
         { "id": "S2", "action": "Edit and save project", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-SAVE", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-SAVE"] },
         { "id": "S3", "action": "Close then open folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-OPEN-FOLDER", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-OPEN"] },
-        { "id": "S4", "action": "Save As to another folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-SAVE-AS", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-SAVE-AS"] }
+        { "id": "S4", "action": "Save As to another folder", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-SAVE-AS", "expectedBehaviorIds": ["EB-DESKTOP-FOLDER-SAVE-AS"] },
+        { "id": "S5", "action": "Modify one canonical file externally then attempt Save", "viewId": "VIEW-DESKTOP-FILE", "uiId": "UI-DESKTOP-SAVE", "expectedBehaviorIds": ["EB-DESKTOP-EXTERNAL-DETECT"] },
+        { "id": "S6", "action": "Exercise every external-change choice", "viewId": "VIEW-SAVE-CONFLICT", "uiId": "UI-SAVE-CONFLICT", "expectedBehaviorIds": ["EB-DESKTOP-EXTERNAL-RESOLVE"] }
       ]
     },
     {
@@ -507,21 +645,25 @@
   ],
   "workPackages": [
     { "id": "WP-UPD001-SPEC", "status": "specified", "dependsOn": [], "traceIds": ["CP-WEB-LOCAL-WORKSPACE", "CP-DESKTOP-PORTABLE-WORKSPACE", "CP-CROSS-HOST-PORTABILITY", "CP-LOCAL-DATA-CUSTODY"], "gate": "Update envelope, impact analysis, ADR-002, traceability, exclusions, and release gate pass review" },
-    { "id": "WP-UPD001-HOST-ADAPTERS", "status": "specified", "dependsOn": ["WP-UPD001-SPEC"], "traceIds": ["IA-HOST", "IA-PROJECT-DOCUMENT", "UC-DESKTOP-SEE-HOST", "UC-SEE-DATA-LOCATION"], "gate": "Domain modules have no browser or Electron dependency and host contract tests pass" },
-    { "id": "WP-UPD001-WEB-REPOSITORY", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-PROJECT-LIBRARY", "TF-WEB-AUTOSAVE-REOPEN", "UC-WEB-AUTOSAVE-IDB", "UC-WEB-INSPECT-STORAGE"], "gate": "IndexedDB library, revisions, snapshots, migration, and failure recovery pass actual-UI flows" },
+    { "id": "WP-UPD001-CONTRACTS", "status": "specified", "dependsOn": ["WP-UPD001-SPEC"], "traceIds": ["IA-PROJECT-DOCUMENT", "IA-PROJECT-REPOSITORY", "IA-PROJECT-ARCHIVE", "IA-FILE-COMPATIBILITY", "TF-WEB-LEGACY-MIGRATION", "TF-WEB-SAVE-CONFLICT"], "gate": "Shared versioned schemas, parsers, canonical serializer, legacy migration, stable error taxonomy, safety limits, and fixtures pass pure and contract tests" },
+    { "id": "WP-UPD001-HOST-ADAPTERS", "status": "specified", "dependsOn": ["WP-UPD001-CONTRACTS"], "traceIds": ["IA-HOST", "IA-PROJECT-DOCUMENT", "UC-DESKTOP-SEE-HOST", "UC-SEE-DATA-LOCATION"], "gate": "Domain modules have no browser or Electron dependency and host contract tests pass" },
+    { "id": "WP-UPD001-WEB-REPOSITORY", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-PROJECT-LIBRARY", "TF-WEB-AUTOSAVE-REOPEN", "TF-WEB-LEGACY-MIGRATION", "TF-WEB-SNAPSHOT-RESTORE", "TF-WEB-STORAGE-PRESSURE", "TF-WEB-SAVE-CONFLICT", "UC-WEB-AUTOSAVE-IDB", "UC-WEB-MIGRATE-LEGACY", "UC-WEB-RESTORE-SNAPSHOT", "UC-WEB-RECOVER-STORAGE", "UC-WEB-RESOLVE-SAVE-CONFLICT", "UC-WEB-INSPECT-STORAGE"], "gate": "IndexedDB library, version-1 migration, integer revisions, retention, quota recovery, snapshots, conflicts, and failure recovery pass actual-UI flows" },
     { "id": "WP-UPD001-ARCHIVES", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-WEB-BACKUP-RESTORE", "IA-PROJECT-ARCHIVE", "IA-FILE-COMPATIBILITY", "UC-WEB-EXPORT-ARCHIVE", "UC-WEB-IMPORT-ARCHIVE", "UC-CROSS-HOST-SAME-FILE"], "gate": "Archive validation, deterministic canonical serialization, conflicts, migration, malicious fixtures, and exact round trip pass" },
     { "id": "WP-UPD001-WEB-OFFLINE", "status": "specified", "dependsOn": ["WP-UPD001-WEB-REPOSITORY"], "traceIds": ["TF-WEB-OFFLINE", "UC-WEB-WORK-OFFLINE"], "gate": "Published-subpath PWA completes declared flows with network disconnected" },
     { "id": "WP-UPD001-ELECTRON-SHELL", "status": "specified", "dependsOn": ["WP-UPD001-HOST-ADAPTERS"], "traceIds": ["TF-DESKTOP-PORTABLE-LAUNCH", "UC-DESKTOP-LAUNCH-PORTABLE", "VIEW-HOST-START"], "gate": "Packaged portable Windows app launches with secure renderer and typed IPC checks" },
-    { "id": "WP-UPD001-DESKTOP-FILES", "status": "specified", "dependsOn": ["WP-UPD001-ELECTRON-SHELL", "WP-UPD001-ARCHIVES"], "traceIds": ["TF-DESKTOP-PROJECT-FOLDER", "TF-DESKTOP-DIRECT-EXPORT", "TF-DESKTOP-UNSAVED-CLOSE", "IA-PROJECT-FOLDER"], "gate": "Folder lifecycle, atomic writes, failures, direct exports, and unsaved close pass packaged Electron UI flows" },
+    { "id": "WP-UPD001-DESKTOP-FILES", "status": "specified", "dependsOn": ["WP-UPD001-ELECTRON-SHELL", "WP-UPD001-ARCHIVES"], "traceIds": ["TF-DESKTOP-PROJECT-FOLDER", "TF-DESKTOP-DIRECT-EXPORT", "TF-DESKTOP-UNSAVED-CLOSE", "UC-DESKTOP-RESOLVE-EXTERNAL-CHANGE", "IA-PROJECT-FOLDER"], "gate": "Folder lifecycle, entry fingerprints, external-change recovery, atomic writes, failures, direct exports, and unsaved close pass packaged Electron UI flows" },
     { "id": "WP-UPD001-CROSS-HOST", "status": "specified", "dependsOn": ["WP-UPD001-WEB-REPOSITORY", "WP-UPD001-DESKTOP-FILES"], "traceIds": ["TF-CROSS-HOST-WEB-TO-DESKTOP", "TF-CROSS-HOST-DESKTOP-TO-WEB", "UC-CROSS-HOST-IDENTICAL-OUTPUT"], "gate": "Bidirectional archive and output parity pass from real web and packaged Electron UIs" },
     { "id": "WP-UPD001-REGRESSION", "status": "specified", "dependsOn": ["WP-UPD001-CROSS-HOST", "WP-UPD001-WEB-OFFLINE"], "traceIds": ["TF-DATA-CUSTODY", "EB-DATA-NETWORK"], "gate": "All affected RUN-MVP-001 baseline flows pass on affected hosts with zero severity 0-2 issues" }
   ],
   "runs": [],
   "issues": [],
   "decisions": [
-    { "id": "DEC-UPD001-DUAL-HOST", "status": "specified", "decision": "Keep GitHub Pages as the complete required web host and add portable Electron as an optional local-file host over one shared product core.", "reversible": true, "evidence": "Owner direction and ADR-002; implementation evidence pending." },
-    { "id": "DEC-UPD001-WEB-STORAGE", "status": "specified", "decision": "Use IndexedDB for project records and snapshots and localStorage only for small preferences, pointers, and migration markers.", "reversible": true, "evidence": "ADR-001 storage contract; migration and actual-UI evidence pending." },
-    { "id": "DEC-UPD001-PORTABLE-WINDOWS", "status": "specified", "decision": "Distribute the first Electron host as a portable Windows x64 ZIP through GitHub Releases without installer or automatic updates.", "reversible": true, "evidence": "Zero-server and zero-signing-cost constraints; packaged validation pending." },
-    { "id": "DEC-UPD001-SHARED-SCHEMA", "status": "specified", "decision": "Canonical project, pack, provenance, and export schemas remain host-neutral; host-only state is stored separately.", "reversible": false, "evidence": "Required to satisfy cross-host portability promise; parity evidence pending." }
+    { "id": "DEC-UPD001-DUAL-HOST", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only if accepted product direction changes or measured host lifecycle, security, or adoption evidence shows the shared dual-host model no longer has positive net value.", "decision": "Keep GitHub Pages as the complete required web host and add portable Electron as an optional local-file host over one shared product core.", "reversible": true, "evidence": "Owner direction and ADR-002; implementation evidence pending." },
+    { "id": "DEC-UPD001-WEB-STORAGE", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only from demonstrated browser-storage infeasibility, data-loss risk, or a changed product/backend constraint whose benefit exceeds migration and revalidation cost.", "decision": "Use IndexedDB for project records and snapshots and localStorage only for small preferences, pointers, and migration markers.", "reversible": true, "evidence": "ADR-001 storage contract; migration and actual-UI evidence pending." },
+    { "id": "DEC-UPD001-PORTABLE-WINDOWS", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only from changed funding/platform support or measured distribution friction that justifies signing, installer, auto-update, or another desktop host after full lifecycle cost analysis.", "decision": "Distribute the first Electron host as a portable Windows x64 ZIP through GitHub Releases without installer or automatic updates.", "reversible": true, "evidence": "Zero-server and zero-signing-cost constraints; packaged validation pending." },
+    { "id": "DEC-UPD001-SHARED-SCHEMA", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only for a proven contract defect, incompatible accepted requirement, or migration evidence showing schema version 2 cannot preserve baseline and cross-host invariants.", "decision": "Canonical project schema version 2, recipe schema version 1, pack, provenance, archive, and export schemas remain host-neutral; host-only state is stored separately. Version 1 projects migrate deterministically and writers emit version 2 only.", "reversible": false, "evidence": "Required to satisfy cross-host portability promise; parity evidence pending." },
+    { "id": "DEC-UPD001-OPAQUE-FILE-GRANTS", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only from verified platform infeasibility or security evidence; an alternative IPC naming or path API without material net benefit is insufficient.", "decision": "Electron renderer file operations use opaque, session-scoped grants minted by native dialogs or validated recent-project records; renderer-visible paths are display-only and never filesystem authority.", "reversible": true, "evidence": "Minimizes the Electron trust boundary while preserving user-approved folder and export workflows; bridge and adversarial evidence pending." },
+    { "id": "DEC-UPD001-OPTIMISTIC-REVISIONS", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only if concurrency fixtures falsify correctness or a changed collaboration promise requires stronger merge semantics whose benefit exceeds compatibility and complexity cost.", "decision": "Web saves use non-negative integer revisions checked inside one IndexedDB transaction; desktop saves compare canonical entry fingerprints. Mismatches write nothing and require explicit reload, overwrite with recovery, Save As or copy, or cancel.", "reversible": true, "evidence": "Prevents older tabs and externally modified folders from silently overwriting newer work; conflict-flow evidence pending." },
+    { "id": "DEC-UPD001-SPEC-LOCK", "status": "specified", "decisionState": "locked", "lockedAt": "2026-07-19", "lockedBy": "product owner", "changeCriteria": "Reopen only through the product-engineering-spec-review justified-change protocol with eligible new evidence or changed constraints, positive net value after full change cost, product-vision alignment, bounded blast radius, revalidation funding, and owner approval.", "decision": "Lock the implementation-ready UPD-001 scope, decisions, behavior, architecture, compatibility, quality scenarios, and release gates at LOCK-UPD-001-002. Subsequent reviews are delta-only and equivalent alternatives do not justify change.", "reversible": true, "evidence": "REVIEW-UPD-001-001 passed two unfamiliar-implementer rounds. LOCK-UPD-001-001 was preserved and superseded by CHANGE-UPD001-LOCK-HARDENING-001, approved by APPROVAL-UPD-001-LOCK-002." }
   ]
 }

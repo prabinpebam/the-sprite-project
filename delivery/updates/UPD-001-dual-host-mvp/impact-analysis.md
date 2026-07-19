@@ -41,7 +41,8 @@ The creative outputs may retain their baseline IDs and oracles when unchanged, b
 ## Data and Migration Impact
 
 - Existing localStorage project data must migrate once into IndexedDB without changing project ID, recipe, theme, preview state, or render hash.
-- Migration creates a known-good snapshot before deleting or marking the legacy record migrated.
+- Project schema version 2 extracts the verified version-1 character into one recipe document, preserves all creative identity and values, and adds exact pack locks plus an integer repository revision. UPD-001 still exposes one active recipe.
+- Migration creates project, recipe, pack lock, raw recovery bytes, and a pending marker in one IndexedDB transaction, then completes read-back parity before removing the exact legacy key.
 - The web repository gains multiple-project indexing, revisions, snapshots, and conflict handling.
 - Electron project folders serialize the same canonical project document and pack lock used by archives.
 - Browser-only keys, object URLs, filesystem paths, and Electron handles never enter canonical project data.
@@ -51,6 +52,7 @@ The creative outputs may retain their baseline IDs and oracles when unchanged, b
 	outside portable data.
 - Both hosts must open and save files produced by the other without host conversion. Independent serializers are
 	acceptable only if compatibility fixtures prove identical canonical payload bytes.
+- Archive version 1 enforces the numeric limits and adversarial fixture catalog in `implementation-contract.md` before any project mutation.
 
 ## UX Impact
 
@@ -62,7 +64,7 @@ The creative outputs may retain their baseline IDs and oracles when unchanged, b
 
 ## Security Impact
 
-- Electron uses `contextIsolation: true`, `nodeIntegration: false`, a sandboxed renderer, narrow typed preload methods, path validation, and user-selected roots.
+- Electron uses `contextIsolation: true`, `nodeIntegration: false`, a sandboxed renderer, one frozen typed bridge, opaque user-approved location grants, main-process schema/size validation, and no renderer-authoritative path input.
 - Imported archives and packs remain untrusted input on both hosts.
 - Desktop writes are atomic and constrained to the selected project/export location.
 - No secrets or remote credentials are added.

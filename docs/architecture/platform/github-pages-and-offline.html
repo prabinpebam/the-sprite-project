@@ -77,12 +77,16 @@
 
 <h2>Pack distribution</h2>
 <dl class="slate-defs">
-  <dt>Bundled packs</dt><dd>Small, essential, versioned packs deployed with the application and included in the offline baseline.</dd>
+  <dt>Bundled packs</dt><dd>Small, essential, versioned packs marked <code>bundled: true</code> in the static pack index, deployed with the application, and precached in the offline baseline.</dd>
   <dt>Static pack index</dt><dd>A public JSON document containing pack ID, version, size, checksum, compatibility, source, and license summary.</dd>
   <dt>Optional pack files</dt><dd>Immutable, versioned archives fetched on demand and verified before installation.</dd>
   <dt>Large pack escape hatch</dt><dd>Move binaries to public GitHub Releases while keeping the index and checksums static; do not introduce a custom server only for file hosting.</dd>
   <dt>Unavailable network</dt><dd>Installed packs continue working; unavailable remote packs retain metadata and an explicit retry state.</dd>
 </dl>
+<p>Offline readiness is computed from exact project pack locks. A lock is ready only when its version and checksum
+   resolve to a bundled, checksum-validated local installation, or archive-embedded record. The UI reports
+   <em>Ready offline</em> only when every lock resolves locally and names unavailable packs without substituting a
+   different version.</p>
 
 <div class="slate-callout slate-callout--warning" role="note">
   <p class="slate-callout__title">GitHub Pages is not an application backend</p>

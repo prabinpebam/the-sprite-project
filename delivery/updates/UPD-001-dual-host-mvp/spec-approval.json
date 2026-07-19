@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "approvalId": "APPROVAL-UPD-001-LOCK-002",
+  "kind": "specification-lock-and-change-control",
+  "lockId": "LOCK-UPD-001-002",
+  "reviewId": "REVIEW-UPD-001-001",
+  "ownerRole": "product owner",
+  "approvedAt": "2026-07-19",
+  "sourceType": "direct-user-request",
+  "sourceReference": "GitHub Copilot session owner request on 2026-07-19",
+  "statement": "Lock and stabilize ready product decisions and specifications. Reopen only for well-evidenced, product-aligned change whose benefit exceeds full change and revalidation cost; equivalent alternatives do not justify change.",
+  "lockedDecisionIds": ["DEC-UPD001-DUAL-HOST", "DEC-UPD001-WEB-STORAGE", "DEC-UPD001-PORTABLE-WINDOWS", "DEC-UPD001-SHARED-SCHEMA", "DEC-UPD001-OPAQUE-FILE-GRANTS", "DEC-UPD001-OPTIMISTIC-REVISIONS", "DEC-UPD001-SPEC-LOCK"],
+  "approvedDecisionIds": ["DEC-UPD001-SPEC-LOCK"],
+  "approvedChangeIds": ["CHANGE-UPD001-LOCK-HARDENING-001"]
+}

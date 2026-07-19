@@ -35,6 +35,66 @@ Every flow is accepted only through visible interaction on its declared host. Th
 | S3 | Reload and reopen project | `VIEW-PROJECTS` | `UI-PROJECT-CARD` | `NAV-PROJECTS` | `EB-WEB-AUTOSAVE-REOPEN`: Browser reload restores exact project ID, recipe, theme, preview state, revision, and render hash. |
 | S4 | Inspect storage state | `VIEW-STORAGE` | `UI-STORAGE-STATUS` | `NAV-STORAGE` | `EB-WEB-STORAGE-STATUS`: Storage view reports IndexedDB location, persistence result, approximate usage and quota, latest revision, and snapshot time without promising cloud backup. |
 
+## TF-WEB-LEGACY-MIGRATION
+
+- **Host:** web
+- **Scenarios:** `SC-WEB-LEGACY-MIGRATION`
+- **Capabilities:** `UC-WEB-MIGRATE-LEGACY`
+- **Preconditions:** The exact verified-MVP localStorage key exists; No verified legacy migration marker exists
+- **Completion:** A valid version-1 project exists once as a parity-checked version-2 graph or the untouched legacy bytes remain recoverable
+- **Status:** specified
+
+| Step | User action | View | UI | Navigation | Objective behavior |
+|---|---|---|---|---|---|
+| S1 | Open the updated web product | `VIEW-MIGRATION-RECOVERY` | `UI-MIGRATION-STATUS` | No route change | `EB-WEB-MIGRATION-DETECT`: Startup with the exact legacy key and no verified marker announces Upgrading project storage before the library opens; startup without that state performs no migration. |
+| S2 | Observe the transactional migration | `VIEW-MIGRATION-RECOVERY` | `UI-MIGRATION-STATUS` | No route change | `EB-WEB-MIGRATION-COMMIT`: One IndexedDB transaction writes the schema-version-2 project, sole recipe, exact pack lock, untouched legacy recovery bytes, and pending marker while preserving all version-1 identity and creative values. |
+| S3 | Reopen the migrated project and restart | `VIEW-PROJECTS` | `UI-PROJECT-CARD` | `NAV-PROJECTS` | `EB-WEB-MIGRATION-VERIFY`: Read-back validation proves semantic, render, credits, animation, and Godot parity before marking migration verified and removing the legacy project key; a subsequent start performs no second migration. |
+| S4 | Trigger each migration failure and use recovery | `VIEW-MIGRATION-RECOVERY` | `UI-MIGRATION-RECOVERY` | No route change | `EB-WEB-MIGRATION-FAILURE`: Parse, validation, pack, quota, transaction, interruption, or parity failure commits no new current project, retains the legacy key unchanged, announces the stable error, and makes Retry and Download recovery data operable. |
+
+## TF-WEB-SNAPSHOT-RESTORE
+
+- **Host:** web
+- **Scenarios:** `SC-WEB-SNAPSHOT-RECOVERY`
+- **Capabilities:** `UC-WEB-RESTORE-SNAPSHOT`
+- **Preconditions:** An open project has at least one known-good snapshot
+- **Completion:** The selected snapshot becomes a new current revision while the pre-restore graph remains recoverable
+- **Status:** specified
+
+| Step | User action | View | UI | Navigation | Objective behavior |
+|---|---|---|---|---|---|
+| S1 | Open project recovery history | `VIEW-SNAPSHOT-RESTORE` | `UI-SNAPSHOT-LIST` | `NAV-STORAGE` | `EB-WEB-SNAPSHOT-LIST`: Recovery view lists only valid snapshots newest first with revision, UTC time, reason, and protected status and retains at most the binding 20-per-project and 30-day policy. |
+| S2 | Cancel, then confirm restore of one snapshot | `VIEW-SNAPSHOT-RESTORE` | `UI-SNAPSHOT-RESTORE` | No route change | `EB-WEB-SNAPSHOT-RESTORE`: After explicit confirmation, restore snapshots the pre-restore graph, promotes exactly the selected valid graph to a new revision, reproduces its render, and announces completion; Cancel or revision mismatch changes nothing. |
+
+## TF-WEB-STORAGE-PRESSURE
+
+- **Host:** web
+- **Scenarios:** `SC-WEB-STORAGE-PRESSURE`
+- **Capabilities:** `UC-WEB-INSPECT-STORAGE`, `UC-WEB-RECOVER-STORAGE`, `UC-WEB-EXPORT-ARCHIVE`
+- **Preconditions:** Estimated browser storage is at or above warning threshold or a write raises QuotaExceededError
+- **Completion:** Safe cleanup or backup completes without silent loss of current, owned, referenced, migration-recovery, or last-known-good data
+- **Status:** specified
+
+| Step | User action | View | UI | Navigation | Objective behavior |
+|---|---|---|---|---|---|
+| S1 | Inspect the storage warning | `VIEW-STORAGE` | `UI-STORAGE-STATUS` | `NAV-STORAGE` | `EB-WEB-QUOTA-WARNING`: At 80 percent estimated use, a pending crossing, 90 percent critical use, or QuotaExceededError, Storage reports observed use/quota and keeps the current project dirty until a safe action completes. |
+| S2 | Preview and clear disposable data | `VIEW-STORAGE` | `UI-STORAGE-RECOVERY` | No route change | `EB-WEB-QUOTA-CLEANUP`: Clear disposable data previews categories and estimated bytes, removes only caches, unreferenced official pack blobs, and snapshots allowed by policy in binding order, then reports exact categories removed without deleting current, owned, referenced, or last-known-good data. |
+| S3 | Export a project when cleanup is insufficient | `VIEW-STORAGE` | `UI-EXPORT-ARCHIVE` | No route change | `EB-WEB-QUOTA-BACKUP`: When cleanup is insufficient, Export project backup produces a verified user-owned archive from the in-memory graph while the blocked save remains dirty; Cancel writes and deletes nothing. |
+
+## TF-WEB-SAVE-CONFLICT
+
+- **Host:** web
+- **Scenarios:** `SC-WEB-CONCURRENT-EDIT`, `SC-WEB-PROJECT-LIBRARY`
+- **Capabilities:** `UC-WEB-AUTOSAVE-IDB`, `UC-WEB-RESOLVE-SAVE-CONFLICT`
+- **Preconditions:** Two same-origin tabs loaded the same project revision
+- **Completion:** A stale tab cannot overwrite the newer revision without one explicit recovery choice
+- **Status:** specified
+
+| Step | User action | View | UI | Navigation | Objective behavior |
+|---|---|---|---|---|---|
+| S1 | Edit and save in the first tab | `VIEW-WORKSPACE` | `UI-WORKSPACE-EDIT` | `NAV-WORKSPACE` | `EB-WEB-CONFLICT-FIRST-SAVE`: The first tab commits revision N+1 and announces it through BroadcastChannel while the IndexedDB transaction remains the source of truth. |
+| S2 | Edit and attempt save from the stale tab | `VIEW-WORKSPACE` | `UI-SAVE-STATUS` | No route change | `EB-WEB-CONFLICT-DETECT`: The stale tab compares expected N with actual N+1 inside its write transaction, writes nothing, remains dirty, and opens conflict resolution even when the BroadcastChannel message was missed. |
+| S3 | Exercise every conflict choice | `VIEW-SAVE-CONFLICT` | `UI-SAVE-CONFLICT` | No route change | `EB-WEB-CONFLICT-RESOLVE`: Reload newer version, Overwrite with a named recovery snapshot, Save as copy with a new project ID, and Cancel each produce exactly the documented result; no choice is preselected, Escape cancels, and focus returns to the save trigger. |
+
 ## TF-WEB-BACKUP-RESTORE
 
 - **Host:** web
@@ -85,7 +145,7 @@ Every flow is accepted only through visible interaction on its declared host. Th
 
 - **Host:** desktop
 - **Scenarios:** `SC-DESKTOP-PROJECT-FOLDER`
-- **Capabilities:** `UC-DESKTOP-CREATE-FOLDER`, `UC-DESKTOP-OPEN-FOLDER`, `UC-DESKTOP-SAVE-ATOMIC`, `UC-DESKTOP-SAVE-AS`, `UC-DESKTOP-OPEN-RECENT`
+- **Capabilities:** `UC-DESKTOP-CREATE-FOLDER`, `UC-DESKTOP-OPEN-FOLDER`, `UC-DESKTOP-SAVE-ATOMIC`, `UC-DESKTOP-SAVE-AS`, `UC-DESKTOP-OPEN-RECENT`, `UC-DESKTOP-RESOLVE-EXTERNAL-CHANGE`
 - **Preconditions:** Desktop host active
 - **Completion:** Project folder creates, saves, opens, and relocates without semantic drift
 - **Status:** specified
@@ -96,6 +156,8 @@ Every flow is accepted only through visible interaction on its declared host. Th
 | S2 | Edit and save project | `VIEW-DESKTOP-FILE` | `UI-DESKTOP-SAVE` | No route change | `EB-DESKTOP-FOLDER-SAVE`: Save writes a temporary validated document then atomically replaces the target; failure preserves the prior file and dirty state. |
 | S3 | Close then open folder | `VIEW-DESKTOP-FILE` | `UI-DESKTOP-OPEN-FOLDER` | No route change | `EB-DESKTOP-FOLDER-OPEN`: Open validates schema, pack locks, references, and external revision before exposing the project for editing. |
 | S4 | Save As to another folder | `VIEW-DESKTOP-FILE` | `UI-DESKTOP-SAVE-AS` | No route change | `EB-DESKTOP-FOLDER-SAVE-AS`: Save As writes a complete new folder, preserves semantic project identity unless Copy is chosen, and leaves the source untouched. |
+| S5 | Modify one canonical file externally then attempt Save | `VIEW-DESKTOP-FILE` | `UI-DESKTOP-SAVE` | No route change | `EB-DESKTOP-EXTERNAL-DETECT`: Before Save, Electron compares SHA-256 fingerprints of all manifest-listed canonical entries to the open fingerprint; mismatch writes nothing, keeps dirty state, and opens conflict resolution. |
+| S6 | Exercise every external-change choice | `VIEW-SAVE-CONFLICT` | `UI-SAVE-CONFLICT` | No route change | `EB-DESKTOP-EXTERNAL-RESOLVE`: Reload disk version, Overwrite after writing a host-only recovery copy, Save As, and Cancel each produce the documented result and preserve at least one complete disk or in-memory graph. |
 
 ## TF-DESKTOP-DIRECT-EXPORT
 

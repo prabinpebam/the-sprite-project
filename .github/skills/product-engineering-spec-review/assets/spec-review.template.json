@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 2,
+  "reviewId": "REVIEW-001",
+  "target": "path/to/specification",
+  "reviewedAt": "2026-01-01",
+  "depth": "standard",
+  "verdict": "not-ready",
+  "materialitySignals": [],
+  "sources": [],
+  "dimensions": [
+    {
+      "id": "product-truth",
+      "applicable": true,
+      "score": 0,
+      "definitionOf10": "Target-specific definition",
+      "evidence": [],
+      "findingIds": []
+    }
+  ],
+  "findings": [],
+  "unresolvedDecisions": [],
+  "editsMade": [],
+  "implementationReadiness": {
+    "unfamiliarImplementerPass": false,
+    "blockingFindingIds": [],
+    "implementationSequence": [],
+    "verificationGates": []
+  },
+  "conditions": [],
+  "adversarialReview": {
+    "maxRounds": 1,
+    "rounds": [],
+    "remainingConcerns": []
+  },
+  "stabilization": {
+    "state": "candidate",
+    "approvalRef": "",
+    "approvalId": "",
+    "settledDecisionIds": [],
+    "justifiedChanges": []
+  }
+}

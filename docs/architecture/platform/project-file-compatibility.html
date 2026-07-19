@@ -61,14 +61,14 @@
     <tr><td>Container</td><td>ZIP, non-encrypted, no symlinks, no absolute paths, no data descriptors required for interpretation</td></tr>
     <tr><td>Entry paths</td><td>UTF-8, forward slash, relative, Unicode NFC, no <code>.</code>/<code>..</code>, no duplicate case-folded path</td></tr>
     <tr><td>Required JSON encoding</td><td>UTF-8 without BOM, LF newline, exactly one trailing LF</td></tr>
-    <tr><td>Canonical JSON</td><td>Object keys sorted lexicographically, arrays retain schema-defined order, no insignificant whitespace, finite JSON numbers only</td></tr>
+    <tr><td>Canonical JSON</td><td>Strict schemas reject unknown keys; object keys sort by Unicode code point, arrays retain schema order, strings use standard JSON escaping, finite IEEE-754 values use ECMAScript shortest round-trippable serialization, negative zero becomes zero, and no insignificant whitespace is emitted</td></tr>
     <tr><td>Archive entry order</td><td>Required root files first in documented order, then remaining paths by UTF-8 byte order</td></tr>
     <tr><td>ZIP timestamps</td><td>Fixed canonical timestamp; filesystem modification time is not semantic project data</td></tr>
     <tr><td>Compression</td><td>Store or deterministic Deflate as defined by archive format version; readers must not depend on compression choice</td></tr>
     <tr><td>Checksums</td><td>SHA-256 of uncompressed canonical entry bytes; manifest lists every payload entry except itself</td></tr>
     <tr><td>Media identity</td><td>Imported binary content addressed by SHA-256; original display name is metadata, not an internal path</td></tr>
     <tr><td>MIME declaration</td><td>Manifest records expected media type; readers verify signature where supported</td></tr>
-    <tr><td>Maximum expansion</td><td>Versioned safety limits for entries, individual size, total size, and compression ratio</td></tr>
+    <tr><td>Maximum expansion</td><td>Format v1: 128 MiB compressed archive, 512 entries, 8 MiB JSON/text entry, 64 MiB binary entry, 256 MiB total uncompressed, 100:1 maximum compression ratio, 240-byte relative path, and 8 path segments</td></tr>
   </tbody>
 </table>
 
@@ -88,7 +88,7 @@
 <h2>Archive manifest</h2>
 <pre><code>{
   "archiveFormatVersion": 1,
-  "projectSchemaVersion": 1,
+  "projectSchemaVersion": 2,
   "packLockVersion": 1,
   "projectId": "uuid",
   "createdWith": "sprite-project/x.y.z",
@@ -123,6 +123,16 @@
     <tr><td>Extensions</td><td>Only inside a versioned, namespaced <code>extensions</code> object; unsupported required extensions fail closed.</td></tr>
   </tbody>
 </table>
+
+<h2>Project schema evolution</h2>
+<p>Project schema version 2 is the only format written by UPD-001. It separates project metadata in
+  <code>project.json</code> from the active character recipe in <code>recipes/&lt;recipe-id&gt;.json</code>. The
+  project stores <code>activeRecipeId</code>, an ordered <code>recipeIds</code> array, exact pack-lock references,
+  theme, preview, timestamps, and a non-negative integer revision. UPD-001 creates exactly one recipe; the shape
+  reserves future growth without promising multi-recipe UI.</p>
+<p>The verified schema-version-1 project migrates deterministically: preserve project and character IDs and all
+  creative values, move the character value into one recipe document, resolve the exact pack lock, set revision
+  zero, validate the complete graph, and require semantic, render, provenance, and export parity before commit.</p>
 
 <h2>Host-only data that must not enter the file</h2>
 <ul>
@@ -173,7 +183,8 @@
   <li>Never update <code>project.json</code> without updating its manifest size and checksum in the same logical save.</li>
   <li>A failed save leaves the last valid file/folder intact and keeps the project visibly dirty.</li>
   <li>Migration never overwrites the only source copy. Web keeps an IndexedDB snapshot; Electron keeps the source file/folder and writes a new temporary result.</li>
-  <li>Locking detects simultaneous writes where possible; revision mismatch requires explicit reload, overwrite, or save-as resolution.</li>
+  <li>Web optimistic concurrency uses an integer revision checked inside the IndexedDB transaction. Desktop saves compare SHA-256 fingerprints of every canonical entry read at open.</li>
+  <li>A revision or fingerprint mismatch writes nothing and requires explicit reload, overwrite with a recovery checkpoint, save-as/copy, or cancel resolution.</li>
 </ul>
 
 <h2>Compatibility verification</h2>

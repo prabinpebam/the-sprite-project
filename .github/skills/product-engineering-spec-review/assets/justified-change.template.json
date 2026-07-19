@@ -1,0 +1,28 @@
+{
+  "id": "CHANGE-001",
+  "priorLockId": "LOCK-001",
+  "triggerClass": "new-evidence",
+  "newEvidence": "Observable fact unavailable or unresolved when the specification was locked",
+  "evidenceRefs": ["path/to/repository-evidence"],
+  "lockedSurface": "Decision IDs, promises, flows, contracts, files, and gates affected",
+  "noChangeConsequence": "Concrete user/system harm, missed value, or constraint violation if the lock remains unchanged",
+  "options": [
+    "Keep the locked specification unchanged",
+    "Apply the smallest sufficient repair"
+  ],
+  "productAlignment": "How the change advances the accepted promise and north star without adding an excluded promise",
+  "expectedBenefit": "Measured value or low/medium/high/unknown with evidence and uncertainty",
+  "fullChangeCost": "Design, implementation, migration, compatibility, revalidation, documentation, support, rollout, rollback, and cognitive cost",
+  "blastRadius": "Direct and transitive contracts, hosts, evidence, and decisions invalidated",
+  "reversibility": "Rollback path and any one-way consequences",
+  "revalidationPlan": [
+    "Validators and contract tests to rerun",
+    "Affected actual-UI flows and hosts",
+    "Migration, compatibility, release, and rollback gates"
+  ],
+  "recommendation": "Why net value is positive at the stated confidence and why this is the narrowest sufficient delta",
+  "confidence": 0,
+  "authority": "Decision owner",
+  "approvalRef": "path/to/owner-approval-artifact",
+  "decision": "pending"
+}

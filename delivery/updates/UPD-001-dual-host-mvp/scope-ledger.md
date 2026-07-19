@@ -5,10 +5,10 @@
 | Type | Count |
 |---|---|
 | Customer promises | 4 |
-| Scenarios | 10 |
-| User-can capabilities | 26 |
-| Task flows | 11 |
-| Expected behaviors | 42 |
+| Scenarios | 14 |
+| User-can capabilities | 31 |
+| Task flows | 15 |
+| Expected behaviors | 56 |
 
 ## Deliberate Exclusions
 

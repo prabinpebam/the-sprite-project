@@ -1,0 +1,500 @@
+{
+  "schemaVersion": 2,
+  "reviewId": "REVIEW-UPD-001-001",
+  "target": "delivery/updates/UPD-001-dual-host-mvp",
+  "reviewedAt": "2026-07-19",
+  "depth": "deep",
+  "verdict": "ready",
+  "materialitySignals": [
+    "adds an optional Electron host",
+    "replaces browser project persistence",
+    "introduces a universal canonical project file",
+    "migrates a verified legacy project schema",
+    "adds filesystem and IPC trust boundaries",
+    "adds cross-host compatibility and distribution obligations"
+  ],
+  "sources": [
+    "delivery/updates/UPD-001-dual-host-mvp/traceability.json",
+    "delivery/updates/UPD-001-dual-host-mvp/implementation-contract.md",
+    "delivery/updates/UPD-001-dual-host-mvp/quality-scenarios.md",
+    "delivery/updates/UPD-001-dual-host-mvp/release-gate.md",
+    "delivery/mvp/traceability.json",
+    "docs/architecture/decisions/0001-zero-server-web-platform.html",
+    "docs/architecture/decisions/0002-dual-host-local-first-product.html",
+    "docs/architecture/platform/project-file-compatibility.html",
+    "docs/architecture/platform/browser-storage-and-portability.html",
+    "docs/architecture/platform/github-pages-and-offline.html",
+    "product/src/domain/types.ts",
+    "product/src/domain/storage.ts",
+    "product/src/domain/project.ts"
+  ],
+  "dimensions": [
+    {
+      "id": "product-truth",
+      "applicable": true,
+      "score": 10,
+      "definitionOf10": "Named users, zero-server and local-file needs, observable web/desktop/cross-host outcomes, recovery expectations, evidence, and consequences of exclusions remain explicit without changing the verified MVP promise.",
+      "evidence": [
+        "customer-promise.md",
+        "scope-ledger.md",
+        "impact-analysis.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "scope-alternatives",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Web-only, Electron-only, separate-product, Tauri, and shared-core alternatives are compared; accepted scope, deferred capabilities, and north-star trajectory are explicit and reversible where possible.",
+      "evidence": [
+        "docs/architecture/decisions/0002-dual-host-local-first-product.html",
+        "scope-ledger.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "architecture",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "One host-neutral schema/serializer/core, typed repository/archive/export contracts, exact Electron bridge, opaque path authority, persistence ownership, dependency order, and accepted ADR consequences are executable without architecture invention.",
+      "evidence": [
+        "implementation-contract.md sections 1, 2, 8, 9, and 13",
+        "decisions.md",
+        "execution-plan.md"
+      ],
+      "findingIds": [
+        "SPEC-001",
+        "SPEC-002",
+        "SPEC-008"
+      ]
+    },
+    {
+      "id": "data-failure",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Schema migration, autosave, revisions, snapshots, quota, archive import, desktop fingerprints, partial writes, conflicts, external modification, and stable recovery errors have deterministic state transitions and evidence flows.",
+      "evidence": [
+        "implementation-contract.md sections 3 through 10",
+        "traceability.json migration, recovery, quota, and conflict flows"
+      ],
+      "findingIds": [
+        "SPEC-003",
+        "SPEC-004",
+        "SPEC-005",
+        "SPEC-008"
+      ]
+    },
+    {
+      "id": "quality-attributes",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Correctness, durability, recoverability, security, compatibility, accessibility, storage capacity, performance, offline continuity, release safety, and maintainability are measurable in target-specific scenarios.",
+      "evidence": [
+        "quality-scenarios.md QS-001 through QS-012",
+        "release-gate.md Quality Scenario Gate"
+      ],
+      "findingIds": [
+        "SPEC-004",
+        "SPEC-006",
+        "SPEC-007"
+      ]
+    },
+    {
+      "id": "verification-release",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Every promise and failure contract maps to shared tests, actual web or packaged Electron UI evidence, cross-host fixtures, clean-machine launch, release checksum, and rehearsed rollback without confusing specified with verified.",
+      "evidence": [
+        "release-gate.md",
+        "quality-scenarios.md",
+        "traceability.json work packages and expected behaviors"
+      ],
+      "findingIds": [
+        "SPEC-007"
+      ]
+    },
+    {
+      "id": "implementation-readiness",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "A competent implementer can execute the dependency-ordered packages without choosing product behavior, data dialects, bridge authority, conflict outcomes, limits, accessibility behavior, or release criteria.",
+      "evidence": [
+        "implementation-contract.md",
+        "two independent unfamiliar-implementer review rounds; round 2 PASS"
+      ],
+      "findingIds": [
+        "SPEC-001",
+        "SPEC-002",
+        "SPEC-003",
+        "SPEC-004",
+        "SPEC-005",
+        "SPEC-006",
+        "SPEC-007",
+        "SPEC-008"
+      ]
+    },
+    {
+      "id": "ux-accessibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "All new views and recovery states have named controls, visible status, safe defaults, keyboard/focus contracts, WCAG 2.2 AA-oriented acceptance, reflow, contrast, target-size, and reduced-motion evidence.",
+      "evidence": [
+        "experience-architecture.md",
+        "implementation-contract.md section 11",
+        "quality-scenarios.md QS-006"
+      ],
+      "findingIds": [
+        "SPEC-005",
+        "SPEC-006"
+      ]
+    },
+    {
+      "id": "developer-experience",
+      "applicable": true,
+      "score": 8,
+      "definitionOf10": "The internal implementer-facing contracts are discoverable, strictly typed, consistently named, fixture-backed, and dependency-ordered; public API/CLI onboarding is correctly excluded.",
+      "evidence": [
+        "implementation-contract.md sections 9, 10, and 13",
+        "scope-ledger.md public CLI exclusion context"
+      ],
+      "findingIds": [
+        "SPEC-002",
+        "SPEC-008"
+      ]
+    },
+    {
+      "id": "security-privacy",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Assets, untrusted archives/imports, renderer-main privilege crossing, opaque location grants, payload/expansion bounds, strict schemas, navigation controls, no undeclared transfer, mitigations, and adversarial evidence are explicit.",
+      "evidence": [
+        "implementation-contract.md sections 6, 9, and 10",
+        "quality-scenarios.md QS-004",
+        "release-gate.md Electron and Cross-Host gates"
+      ],
+      "findingIds": [
+        "SPEC-002",
+        "SPEC-004",
+        "SPEC-008"
+      ]
+    },
+    {
+      "id": "reliability-operability",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Local durability, recovery, offline continuity, diagnostic error codes, storage status, update lifecycle, clean-machine evidence, and independent host rollback are specified without inventing server monitoring.",
+      "evidence": [
+        "implementation-contract.md sections 3 through 5, 10, and 12",
+        "quality-scenarios.md QS-002, QS-003, QS-010, QS-011"
+      ],
+      "findingIds": [
+        "SPEC-003",
+        "SPEC-004",
+        "SPEC-007"
+      ]
+    },
+    {
+      "id": "performance-capacity",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Archive, IPC, storage, path, entry, and snapshot limits are numeric; save and maximum-archive workloads have reference environments, p95 or boundary targets, and failure behavior.",
+      "evidence": [
+        "implementation-contract.md sections 5, 6, and 9",
+        "quality-scenarios.md QS-007 through QS-009"
+      ],
+      "findingIds": [
+        "SPEC-004",
+        "SPEC-007"
+      ]
+    },
+    {
+      "id": "migration-compatibility",
+      "applicable": true,
+      "score": 10,
+      "definitionOf10": "Version dimensions, v1-to-v2 transformation, idempotent migration record, source preservation, old/current/future matrix, exact cross-host canonicalization, folder equivalence, and round-trip parity are binding and testable.",
+      "evidence": [
+        "implementation-contract.md sections 1 through 3",
+        "docs/architecture/platform/project-file-compatibility.html",
+        "quality-scenarios.md QS-003 and QS-005"
+      ],
+      "findingIds": [
+        "SPEC-001",
+        "SPEC-003",
+        "SPEC-008"
+      ]
+    },
+    {
+      "id": "deployment-distribution",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Actual Pages subpath/service-worker behavior, deterministic portable artifact naming, SHA-256 publication, unsigned-binary disclosure, clean-machine launch, manual update, independent withdrawal, and data-safe rollback are objective gates.",
+      "evidence": [
+        "implementation-contract.md section 12",
+        "docs/architecture/platform/github-pages-and-offline.html",
+        "release-gate.md"
+      ],
+      "findingIds": [
+        "SPEC-007"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "SPEC-001",
+      "dimension": "architecture",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Canonical project evolution was not implementation-grade",
+      "evidence": [
+        {
+          "source": "product/src/domain/types.ts and pre-review IA-PROJECT-DOCUMENT",
+          "claim": "The current schema embeds one character while the update referred broadly to recipes and pack locks without a binding next schema."
+        }
+      ],
+      "problem": "An implementer had to invent the canonical project graph and version transition.",
+      "impact": "Hosts could write incompatible project dialects or lose baseline identity during migration.",
+      "remediation": "Define project schema version 2, recipe schema version 1, invariants, v1 transformation, and one shared serializer/parser package.",
+      "verification": "Strict schema fixtures, v1 parity migration, byte-idempotent serializer tests, and cross-host FILE gates.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-002",
+      "dimension": "security-privacy",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Electron renderer bridge and file authority were underspecified",
+      "evidence": [
+        {
+          "source": "docs/architecture/decisions/0002-dual-host-local-first-product.html before review",
+          "claim": "The decision required narrow typed preload methods and path validation but did not define methods, channels, result/error types, payload bounds, or authority."
+        }
+      ],
+      "problem": "Renderer/main boundaries and filesystem authorization could diverge across implementations.",
+      "impact": "The renderer could gain excess Node or path authority, and contract tests could not prove the security claim.",
+      "remediation": "Define frozen SpriteHostBridge methods, internal channel constants, strict request/response schemas, opaque session grants, operation scopes, recents, navigation controls, and payload limits.",
+      "verification": "Bridge contract tests, invalid-channel/payload/grant tests, packaged renderer-global checks, and navigation adversarial tests.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-003",
+      "dimension": "migration-compatibility",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Legacy localStorage migration lacked a state machine and durable marker",
+      "evidence": [
+        {
+          "source": "impact-analysis.md and product/src/domain/storage.ts before review",
+          "claim": "The update promised lossless migration from one legacy key but did not define trigger, transaction, read-back, marker, restart, raw recovery, or failure behavior."
+        }
+      ],
+      "problem": "The migration could delete the only legacy copy, repeat, or strand a pending candidate.",
+      "impact": "Returning verified-MVP users could lose access to work during the persistence upgrade.",
+      "remediation": "Define pure v1-to-v2 transform, one-transaction candidate/recovery record, strict migration record, startup reconciliation, parity read-back, retention, Retry, and raw recovery download.",
+      "verification": "Valid, malformed, missing-pack, quota, interrupted, pending-restart, and verified-no-repeat migration fixtures through actual UI.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-004",
+      "dimension": "performance-capacity",
+      "severity": "high",
+      "confidence": 9,
+      "title": "Storage retention, quota thresholds, and archive safety limits were non-numeric",
+      "evidence": [
+        {
+          "source": "browser-storage-and-portability.html and project-file-compatibility.html before review",
+          "claim": "The contracts required documented bounds and versioned expansion limits but supplied no values."
+        }
+      ],
+      "problem": "Quota cleanup and malicious archive handling could not be implemented or tested consistently.",
+      "impact": "Snapshots could grow without bound and hosts could accept different archive bombs or oversized inputs.",
+      "remediation": "Set snapshot/age floors, 80/90 percent quota behavior, ordered safe eviction, archive/entry/path/ratio limits, and adversarial fixtures.",
+      "verification": "Boundary fixtures, quota flow, snapshot policy tests, maximum-archive benchmark, and identical host errors.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-005",
+      "dimension": "data-failure",
+      "severity": "high",
+      "confidence": 9,
+      "title": "Conflict and recovery obligations were prose-only",
+      "evidence": [
+        {
+          "source": "pre-review scenarios, task-flows.md, and compatibility atomicity rules",
+          "claim": "Older-tab, quota, snapshot, external-modification, and migration failures appeared as interruptions or gates without complete user flows and exact choices."
+        }
+      ],
+      "problem": "Implementers could handle high-risk conflicts differently or omit visible recovery.",
+      "impact": "Stale tabs or external tools could silently overwrite work, and users could not exercise promised recovery.",
+      "remediation": "Add first-class migration, snapshot restore, quota recovery, web save-conflict, and desktop external-change scenarios, capabilities, views, controls, flows, and objective behaviors.",
+      "verification": "All 15 task flows pass through actual UI with no orphan trace records.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-006",
+      "dimension": "ux-accessibility",
+      "severity": "medium",
+      "confidence": 9,
+      "title": "New surfaces lacked a binding accessibility interaction contract",
+      "evidence": [
+        {
+          "source": "pre-review experience-architecture.md",
+          "claim": "Roles and names existed, but keyboard patterns, focus movement/restoration, status announcements, reflow, target size, contrast, and reduced motion were not acceptance obligations."
+        }
+      ],
+      "problem": "Accessible names alone could be mistaken for accessible workflows.",
+      "impact": "Keyboard and assistive-technology users could be blocked in recovery, conflict, import, or close flows.",
+      "remediation": "Bind WCAG 2.2 AA-oriented semantics, keyboard/focus behavior, safe defaults, announcements, reflow, contrast, target size, and reduced motion to every new flow.",
+      "verification": "Playwright keyboard/focus/status tests plus automated and manual accessibility checks on supported hosts.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-007",
+      "dimension": "verification-release",
+      "severity": "medium",
+      "confidence": 9,
+      "title": "Cross-cutting quality and release claims lacked measurable scenarios",
+      "evidence": [
+        {
+          "source": "pre-review release-gate.md",
+          "claim": "The gate named parity and anomalies but lacked reference workloads, accessibility evidence, artifact naming/checksums, clean-machine fields, and a full data-safe rollback rehearsal."
+        }
+      ],
+      "problem": "Release readiness could depend on subjective interpretation or stale local checks.",
+      "impact": "A host could appear complete while failing at capacity, offline, packaged launch, or rollback boundaries.",
+      "remediation": "Add QS-001 through QS-012 and strengthen web, Electron, cross-host, performance, artifact, clean-machine, and rollback gates.",
+      "verification": "Every quality scenario has passing evidence or an approved not-applicable reason before release.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "SPEC-008",
+      "dimension": "implementation-readiness",
+      "severity": "high",
+      "confidence": 9,
+      "title": "Canonical serialization, meaningful edits, and migration/fingerprint metadata still required inference after the first hardening pass",
+      "evidence": [
+        {
+          "source": "independent unfamiliar-implementer review round 1",
+          "claim": "The reviewer could not determine exact JSON number/string behavior, autosave field classification, migration marker lifecycle, or non-recursive fingerprint structure from the first revision."
+        }
+      ],
+      "problem": "Subtle shared-core behaviors remained easy to implement differently even after the main contracts were added.",
+      "impact": "Byte parity, autosave frequency, restart recovery, or external-change detection could drift by host or module.",
+      "remediation": "Define strict shared serialization, meaningful/non-meaningful fields, exact migration record/restart rules, explicit non-recursive fingerprint, pack-lock preservation, product-specific web names, leakage fixtures, recents, labels, and dialog defaults.",
+      "verification": "Independent round 2 confirms all earlier issues resolved and returns PASS with no critical/high findings.",
+      "disposition": "fixed"
+    }
+  ],
+  "unresolvedDecisions": [],
+  "editsMade": [
+    "Created a reusable product-engineering-spec-review skill and validator.",
+    "Added implementation-contract.md and quality-scenarios.md.",
+    "Expanded traceability from 164 to 203 records and task flows from 11 to 15.",
+    "Defined schema version 2, shared canonical serialization, migration, revisions, snapshots, quota, archive limits, conflicts, Electron grants/bridge, error taxonomy, accessibility, offline readiness, and release artifacts.",
+    "Aligned architecture decisions and platform contracts and strengthened release and rollback gates."
+  ],
+  "implementationReadiness": {
+    "unfamiliarImplementerPass": true,
+    "blockingFindingIds": [],
+    "implementationSequence": [
+      "Shared schemas, parsers, canonical serializer, migration, error taxonomy, and fixtures",
+      "Host-neutral repository, archive, pack, and export contracts",
+      "IndexedDB repository and web migration/recovery/conflict UI",
+      "GitHub Pages PWA lifecycle and actual-subpath verification",
+      "Electron main/preload shell with opaque grants",
+      "Desktop folder/archive/export adapters and external-change recovery",
+      "Cross-host parity plus baseline regression",
+      "Portable release, clean-machine launch, and rollback rehearsal"
+    ],
+    "verificationGates": [
+      "Product update and traceability validators pass",
+      "Shared schema/serializer/migration and adversarial fixtures pass",
+      "Every new expected behavior has direct evidence",
+      "All 15 task flows pass on their declared actual host",
+      "Affected RUN-MVP-001 baseline flows pass on every affected host",
+      "QS-001 through QS-012 pass or are explicitly approved not applicable",
+      "No unresolved severity 0-2 issue or undeclared anomaly remains"
+    ]
+  },
+  "conditions": [],
+  "adversarialReview": {
+    "maxRounds": 3,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "fail",
+        "issuesRaised": 13,
+        "validMaterialIssues": 8,
+        "rejectedOrAlreadyCovered": 5,
+        "result": "Repaired serializer, edit classification, migration marker, fingerprint clarity, pack locks, browser channel names, strict schemas, recents, conflict labels, and dialog defaults."
+      },
+      {
+        "round": 2,
+        "verdict": "pass",
+        "issuesRaised": 1,
+        "validMaterialIssues": 0,
+        "remainingCriticalOrHigh": 0,
+        "result": "All round-1 material issues resolved; no new material product or architecture decision remains. Offline pack wording was clarified as a data-driven low-risk improvement."
+      }
+    ],
+    "remainingConcerns": []
+  },
+  "stabilization": {
+    "state": "locked",
+    "lockId": "LOCK-UPD-001-002",
+    "lockedAt": "2026-07-19T18:32:41.142Z",
+    "lockedBy": "product owner",
+    "decisionOwnerApproval": true,
+    "lockManifest": "delivery/updates/UPD-001-dual-host-mvp/spec-lock.json",
+    "approvalRef": "delivery/updates/UPD-001-dual-host-mvp/spec-approval.json",
+    "approvalId": "APPROVAL-UPD-001-LOCK-002",
+    "productVisionAlignment": "Preserves one local-first product core, a complete zero-server web baseline, optional desktop file convenience, exact cross-host portability, and a scalable path to the North Star without adding excluded backend or desktop promises.",
+    "settledDecisionIds": [
+      "DEC-UPD001-DUAL-HOST",
+      "DEC-UPD001-WEB-STORAGE",
+      "DEC-UPD001-PORTABLE-WINDOWS",
+      "DEC-UPD001-SHARED-SCHEMA",
+      "DEC-UPD001-OPAQUE-FILE-GRANTS",
+      "DEC-UPD001-OPTIMISTIC-REVISIONS",
+      "DEC-UPD001-SPEC-LOCK"
+    ],
+    "justifiedChanges": [
+      {
+        "id": "CHANGE-UPD001-LOCK-HARDENING-001",
+        "priorLockId": "LOCK-UPD-001-001",
+        "triggerClass": "contract-defect",
+        "newEvidence": "A focused adversarial review demonstrated that the final review record was mutable, generated projections lacked freshness validation, and approved lock changes could cite no repository-resolvable approval artifact.",
+        "evidenceRefs": [
+          "delivery/updates/UPD-001-dual-host-mvp/stabilization-review.md",
+          "delivery/updates/UPD-001-dual-host-mvp/spec-locks/LOCK-UPD-001-001.json"
+        ],
+        "lockedSurface": "DEC-UPD001-SPEC-LOCK, spec review metadata, lock manifest controls, generated-artifact validation, and justified-change validation; no customer promise, workflow, schema, host, compatibility, quality threshold, or release behavior changes.",
+        "noChangeConsequence": "A later non-deterministic reviewer could rewrite readiness conclusions or stale generated projections and present self-asserted approval while the source-contract hash remained clean.",
+        "options": [
+          "Keep LOCK-UPD-001-001 unchanged and accept the convergence bypasses",
+          "Issue bounded LOCK-UPD-001-002 hardening without product-semantic changes",
+          "Add a signed external approval service and cryptographic manifest chain"
+        ],
+        "productAlignment": "Makes autonomous implementation of the accepted local-first dual-host vision stable without expanding scope or adding backend infrastructure.",
+        "expectedBenefit": "High: closes direct review-churn bypasses and makes generated and review conclusions deterministic inputs to later agents.",
+        "fullChangeCost": "Low: validator and generator checks plus immutable local artifacts; no product implementation, migration, compatibility fixture, actual-UI flow, or release gate is invalidated.",
+        "blastRadius": "Stabilization tooling and review metadata only; the semantic trace changes only the active lock ID and lock-decision evidence.",
+        "reversibility": "Restore the preserved LOCK-UPD-001-001 manifest and prior tooling if the control causes disproportionate friction.",
+        "revalidationPlan": [
+          "Run stabilization and review self-tests",
+          "Run generated documentation freshness check",
+          "Run product-update and review validators",
+          "Run a fresh adversarial stabilization-control review",
+          "Verify the lock notice and current counts in the rendered docs page"
+        ],
+        "recommendation": "Approve the bounded hardening because it directly closes demonstrated convergence bypasses at low cost and is the narrowest repair that preserves evidence-owned status progress.",
+        "confidence": 10,
+        "authority": "product owner",
+        "approvalRef": "delivery/updates/UPD-001-dual-host-mvp/spec-approval.json",
+        "affectedDecisionIds": [
+          "DEC-UPD001-SPEC-LOCK"
+        ],
+        "decision": "approved"
+      }
+    ]
+  }
+}

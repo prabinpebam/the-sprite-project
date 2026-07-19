@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "lockId": "LOCK-UPD-001-002",
+  "state": "locked",
+  "target": "delivery/updates/UPD-001-dual-host-mvp",
+  "baselineReviewId": "REVIEW-UPD-001-001",
+  "supersedesLockId": "LOCK-UPD-001-001",
+  "priorLockManifest": "delivery/updates/UPD-001-dual-host-mvp/spec-locks/LOCK-UPD-001-001.json",
+  "priorLockSha256": "4ea15ccc9274617c9d08596299b5b1340bde45fac429ea93794b5912a3342323",
+  "lockedAt": "2026-07-19T18:32:41.142Z",
+  "lockedBy": "product owner",
+  "approvalRef": "delivery/updates/UPD-001-dual-host-mvp/spec-approval.json",
+  "approvalId": "APPROVAL-UPD-001-LOCK-002",
+  "approvalEvidence": "APPROVAL-UPD-001-LOCK-002 approves the bounded stabilization-control hardening requested directly by the product owner on 2026-07-19.",
+  "productVisionAlignment": "One local-first product core with a complete zero-server web baseline, optional desktop file convenience, exact cross-host portability, and no premature backend or divergent-host promise.",
+  "workspaceRoot": "../../..",
+  "settledDecisionIds": [
+    "DEC-UPD001-DUAL-HOST",
+    "DEC-UPD001-WEB-STORAGE",
+    "DEC-UPD001-PORTABLE-WINDOWS",
+    "DEC-UPD001-SHARED-SCHEMA",
+    "DEC-UPD001-OPAQUE-FILE-GRANTS",
+    "DEC-UPD001-OPTIMISTIC-REVISIONS",
+    "DEC-UPD001-SPEC-LOCK"
+  ],
+  "allowedWithoutReopen": [
+    "implementation code that conforms to the locked contracts",
+    "traceability status, decision evidence, run, and issue updates owned by generated evidence",
+    "regeneration of derived customer-promise, scenario, capability, task-flow, experience, scope, decision, execution, and docs pages from unchanged canonical sources"
+  ],
+  "reopenTriggers": [
+    "evidence-backed contract defect, infeasibility, data-loss, security, privacy, or untestable behavior",
+    "material new implementation, user, operational, legal, performance, compatibility, or research evidence",
+    "decision-owner change to promise, product vision, target user, platform, funding, deadline, law, or dependency constraint",
+    "measured user value, risk reduction, or lifecycle cost reduction that exceeds full change and revalidation cost"
+  ],
+  "consistencyChecks": [
+    {
+      "type": "generated-files",
+      "script": "delivery/updates/UPD-001-dual-host-mvp/generate-docs.mjs",
+      "outputs": [
+        "delivery/updates/UPD-001-dual-host-mvp/customer-promise.md",
+        "delivery/updates/UPD-001-dual-host-mvp/scenarios.md",
+        "delivery/updates/UPD-001-dual-host-mvp/capabilities.md",
+        "delivery/updates/UPD-001-dual-host-mvp/task-flows.md",
+        "delivery/updates/UPD-001-dual-host-mvp/experience-architecture.md",
+        "delivery/updates/UPD-001-dual-host-mvp/scope-ledger.md",
+        "delivery/updates/UPD-001-dual-host-mvp/decisions.md",
+        "delivery/updates/UPD-001-dual-host-mvp/execution-plan.md",
+        "docs/execution/updates/upd-001-dual-host-mvp.html"
+      ]
+    }
+  ],
+  "finalization": {
+    "reviewPath": "delivery/updates/UPD-001-dual-host-mvp/spec-review.json"
+  },
+  "entries": [
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/baseline.json",
+      "mode": "bytes",
+      "sha256": "fdfe369c8e66883375f0b71e789fff649b56ff14b2f4741a922be3161d9cae49"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/change-proposal.md",
+      "mode": "bytes",
+      "sha256": "2a35874e0ef9038def8078034a489d82e1847e6fe15b36f61900482ccaa16bed"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/impact-analysis.md",
+      "mode": "bytes",
+      "sha256": "67f707c6990096d1897eae8af0fb0ce420c6efdab799ffbca9223606c648fa26"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/traceability.json",
+      "mode": "traceability-contract",
+      "sha256": "c495803714e8896569f4f5f9c25bbc54a63b64f20f3843f0037342164108483e"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/implementation-contract.md",
+      "mode": "bytes",
+      "sha256": "80d84b2ef9bb878e12ff4ce6fb0b2fec5677f55a04d56a8c601c609e7efefda5"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/quality-scenarios.md",
+      "mode": "bytes",
+      "sha256": "c742d00b3acd10c37f11db1c3766ab284bd145047468dee6507b6b7dd98da4ec"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/release-gate.md",
+      "mode": "bytes",
+      "sha256": "dd47ab63ac3d1635ea3df7ce3aa4c3ff5d4e279b016240710ac0e97dace76177"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/spec-review.json",
+      "mode": "review-contract",
+      "sha256": "179619d5424a07e83d2d62dc470ffaf1e1b93d88f121a2c8b655a080fc4e4f6f"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/spec-approval.json",
+      "mode": "bytes",
+      "sha256": "e88d893e5e1f99b2d882feddbb32125ecb77cd931b646612061419a7e96c008d"
+    },
+    {
+      "path": "delivery/updates/UPD-001-dual-host-mvp/stabilization-review.md",
+      "mode": "bytes",
+      "sha256": "0959d031875496951fa4ac6657a4cb49352d558c8d9a09137f12d5efebdc0a2b"
+    },
+    {
+      "path": "docs/execution/updates/upd-001-dual-host-mvp.html",
+      "mode": "html-contract",
+      "sha256": "ddb4366cea3e8b864152f916e7c32f3a5361b64918111e5e4d784f40ea326437"
+    }
+  ]
+}
