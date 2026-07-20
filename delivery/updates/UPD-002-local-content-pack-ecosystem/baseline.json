@@ -1,0 +1,32 @@
+{
+  "updateId": "UPD-002",
+  "baseline": {
+    "name": "Implemented Dual-Host Local-First MVP",
+    "gitRevision": "4e890b082d4df3b2758cdcc27f7f905bfee3afe0",
+    "evidenceRunId": "RUN-UPD001-001",
+    "traceabilityModel": "delivery/updates/UPD-001-dual-host-mvp/traceability.json",
+    "status": "implemented",
+    "recordCount": 205,
+    "verifiedFlowCount": 15,
+    "verifiedBehaviorCount": 56
+  },
+  "policy": {
+    "immutable": true,
+    "inheritVerifiedStatus": false,
+    "changedRecordsRequireNewEvidence": true,
+    "affectedRetainedFlowsRequireRegression": true
+  },
+  "retainedProductClaims": [
+    "CP-PACK-INSTALL",
+    "CP-PACK-AUTHOR",
+    "CP-PACK-LIFECYCLE",
+    "CP-PACK-PORTABILITY"
+  ],
+  "retainedArchitectureDecisions": [
+    "ADR-001 Zero-Server Web Platform",
+    "ADR-002 Dual-Host Local-First Product",
+    "LOCK-UPD-001-002"
+  ],
+  "entryCondition": "UPD-002 implementation begins only after UPD-001 external release verification completes or the product owner explicitly reschedules that gate without changing the UPD-002 contract.",
+  "note": "UPD-002 layers a data-only local pack ecosystem above UPD-001. It does not rewrite dual-host, project, archive, security, recovery, or export evidence."
+}

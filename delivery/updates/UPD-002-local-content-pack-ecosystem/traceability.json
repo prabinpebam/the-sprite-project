@@ -1,0 +1,320 @@
+{
+  "modelVersion": "1.0.0",
+  "update": {
+    "id": "UPD-002",
+    "title": "Local Content Pack Ecosystem",
+    "status": "specified",
+    "requestedAt": "2026-07-20",
+    "baselineRevision": "4e890b082d4df3b2758cdcc27f7f905bfee3afe0",
+    "baselineEvidenceRun": "RUN-UPD001-001",
+    "hosts": ["web", "desktop", "cross-host"]
+  },
+  "stage": {
+    "id": "STAGE-CONTENT-ECOSYSTEM-001",
+    "name": "Open the local content ecosystem",
+    "status": "specified",
+    "targetUser": "Solo and small-team 2D game developers and technical artists who need to add legally traceable humanoid content without waiting for an application release",
+    "qualityGate": "A compatible third-party-style humanoid pack can be authored, validated, installed, versioned, used offline, transferred between hosts, removed safely, and credited exactly without renderer branches or silent project drift"
+  },
+  "sources": [
+    "docs/planning/overview.html",
+    "docs/north-star/overview.html",
+    "docs/design/generators/character-generator.html",
+    "docs/design/systems/composition-model.html",
+    "docs/research/art-sources/lpc-pirates.html",
+    "docs/research/character-generators/ulpc-capabilities-gaps.html",
+    "delivery/updates/UPD-001-dual-host-mvp/traceability.json",
+    "delivery/updates/UPD-001-dual-host-mvp/implementation-contract.md",
+    "product/src/domain/packs.ts",
+    "product/src/domain/archive.ts"
+  ],
+  "promises": [
+    {
+      "id": "CP-PACK-INSTALL",
+      "status": "specified",
+      "host": "shared",
+      "statement": "A developer can inspect and install a compatible local humanoid content pack without an application release.",
+      "user": "Developer extending the available character catalog",
+      "context": "The developer has a local .spritepack file from themselves or another creator",
+      "trigger": "They choose Add pack from the pack library",
+      "outcome": "The product validates the complete package before mutation, shows identity, version, coverage, token bindings, provenance, and risks, then installs the exact content for offline use",
+      "quality": "Install is transactional, deterministic, host-consistent, and completes within 10 seconds for the maximum supported package on the reference machine",
+      "recovery": "Invalid, incompatible, duplicate, oversized, or interrupted installs preserve the source file and existing pack repository and return a stable error with a next action",
+      "evidence": "Shared adversarial fixtures plus actual-UI install, rejection, update, removal, and offline runs pass on web and packaged Electron"
+    },
+    {
+      "id": "CP-PACK-AUTHOR",
+      "status": "specified",
+      "host": "shared",
+      "statement": "A technical artist can turn LPC-compatible humanoid layer sheets into a reusable, token-aware, legally attributed pack without writing JSON.",
+      "user": "Technical artist or developer with compatible original or redistributable layer art",
+      "context": "The source art follows the current 64px humanoid idle/walk sheet profile",
+      "trigger": "They create a pack draft and import one or more PNG layer sheets",
+      "outcome": "A guided workflow captures metadata, slots, fixed and token colors, coverage, source and license information, previews the exact runtime composition, and exports a deterministic .spritepack",
+      "quality": "Drafts autosave locally, validation points to exact assets and fields, and exported bytes are reproducible from an unchanged draft",
+      "recovery": "Decode, validation, quota, interruption, or export failure retains the draft and original imports and offers retry, remove offending asset, or export recovery data",
+      "evidence": "Actual-UI authoring, reload, validation, correction, preview, export, and self-install flows pass with exact render and credit fixtures"
+    },
+    {
+      "id": "CP-PACK-LIFECYCLE",
+      "status": "specified",
+      "host": "shared",
+      "statement": "A developer can manage installed pack versions without silently changing or stranding existing projects.",
+      "user": "Returning developer with projects locked to installed content",
+      "context": "One or more local packs and projects exist",
+      "trigger": "They inspect, enable, disable, update, activate, or remove a pack",
+      "outcome": "Versions install side by side, projects preserve exact locks, destructive actions expose affected projects, and missing locks have explicit locate, install, replace-copy, or cancel recovery",
+      "quality": "No lifecycle command mutates project pack locks implicitly; current projects and last-known-good content remain available through failures",
+      "recovery": "In-use removal is blocked; unavailable content leaves the project intact in a deterministic blocked state",
+      "evidence": "Version, dependency, remove, missing-lock, rollback, and regression fixtures pass on both hosts"
+    },
+    {
+      "id": "CP-PACK-PORTABILITY",
+      "status": "specified",
+      "host": "cross-host",
+      "statement": "A developer can move authored packs and projects that use them between web and Electron without content, rendering, or provenance drift.",
+      "user": "Developer using both local-first hosts",
+      "context": "A project references an installed local pack",
+      "trigger": "They export/import a .spritepack or transfer a .spriteproject containing embedded required content",
+      "outcome": "Both hosts resolve the same pack identity and bytes, produce identical render and export hashes, and generate the same merged credits",
+      "quality": "Canonical pack payload hashes, project locks, selected assets, runtime pixels, and credits match exactly across hosts",
+      "recovery": "A missing, conflicting, or tampered pack fails before project mutation and preserves both sources",
+      "evidence": "Bidirectional pack and project round trips pass from actual web and packaged Electron UIs"
+    }
+  ],
+  "scenarios": [
+    { "id": "SC-PACK-FIRST-INSTALL", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-INSTALL"], "actor": "Developer adding a themed wardrobe", "startingState": "Pack library contains bundled packs only", "intent": "Inspect and install a compatible local pack", "environment": "Supported web or packaged Electron host", "success": "The exact pack is installed, offline-ready, and available to new recipes", "interruptions": ["Cancel before commit", "Duplicate version", "Quota or disk capacity", "Host closes during validation"] },
+    { "id": "SC-PACK-INVALID", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-INSTALL", "CP-PACK-LIFECYCLE"], "actor": "Developer receiving an untrusted pack", "startingState": "Existing projects and packs are valid", "intent": "Understand why a pack cannot be installed", "environment": "Malformed, hostile, unsupported, or oversized .spritepack fixture", "success": "The package is rejected with a stable code and no repository or project mutation", "interruptions": ["Traversal", "Checksum mismatch", "Malformed PNG", "Future schema", "Unknown license", "Compression bomb"] },
+    { "id": "SC-PACK-LIBRARY", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-LIFECYCLE"], "actor": "Returning developer", "startingState": "Bundled and locally installed pack versions exist", "intent": "Inspect availability, origin, storage, usage, and status", "environment": "Online or offline", "success": "The library accurately distinguishes bundled, installed, embedded, disabled, missing, and in-use versions", "interruptions": ["Unavailable source", "Corrupt local record", "Storage estimate unavailable"] },
+    { "id": "SC-PACK-UPDATE", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-LIFECYCLE"], "actor": "Developer evaluating a newer pack version", "startingState": "Projects lock version 1 and a valid version 2 package is available locally", "intent": "Install the new version without changing existing projects", "environment": "Both hosts", "success": "Versions coexist and only explicit project action changes a lock after preview and checkpoint", "interruptions": ["Same version different checksum", "Breaking asset removal", "Update cancelled"] },
+    { "id": "SC-PACK-REMOVE", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-LIFECYCLE"], "actor": "Developer reclaiming local storage", "startingState": "An installed pack may be unused or referenced", "intent": "Remove only content that is safe to remove", "environment": "Pack library", "success": "Unused versions remove after confirmation; referenced versions remain intact with affected projects named", "interruptions": ["Removal cancelled", "Pack becomes referenced concurrently", "Filesystem or IndexedDB failure"] },
+    { "id": "SC-PACK-MISSING-RECOVERY", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-LIFECYCLE", "CP-PACK-PORTABILITY"], "actor": "Developer opening a transferred project", "startingState": "Project requires an unavailable exact pack lock", "intent": "Recover deterministic rendering without losing the project", "environment": "Web or Electron", "success": "Installing or locating the exact checksum resumes the project; replacement creates a copy and preserves the original lock", "interruptions": ["Wrong version", "Right ID/version but wrong checksum", "User cancels"] },
+    { "id": "SC-PACK-AUTHOR-START", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-AUTHOR"], "actor": "Technical artist with original compatible art", "startingState": "No draft or a blank draft", "intent": "Define pack identity and add humanoid layer sheets", "environment": "Pack authoring workspace", "success": "A draft contains valid metadata and at least one decoded, classified asset", "interruptions": ["Invalid dimensions", "Non-PNG input", "Duplicate asset ID", "User cancels"] },
+    { "id": "SC-PACK-AUTHOR-TOKENS", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-AUTHOR"], "actor": "Technical artist making art theme-aware", "startingState": "A valid asset sheet is present", "intent": "Bind source colors to semantic tokens while preserving fixed colors", "environment": "Token mapping and runtime preview", "success": "Every source color has an explicit fixed or token+shade disposition and preview matches exported runtime pixels", "interruptions": ["Ambiguous anti-aliased color", "Unmapped color", "Invalid shade", "Preview decode failure"] },
+    { "id": "SC-PACK-AUTHOR-PROVENANCE", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-AUTHOR"], "actor": "Creator preparing redistribution", "startingState": "Assets are configured but legal metadata may be incomplete", "intent": "Record exact source, author, offered license, chosen license, and attribution text", "environment": "Pack authoring workspace", "success": "Validation proves every asset has supported, internally consistent provenance and generated credits", "interruptions": ["Unsupported license", "Missing source URL", "Chosen license not offered", "Attribution omitted"] },
+    { "id": "SC-PACK-AUTHOR-RECOVERY", "status": "specified", "host": "shared", "promiseIds": ["CP-PACK-AUTHOR"], "actor": "Returning pack author", "startingState": "A dirty or previously failed draft exists", "intent": "Resume without reimporting source art", "environment": "Browser restart or Electron relaunch", "success": "The latest committed draft and imported bytes reopen, validation state recomputes, and recovery export is available", "interruptions": ["Quota full", "Interrupted asset write", "Unsupported future draft"] },
+    { "id": "SC-PACK-CROSS-HOST", "status": "specified", "host": "cross-host", "promiseIds": ["CP-PACK-PORTABILITY"], "actor": "Developer alternating between hosts", "startingState": "One host authored a pack and project using it", "intent": "Continue on the other host", "environment": "Local .spritepack and .spriteproject transfer", "success": "Pack bytes, project locks, preview hashes, generic/Godot exports, and credits remain identical", "interruptions": ["Pack already installed", "Pack missing", "Checksum conflict", "Archive cancelled"] }
+    ,{ "id": "SC-PACK-EMBEDDED-OFFLINE", "status": "specified", "host": "cross-host", "promiseIds": ["CP-PACK-PORTABILITY", "CP-PACK-LIFECYCLE"], "actor": "Developer receiving a project without a separately installed pack", "startingState": "Project archive v2 embeds every non-bundled exact pack and destination is offline", "intent": "Open and use the project without globally installing embedded content", "environment": "Disconnected supported web or packaged Electron host", "success": "Embedded exact locks validate project-scoped, preview/save/archive/generic/Godot/credits complete, and no global pack or enabled-state mutation occurs", "interruptions": ["Corrupt embedded package", "Lock/checksum mismatch", "Exact global package already installed", "User cancels"] }
+  ],
+  "capabilities": [
+    { "id": "UC-PACK-CHOOSE-FILE", "status": "specified", "host": "shared", "statement": "User can choose a local .spritepack file without granting arbitrary path authority.", "scenarioIds": ["SC-PACK-FIRST-INSTALL", "SC-PACK-INVALID"] },
+    { "id": "UC-PACK-INSPECT", "status": "specified", "host": "shared", "statement": "User can inspect pack identity, version, subject, assets, coverage, tokens, provenance, size, and warnings before install.", "scenarioIds": ["SC-PACK-FIRST-INSTALL", "SC-PACK-INVALID"] },
+    { "id": "UC-PACK-INSTALL", "status": "specified", "host": "shared", "statement": "User can transactionally install a validated exact pack version for offline use.", "scenarioIds": ["SC-PACK-FIRST-INSTALL"] },
+    { "id": "UC-PACK-REJECT", "status": "specified", "host": "shared", "statement": "User can see a stable actionable rejection without changing existing content.", "scenarioIds": ["SC-PACK-INVALID"] },
+    { "id": "UC-PACK-LIST", "status": "specified", "host": "shared", "statement": "User can list bundled, installed, embedded, disabled, missing, and in-use pack versions.", "scenarioIds": ["SC-PACK-LIBRARY"] },
+    { "id": "UC-PACK-ENABLE", "status": "specified", "host": "shared", "statement": "User can enable or disable an installed pack for new selections without changing existing locks.", "scenarioIds": ["SC-PACK-LIBRARY"] },
+    { "id": "UC-PACK-INSTALL-VERSION", "status": "specified", "host": "shared", "statement": "User can install multiple versions of one pack side by side.", "scenarioIds": ["SC-PACK-UPDATE"] },
+    { "id": "UC-PACK-ACTIVATE-VERSION", "status": "specified", "host": "shared", "statement": "User can explicitly change a project to a compatible installed version after preview and checkpoint.", "scenarioIds": ["SC-PACK-UPDATE"] },
+    { "id": "UC-PACK-REMOVE", "status": "specified", "host": "shared", "statement": "User can remove an unused installed version after explicit confirmation.", "scenarioIds": ["SC-PACK-REMOVE"] },
+    { "id": "UC-PACK-PROTECT-IN-USE", "status": "specified", "host": "shared", "statement": "User can see why an in-use version cannot be removed and which projects depend on it.", "scenarioIds": ["SC-PACK-REMOVE"] },
+    { "id": "UC-PACK-RECOVER-MISSING", "status": "specified", "host": "shared", "statement": "User can locate or install the exact missing pack checksum and resume a blocked project.", "scenarioIds": ["SC-PACK-MISSING-RECOVERY"] },
+    { "id": "UC-PACK-REPLACE-COPY", "status": "specified", "host": "shared", "statement": "User can replace an unavailable pack only in a new project copy after compatibility preview.", "scenarioIds": ["SC-PACK-MISSING-RECOVERY"] },
+    { "id": "UC-PACK-DRAFT-CREATE", "status": "specified", "host": "shared", "statement": "User can create a pack draft with stable ID, SemVer version, name, description, and humanoid subject profile.", "scenarioIds": ["SC-PACK-AUTHOR-START"] },
+    { "id": "UC-PACK-ASSET-IMPORT", "status": "specified", "host": "shared", "statement": "User can import a compatible PNG layer sheet and retain the original bytes in the draft.", "scenarioIds": ["SC-PACK-AUTHOR-START", "SC-PACK-AUTHOR-RECOVERY"] },
+    { "id": "UC-PACK-ASSET-CONFIGURE", "status": "specified", "host": "shared", "statement": "User can assign asset ID, display name, slot, description, and idle/walk coverage.", "scenarioIds": ["SC-PACK-AUTHOR-START"] },
+    { "id": "UC-PACK-TOKEN-BIND", "status": "specified", "host": "shared", "statement": "User can classify each source color as fixed or bind it to a semantic token and shade.", "scenarioIds": ["SC-PACK-AUTHOR-TOKENS"] },
+    { "id": "UC-PACK-PREVIEW", "status": "specified", "host": "shared", "statement": "User can preview the authored asset through the same runtime renderer used by installed packs.", "scenarioIds": ["SC-PACK-AUTHOR-TOKENS", "SC-PACK-AUTHOR-PROVENANCE"] },
+    { "id": "UC-PACK-PROVENANCE", "status": "specified", "host": "shared", "statement": "User can record supported license and attribution metadata for every asset.", "scenarioIds": ["SC-PACK-AUTHOR-PROVENANCE"] },
+    { "id": "UC-PACK-DRAFT-SAVE", "status": "specified", "host": "shared", "statement": "User can rely on transactional local draft autosave and reopen imported source bytes.", "scenarioIds": ["SC-PACK-AUTHOR-RECOVERY"] },
+    { "id": "UC-PACK-DRAFT-RECOVER", "status": "specified", "host": "shared", "statement": "User can download recovery data or remove an offending asset when a draft cannot validate.", "scenarioIds": ["SC-PACK-AUTHOR-RECOVERY"] },
+    { "id": "UC-PACK-VALIDATE", "status": "specified", "host": "shared", "statement": "User can validate the complete pack and navigate directly to every blocking field or asset.", "scenarioIds": ["SC-PACK-AUTHOR-PROVENANCE", "SC-PACK-AUTHOR-RECOVERY"] },
+    { "id": "UC-PACK-EXPORT", "status": "specified", "host": "shared", "statement": "User can export a deterministic .spritepack and matching human-readable validation report.", "scenarioIds": ["SC-PACK-AUTHOR-PROVENANCE", "SC-PACK-CROSS-HOST"] },
+    { "id": "UC-PACK-SELF-INSTALL", "status": "specified", "host": "shared", "statement": "User can install the exported pack as a test copy before distributing it.", "scenarioIds": ["SC-PACK-AUTHOR-PROVENANCE"] },
+    { "id": "UC-PACK-CROSS-HOST", "status": "specified", "host": "cross-host", "statement": "User can transfer authored packs and dependent projects between web and Electron with exact parity.", "scenarioIds": ["SC-PACK-CROSS-HOST", "SC-PACK-EMBEDDED-OFFLINE"] }
+  ],
+  "informationArchitecture": [
+    { "id": "IA-PACK-PACKAGE", "status": "specified", "name": "Portable pack package", "contains": ["manifest", "pack document", "asset sheets", "source-color bindings", "provenance", "checksums", "README"] },
+    { "id": "IA-PACK-MANIFEST", "status": "specified", "name": "Pack manifest", "contains": ["format version", "pack schema version", "identity", "entry inventory", "sizes", "media types", "SHA-256"] },
+    { "id": "IA-PACK-ASSET", "status": "specified", "name": "Humanoid pack asset", "contains": ["stable ID", "slot", "sheet reference", "coverage", "token map", "fixed colors", "provenance"] },
+    { "id": "IA-PACK-VERSION", "status": "specified", "name": "Installed pack version", "contains": ["pack ID", "SemVer", "checksum", "origin", "enabled state", "availability", "storage", "dependent projects"] },
+    { "id": "IA-PACK-DRAFT", "status": "specified", "name": "Pack authoring draft", "contains": ["metadata", "source bytes", "assets", "token mappings", "provenance", "validation state", "revision"] },
+    { "id": "IA-PACK-VALIDATION", "status": "specified", "name": "Pack validation report", "contains": ["stage", "stable codes", "asset paths", "blocking issues", "warnings", "package summary"] },
+    { "id": "IA-PACK-DEPENDENCY", "status": "specified", "name": "Project pack dependency", "contains": ["exact lock", "availability", "compatible alternatives", "affected project IDs", "recovery choices"] },
+    { "id": "IA-PACK-PROVENANCE", "status": "specified", "name": "Pack provenance", "contains": ["author", "source", "source URL", "offered licenses", "chosen license", "attribution text"] }
+  ],
+  "navigation": [
+    { "id": "NAV-PACKS", "status": "specified", "label": "Packs", "destination": "VIEW-PACK-LIBRARY", "backBehavior": "Returns to the prior workspace without changing project locks" },
+    { "id": "NAV-PACK-AUTHOR", "status": "specified", "label": "Author pack", "destination": "VIEW-PACK-AUTHOR", "backBehavior": "Preserves the draft and returns to its last completed section" },
+    { "id": "NAV-WORKSPACE", "status": "specified", "label": "Workspace", "destination": "VIEW-WORKSPACE", "backBehavior": "Returns to the active project without pack mutation" }
+  ],
+  "views": [
+    { "id": "VIEW-PACK-LIBRARY", "status": "specified", "name": "Pack library", "informationIds": ["IA-PACK-VERSION", "IA-PACK-DEPENDENCY"], "purpose": "Inspect and manage bundled, installed, embedded, disabled, missing, and in-use packs" },
+    { "id": "VIEW-PACK-INSTALL", "status": "specified", "name": "Pack install review", "informationIds": ["IA-PACK-PACKAGE", "IA-PACK-MANIFEST", "IA-PACK-VALIDATION", "IA-PACK-PROVENANCE"], "purpose": "Validate and summarize an untrusted pack before repository mutation" },
+    { "id": "VIEW-PACK-DETAIL", "status": "specified", "name": "Pack version detail", "informationIds": ["IA-PACK-VERSION", "IA-PACK-ASSET", "IA-PACK-PROVENANCE", "IA-PACK-DEPENDENCY"], "purpose": "Inspect content, origin, usage, versions, coverage, storage, and credits" },
+    { "id": "VIEW-PACK-AUTHOR", "status": "specified", "name": "Pack authoring workspace", "informationIds": ["IA-PACK-DRAFT", "IA-PACK-ASSET", "IA-PACK-PROVENANCE"], "purpose": "Build a current-profile humanoid pack without editing JSON" },
+    { "id": "VIEW-PACK-ASSET", "status": "specified", "name": "Asset configuration", "informationIds": ["IA-PACK-ASSET", "IA-PACK-VALIDATION"], "purpose": "Configure one sheet, slot, coverage, color bindings, and preview" },
+    { "id": "VIEW-PACK-VALIDATION", "status": "specified", "name": "Pack validation and export", "informationIds": ["IA-PACK-VALIDATION", "IA-PACK-PACKAGE", "IA-PACK-PROVENANCE"], "purpose": "Resolve blockers and export or self-install a deterministic package" },
+    { "id": "VIEW-PACK-RECOVERY", "status": "specified", "name": "Missing pack recovery", "informationIds": ["IA-PACK-DEPENDENCY", "IA-PACK-VALIDATION"], "purpose": "Recover an exact project lock without silent substitution" },
+    { "id": "VIEW-WORKSPACE", "status": "specified", "name": "Character workspace", "informationIds": ["IA-PACK-VERSION", "IA-PACK-ASSET"], "purpose": "Compose and export with bundled or installed packs through one renderer" }
+  ],
+  "uiElements": [
+    { "id": "UI-PACK-IMPORT", "status": "specified", "viewId": "VIEW-PACK-LIBRARY", "role": "button", "name": "Add pack" },
+    { "id": "UI-PACK-INSTALL-SUMMARY", "status": "specified", "viewId": "VIEW-PACK-INSTALL", "role": "region", "name": "Pack install summary" },
+    { "id": "UI-PACK-INSTALL", "status": "specified", "viewId": "VIEW-PACK-INSTALL", "role": "button", "name": "Install pack" },
+    { "id": "UI-PACK-ERROR", "status": "specified", "viewId": "VIEW-PACK-INSTALL", "role": "alert", "name": "Pack validation error" },
+    { "id": "UI-PACK-LIST", "status": "specified", "viewId": "VIEW-PACK-LIBRARY", "role": "list", "name": "Local packs" },
+    { "id": "UI-PACK-ENABLE", "status": "specified", "viewId": "VIEW-PACK-DETAIL", "role": "switch", "name": "Enable for new selections" },
+    { "id": "UI-PACK-VERSION", "status": "specified", "viewId": "VIEW-PACK-DETAIL", "role": "list", "name": "Installed versions" },
+    { "id": "UI-PACK-ACTIVATE", "status": "specified", "viewId": "VIEW-PACK-DETAIL", "role": "button", "name": "Use version in project" },
+    { "id": "UI-PACK-REMOVE", "status": "specified", "viewId": "VIEW-PACK-DETAIL", "role": "button", "name": "Remove pack version" },
+    { "id": "UI-PACK-DEPENDENCIES", "status": "specified", "viewId": "VIEW-PACK-DETAIL", "role": "region", "name": "Dependent projects" },
+    { "id": "UI-PACK-LOCATE", "status": "specified", "viewId": "VIEW-PACK-RECOVERY", "role": "button", "name": "Locate exact pack" },
+    { "id": "UI-PACK-REPLACE-COPY", "status": "specified", "viewId": "VIEW-PACK-RECOVERY", "role": "button", "name": "Replace in a copy" },
+    { "id": "UI-PACK-DRAFT-NEW", "status": "specified", "viewId": "VIEW-PACK-LIBRARY", "role": "button", "name": "Create pack" },
+    { "id": "UI-PACK-ASSET-IMPORT", "status": "specified", "viewId": "VIEW-PACK-AUTHOR", "role": "button", "name": "Add layer sheet" },
+    { "id": "UI-PACK-ASSET-CONFIG", "status": "specified", "viewId": "VIEW-PACK-ASSET", "role": "group", "name": "Asset configuration" },
+    { "id": "UI-PACK-TOKEN-MAP", "status": "specified", "viewId": "VIEW-PACK-ASSET", "role": "table", "name": "Source color bindings" },
+    { "id": "UI-PACK-PREVIEW", "status": "specified", "viewId": "VIEW-PACK-ASSET", "role": "img", "name": "Authored asset preview" },
+    { "id": "UI-PACK-PROVENANCE", "status": "specified", "viewId": "VIEW-PACK-ASSET", "role": "group", "name": "Source and license" },
+    { "id": "UI-PACK-DRAFT-STATUS", "status": "specified", "viewId": "VIEW-PACK-AUTHOR", "role": "status", "name": "Draft save status" },
+    { "id": "UI-PACK-DRAFT-RECOVERY", "status": "specified", "viewId": "VIEW-PACK-AUTHOR", "role": "button", "name": "Download draft recovery" },
+    { "id": "UI-PACK-VALIDATE", "status": "specified", "viewId": "VIEW-PACK-VALIDATION", "role": "button", "name": "Validate pack" },
+    { "id": "UI-PACK-VALIDATION-REPORT", "status": "specified", "viewId": "VIEW-PACK-VALIDATION", "role": "region", "name": "Validation report" },
+    { "id": "UI-PACK-EXPORT", "status": "specified", "viewId": "VIEW-PACK-VALIDATION", "role": "button", "name": "Export .spritepack" },
+    { "id": "UI-PACK-SELF-INSTALL", "status": "specified", "viewId": "VIEW-PACK-VALIDATION", "role": "button", "name": "Install test copy" },
+    { "id": "UI-WORKSPACE-PACK", "status": "specified", "viewId": "VIEW-WORKSPACE", "role": "combobox", "name": "Content pack" }
+  ],
+  "expectedBehaviors": [
+    { "id": "EB-PACK-INSTALL-CHOOSE", "status": "specified", "flowId": "TF-PACK-INSTALL", "stepIds": ["S1"], "oracle": "Add pack opens a native or browser file chooser limited to .spritepack; cancellation returns focus and mutates nothing." },
+    { "id": "EB-PACK-INSTALL-INSPECT", "status": "specified", "flowId": "TF-PACK-INSTALL", "stepIds": ["S2"], "oracle": "Validation completes before install is enabled and shows exact ID, version, checksum, subject profile, asset count, complete coverage, token bindings, licenses, expanded size, warnings, and duplicate state." },
+    { "id": "EB-PACK-INSTALL-COMMIT", "status": "specified", "flowId": "TF-PACK-INSTALL", "stepIds": ["S3"], "oracle": "Install commits manifest, pack document, provenance, and content-addressed PNG bytes in one host transaction, reads them back, and announces the installed checksum." },
+    { "id": "EB-PACK-INSTALL-AVAILABLE", "status": "specified", "flowId": "TF-PACK-INSTALL", "stepIds": ["S4"], "oracle": "The installed pack appears in the pack library and new-recipe selector and renders through the shared runtime with no application reload or renderer branch." },
+    { "id": "EB-PACK-INVALID-REJECT", "status": "specified", "flowId": "TF-PACK-INVALID", "stepIds": ["S1"], "oracle": "Every named malformed, hostile, incompatible, or over-limit fixture fails at a documented validation stage with stable pack-invalid, pack-limit, unsupported-version, unsupported-license, or image-invalid code before mutation." },
+    { "id": "EB-PACK-INVALID-PRESERVE", "status": "specified", "flowId": "TF-PACK-INVALID", "stepIds": ["S2"], "oracle": "Existing packs, pack blobs, projects, drafts, and the selected source file remain byte-identical after rejection or interruption." },
+    { "id": "EB-PACK-INVALID-RECOVER", "status": "specified", "flowId": "TF-PACK-INVALID", "stepIds": ["S3"], "oracle": "The error surface names the stage, offending entry or field, observed and allowed values, and offers choose another file, download validation report, or cancel." },
+    { "id": "EB-PACK-LIBRARY-LIST", "status": "specified", "flowId": "TF-PACK-LIBRARY", "stepIds": ["S1"], "oracle": "Pack library lists every local version by name, ID, SemVer, checksum prefix, origin, enabled state, storage, availability, and dependent-project count with deterministic sorting and filters." },
+    { "id": "EB-PACK-LIBRARY-DETAIL", "status": "specified", "flowId": "TF-PACK-LIBRARY", "stepIds": ["S2"], "oracle": "Pack detail shows assets by slot, runtime coverage, token mappings, source/license records, installed versions, and all exact project dependencies." },
+    { "id": "EB-PACK-LIBRARY-ENABLE", "status": "specified", "flowId": "TF-PACK-LIBRARY", "stepIds": ["S3"], "oracle": "Disabling removes a pack only from new selections; existing locked projects continue rendering and exporting, and re-enabling restores selection availability." },
+    { "id": "EB-PACK-UPDATE-SIDE-BY-SIDE", "status": "specified", "flowId": "TF-PACK-UPDATE", "stepIds": ["S1"], "oracle": "A different valid SemVer installs beside prior versions; the same ID+version+checksum is idempotent and the same ID+version with a different checksum is rejected as pack-conflict." },
+    { "id": "EB-PACK-UPDATE-IMPACT", "status": "specified", "flowId": "TF-PACK-UPDATE", "stepIds": ["S2"], "oracle": "Version detail identifies added, removed, and changed asset IDs and names every project that would become incompatible before any project action is enabled." },
+    { "id": "EB-PACK-UPDATE-ACTIVATE", "status": "specified", "flowId": "TF-PACK-UPDATE", "stepIds": ["S3"], "oracle": "Use version creates a named pre-change snapshot, validates every selected asset, previews semantic/render/credit differences, and changes only the active project's exact lock after explicit confirmation." },
+    { "id": "EB-PACK-UPDATE-ROLLBACK", "status": "specified", "flowId": "TF-PACK-UPDATE", "stepIds": ["S4"], "oracle": "Cancel writes nothing; restoring the pre-change snapshot restores the prior exact lock, recipe, pixels, and credits." },
+    { "id": "EB-PACK-REMOVE-UNUSED", "status": "specified", "flowId": "TF-PACK-REMOVE", "stepIds": ["S1"], "oracle": "An unused non-bundled version removes only after a confirmation naming identity, checksum, and bytes; shared blobs remain while referenced by any other version." },
+    { "id": "EB-PACK-REMOVE-IN-USE", "status": "specified", "flowId": "TF-PACK-REMOVE", "stepIds": ["S2"], "oracle": "An in-use, bundled, embedded-only, or currently authoring test version cannot be removed; the UI names every dependency and offers open project, export backup, or cancel." },
+    { "id": "EB-PACK-REMOVE-FAILURE", "status": "specified", "flowId": "TF-PACK-REMOVE", "stepIds": ["S3"], "oracle": "Failed removal retains the complete version and blobs, reports a stable error, and leaves dependent projects renderable." },
+    { "id": "EB-PACK-MISSING-BLOCK", "status": "specified", "flowId": "TF-PACK-MISSING-RECOVERY", "stepIds": ["S1"], "oracle": "Opening a project with an unavailable lock preserves and displays the project but blocks deterministic preview/export, names exact ID/version/checksum, and never substitutes another version." },
+    { "id": "EB-PACK-MISSING-LOCATE", "status": "specified", "flowId": "TF-PACK-MISSING-RECOVERY", "stepIds": ["S2"], "oracle": "Locate exact pack accepts only a package whose identity and payload checksum match the lock, installs it transactionally, and resumes the unchanged project." },
+    { "id": "EB-PACK-MISSING-COPY", "status": "specified", "flowId": "TF-PACK-MISSING-RECOVERY", "stepIds": ["S3"], "oracle": "Replace in a copy requires an installed compatible version, previews missing assets and output changes, creates a new project ID with checkpoint, and leaves the original project and lock unchanged." },
+    { "id": "EB-PACK-MISSING-CANCEL", "status": "specified", "flowId": "TF-PACK-MISSING-RECOVERY", "stepIds": ["S4"], "oracle": "Cancel returns to the blocked project with all source data intact and no pack or project mutation." },
+    { "id": "EB-PACK-AUTHOR-DRAFT", "status": "specified", "flowId": "TF-PACK-AUTHOR", "stepIds": ["S1"], "oracle": "Create pack produces a local draft with generated stable draft ID, user-defined canonical pack ID, valid SemVer, humanoid-lpc-64 profile, revision zero, and visible Unsaved/Saving/Saved state." },
+    { "id": "EB-PACK-AUTHOR-IMPORT", "status": "specified", "flowId": "TF-PACK-AUTHOR", "stepIds": ["S2"], "oracle": "Add layer sheet accepts PNG only, verifies signature and exact 256x512 RGBA dimensions before decode, computes SHA-256, stores original bytes, and rejects duplicates without partial assets." },
+    { "id": "EB-PACK-AUTHOR-CONFIGURE", "status": "specified", "flowId": "TF-PACK-AUTHOR", "stepIds": ["S3"], "oracle": "Asset configuration requires unique canonical ID, name, description, one current humanoid slot, and complete idle/walk four-direction profile; errors remain adjacent and retain input." },
+    { "id": "EB-PACK-AUTHOR-TOKENS", "status": "specified", "flowId": "TF-PACK-AUTHOR", "stepIds": ["S4"], "oracle": "The color table lists every distinct non-transparent RGBA color with pixel count and requires fixed or token+shade mapping; no hidden automatic mapping is committed." },
+    { "id": "EB-PACK-AUTHOR-PROVENANCE", "status": "specified", "flowId": "TF-PACK-AUTHOR", "stepIds": ["S5"], "oracle": "Every asset requires author, source title, HTTPS source URL, offered supported licenses, one chosen offered license, and attribution text when the chosen license requires it." },
+    { "id": "EB-PACK-AUTHOR-PREVIEW", "status": "specified", "flowId": "TF-PACK-AUTHOR", "stepIds": ["S6"], "oracle": "Preview uses the shared installed-pack renderer and displays idle/walk in all directions, token theme changes, pixel hash, coverage, and generated credit record from the draft bytes." },
+    { "id": "EB-PACK-DRAFT-AUTOSAVE", "status": "specified", "flowId": "TF-PACK-DRAFT-RECOVERY", "stepIds": ["S1"], "oracle": "Meaningful metadata, asset, mapping, and provenance edits mark Unsaved within one frame and commit draft metadata plus referenced source blobs after a 750 ms quiet period with integer revision conflict checks." },
+    { "id": "EB-PACK-DRAFT-REOPEN", "status": "specified", "flowId": "TF-PACK-DRAFT-RECOVERY", "stepIds": ["S2"], "oracle": "Browser restart or Electron relaunch reopens the latest committed draft, original imported bytes, active asset, and recomputed validation report without changing draft bytes." },
+    { "id": "EB-PACK-DRAFT-FAILURE", "status": "specified", "flowId": "TF-PACK-DRAFT-RECOVERY", "stepIds": ["S3"], "oracle": "Quota, write, decode, stale-revision, or read-back failure retains dirty state and last committed draft and offers retry, save copy, remove offending asset, download recovery, or cancel as applicable." },
+    { "id": "EB-PACK-VALIDATE-REPORT", "status": "specified", "flowId": "TF-PACK-VALIDATE-EXPORT", "stepIds": ["S1"], "oracle": "Validate checks package limits, identity, graph references, PNGs, slots, full coverage, every color disposition, provenance/licenses, runtime preview, deterministic credits, and canonical serialization and groups results by exact asset/field." },
+    { "id": "EB-PACK-VALIDATE-NAVIGATE", "status": "specified", "flowId": "TF-PACK-VALIDATE-EXPORT", "stepIds": ["S2"], "oracle": "Activating a validation item opens the owning section, focuses the exact field or asset, preserves all draft inputs, and removes the item only after successful revalidation." },
+    { "id": "EB-PACK-EXPORT-DETERMINISTIC", "status": "specified", "flowId": "TF-PACK-VALIDATE-EXPORT", "stepIds": ["S3"], "oracle": "Export is enabled only with zero blockers and emits one deterministic .spritepack plus text validation report; unchanged drafts produce identical payload entry hashes on both hosts." },
+    { "id": "EB-PACK-SELF-INSTALL", "status": "specified", "flowId": "TF-PACK-VALIDATE-EXPORT", "stepIds": ["S4"], "oracle": "Install test copy validates the exported bytes through the public install path, marks origin authored-local, and makes the pack available without granting the draft special runtime behavior." },
+    { "id": "EB-PACK-CROSS-WEB-DESKTOP", "status": "specified", "flowId": "TF-PACK-CROSS-HOST", "stepIds": ["S1", "S2"], "oracle": "A web-authored .spritepack installs in packaged Electron with identical canonical payload hashes, asset inventory, preview hashes, and credits." },
+    { "id": "EB-PACK-CROSS-PROJECT", "status": "specified", "flowId": "TF-PACK-CROSS-HOST", "stepIds": ["S3"], "oracle": "A project using the local pack transfers in .spriteproject with exact lock and embedded required content, opens offline in the other host, and produces identical generic/Godot outputs." },
+    { "id": "EB-PACK-CROSS-RETURN", "status": "specified", "flowId": "TF-PACK-CROSS-HOST", "stepIds": ["S4"], "oracle": "Electron re-exported pack and project reopen in web without conversion, host metadata leakage, payload drift, or duplicate installation." },
+    { "id": "EB-PACK-OFFLINE-READY", "status": "specified", "flowId": "TF-PACK-OFFLINE", "stepIds": ["S1"], "oracle": "Pack detail reports Ready offline only when manifest, provenance, and every referenced PNG checksum resolve locally." },
+    { "id": "EB-PACK-OFFLINE-USE", "status": "specified", "flowId": "TF-PACK-OFFLINE", "stepIds": ["S2"], "oracle": "After network disconnect and restart, installed pack browsing, selection, token recolor, preview, save, archive, generic export, Godot export, and credits complete with zero required network requests." },
+    { "id": "EB-PACK-OFFLINE-MISSING", "status": "specified", "flowId": "TF-PACK-OFFLINE", "stepIds": ["S3"], "oracle": "A deliberately incomplete local install reports the exact missing checksum and blocks use/export without fetching or substituting content." }
+  ],
+  "flows": [
+    { "id": "TF-PACK-INSTALL", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-FIRST-INSTALL"], "capabilityIds": ["UC-PACK-CHOOSE-FILE", "UC-PACK-INSPECT", "UC-PACK-INSTALL"], "preconditions": ["Pack library open", "Local compatible .spritepack available"], "completion": "Exact pack version is installed, offline-ready, and selectable", "steps": [
+      { "id": "S1", "action": "Choose Add pack and select local package", "viewId": "VIEW-PACK-LIBRARY", "uiId": "UI-PACK-IMPORT", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-INSTALL-CHOOSE"] },
+      { "id": "S2", "action": "Review validated package summary", "viewId": "VIEW-PACK-INSTALL", "uiId": "UI-PACK-INSTALL-SUMMARY", "expectedBehaviorIds": ["EB-PACK-INSTALL-INSPECT"] },
+      { "id": "S3", "action": "Install pack", "viewId": "VIEW-PACK-INSTALL", "uiId": "UI-PACK-INSTALL", "expectedBehaviorIds": ["EB-PACK-INSTALL-COMMIT"] },
+      { "id": "S4", "action": "Create or open recipe and select installed pack", "viewId": "VIEW-WORKSPACE", "uiId": "UI-WORKSPACE-PACK", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-PACK-INSTALL-AVAILABLE"] }
+    ] },
+    { "id": "TF-PACK-INVALID", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-INVALID"], "capabilityIds": ["UC-PACK-CHOOSE-FILE", "UC-PACK-INSPECT", "UC-PACK-REJECT"], "preconditions": ["Existing repository valid", "Adversarial package available"], "completion": "Invalid package is rejected with sources and repository unchanged", "steps": [
+      { "id": "S1", "action": "Select invalid or hostile package", "viewId": "VIEW-PACK-INSTALL", "uiId": "UI-PACK-ERROR", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-INVALID-REJECT"] },
+      { "id": "S2", "action": "Inspect repository and source preservation", "viewId": "VIEW-PACK-LIBRARY", "uiId": "UI-PACK-LIST", "expectedBehaviorIds": ["EB-PACK-INVALID-PRESERVE"] },
+      { "id": "S3", "action": "Choose recovery or cancel", "viewId": "VIEW-PACK-INSTALL", "uiId": "UI-PACK-ERROR", "expectedBehaviorIds": ["EB-PACK-INVALID-RECOVER"] }
+    ] },
+    { "id": "TF-PACK-LIBRARY", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-LIBRARY"], "capabilityIds": ["UC-PACK-LIST", "UC-PACK-ENABLE"], "preconditions": ["At least one bundled and one local pack"], "completion": "Developer understands and controls local pack availability", "steps": [
+      { "id": "S1", "action": "Open Packs and filter local versions", "viewId": "VIEW-PACK-LIBRARY", "uiId": "UI-PACK-LIST", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-LIBRARY-LIST"] },
+      { "id": "S2", "action": "Open a pack version detail", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-DEPENDENCIES", "expectedBehaviorIds": ["EB-PACK-LIBRARY-DETAIL"] },
+      { "id": "S3", "action": "Disable then enable for new selections", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-ENABLE", "expectedBehaviorIds": ["EB-PACK-LIBRARY-ENABLE"] }
+    ] },
+    { "id": "TF-PACK-UPDATE", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-UPDATE"], "capabilityIds": ["UC-PACK-INSTALL-VERSION", "UC-PACK-ACTIVATE-VERSION"], "preconditions": ["Version 1 installed and used", "Version 2 package available"], "completion": "Version 2 coexists and explicit project activation is reversible", "steps": [
+      { "id": "S1", "action": "Install second pack version", "viewId": "VIEW-PACK-INSTALL", "uiId": "UI-PACK-INSTALL", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-UPDATE-SIDE-BY-SIDE"] },
+      { "id": "S2", "action": "Inspect version and project impact", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-VERSION", "expectedBehaviorIds": ["EB-PACK-UPDATE-IMPACT"] },
+      { "id": "S3", "action": "Use version in one project", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-ACTIVATE", "expectedBehaviorIds": ["EB-PACK-UPDATE-ACTIVATE"] },
+      { "id": "S4", "action": "Cancel or restore checkpoint", "viewId": "VIEW-WORKSPACE", "uiId": "UI-WORKSPACE-PACK", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-PACK-UPDATE-ROLLBACK"] }
+    ] },
+    { "id": "TF-PACK-REMOVE", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-REMOVE"], "capabilityIds": ["UC-PACK-REMOVE", "UC-PACK-PROTECT-IN-USE"], "preconditions": ["Installed local pack versions exist"], "completion": "Only unused safe content removes", "steps": [
+      { "id": "S1", "action": "Remove unused version after confirmation", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-REMOVE", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-REMOVE-UNUSED"] },
+      { "id": "S2", "action": "Attempt removal of in-use version", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-DEPENDENCIES", "expectedBehaviorIds": ["EB-PACK-REMOVE-IN-USE"] },
+      { "id": "S3", "action": "Simulate failed repository removal", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-ERROR", "expectedBehaviorIds": ["EB-PACK-REMOVE-FAILURE"] }
+    ] },
+    { "id": "TF-PACK-MISSING-RECOVERY", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-MISSING-RECOVERY"], "capabilityIds": ["UC-PACK-RECOVER-MISSING", "UC-PACK-REPLACE-COPY"], "preconditions": ["Project requires unavailable exact pack"], "completion": "Exact content resumes project or replacement occurs only in a copy", "steps": [
+      { "id": "S1", "action": "Open project with missing exact lock", "viewId": "VIEW-PACK-RECOVERY", "uiId": "UI-PACK-DEPENDENCIES", "expectedBehaviorIds": ["EB-PACK-MISSING-BLOCK"] },
+      { "id": "S2", "action": "Locate exact pack", "viewId": "VIEW-PACK-RECOVERY", "uiId": "UI-PACK-LOCATE", "expectedBehaviorIds": ["EB-PACK-MISSING-LOCATE"] },
+      { "id": "S3", "action": "Replace compatible version in a copy", "viewId": "VIEW-PACK-RECOVERY", "uiId": "UI-PACK-REPLACE-COPY", "expectedBehaviorIds": ["EB-PACK-MISSING-COPY"] },
+      { "id": "S4", "action": "Cancel recovery", "viewId": "VIEW-PACK-RECOVERY", "uiId": "UI-PACK-DEPENDENCIES", "expectedBehaviorIds": ["EB-PACK-MISSING-CANCEL"] }
+    ] },
+    { "id": "TF-PACK-AUTHOR", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-AUTHOR-START", "SC-PACK-AUTHOR-TOKENS", "SC-PACK-AUTHOR-PROVENANCE"], "capabilityIds": ["UC-PACK-DRAFT-CREATE", "UC-PACK-ASSET-IMPORT", "UC-PACK-ASSET-CONFIGURE", "UC-PACK-TOKEN-BIND", "UC-PACK-PROVENANCE", "UC-PACK-PREVIEW"], "preconditions": ["User owns or may redistribute compatible PNG art"], "completion": "Draft previews through runtime with complete metadata and provenance", "steps": [
+      { "id": "S1", "action": "Choose Create pack and enter identity", "viewId": "VIEW-PACK-LIBRARY", "uiId": "UI-PACK-DRAFT-NEW", "navigationId": "NAV-PACK-AUTHOR", "expectedBehaviorIds": ["EB-PACK-AUTHOR-DRAFT"] },
+      { "id": "S2", "action": "Add LPC-compatible layer sheet", "viewId": "VIEW-PACK-AUTHOR", "uiId": "UI-PACK-ASSET-IMPORT", "expectedBehaviorIds": ["EB-PACK-AUTHOR-IMPORT"] },
+      { "id": "S3", "action": "Configure asset identity and slot", "viewId": "VIEW-PACK-ASSET", "uiId": "UI-PACK-ASSET-CONFIG", "expectedBehaviorIds": ["EB-PACK-AUTHOR-CONFIGURE"] },
+      { "id": "S4", "action": "Classify fixed and semantic colors", "viewId": "VIEW-PACK-ASSET", "uiId": "UI-PACK-TOKEN-MAP", "expectedBehaviorIds": ["EB-PACK-AUTHOR-TOKENS"] },
+      { "id": "S5", "action": "Enter source and license metadata", "viewId": "VIEW-PACK-ASSET", "uiId": "UI-PACK-PROVENANCE", "expectedBehaviorIds": ["EB-PACK-AUTHOR-PROVENANCE"] },
+      { "id": "S6", "action": "Preview runtime animation and credits", "viewId": "VIEW-PACK-ASSET", "uiId": "UI-PACK-PREVIEW", "expectedBehaviorIds": ["EB-PACK-AUTHOR-PREVIEW"] }
+    ] },
+    { "id": "TF-PACK-DRAFT-RECOVERY", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-AUTHOR-RECOVERY"], "capabilityIds": ["UC-PACK-ASSET-IMPORT", "UC-PACK-DRAFT-SAVE", "UC-PACK-DRAFT-RECOVER", "UC-PACK-VALIDATE"], "preconditions": ["Pack draft contains meaningful work"], "completion": "Draft persists or fails with operable recovery", "steps": [
+      { "id": "S1", "action": "Edit draft and wait for autosave", "viewId": "VIEW-PACK-AUTHOR", "uiId": "UI-PACK-DRAFT-STATUS", "navigationId": "NAV-PACK-AUTHOR", "expectedBehaviorIds": ["EB-PACK-DRAFT-AUTOSAVE"] },
+      { "id": "S2", "action": "Reload or reopen draft", "viewId": "VIEW-PACK-AUTHOR", "uiId": "UI-PACK-DRAFT-STATUS", "expectedBehaviorIds": ["EB-PACK-DRAFT-REOPEN"] },
+      { "id": "S3", "action": "Trigger and recover from failed save or validation", "viewId": "VIEW-PACK-AUTHOR", "uiId": "UI-PACK-DRAFT-RECOVERY", "expectedBehaviorIds": ["EB-PACK-DRAFT-FAILURE"] }
+    ] },
+    { "id": "TF-PACK-VALIDATE-EXPORT", "status": "specified", "host": "shared", "scenarioIds": ["SC-PACK-AUTHOR-PROVENANCE", "SC-PACK-AUTHOR-RECOVERY"], "capabilityIds": ["UC-PACK-VALIDATE", "UC-PACK-EXPORT", "UC-PACK-SELF-INSTALL"], "preconditions": ["Draft contains one or more configured assets"], "completion": "Deterministic pack exports and installs through public path", "steps": [
+      { "id": "S1", "action": "Validate complete draft", "viewId": "VIEW-PACK-VALIDATION", "uiId": "UI-PACK-VALIDATE", "navigationId": "NAV-PACK-AUTHOR", "expectedBehaviorIds": ["EB-PACK-VALIDATE-REPORT"] },
+      { "id": "S2", "action": "Navigate to and repair blockers", "viewId": "VIEW-PACK-VALIDATION", "uiId": "UI-PACK-VALIDATION-REPORT", "expectedBehaviorIds": ["EB-PACK-VALIDATE-NAVIGATE"] },
+      { "id": "S3", "action": "Export package and report", "viewId": "VIEW-PACK-VALIDATION", "uiId": "UI-PACK-EXPORT", "expectedBehaviorIds": ["EB-PACK-EXPORT-DETERMINISTIC"] },
+      { "id": "S4", "action": "Install exported pack as test copy", "viewId": "VIEW-PACK-VALIDATION", "uiId": "UI-PACK-SELF-INSTALL", "expectedBehaviorIds": ["EB-PACK-SELF-INSTALL"] }
+    ] },
+    { "id": "TF-PACK-CROSS-HOST", "status": "specified", "host": "cross-host", "scenarioIds": ["SC-PACK-CROSS-HOST", "SC-PACK-EMBEDDED-OFFLINE"], "capabilityIds": ["UC-PACK-EXPORT", "UC-PACK-CROSS-HOST"], "preconditions": ["Web-authored valid pack and project use it"], "completion": "Pack and project round trip with exact runtime and output parity", "steps": [
+      { "id": "S1", "action": "Export authored pack from web", "viewId": "VIEW-PACK-VALIDATION", "uiId": "UI-PACK-EXPORT", "navigationId": "NAV-PACK-AUTHOR", "expectedBehaviorIds": ["EB-PACK-CROSS-WEB-DESKTOP"] },
+      { "id": "S2", "action": "Install pack in Electron", "viewId": "VIEW-PACK-INSTALL", "uiId": "UI-PACK-INSTALL", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-CROSS-WEB-DESKTOP"] },
+      { "id": "S3", "action": "Transfer and export dependent project", "viewId": "VIEW-WORKSPACE", "uiId": "UI-WORKSPACE-PACK", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-PACK-CROSS-PROJECT"] },
+      { "id": "S4", "action": "Re-export from Electron and reopen in web", "viewId": "VIEW-PACK-LIBRARY", "uiId": "UI-PACK-LIST", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-CROSS-RETURN"] }
+    ] },
+    { "id": "TF-PACK-OFFLINE", "status": "specified", "host": "web", "scenarioIds": ["SC-PACK-LIBRARY", "SC-PACK-CROSS-HOST"], "capabilityIds": ["UC-PACK-LIST", "UC-PACK-INSTALL", "UC-PACK-CROSS-HOST"], "preconditions": ["Pack installed and app shell loaded online once"], "completion": "Pack workflows and dependent exports complete offline", "steps": [
+      { "id": "S1", "action": "Confirm pack offline readiness", "viewId": "VIEW-PACK-DETAIL", "uiId": "UI-PACK-DEPENDENCIES", "navigationId": "NAV-PACKS", "expectedBehaviorIds": ["EB-PACK-OFFLINE-READY"] },
+      { "id": "S2", "action": "Disconnect, restart, compose, save, and export", "viewId": "VIEW-WORKSPACE", "uiId": "UI-WORKSPACE-PACK", "navigationId": "NAV-WORKSPACE", "expectedBehaviorIds": ["EB-PACK-OFFLINE-USE"] },
+      { "id": "S3", "action": "Open fixture with missing local blob", "viewId": "VIEW-PACK-RECOVERY", "uiId": "UI-PACK-DEPENDENCIES", "expectedBehaviorIds": ["EB-PACK-OFFLINE-MISSING"] }
+    ] }
+  ],
+  "exclusions": [
+    { "id": "OUT-UPD002-TERRAIN", "status": "excluded", "expectation": "Generate terrain or add a second producer", "reason": "The delivery roadmap opens the pack ecosystem in Phase 4 before using it for the Phase 5 terrain producer", "consequence": "UPD-002 proves extensibility only with current-profile humanoid content", "disposition": "Phase 5 terrain update after pack ecosystem evidence" },
+    { "id": "OUT-UPD002-SCENES", "status": "excluded", "expectation": "Compose characters and world assets in scenes", "reason": "Scene value and schema depend on at least two real producers", "consequence": "Projects continue to expose one active character recipe", "disposition": "Phase 5 after terrain producer is specified" },
+    { "id": "OUT-UPD002-NON-HUMANOID", "status": "excluded", "expectation": "Author creatures, mounts, animals, or rider composites", "reason": "Distinct frame geometry, slots, masks, and z-order would make the pack profile ambiguous", "consequence": "Subject profile is fixed to current LPC humanoid 64px sheets", "disposition": "Later content ecosystem update from real non-humanoid fixtures" },
+    { "id": "OUT-UPD002-PIXEL-EDITOR", "status": "excluded", "expectation": "Draw or edit source pixels in the product", "reason": "Pack authoring configures compatible existing art; pixel/animation editing is a separate Phase 6 promise", "consequence": "Users edit source PNGs in an external art tool and reimport", "disposition": "Phase 6 manual editor" },
+    { "id": "OUT-UPD002-ARBITRARY-GEOMETRY", "status": "excluded", "expectation": "Define custom frame sizes, layouts, directions, or animations", "reason": "The next increment must prove the ecosystem without redesigning renderer geometry", "consequence": "Assets use exact 256x512 current humanoid idle/walk layout", "disposition": "Versioned future pack profile after a real second geometry" },
+    { "id": "OUT-UPD002-FOLDER-WATCH", "status": "excluded", "expectation": "Watch arbitrary source or pack folders for live changes", "reason": "Watcher lifecycle and path trust are independent desktop-only concerns", "consequence": "Authors explicitly reimport changed PNGs and re-export packs", "disposition": "Future desktop live-content update" },
+    { "id": "OUT-UPD002-MARKETPLACE", "status": "excluded", "expectation": "Browse, download, publish, rate, moderate, or sell packs through a hosted catalog", "reason": "Marketplace requires backend, identity, moderation, legal, and operating commitments", "consequence": "Users exchange local .spritepack files themselves", "disposition": "Separate funded backend update" },
+    { "id": "OUT-UPD002-REMOTE-INSTALL", "status": "excluded", "expectation": "Install a pack directly from a URL", "reason": "Remote retrieval adds network trust, availability, and privacy boundaries not needed for local ecosystem proof", "consequence": "Users download a pack first and install the local file", "disposition": "Future distribution update after local evidence" },
+    { "id": "OUT-UPD002-EXECUTABLE-PACKS", "status": "excluded", "expectation": "Run pack scripts, plugins, shaders, SVG, or custom decoders", "reason": "Executable content would violate the data-only local trust boundary", "consequence": "Pack entries are strict JSON, PNG, and UTF-8 text only", "disposition": "Permanently rejected for format version 1" },
+    { "id": "OUT-UPD002-ENGINE-ADAPTER", "status": "excluded", "expectation": "Add Unity, GameMaker, RPG Maker, or another engine adapter", "reason": "An engine adapter has an independent user promise, implementation, evidence fixture, release, and rollback boundary", "consequence": "Generic and Godot exports remain the supported adapters", "disposition": "Candidate UPD-003 after adapter demand and target are selected" },
+    { "id": "OUT-UPD002-CUSTOM-LICENSE", "status": "excluded", "expectation": "Enter arbitrary custom license terms or receive legal clearance", "reason": "Unbounded terms cannot be validated or converted into deterministic attribution rules", "consequence": "Authoring supports an explicit curated license vocabulary and states that the product does not provide legal advice", "disposition": "Expand only through reviewed license profiles" },
+    { "id": "OUT-UPD002-BULK-CONVERSION", "status": "excluded", "expectation": "Automatically convert existing third-party repositories into packs", "reason": "Source layouts and licenses require deliberate human mapping and review", "consequence": "Authors import and configure assets individually or from a bounded draft", "disposition": "Future CLI after authoring contract is verified" }
+  ],
+  "workPackages": [
+    { "id": "WP-UPD002-SPEC", "status": "specified", "dependsOn": [], "traceIds": ["CP-PACK-INSTALL", "CP-PACK-AUTHOR", "CP-PACK-LIFECYCLE", "CP-PACK-PORTABILITY"], "gate": "Complete update envelope, product/UX contract, engineering contract, threat model, quality scenarios, exclusions, and ready spec review" },
+    { "id": "WP-UPD002-CONTRACTS", "status": "specified", "dependsOn": ["WP-UPD002-SPEC"], "traceIds": ["IA-PACK-PACKAGE", "IA-PACK-MANIFEST", "IA-PACK-ASSET", "IA-PACK-PROVENANCE", "TF-PACK-INVALID"], "gate": "Shared strict pack/draft schemas, canonical serializer, image profile, license profiles, limits, stable errors, and adversarial fixtures pass pure tests" },
+    { "id": "WP-UPD002-PACK-REPOSITORY", "status": "specified", "dependsOn": ["WP-UPD002-CONTRACTS"], "traceIds": ["TF-PACK-INSTALL", "TF-PACK-LIBRARY", "TF-PACK-UPDATE", "TF-PACK-REMOVE", "TF-PACK-MISSING-RECOVERY"], "gate": "Web and Electron repository adapters pass transactional install, side-by-side version, dependency, remove, and recovery contract suites" },
+    { "id": "WP-UPD002-RUNTIME", "status": "specified", "dependsOn": ["WP-UPD002-CONTRACTS"], "traceIds": ["IA-PACK-ASSET", "EB-PACK-INSTALL-AVAILABLE", "EB-PACK-AUTHOR-PREVIEW"], "gate": "PNG-backed authored assets render through one host-neutral runtime with deterministic token replacement, frame, spritesheet, export, and credit hashes" },
+    { "id": "WP-UPD002-AUTHORING", "status": "specified", "dependsOn": ["WP-UPD002-CONTRACTS", "WP-UPD002-RUNTIME"], "traceIds": ["TF-PACK-AUTHOR", "TF-PACK-DRAFT-RECOVERY", "TF-PACK-VALIDATE-EXPORT"], "gate": "Draft repository, asset import/configuration, token mapping, provenance, validation, preview, recovery, deterministic export, and self-install pass actual-UI flows" },
+    { "id": "WP-UPD002-WEB-UX", "status": "specified", "dependsOn": ["WP-UPD002-PACK-REPOSITORY", "WP-UPD002-AUTHORING"], "traceIds": ["VIEW-PACK-LIBRARY", "VIEW-PACK-INSTALL", "VIEW-PACK-DETAIL", "VIEW-PACK-AUTHOR", "VIEW-PACK-ASSET", "VIEW-PACK-VALIDATION", "VIEW-PACK-RECOVERY", "TF-PACK-OFFLINE"], "gate": "All pack lifecycle and authoring flows pass production web keyboard, reflow, reduced-motion, offline, quota, and failure evidence" },
+    { "id": "WP-UPD002-DESKTOP-ADAPTER", "status": "specified", "dependsOn": ["WP-UPD002-PACK-REPOSITORY", "WP-UPD002-AUTHORING"], "traceIds": ["TF-PACK-INSTALL", "TF-PACK-LIBRARY", "TF-PACK-UPDATE", "TF-PACK-REMOVE", "TF-PACK-AUTHOR", "TF-PACK-VALIDATE-EXPORT"], "gate": "Packaged Electron uses opaque file grants and validated userData pack storage with no renderer path or Node authority and passes equivalent lifecycle/authoring flows" },
+    { "id": "WP-UPD002-CROSS-HOST", "status": "specified", "dependsOn": ["WP-UPD002-WEB-UX", "WP-UPD002-DESKTOP-ADAPTER"], "traceIds": ["TF-PACK-CROSS-HOST", "CP-PACK-PORTABILITY"], "gate": "Bidirectional pack/project transfer preserves canonical payload, lock, preview, generic/Godot, and credit hashes from actual hosts" },
+    { "id": "WP-UPD002-REGRESSION", "status": "specified", "dependsOn": ["WP-UPD002-CROSS-HOST"], "traceIds": ["TF-PACK-OFFLINE", "TF-PACK-MISSING-RECOVERY", "EB-PACK-INSTALL-AVAILABLE"], "gate": "All affected UPD-001 project, archive, offline, export, Electron security, and cross-host flows regress cleanly with zero severity 0-2 issues" }
+  ],
+  "runs": [],
+  "issues": [],
+  "decisions": [
+    { "id": "DEC-UPD002-PHASE-BOUNDARY", "status": "specified", "decisionState": "proposed", "decision": "UPD-002 opens the local humanoid content ecosystem before terrain, scenes, non-humanoids, or engine-adapter expansion.", "reversible": true, "evidence": "docs/planning/overview.html Phase 4 and anti-bundling rule in product-update governance" },
+    { "id": "DEC-UPD002-PACK-FORMAT", "status": "specified", "decisionState": "proposed", "decision": "Use one deterministic data-only .spritepack ZIP format with independent pack container, pack schema, and draft schema versions.", "reversible": false, "evidence": "UPD-001 canonical archive and cross-host compatibility patterns" },
+    { "id": "DEC-UPD002-HUMANOID-PROFILE", "status": "specified", "decisionState": "proposed", "decision": "Format version 1 authoring accepts exact 256x512 RGBA PNG sheets for the current 64px humanoid idle/walk four-direction layout and current six slots only.", "reversible": false, "evidence": "Current renderer geometry and requirement to avoid speculative multi-profile abstraction" },
+    { "id": "DEC-UPD002-DATA-ONLY", "status": "specified", "decisionState": "proposed", "decision": "Packs contain strict JSON, PNG, and UTF-8 text only; scripts, plugins, SVG, shaders, links, and custom decoders are rejected.", "reversible": false, "evidence": "Local untrusted-input boundary and zero-server/offline product strategy" },
+    { "id": "DEC-UPD002-SIDE-BY-SIDE", "status": "specified", "decisionState": "proposed", "decision": "Pack ID, SemVer, and payload checksum form exact identity; versions install side by side and project locks change only through explicit checkpointed action.", "reversible": true, "evidence": "UPD-001 exact pack-lock and no-silent-drift contracts" },
+    { "id": "DEC-UPD002-LICENSE-PROFILES", "status": "specified", "decisionState": "proposed", "decision": "Authoring supports a reviewed finite license vocabulary with offered and chosen licenses plus deterministic attribution; arbitrary custom terms are excluded and the product does not provide legal advice.", "reversible": true, "evidence": "LPC research and MVP provenance contract" },
+    { "id": "DEC-UPD002-ADAPTER-DEFER", "status": "specified", "decisionState": "proposed", "decision": "The next engine adapter remains a separate update because target selection, output contract, downstream fixture, and rollback are independent of pack ecosystem delivery.", "reversible": true, "evidence": "Product update anti-bundling rule and independent export-adapter ownership" }
+  ]
+}

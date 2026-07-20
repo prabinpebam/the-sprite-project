@@ -10,10 +10,11 @@
 <aside class="slate-tldr">
   <p class="slate-tldr__label">TL;DR</p>
    <p><strong>The MVP gate is verified.</strong> The foundation, character-to-Godot vertical slice, second-pack
-   extensibility test, recovery behavior, and actual-UI task flows now have executable evidence. The active next
-   boundary is <a href="../execution/updates/upd-001-dual-host-mvp.html">UPD-001 · Dual-Host Local-First MVP</a>,
-   currently specified and awaiting implementation. Phase 4 follows only after this update is verified or
-   deliberately rescheduled.</p>
+   extensibility test, recovery behavior, dual-host implementation, and actual-UI task flows now have executable
+   evidence. The active review candidate is
+   <a href="../execution/updates/upd-002-local-content-pack-ecosystem.html">UPD-002 · Local Content Pack Ecosystem</a>,
+   which defines Phase 4 but still requires product-owner approval. Its implementation entry condition is the
+   remaining UPD-001 external release verification or an explicit owner reschedule.</p>
 </aside>
 
 <div class="slate-callout slate-callout--info" role="note">
@@ -61,19 +62,20 @@
 <p><strong>Exit gate:</strong> the second pack requires no renderer changes, saved projects reproduce reliably,
    and target users complete the character-to-engine journey without assistance.</p>
 
-<h2>MVP evolution · Dual-host local-first <span class="slate-badge slate-badge--warning">Specified</span></h2>
+<h2>MVP evolution · Dual-host local-first <span class="slate-badge slate-badge--success">Implemented</span></h2>
 <p><a href="../execution/updates/upd-001-dual-host-mvp.html">UPD-001</a> evolves the verified baseline into two
    complementary hosts over one product core: a GitHub Pages web workspace using IndexedDB and local preferences,
    and a portable Electron Windows workspace using project folders and direct export directories. It includes
    project archives, migration from current localStorage persistence, exact cross-host parity, secure Electron IPC,
    and fresh regression evidence for affected MVP flows.</p>
-<p><strong>Exit gate:</strong> all 11 new web, desktop, cross-host, and shared flows and all 40 objective behaviors
-   pass; affected baseline flows regress cleanly; project and export parity are exact; no severity 0-2 issue remains.</p>
+<p><strong>Current state:</strong> all 15 new web, desktop, cross-host, and shared flows and all 56 objective behaviors
+   have local implementation evidence; actual Pages and clean-machine release verification remain.</p>
 
 <h2>Phase 4 · Open the content ecosystem <span class="slate-badge slate-badge--warning">Next</span></h2>
-<p>Only after the pack contract survives the MVP, add pack validation and authoring workflows, broaden humanoid
-   content, and introduce the next engine export adapter. Creatures and mounts follow when their distinct animation
-   and compositing requirements can be modeled from real content.</p>
+<p><a href="../execution/updates/upd-002-local-content-pack-ecosystem.html">UPD-002</a> proposes pack validation,
+   lifecycle management, guided humanoid pack authoring, deterministic local packages, offline use, and exact
+   cross-host transfer. Terrain remains Phase 5. A next engine adapter is intentionally separated because it has its
+   own target, downstream fixture, release, and rollback boundary.</p>
 <p><strong>Exit gate:</strong> content can grow independently of application releases, with provenance intact.</p>
 
 <h2>Phase 5 · Expand from characters to worlds</h2>
