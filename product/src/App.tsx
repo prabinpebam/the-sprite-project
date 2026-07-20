@@ -866,9 +866,22 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${hostInfo ? 'electron-shell' : ''}`}>
+      {hostInfo && (
+        <div className="electron-titlebar" aria-label="Application title bar">
+          <div className="electron-titlebar__identity">
+            <span className="electron-titlebar__mark"><Sparkles /></span>
+            <strong>The Sprite Project</strong>
+            <span className="electron-titlebar__separator" aria-hidden="true">/</span>
+            <span className="electron-titlebar__project">{project?.name ?? 'Desktop workspace'}</span>
+          </div>
+          <span className="electron-titlebar__meta">Portable · {hostInfo.version}</span>
+        </div>
+      )}
       <header className="topbar">
-        <div className="brand"><span className="brand-mark"><Sparkles /></span><span><strong>The Sprite Project</strong><small>{hostInfo ? 'Portable desktop workspace' : 'Browser character workspace'}</small></span></div>
+        {hostInfo
+          ? <div className="command-context"><span>Project workspace</span><strong>{project?.name ?? 'No project open'}</strong></div>
+          : <div className="brand"><span className="brand-mark"><Sparkles /></span><span><strong>The Sprite Project</strong><small>Browser character workspace</small></span></div>}
         <div className="topbar-actions">
           {project && <span className={`save-state ${dirty ? 'dirty' : ''}`}>{saving ? 'Saving…' : dirty ? 'Unsaved changes' : 'Saved locally'}</span>}
           <button ref={newProjectButton} type="button" className="button secondary" onClick={() => setDialogMode('new')}><Plus /> New project</button>

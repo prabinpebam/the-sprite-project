@@ -61,8 +61,24 @@ test('TF-DESKTOP-PORTABLE-LAUNCH exposes a secure visible host and creates a pro
   expect(bridge.requireType).toBe('undefined')
   expect(bridge.host).toMatchObject({ ok: true, value: { host: 'electron', portable: true, platform: 'win32', architecture: 'x64' } })
 
-  await expect(page.getByText('Portable desktop workspace', { exact: true })).toBeVisible()
+  const titlebar = page.getByLabel('Application title bar')
+  await expect(titlebar).toContainText('The Sprite Project')
+  await expect(titlebar).toContainText('Desktop workspace')
+  await expect(titlebar).toContainText('Portable · 0.1.0')
+  const titlebarGeometry = await titlebar.evaluate(element => {
+    const titlebarBounds = element.getBoundingClientRect()
+    const identityBounds = element.firstElementChild?.getBoundingClientRect()
+    return {
+      top: titlebarBounds.top,
+      height: titlebarBounds.height,
+      identityRight: identityBounds?.right ?? 0,
+      viewportWidth: document.documentElement.clientWidth,
+    }
+  })
+  expect(titlebarGeometry).toMatchObject({ top: 0, height: 44 })
+  expect(titlebarGeometry.identityRight).toBeLessThan(titlebarGeometry.viewportWidth - 138)
   await expect(page.getByRole('button', { name: 'Open project folder' })).toBeVisible()
+  expect(await page.getByRole('button', { name: 'New project' }).first().evaluate(element => getComputedStyle(element).borderRadius)).toBe('8px')
   await createDesktopProject('Desktop Field Test')
   await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible()
   await expect(page.locator('canvas')).toHaveAttribute('data-render-hash', /^[a-f0-9]{8}$/)

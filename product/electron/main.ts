@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell } from 'electron'
 import { createHash, randomUUID } from 'node:crypto'
 import { lstat, mkdir, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -280,12 +280,17 @@ function registerHandlers(): void {
 function createWindow(): void {
   if (mainWindow) return
   const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
+  const titleBarOverlay = () => nativeTheme.shouldUseDarkColors
+    ? { color: '#343231', symbolColor: '#dedede', height: 44 }
+    : { color: '#fcfbf8', symbolColor: '#242424', height: 44 }
   const window = new BrowserWindow({
     width: 1440,
     height: 900,
     minWidth: 820,
     minHeight: 640,
     show: true,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: titleBarOverlay(),
     webPreferences: {
       preload: path.join(currentDirectory, 'preload.cjs'),
       contextIsolation: true,
@@ -293,6 +298,8 @@ function createWindow(): void {
       sandbox: true,
     },
   })
+  const syncTitleBarTheme = () => window.setTitleBarOverlay(titleBarOverlay())
+  nativeTheme.on('updated', syncTitleBarTheme)
   window.webContents.setWindowOpenHandler(details => {
     if (details.url.startsWith('https://')) void shell.openExternal(details.url)
     return { action: 'deny' }
@@ -310,7 +317,10 @@ function createWindow(): void {
       }
     })
   })
-  window.on('closed', () => { mainWindow = null })
+  window.on('closed', () => {
+    nativeTheme.off('updated', syncTitleBarTheme)
+    mainWindow = null
+  })
   mainWindow = window
   void window.loadFile(path.join(app.getAppPath(), 'dist', 'index.html')).then(() => {
     window.webContents.on('will-navigate', event => event.preventDefault())
