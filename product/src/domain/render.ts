@@ -1,6 +1,7 @@
 import { packById, selectedAssets } from './packs'
 import { resolvedTheme } from './project'
-import { ANIMATIONS, DIRECTIONS, type AnimationId, type Direction, type MotionId, type PixelPart, type SpriteProject, type ThemeTokens } from './types'
+import { recolorSheetCell, registeredSheet } from './pack-runtime'
+import { ANIMATIONS, DIRECTIONS, type AnimationId, type ContentPack, type Direction, type MotionId, type PixelPart, type SpriteProject, type ThemeTokens } from './types'
 
 export const FRAME_SIZE = 64
 const LOGICAL_SIZE = 32
@@ -49,21 +50,58 @@ function drawPart(context: CanvasRenderingContext2D, part: PixelPart, tokens: Th
   context.fillRect(x, y, part.width, part.height)
 }
 
-export function drawFrame(canvas: HTMLCanvasElement, project: SpriteProject, frame = 0): void {
+let sheetCanvas: HTMLCanvasElement | null = null
+
+function runtimeSheetCanvas(): HTMLCanvasElement {
+  if (!sheetCanvas) {
+    sheetCanvas = document.createElement('canvas')
+    sheetCanvas.width = FRAME_SIZE
+    sheetCanvas.height = FRAME_SIZE
+  }
+  return sheetCanvas
+}
+
+function drawSheetAsset(context: CanvasRenderingContext2D, asset: ReturnType<typeof selectedAssets>[number], tokens: ThemeTokens, animation: AnimationId, direction: Direction, frame: number): void {
+  if (!asset.sheet) return
+  const source = registeredSheet(asset.sheet.pngSha256)
+  if (!source) return
+  const directionRow = DIRECTIONS.indexOf(direction)
+  const row = (animation === 'idle' ? 0 : 4) + directionRow
+  const column = animation === 'idle' ? 0 : frame % 4
+  const cell = new Uint8ClampedArray(FRAME_SIZE * FRAME_SIZE * 4)
+  for (let y = 0; y < FRAME_SIZE; y += 1) {
+    const sourceStart = ((row * FRAME_SIZE + y) * source.width + column * FRAME_SIZE) * 4
+    cell.set(source.data.subarray(sourceStart, sourceStart + FRAME_SIZE * 4), y * FRAME_SIZE * 4)
+  }
+  const recolored = recolorSheetCell(cell, asset.sheet.sourceColorBindings, tokens)
+  const canvas = runtimeSheetCanvas()
+  const sheetContext = canvas.getContext('2d')
+  if (!sheetContext) return
+  sheetContext.clearRect(0, 0, FRAME_SIZE, FRAME_SIZE)
+  sheetContext.putImageData(new ImageData(Uint8ClampedArray.from(recolored), FRAME_SIZE, FRAME_SIZE), 0, 0)
+  context.drawImage(canvas, 0, 0)
+}
+
+export function drawFrame(canvas: HTMLCanvasElement, project: SpriteProject, frame = 0, packValue?: ContentPack): void {
   canvas.width = FRAME_SIZE
   canvas.height = FRAME_SIZE
   const context = canvas.getContext('2d', { alpha: true })
   if (!context) return
   context.clearRect(0, 0, FRAME_SIZE, FRAME_SIZE)
   context.imageSmoothingEnabled = false
-  context.save()
-  context.scale(SCALE, SCALE)
-  const pack = packById(project.packId)
+  const pack = packValue ?? packById(project.packId)
   const tokens = resolvedTheme(project)
   const assets = selectedAssets(pack, project.character.selections)
     .sort((a, b) => SLOT_ORDER.indexOf(a.slot) - SLOT_ORDER.indexOf(b.slot))
-  for (const item of assets) for (const part of item.parts) drawPart(context, part, tokens, project.preview.animation, project.preview.direction, frame)
-  context.restore()
+  for (const item of assets) {
+    if (item.sheet) drawSheetAsset(context, item, tokens, project.preview.animation, project.preview.direction, frame)
+    else {
+      context.save()
+      context.scale(SCALE, SCALE)
+      for (const part of item.parts) drawPart(context, part, tokens, project.preview.animation, project.preview.direction, frame)
+      context.restore()
+    }
+  }
 }
 
 export function buildAnimationManifest() {
@@ -82,7 +120,7 @@ export function buildAnimationManifest() {
   return { schemaVersion: 1, frameWidth: 64, frameHeight: 64, columns: 4, rows: 8, animations }
 }
 
-export function renderSpritesheet(project: SpriteProject): HTMLCanvasElement {
+export function renderSpritesheet(project: SpriteProject, packValue?: ContentPack): HTMLCanvasElement {
   const sheet = document.createElement('canvas')
   sheet.width = FRAME_SIZE * 4
   sheet.height = FRAME_SIZE * 8
@@ -95,7 +133,7 @@ export function renderSpritesheet(project: SpriteProject): HTMLCanvasElement {
     for (const direction of DIRECTIONS) {
       const frameCount = animation === 'idle' ? 1 : 4
       for (let frame = 0; frame < 4; frame += 1) {
-        drawFrame(frameCanvas, { ...project, preview: { ...project.preview, animation, direction } }, Math.min(frame, frameCount - 1))
+        drawFrame(frameCanvas, { ...project, preview: { ...project.preview, animation, direction } }, Math.min(frame, frameCount - 1), packValue)
         context.drawImage(frameCanvas, frame * FRAME_SIZE, row * FRAME_SIZE)
       }
       row += 1

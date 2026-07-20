@@ -1,0 +1,35 @@
+{
+  "id": "ROLLBACK-UPD002-001",
+  "completedAt": "2026-07-20T19:44:24.007Z",
+  "mode": "local reader-only rollback rehearsal",
+  "baseline": {
+    "packageSha256": "b0c742380971056292710359171b9650fd9cc98e6e83a41388d526b2102aace2",
+    "sourcePngSha256": "296e59e39ce6044f13b5bdf0de1cdbc8c87d8c764a5cc95f9d435dcc27ce8a75",
+    "recoverySha256": "235a4aa46f97a09a58bd4ac9ff474e10646b35209a7e647c49d32a7afcb300a8",
+    "archiveSha256": "a27446d4f4363ce02e46225fbb641620014846bd5749db2d271f69982a869f4d",
+    "packDocumentSha256": "622818dc5c378474db2b2e4e045ead4e6eac8769c33d041930cd0014191a303c"
+  },
+  "after": {
+    "packageSha256": "b0c742380971056292710359171b9650fd9cc98e6e83a41388d526b2102aace2",
+    "sourcePngSha256": "296e59e39ce6044f13b5bdf0de1cdbc8c87d8c764a5cc95f9d435dcc27ce8a75",
+    "recoverySha256": "235a4aa46f97a09a58bd4ac9ff474e10646b35209a7e647c49d32a7afcb300a8",
+    "archiveSha256": "a27446d4f4363ce02e46225fbb641620014846bd5749db2d271f69982a869f4d",
+    "packDocumentSha256": "622818dc5c378474db2b2e4e045ead4e6eac8769c33d041930cd0014191a303c"
+  },
+  "failures": {
+    "removeFailureCode": "pack-in-use",
+    "collisionFailureCode": "pack-conflict"
+  },
+  "checks": {
+    "readerOnlyPackOpened": true,
+    "readerOnlyArchiveV2Opened": true,
+    "recoveryRetainsOriginalPng": true,
+    "draftReopened": true,
+    "projectReopened": true,
+    "failedRemovalRolledBack": true,
+    "failedUpdateRolledBack": true,
+    "allCanonicalHashesPreserved": true
+  },
+  "status": "passed",
+  "limitation": "Deployed Pages withdrawal and independent clean-machine executable rollback remain external release observations."
+}

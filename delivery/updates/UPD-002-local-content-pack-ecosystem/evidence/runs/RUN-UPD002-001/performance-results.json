@@ -1,0 +1,43 @@
+{
+  "id": "BENCH-UPD002-001",
+  "startedAt": "2026-07-20T19:44:23.715Z",
+  "completedAt": "2026-07-20T19:44:26.365Z",
+  "environment": {
+    "platform": "win32",
+    "architecture": "x64",
+    "node": "v24.13.0",
+    "logicalCpus": 32
+  },
+  "fixture": {
+    "class": "large-supported",
+    "note": "Eight unique deterministic PNGs with incompressible ancillary data; complete humanoid coverage and provenance."
+  },
+  "thresholds": {
+    "validationTotalMs": 10000,
+    "draftSaveP95Ms": 2000,
+    "previewP95Ms": 250
+  },
+  "observed": {
+    "largeCompressedBytes": 66291703,
+    "largeExpandedBytes": 66289015,
+    "largeAssetCount": 8,
+    "fixtureBuildMs": 1812.2008999999998,
+    "validationTotalMs": 449.0104000000001,
+    "coreDiagnosticMaxEventLoopStallMs": 353.924,
+    "draftSaveP50Ms": 1.3562000000001717,
+    "draftSaveP95Ms": 2.0452000000000226,
+    "draftSaveMaxMs": 2.4515000000001237,
+    "previewP50Ms": 1.097099999999955,
+    "previewP95Ms": 2.2687999999998283,
+    "previewMaxMs": 4.4430999999999585,
+    "overLimitCode": "pack-limit",
+    "ordinaryPackageSha256": "b0c742380971056292710359171b9650fd9cc98e6e83a41388d526b2102aace2"
+  },
+  "checks": {
+    "validationWithinTenSeconds": true,
+    "draftSaveP95WithinTwoSeconds": true,
+    "previewP95Within250Ms": true,
+    "oneOverCompressedLimitFailsStable": true
+  },
+  "status": "passed"
+}

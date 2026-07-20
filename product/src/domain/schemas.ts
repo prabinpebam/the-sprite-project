@@ -68,6 +68,24 @@ export const archiveManifestSchema = z.object({
   entries: z.array(archiveManifestEntrySchema).min(3),
 }).strict()
 
+export const archiveEmbeddedPackSchema = z.object({
+  packId: identifier,
+  version: z.string().min(1),
+  packageSha256: sha256,
+  path: z.string().regex(/^embedded-packs\/[a-f0-9]{64}\.spritepack$/),
+  size: z.number().int().positive(),
+}).strict()
+
+export const archiveManifestV2Schema = z.object({
+  archiveFormatVersion: z.literal(2),
+  projectSchemaVersion: z.literal(2),
+  packLockVersion: z.literal(1),
+  projectId: identifier,
+  createdWith: z.string().min(1),
+  embeddedPacks: z.array(archiveEmbeddedPackSchema).min(1).max(16),
+  entries: z.array(archiveManifestEntrySchema).min(4),
+}).strict()
+
 export const projectV2Schema = z.object({
   schemaVersion: z.literal(2),
   id: identifier,

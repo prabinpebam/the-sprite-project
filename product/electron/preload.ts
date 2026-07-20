@@ -15,6 +15,12 @@ const bridge: SpriteHostBridge = {
   inspectArchive: sourceGrantId => ipcRenderer.invoke(CHANNELS.inspectArchive, sourceGrantId),
   writeArchive: request => ipcRenderer.invoke(CHANNELS.writeArchive, request),
   writeExport: request => ipcRenderer.invoke(CHANNELS.writeExport, request),
+  choosePackFile: mode => ipcRenderer.invoke(CHANNELS.choosePackFile, mode),
+  readPack: sourceGrantId => ipcRenderer.invoke(CHANNELS.readPack, sourceGrantId),
+  listInstalledPacks: () => ipcRenderer.invoke(CHANNELS.listInstalledPacks),
+  installPack: request => ipcRenderer.invoke(CHANNELS.installPack, request),
+  removePack: request => ipcRenderer.invoke(CHANNELS.removePack, request),
+  writePack: request => ipcRenderer.invoke(CHANNELS.writePack, request),
 }
 
 contextBridge.exposeInMainWorld('spriteHost', Object.freeze(bridge))

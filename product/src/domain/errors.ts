@@ -15,6 +15,21 @@ export const HOST_ERROR_CODES = [
   'archive-limit',
   'atomic-replace-unavailable',
   'io-failed',
+  'pack-invalid',
+  'pack-limit',
+  'pack-conflict',
+  'pack-missing',
+  'pack-in-use',
+  'pack-disabled',
+  'draft-conflict',
+  'draft-limit',
+  'image-invalid',
+  'image-profile-invalid',
+  'image-color-limit',
+  'color-binding-invalid',
+  'coverage-incomplete',
+  'provenance-invalid',
+  'unsupported-license',
 ] as const
 
 export type HostErrorCode = (typeof HOST_ERROR_CODES)[number]

@@ -1,6 +1,6 @@
 # UPD-002 Evidence
 
-UPD-002 has no implementation evidence yet. This directory is reserved for generated runs after specification approval and implementation.
+`RUN-UPD002-001` is the local implementation evidence run. It owns production-build web, packaged Electron, offline, reflow, recovery, adversarial contract, web-Electron-web archive-v2, near-boundary performance, exact capacity, dependency-audit, rollback-preservation, and repository-subpath Pages-simulation evidence.
 
 A promotable run must include:
 
@@ -12,4 +12,4 @@ A promotable run must include:
 - 100-install/remove and maximum-package performance results
 - zero unexplained console, page, network, filesystem, IPC, visual, persistence, provenance, or accessibility anomalies
 
-Statuses remain `specified` until generated evidence owns promotion.
+The update remains `implemented`, not globally `verified`. All locally executable gates pass. Actual GitHub Pages publication with deployed rollback/withdrawal and independent clean-machine Windows/SmartScreen launch plus executable rollback remain human/remote release verification work. See `runs/RUN-UPD002-001/run-summary.json`.

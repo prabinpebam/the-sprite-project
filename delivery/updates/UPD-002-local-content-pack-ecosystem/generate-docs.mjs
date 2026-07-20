@@ -15,10 +15,17 @@ for (const key of ['promises', 'scenarios', 'capabilities', 'flows', 'informatio
 const refs = ids => ids.map(id => `\`${id}\``).join(', ')
 const table = (headers, rows) => `| ${headers.join(' | ')} |\n|${headers.map(() => '---').join('|')}|\n${rows.map(row => `| ${row.map(value => String(value).replaceAll('|', '\\|').replaceAll('\n', ' ')).join(' | ')} |`).join('\n')}`
 const h = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
+const approved = ['approved', 'implemented', 'verified'].includes(model.update.status)
 
 function write(relativePath, content) {
   const target = path.resolve(root, relativePath)
-  const expected = `${content.trim()}\n`
+  const lifecycleContent = approved
+    ? content
+      .replace('These promises are specified, not approved or implemented. UPD-001 remains the immutable implementation baseline. Product-owner approval is required before implementation dispatch.', 'These promises are approved and implementation is authorized under LOCK-UPD-002-001. Status promotion remains evidence-owned; approval is not implementation or verification.')
+      .replace('# UPD-002 Proposed Decisions', '# UPD-002 Decisions')
+      .replace('These decisions are review candidates. They are not locked until explicit product-owner approval.', 'These decisions are product-owner approved and protected by LOCK-UPD-002-001. Reopen only through justified change control.')
+    : content
+  const expected = `${lifecycleContent.trim()}\n`
   if (check) {
     if (!fs.existsSync(target)) errors.push(`${relativePath}: missing`)
     else if (fs.readFileSync(target, 'utf8') !== expected) errors.push(`${relativePath}: stale`)
@@ -53,15 +60,15 @@ const exclusionRows = model.exclusions.map(item => `<tr><td><code>${h(item.id)}<
 const decisionRows = model.decisions.map(item => `<tr><td><code>${h(item.id)}</code></td><td>${h(item.decision)}</td><td><span class="slate-badge slate-badge--status">${h(item.decisionState)}</span></td></tr>`).join('\n')
 const html = `<!-- Generated from delivery/updates/UPD-002-local-content-pack-ecosystem/traceability.json. Do not edit manually. -->
 <header class="slate-hero"><p class="slate-hero__eyebrow">Product update · UPD-002</p><h1 class="slate-hero__title">Local Content Pack Ecosystem</h1><p class="slate-hero__summary">Install, validate, manage, author, export, and transfer current-profile humanoid packs without application releases or JSON authoring.</p></header>
-<aside class="slate-tldr"><p class="slate-tldr__label">TL;DR</p><p><strong>${summary}</strong> define this proposed update. Status: <strong>${h(model.update.status)}</strong>. Product-owner approval and the UPD-001 release entry condition remain.</p></aside>
-<div class="slate-callout slate-callout--warning" role="note"><p class="slate-callout__title">Specified · ready for product-owner review</p><p>The specification has been derived and independently reviewed. It is not approved, implemented, or verified.</p></div>
+<aside class="slate-tldr"><p class="slate-tldr__label">TL;DR</p><p><strong>${summary}</strong> define this update. Status: <strong>${h(model.update.status)}</strong>. Status promotion remains evidence-owned.</p></aside>
+${model.update.status === 'implemented' ? '<div class="slate-callout slate-callout--warning" role="note"><p class="slate-callout__title">Implemented · release verification pending</p><p>All eleven flows and forty expected behaviors are implemented across web, packaged Electron, and cross-host transfer. Actual Pages publication and independent clean-machine Windows observation remain release verification gates.</p></div>' : approved ? '<div class="slate-callout slate-callout--tip" role="note"><p class="slate-callout__title">Approved and locked · implementation authorized</p><p>The product owner approved all seven decisions and rescheduled UPD-001 external verification as a release gate. UPD-002 is not yet implemented or verified.</p></div>' : '<div class="slate-callout slate-callout--warning" role="note"><p class="slate-callout__title">Specified · ready for product-owner review</p><p>The specification has been derived and independently reviewed. It is not approved, implemented, or verified.</p></div>'}
 <h2>Customer promises</h2><div class="slate-card-grid" data-cols="2">${cards}</div>
 <h2>Why this increment</h2><p>Phase 4 proves that legally traceable content can grow independently of application releases before Phase 5 adds terrain and other producers. The format remains deliberately limited to current humanoid geometry so the first ecosystem contract is extracted from working behavior rather than speculative rigs.</p>
 <h2>Task flows</h2><table><thead><tr><th>ID</th><th>Host</th><th>Completion</th><th>Status</th></tr></thead><tbody>${flowRows}</tbody></table>
 <h2>Execution packages</h2><table><thead><tr><th>ID</th><th>Evidence gate</th><th>Status</th></tr></thead><tbody>${packageRows}</tbody></table>
 <h2>Product-owner decisions</h2><table><thead><tr><th>ID</th><th>Proposed decision</th><th>State</th></tr></thead><tbody>${decisionRows}</tbody></table>
 <h2>Deliberate exclusions</h2><table><thead><tr><th>ID</th><th>Expectation</th><th>Disposition</th></tr></thead><tbody>${exclusionRows}</tbody></table>
-<h2>Review readiness</h2><div class="slate-callout slate-callout--tip" role="note"><p class="slate-callout__title">Deep review verdict · Ready</p><p>All 14 applicable lenses score 9/10, no critical/high finding remains, and the unfamiliar-implementer gate passed after three independent rounds. Product-owner approval remains required before stabilization or implementation.</p></div><p>Binding detail lives in <code>product-design-spec.md</code>, <code>engineering-spec.md</code>, <code>quality-scenarios.md</code>, <code>threat-model.md</code>, <code>release-gate.md</code>, <code>owner-review.md</code>, and <code>spec-review.json</code> beside the canonical traceability model.</p>
+<h2>Review readiness</h2><div class="slate-callout slate-callout--tip" role="note"><p class="slate-callout__title">Deep review verdict · Ready</p><p>All 14 applicable lenses score 9/10, no critical/high finding remains, and the unfamiliar-implementer gate passed after three independent rounds. ${approved ? 'Product-owner approval is recorded in spec-approval.json.' : 'Product-owner approval remains required before stabilization or implementation.'}</p></div><p>Binding detail lives in <code>product-design-spec.md</code>, <code>engineering-spec.md</code>, <code>quality-scenarios.md</code>, <code>threat-model.md</code>, <code>release-gate.md</code>, <code>owner-review.md</code>, and <code>spec-review.json</code> beside the canonical traceability model.</p>
 `
 if (check) {
   if (!fs.existsSync(docsPath)) errors.push('docs execution page: missing')

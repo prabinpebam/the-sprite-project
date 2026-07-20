@@ -9,7 +9,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-CHOOSE-FILE`, `UC-PACK-INSPECT`, `UC-PACK-INSTALL`
 - **Preconditions:** Pack library open; Local compatible .spritepack available
 - **Completion:** Exact pack version is installed, offline-ready, and selectable
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -25,7 +25,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-CHOOSE-FILE`, `UC-PACK-INSPECT`, `UC-PACK-REJECT`
 - **Preconditions:** Existing repository valid; Adversarial package available
 - **Completion:** Invalid package is rejected with sources and repository unchanged
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -40,7 +40,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-LIST`, `UC-PACK-ENABLE`
 - **Preconditions:** At least one bundled and one local pack
 - **Completion:** Developer understands and controls local pack availability
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -55,7 +55,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-INSTALL-VERSION`, `UC-PACK-ACTIVATE-VERSION`
 - **Preconditions:** Version 1 installed and used; Version 2 package available
 - **Completion:** Version 2 coexists and explicit project activation is reversible
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -71,7 +71,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-REMOVE`, `UC-PACK-PROTECT-IN-USE`
 - **Preconditions:** Installed local pack versions exist
 - **Completion:** Only unused safe content removes
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -86,7 +86,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-RECOVER-MISSING`, `UC-PACK-REPLACE-COPY`
 - **Preconditions:** Project requires unavailable exact pack
 - **Completion:** Exact content resumes project or replacement occurs only in a copy
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -102,7 +102,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-DRAFT-CREATE`, `UC-PACK-ASSET-IMPORT`, `UC-PACK-ASSET-CONFIGURE`, `UC-PACK-TOKEN-BIND`, `UC-PACK-PROVENANCE`, `UC-PACK-PREVIEW`
 - **Preconditions:** User owns or may redistribute compatible PNG art
 - **Completion:** Draft previews through runtime with complete metadata and provenance
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -120,7 +120,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-ASSET-IMPORT`, `UC-PACK-DRAFT-SAVE`, `UC-PACK-DRAFT-RECOVER`, `UC-PACK-VALIDATE`
 - **Preconditions:** Pack draft contains meaningful work
 - **Completion:** Draft persists or fails with operable recovery
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -135,7 +135,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-VALIDATE`, `UC-PACK-EXPORT`, `UC-PACK-SELF-INSTALL`
 - **Preconditions:** Draft contains one or more configured assets
 - **Completion:** Deterministic pack exports and installs through public path
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -151,7 +151,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-EXPORT`, `UC-PACK-CROSS-HOST`
 - **Preconditions:** Web-authored valid pack and project use it
 - **Completion:** Pack and project round trip with exact runtime and output parity
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|
@@ -167,7 +167,7 @@ Every flow is accepted only through visible interaction on its declared host. Af
 - **Capabilities:** `UC-PACK-LIST`, `UC-PACK-INSTALL`, `UC-PACK-CROSS-HOST`
 - **Preconditions:** Pack installed and app shell loaded online once
 - **Completion:** Pack workflows and dependent exports complete offline
-- **Status:** specified
+- **Status:** implemented
 
 | Step | User action | View | UI | Navigation | Objective behavior |
 |---|---|---|---|---|---|

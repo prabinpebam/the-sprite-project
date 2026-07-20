@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests',
+  testIgnore: 'upd002-pages-subpath.spec.ts',
   outputDir: '../delivery/updates/UPD-001-dual-host-mvp/evidence/runs/RUN-UPD001-001/artifacts',
   fullyParallel: false,
   workers: 1,

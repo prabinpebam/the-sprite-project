@@ -2,10 +2,13 @@ import { strToU8, unzipSync, zipSync } from 'fflate'
 import { canonicalJsonBytes } from './canonical'
 import { ProductError } from './errors'
 import { creditsFor } from './project'
-import { legacyProjection } from './project-v2'
-import { archiveManifestSchema, packLockDocumentSchema, parseProjectGraphV2, parseProjectV2, recipeV1Schema } from './schemas'
+import { packLockForPack } from './pack-locks'
+import { packByLock, PACKS } from './packs'
+import { runtimePackFromInstalled } from './pack-runtime'
+import { archiveManifestSchema, archiveManifestV2Schema, packLockDocumentSchema, parseProjectGraphV2, parseProjectV2, recipeV1Schema } from './schemas'
 import { sha256Hex } from './sha256'
-import type { ProjectGraphV2 } from './types'
+import { readSpritePack, type ReadSpritePackResult } from './spritepack'
+import type { ContentPack, ProjectGraphV2, SpriteProject } from './types'
 
 export const ARCHIVE_LIMITS = {
   compressedBytes: 128 * 1024 * 1024,
@@ -26,25 +29,35 @@ export interface ArchiveManifestEntry {
 }
 
 export interface ArchiveManifest {
-  archiveFormatVersion: 1
+  archiveFormatVersion: 1 | 2
   projectSchemaVersion: 2
   packLockVersion: 1
   projectId: string
   createdWith: string
+  embeddedPacks?: EmbeddedPackManifestEntry[]
   entries: ArchiveManifestEntry[]
+}
+
+export interface EmbeddedPackManifestEntry {
+  packId: string
+  version: string
+  packageSha256: string
+  path: string
+  size: number
 }
 
 export interface ReadArchiveResult {
   graph: ProjectGraphV2
   manifest: ArchiveManifest
   entries: Record<string, Uint8Array>
+  embeddedPacks: ReadSpritePackResult[]
 }
 
 const MANIFEST_PATH = 'archive-manifest.json'
 const ROOT_ORDER = ['project.json', 'packs.lock.json']
 const FIXED_ZIP_TIME = new Date('1980-01-01T00:00:00.000Z')
 
-function archiveError(code: 'archive-invalid' | 'archive-limit' | 'unsupported-version' | 'missing-pack', message: string, details?: Record<string, string | number | boolean>): ProductError {
+function archiveError(code: 'archive-invalid' | 'archive-limit' | 'unsupported-version' | 'missing-pack' | 'pack-invalid', message: string, details?: Record<string, string | number | boolean>): ProductError {
   return new ProductError({ code, message, operation: 'archive:read', recoverable: true, ...(details ? { details } : {}) })
 }
 
@@ -148,15 +161,30 @@ function inspectZipContainer(bytes: Uint8Array): void {
   }
 }
 
-async function payloadEntries(graphValue: ProjectGraphV2): Promise<Record<string, Uint8Array>> {
+async function payloadEntries(graphValue: ProjectGraphV2, embeddedRuntimePacks: ContentPack[] = []): Promise<Record<string, Uint8Array>> {
   const graph = parseProjectGraphV2(graphValue)
-  const projection = legacyProjection(graph)
+  const recipe = graph.recipes[graph.project.activeRecipeId]
+  const projection: SpriteProject = {
+    schemaVersion: 1,
+    id: graph.project.id,
+    name: graph.project.name,
+    packId: recipe.packId,
+    themePresetId: graph.project.themePresetId,
+    theme: graph.project.theme,
+    character: { id: recipe.id, name: recipe.name, packId: recipe.packId, selections: recipe.selections, overrides: recipe.overrides },
+    preview: graph.project.preview,
+    createdAt: graph.project.createdAt,
+    updatedAt: graph.project.updatedAt,
+  }
   const entries: Record<string, Uint8Array> = {
     'project.json': canonicalJsonBytes(graph.project),
     'packs.lock.json': canonicalJsonBytes({ packLockVersion: 1, packs: graph.project.packLocks }),
   }
   for (const recipeId of graph.project.recipeIds) entries[`recipes/${recipeId}.json`] = canonicalJsonBytes(graph.recipes[recipeId])
-  entries['provenance/selected-credits.json'] = canonicalJsonBytes({ schemaVersion: 1, records: creditsFor(projection) })
+  const lock = graph.project.packLocks.find(item => item.packId === projection.packId)
+  const resolvedPack = lock ? packByLock(lock) ?? embeddedRuntimePacks.find(pack => pack.id === lock.packId && pack.version === lock.version && pack.packDocumentSha256 === lock.sha256) ?? null : null
+  if (!resolvedPack) throw archiveError('missing-pack', `Exact pack ${projection.packId} is unavailable for archive credits.`)
+  entries['provenance/selected-credits.json'] = canonicalJsonBytes({ schemaVersion: 1, records: creditsFor(projection, resolvedPack ?? undefined) })
   entries['README.txt'] = strToU8(`${graph.project.name}\n\nPortable project for The Sprite Project. Open the .spriteproject file in the web or desktop host.\n`)
   return entries
 }
@@ -175,14 +203,49 @@ function orderedPayloadPaths(paths: string[]): string[] {
 }
 
 function mediaTypeFor(path: string): string {
+  if (path.endsWith('.spritepack')) return 'application/vnd.sprite-project.pack+zip'
   if (path.endsWith('.json')) return 'application/json'
   if (path.endsWith('.txt') || path.endsWith('.md')) return 'text/plain; charset=utf-8'
   return 'application/octet-stream'
 }
 
-export async function writeProjectArchive(graphValue: ProjectGraphV2, createdWith = 'sprite-project/0.0.0'): Promise<Uint8Array> {
+async function bundledLockMatches(lock: ProjectGraphV2['project']['packLocks'][number]): Promise<boolean> {
+  for (const pack of PACKS.filter(item => !item.origin || item.origin === 'bundled')) {
+    if (pack.id === lock.packId && pack.version === lock.version && (await packLockForPack(pack)).sha256 === lock.sha256) return true
+  }
+  return false
+}
+
+export async function writeProjectArchive(graphValue: ProjectGraphV2, createdWith = 'sprite-project/0.0.0', embeddedPackageBytes: Uint8Array[] = []): Promise<Uint8Array> {
   const graph = parseProjectGraphV2(graphValue)
-  const payload = await payloadEntries(graph)
+  const embeddedPacks = await Promise.all(embeddedPackageBytes.map(bytes => readSpritePack(bytes)))
+  const embeddedRuntimePacks = embeddedPacks.map(pack => runtimePackFromInstalled({
+    packId: pack.pack.id,
+    version: pack.pack.version,
+    packageSha256: pack.packageSha256,
+    packDocumentSha256: pack.packDocumentSha256,
+    origin: 'embedded-project',
+    enabled: false,
+    installedAt: '1980-01-01T00:00:00.000Z',
+    packageBytes: pack.bytes,
+    pack: pack.pack,
+    provenance: pack.provenance,
+  }))
+  const payload = await payloadEntries(graph, embeddedRuntimePacks)
+  const requiredLocks: ProjectGraphV2['project']['packLocks'] = []
+  for (const lock of graph.project.packLocks) if (!await bundledLockMatches(lock)) requiredLocks.push(lock)
+  if (requiredLocks.length !== embeddedPacks.length || requiredLocks.some(lock => !embeddedPacks.some(pack => pack.pack.id === lock.packId && pack.pack.version === lock.version && pack.packDocumentSha256 === lock.sha256))) {
+    throw archiveError('missing-pack', 'Every non-bundled project lock requires one exact embedded package.')
+  }
+  if (embeddedPacks.some(pack => !requiredLocks.some(lock => lock.packId === pack.pack.id && lock.version === pack.pack.version && lock.sha256 === pack.packDocumentSha256))) {
+    throw archiveError('archive-invalid', 'Archive contains an unreferenced or bundled package.')
+  }
+  const embeddedRecords: EmbeddedPackManifestEntry[] = []
+  for (const pack of embeddedPacks.sort((left, right) => utf8Compare(left.packageSha256, right.packageSha256))) {
+    const path = `embedded-packs/${pack.packageSha256}.spritepack`
+    payload[path] = pack.bytes
+    embeddedRecords.push({ packId: pack.pack.id, version: pack.pack.version, packageSha256: pack.packageSha256, path, size: pack.bytes.length })
+  }
   const paths = orderedPayloadPaths(Object.keys(payload))
   const manifestEntries: ArchiveManifestEntry[] = []
   for (const path of paths) {
@@ -190,14 +253,16 @@ export async function writeProjectArchive(graphValue: ProjectGraphV2, createdWit
     manifestEntries.push({ path, mediaType: mediaTypeFor(path), size: payload[path].length, sha256: await sha256Hex(payload[path]) })
   }
   const manifest: ArchiveManifest = {
-    archiveFormatVersion: 1,
+    archiveFormatVersion: embeddedRecords.length ? 2 : 1,
     projectSchemaVersion: 2,
     packLockVersion: 1,
     projectId: graph.project.id,
     createdWith,
+    ...(embeddedRecords.length ? { embeddedPacks: embeddedRecords } : {}),
     entries: manifestEntries,
   }
-  archiveManifestSchema.parse(manifest)
+  if (manifest.archiveFormatVersion === 2) archiveManifestV2Schema.parse(manifest)
+  else archiveManifestSchema.parse(manifest)
 
   const zipEntries: Record<string, [Uint8Array, { level: 6; mtime: Date }]> = {
     [MANIFEST_PATH]: [canonicalJsonBytes(manifest), { level: 6, mtime: FIXED_ZIP_TIME }],
@@ -223,13 +288,14 @@ export async function readProjectArchive(bytes: Uint8Array): Promise<ReadArchive
   } catch {
     throw archiveError('archive-invalid', 'Archive manifest is not valid UTF-8 JSON.')
   }
-  if (typeof manifestValue === 'object' && manifestValue && 'archiveFormatVersion' in manifestValue && (manifestValue as { archiveFormatVersion: unknown }).archiveFormatVersion !== 1) {
+  const archiveFormatVersion = typeof manifestValue === 'object' && manifestValue && 'archiveFormatVersion' in manifestValue ? (manifestValue as { archiveFormatVersion: unknown }).archiveFormatVersion : null
+  if (archiveFormatVersion !== 1 && archiveFormatVersion !== 2) {
     throw archiveError('unsupported-version', 'Archive format version is unsupported.')
   }
 
   let manifest: ArchiveManifest
   try {
-    manifest = archiveManifestSchema.parse(manifestValue) as ArchiveManifest
+    manifest = (archiveFormatVersion === 2 ? archiveManifestV2Schema : archiveManifestSchema).parse(manifestValue) as ArchiveManifest
   } catch {
     throw archiveError('archive-invalid', 'Archive manifest violates the format version 1 schema.')
   }
@@ -267,7 +333,27 @@ export async function readProjectArchive(bytes: Uint8Array): Promise<ReadArchive
     }))
     const graph = parseProjectGraphV2({ project, recipes })
     if (manifest.projectId !== project.id) throw archiveError('archive-invalid', 'Manifest project ID disagrees with project.json.')
-    return { graph, manifest, entries }
+    const embeddedPacks: ReadSpritePackResult[] = []
+    if (manifest.archiveFormatVersion === 2) {
+      const embeddedRecords = manifest.embeddedPacks ?? []
+      if (new Set(embeddedRecords.map(record => record.path)).size !== embeddedRecords.length || new Set(embeddedRecords.map(record => `${record.packId}@${record.version}`)).size !== embeddedRecords.length) throw archiveError('archive-invalid', 'Embedded package records must be unique by path and pack version.')
+      for (const record of manifest.embeddedPacks ?? []) {
+        const content = entries[record.path]
+        if (!content || content.length !== record.size || await sha256Hex(content) !== record.packageSha256) throw archiveError('archive-invalid', `Embedded package identity mismatch: ${record.path}.`)
+        const pack = await readSpritePack(content)
+        if (pack.packageSha256 !== record.packageSha256 || pack.pack.id !== record.packId || pack.pack.version !== record.version) throw archiveError('pack-invalid', `Embedded package manifest mismatch: ${record.path}.`)
+        const lock = project.packLocks.find(item => item.packId === pack.pack.id)
+        if (!lock || lock.version !== pack.pack.version || lock.sha256 !== pack.packDocumentSha256) throw archiveError('missing-pack', `Embedded package does not resolve an exact project lock: ${record.path}.`)
+        if (await bundledLockMatches(lock)) throw archiveError('pack-invalid', `Bundled package must not be embedded: ${record.path}.`)
+        embeddedPacks.push(pack)
+      }
+      for (const lock of project.packLocks) {
+        if (!await bundledLockMatches(lock) && !embeddedPacks.some(pack => pack.pack.id === lock.packId && pack.pack.version === lock.version && pack.packDocumentSha256 === lock.sha256)) throw archiveError('missing-pack', `Exact pack ${lock.packId} ${lock.version} is unavailable.`)
+      }
+    } else {
+      for (const lock of project.packLocks) if (!await bundledLockMatches(lock)) throw archiveError('missing-pack', `Archive v1 cannot resolve non-bundled pack ${lock.packId} ${lock.version}.`)
+    }
+    return { graph, manifest, entries, embeddedPacks }
   } catch (error) {
     if (error instanceof ProductError) throw error
     throw archiveError('archive-invalid', error instanceof Error ? error.message : 'Archive project graph is invalid.')

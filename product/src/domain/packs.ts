@@ -1,4 +1,4 @@
-import type { ContentPack, PackAsset, PixelPart, Provenance, SlotId } from './types'
+import type { ContentPack, PackAsset, PackLockRef, PixelPart, Provenance, SlotId } from './types'
 
 const allDirections = ['south', 'west', 'east', 'north'] as const
 const coverage = ['idle', 'walk'] as const
@@ -158,8 +158,42 @@ export const PACKS: ContentPack[] = [
   },
 ]
 
+export function registerRuntimePack(pack: ContentPack): void {
+  const existing = PACKS.findIndex(item => item.id === pack.id && item.version === pack.version)
+  if (existing >= 0) PACKS[existing] = pack
+  else PACKS.push(pack)
+}
+
+export function unregisterRuntimePack(packId: string, version: string): void {
+  const index = PACKS.findIndex(item => item.id === packId && item.version === version && item.origin !== 'bundled')
+  if (index >= 0) PACKS.splice(index, 1)
+}
+
+export function clearEmbeddedRuntimePacks(): void {
+  for (let index = PACKS.length - 1; index >= 0; index -= 1) if (PACKS[index].origin === 'embedded-project') PACKS.splice(index, 1)
+}
+
 export function packById(id: string): ContentPack {
   return PACKS.find(pack => pack.id === id) ?? PACKS[0]
+}
+
+export function packByLock(lock: PackLockRef): ContentPack | null {
+  const candidates = PACKS.filter(pack => pack.id === lock.packId && pack.version === lock.version)
+  return candidates.find(pack => pack.packDocumentSha256 === lock.sha256)
+    ?? candidates.find(pack => !pack.packDocumentSha256)
+    ?? null
+}
+
+export function packSelectionKey(pack: ContentPack): string {
+  return !pack.origin || pack.origin === 'bundled' ? pack.id : `${pack.id}::${pack.version}::${pack.packDocumentSha256}`
+}
+
+export function packBySelectionKey(key: string): ContentPack | null {
+  return PACKS.find(pack => packSelectionKey(pack) === key) ?? null
+}
+
+export function selectablePacks(activePack?: ContentPack): ContentPack[] {
+  return PACKS.filter(pack => pack === activePack || !pack.origin || pack.origin === 'bundled' || pack.enabled !== false)
 }
 
 export function assetsForSlot(pack: ContentPack, slot: SlotId): PackAsset[] {

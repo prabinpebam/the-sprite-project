@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 2,
+  "lockId": "LOCK-UPD-002-001",
+  "state": "locked",
+  "target": "delivery/updates/UPD-002-local-content-pack-ecosystem",
+  "baselineReviewId": "REVIEW-UPD-002-001",
+  "lockedAt": "2026-07-20T17:24:37.671Z",
+  "lockedBy": "product owner",
+  "approvalRef": "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-approval.json",
+  "approvalId": "APPROVAL-UPD-002-LOCK-001",
+  "approvalEvidence": "Direct product-owner instruction on 2026-07-20 approved the review-ready UPD-002 specification, all seven decisions, implementation dispatch, and explicit release-gate rescheduling.",
+  "productVisionAlignment": "A local-first data-only content ecosystem lets compatible humanoid art grow independently of application releases while preserving exact locks, provenance, offline custody, and one shared web/Electron product core.",
+  "workspaceRoot": "../../..",
+  "settledDecisionIds": [
+    "DEC-UPD002-PHASE-BOUNDARY",
+    "DEC-UPD002-PACK-FORMAT",
+    "DEC-UPD002-HUMANOID-PROFILE",
+    "DEC-UPD002-DATA-ONLY",
+    "DEC-UPD002-SIDE-BY-SIDE",
+    "DEC-UPD002-LICENSE-PROFILES",
+    "DEC-UPD002-ADAPTER-DEFER"
+  ],
+  "allowedWithoutReopen": [
+    "implementation code that conforms to the locked contracts",
+    "traceability status, decision evidence, run, and issue updates owned by generated evidence",
+    "regeneration of derived customer-promise, scenario, capability, task-flow, experience, scope, decision, execution, and docs pages from unchanged canonical sources",
+    "test fixtures, benchmarks, diagnostics, and evidence harnesses that do not alter product semantics"
+  ],
+  "reopenTriggers": [
+    "evidence-backed contract defect, infeasibility, data-loss, security, privacy, legal-metadata, or untestable behavior",
+    "material new implementation, user, operational, performance, compatibility, or research evidence",
+    "decision-owner change to promise, product vision, target user, platform, funding, deadline, law, or dependency constraint",
+    "measured user value, risk reduction, or lifecycle cost reduction that exceeds full change and revalidation cost"
+  ],
+  "consistencyChecks": [
+    {
+      "type": "generated-files",
+      "script": "delivery/updates/UPD-002-local-content-pack-ecosystem/generate-docs.mjs",
+      "outputs": [
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/customer-promise.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/scenarios.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/capabilities.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/task-flows.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/experience-architecture.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/scope-ledger.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/decisions.md",
+        "delivery/updates/UPD-002-local-content-pack-ecosystem/execution-plan.md",
+        "docs/execution/updates/upd-002-local-content-pack-ecosystem.html"
+      ]
+    }
+  ],
+  "finalization": {
+    "reviewPath": "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-review.json"
+  },
+  "entries": [
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/baseline.json",
+      "mode": "bytes",
+      "sha256": "e2676aef539b4a57a020042531181b7846efe6fb6b1372048712d7c4f4799ebe"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/change-proposal.md",
+      "mode": "bytes",
+      "sha256": "12d57e1b39e0abae08d23dc6bbaaac259102b8a897ca0e7e111119627b907cea"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/impact-analysis.md",
+      "mode": "bytes",
+      "sha256": "e7fd7100ed7434a52512365b26064851920c5d4679a792ffb3ef5664adb48995"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/traceability.json",
+      "mode": "traceability-contract",
+      "sha256": "f46b2d45248d5674fe693bd33646d78af1006ed9d01b02bb872d7fae46cc3b29"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/product-design-spec.md",
+      "mode": "bytes",
+      "sha256": "ab5c170b205e3529f4d5795ababdb40aebc9b379bf43b3008ce6ba27d8cc7aef"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/engineering-spec.md",
+      "mode": "bytes",
+      "sha256": "8ae699d2d8b2857d5db3b3843e2f5dcea3adf99b995970e66138d0f227e0422d"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/quality-scenarios.md",
+      "mode": "bytes",
+      "sha256": "37fd5b6408d4a601f5822e9732c8bb2d4e3f7d5be62875cba32bd8c0a875f2dd"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/threat-model.md",
+      "mode": "bytes",
+      "sha256": "c7d3b570d1932373ed929dc14fa68f0499132519bf702cf3bf0ef6c2043a3ce0"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/release-gate.md",
+      "mode": "bytes",
+      "sha256": "95dcd634242658b421ee15d0bed71ef25c00f6741e816218e80ba6d6adcc5c42"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-review.json",
+      "mode": "review-contract",
+      "sha256": "c97a06a66add802f39dcc384ff6f89534754129146f9475322e530b5c074e2de"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-approval.json",
+      "mode": "bytes",
+      "sha256": "ba88d17f8b75da3eecd53525f5ecc9ef55c818c5f93b0b51866d7341ebdb7508"
+    },
+    {
+      "path": "delivery/updates/UPD-002-local-content-pack-ecosystem/owner-review.md",
+      "mode": "bytes",
+      "sha256": "4394a0d960b93c518f4e556fae23945d7e8c2b1b76da50097791e3cf2dfb3969"
+    },
+    {
+      "path": "docs/execution/updates/upd-002-local-content-pack-ecosystem.html",
+      "mode": "html-contract",
+      "sha256": "2c447d3eb59910ff517b05fb56c1e2900eb8f35924f411e308e984c67cd8c6a9"
+    }
+  ]
+}

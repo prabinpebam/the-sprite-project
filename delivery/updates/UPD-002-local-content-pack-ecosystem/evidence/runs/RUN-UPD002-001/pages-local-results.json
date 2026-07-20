@@ -1,0 +1,138 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.pages.config.ts"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.pages.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/delivery/updates/UPD-002-local-content-pack-ecosystem/evidence/runs/RUN-UPD002-001/pages-local-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "upd002-pages-subpath.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../delivery/updates/UPD-002-local-content-pack-ecosystem/evidence/runs/RUN-UPD002-001/pages-local-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../delivery/updates/UPD-002-local-content-pack-ecosystem/evidence/runs/RUN-UPD002-001/pages-local-report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run build:pages && npm run preview:pages",
+      "url": "http://127.0.0.1:4176/the-sprite-project/",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "upd002-pages-subpath.spec.ts",
+      "file": "upd002-pages-subpath.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "QS-PAGES-SUBPATH installs, restarts offline, and exports at repository scope",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2219,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-20T19:45:08.407Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "pages-subpath.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJzZXJ2aWNlV29ya2VyIjogewogICAgImNvbnRyb2xsZWQiOiB0cnVlLAogICAgInNjcmlwdFVSTCI6ICJodHRwOi8vMTI3LjAuMC4xOjQxNzYvdGhlLXNwcml0ZS1wcm9qZWN0L3N3LmpzIgogIH0sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgIm91dE9mU2NvcGVSZXF1ZXN0cyI6IFtdLAogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc2L3RoZS1zcHJpdGUtcHJvamVjdC9kb2NzLyNsYW5kaW5nLmh0bWwiCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bd89fa451fc869b749f4-7b1a141840c74f3a8cc1",
+          "file": "upd002-pages-subpath.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-20T19:45:00.855Z",
+    "duration": 11193.041,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

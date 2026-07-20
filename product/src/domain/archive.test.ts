@@ -6,6 +6,8 @@ import { migrateProjectV1ToV2 } from './migration'
 import { packLockFor } from './pack-locks'
 import { createProject } from './project'
 import { sha256Hex } from './sha256'
+import { readSpritePack } from './spritepack'
+import { spritePackFixtureBytes } from './spritepack-test-fixture'
 
 async function fixture() {
   const legacy = createProject('Portable Hero', '2026-07-19T00:00:00.000Z')
@@ -79,8 +81,46 @@ describe('spriteproject archives', () => {
     const valid = await writeProjectArchive(await fixture())
     const entries = unzipSync(valid)
     const manifest = JSON.parse(new TextDecoder().decode(entries['archive-manifest.json']))
-    entries['archive-manifest.json'] = Uint8Array.from(canonicalJsonBytes({ ...manifest, archiveFormatVersion: 2 }))
+    entries['archive-manifest.json'] = Uint8Array.from(canonicalJsonBytes({ ...manifest, archiveFormatVersion: 3 }))
     await expect(readProjectArchive(zipSync(entries))).rejects.toMatchObject({ code: 'unsupported-version' })
+  })
+
+  it('writes archive v2 only for an exact non-bundled lock and restores immutable embedded bytes', async () => {
+    const graph = await fixture()
+    const packageBytes = await spritePackFixtureBytes()
+    const embedded = await readSpritePack(packageBytes)
+    graph.project.packLocks = [{ packId: embedded.pack.id, version: embedded.pack.version, sha256: embedded.packDocumentSha256 }]
+    graph.recipes = Object.fromEntries(Object.entries(graph.recipes).map(([id, recipe]) => [id, { ...recipe, packId: embedded.pack.id }]))
+    const first = await writeProjectArchive(graph, 'sprite-project/test', [packageBytes])
+    const second = await writeProjectArchive(graph, 'sprite-project/test', [packageBytes])
+    expect(first).toEqual(second)
+    const restored = await readProjectArchive(first)
+    expect(restored.manifest.archiveFormatVersion).toBe(2)
+    expect(restored.manifest.embeddedPacks).toEqual([{
+      packId: embedded.pack.id,
+      version: embedded.pack.version,
+      packageSha256: embedded.packageSha256,
+      path: `embedded-packs/${embedded.packageSha256}.spritepack`,
+      size: packageBytes.length,
+    }])
+    expect(restored.embeddedPacks[0].bytes).toEqual(packageBytes)
+    expect(restored.graph).toEqual(graph)
+  })
+
+  it('rejects a version 1 archive whose graph claims a non-bundled exact lock', async () => {
+    const valid = await writeProjectArchive(await fixture())
+    const packageBytes = await spritePackFixtureBytes()
+    const embedded = await readSpritePack(packageBytes)
+    const entries = unzipSync(valid)
+    const project = JSON.parse(new TextDecoder().decode(entries['project.json']))
+    const recipePath = Object.keys(entries).find(path => path.startsWith('recipes/'))!
+    const recipe = JSON.parse(new TextDecoder().decode(entries[recipePath]))
+    const mutatedProject = { ...project, packLocks: [{ packId: embedded.pack.id, version: embedded.pack.version, sha256: embedded.packDocumentSha256 }] }
+    const mutatedRecipe = { ...recipe, packId: embedded.pack.id }
+    const withProject = await replacePayload(valid, 'project.json', canonicalJsonBytes(mutatedProject))
+    const withRecipe = await replacePayload(withProject, recipePath, canonicalJsonBytes(mutatedRecipe))
+    const lockDocument = { packLockVersion: 1, packs: mutatedProject.packLocks }
+    await expect(readProjectArchive(await replacePayload(withRecipe, 'packs.lock.json', canonicalJsonBytes(lockDocument)))).rejects.toMatchObject({ code: 'missing-pack' })
   })
 
   it('rejects traversal and absolute-path ZIP entries before extraction', async () => {

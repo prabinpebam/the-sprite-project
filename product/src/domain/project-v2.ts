@@ -1,4 +1,3 @@
-import { packById } from './packs'
 import { createProject } from './project'
 import { migrateProjectV1ToV2 } from './migration'
 import { packLockFor } from './pack-locks'
@@ -8,8 +7,6 @@ import type { PackLockRef, ProjectGraphV2, SpriteProject } from './types'
 export function legacyProjection(graphValue: ProjectGraphV2): SpriteProject {
   const graph = parseProjectGraphV2(graphValue)
   const recipe = graph.recipes[graph.project.activeRecipeId]
-  const pack = packById(recipe.packId)
-  if (pack.id !== recipe.packId) throw new Error(`Pack ${recipe.packId} is unavailable.`)
 
   return {
     schemaVersion: 1,

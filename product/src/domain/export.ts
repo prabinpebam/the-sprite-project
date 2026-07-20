@@ -1,7 +1,7 @@
 import { strToU8, zipSync } from 'fflate'
 import { creditsFor, exportBlockers } from './project'
 import { buildAnimationManifest, pixelHash, renderSpritesheet } from './render'
-import type { SpriteProject } from './types'
+import type { ContentPack, SpriteProject } from './types'
 
 function canvasBytes(canvas: HTMLCanvasElement): Promise<Uint8Array> {
   return new Promise((resolve, reject) => canvas.toBlob(async blob => {
@@ -10,8 +10,8 @@ function canvasBytes(canvas: HTMLCanvasElement): Promise<Uint8Array> {
   }, 'image/png'))
 }
 
-function creditsText(project: SpriteProject): string {
-  const records = creditsFor(project)
+function creditsText(project: SpriteProject, pack?: ContentPack): string {
+  const records = creditsFor(project, pack)
   return [
     `${project.name} - generated character credits`,
     '',
@@ -46,19 +46,20 @@ function godotResource(): string {
   return `[gd_resource type="SpriteFrames" load_steps=${id + 1} format=3]\n\n[ext_resource type="Texture2D" path="res://spritesheet.png" id="1_texture"]\n\n${subresources.join('\n\n')}\n\n[resource]\nanimations = [${animations.join(',\n')}]\n`
 }
 
-export async function buildPackage(project: SpriteProject, target: 'generic' | 'godot'): Promise<{ bytes: Uint8Array; filename: string; renderHash: string }> {
-  const blockers = exportBlockers(project)
+export async function buildPackage(project: SpriteProject, target: 'generic' | 'godot', pack?: ContentPack): Promise<{ bytes: Uint8Array; filename: string; renderHash: string }> {
+  const blockers = exportBlockers(project, pack)
   if (blockers.length) throw new Error(blockers.join(' '))
-  const sheet = renderSpritesheet(project)
+  const sheet = renderSpritesheet(project, pack)
   const renderHash = pixelHash(sheet)
-  const credits = creditsFor(project)
+  const credits = creditsFor(project, pack)
   const manifest = buildAnimationManifest()
   const buildManifest = {
     schemaVersion: 1,
     projectId: project.id,
     projectName: project.name,
     packId: project.packId,
-    packVersion: '1.0.0',
+    packVersion: pack?.version ?? '1.0.0',
+    packageSha256: pack?.packageSha256,
     characterId: project.character.id,
     renderHash,
     generatedBy: 'The Sprite Project MVP',
@@ -68,7 +69,7 @@ export async function buildPackage(project: SpriteProject, target: 'generic' | '
     'animations.json': strToU8(JSON.stringify(manifest, null, 2)),
     'build-manifest.json': strToU8(JSON.stringify(buildManifest, null, 2)),
     'credits.json': strToU8(JSON.stringify({ schemaVersion: 1, records: credits }, null, 2)),
-    'CREDITS.txt': strToU8(creditsText(project)),
+    'CREDITS.txt': strToU8(creditsText(project, pack)),
   }
   if (target === 'godot') {
     files['character_sprite_frames.tres'] = strToU8(godotResource())

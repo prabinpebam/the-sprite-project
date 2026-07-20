@@ -3,15 +3,18 @@ import { unzipSync } from 'fflate'
 import {
   AlertTriangle, Box, Check, CheckCircle2, Download, FileArchive, FolderOpen,
   Gamepad2, HardDrive, History, Info, Layers3, Palette, Pause, Pencil, Play, Plus, RotateCcw,
-  Save, ShieldCheck, Sparkles, Trash2, Upload, X,
+  Package, Save, ShieldCheck, Sparkles, Trash2, Upload, X,
 } from 'lucide-react'
 import './App.css'
 import { SpriteCanvas } from './components/SpriteCanvas'
+import { PackWorkspace } from './components/PackWorkspace'
 import { readProjectArchive, writeProjectArchive, type ReadArchiveResult } from './domain/archive'
 import { buildPackage, downloadBytes } from './domain/export'
 import { ProductError } from './domain/errors'
-import { packLockFor } from './domain/pack-locks'
-import { assetsForSlot, packById, PACKS } from './domain/packs'
+import { packLockForPack } from './domain/pack-locks'
+import { assetsForSlot, clearEmbeddedRuntimePacks, packByLock, packBySelectionKey, packSelectionKey, PACKS, registerRuntimePack, selectablePacks } from './domain/packs'
+import { registerSheetPng, runtimePackFromInstalled } from './domain/pack-runtime'
+import { readSpritePackResponsive } from './domain/pack-validation-client'
 import {
   creditsFor, exportBlockers, isExportReady, resolvedTheme,
   switchPack, touch,
@@ -20,12 +23,12 @@ import { applyLegacyProjection, copyProjectGraph, createProjectGraph, legacyProj
 import { isValidHex, presetById, THEME_PRESETS, TOKEN_DESCRIPTIONS, TOKEN_LABELS } from './domain/themes'
 import {
   DIRECTIONS, REQUIRED_SLOTS, SLOT_IDS, TOKEN_IDS,
-  type AnimationId, type Direction, type ProjectGraphV2, type SlotId, type SpriteProject, type SpriteProjectV2, type TokenId,
+  type AnimationId, type ContentPack, type Direction, type ProjectGraphV2, type SlotId, type SpriteProject, type SpriteProjectV2, type TokenId,
 } from './domain/types'
 import { classifyStoragePressure, type DisposableDataPreview, type SnapshotRecord, type StoragePressure, WorkspaceRepository } from './web/repository'
 import type { ApprovedLocation, HostInfo, ProjectFingerprint, RecentProject } from './host/bridge'
 
-type ViewId = 'project' | 'compose' | 'theme' | 'preview' | 'storage' | 'export'
+type ViewId = 'project' | 'compose' | 'theme' | 'preview' | 'storage' | 'packs' | 'export'
 type DialogMode = 'new' | 'rename' | null
 
 const NAV_ITEMS = [
@@ -34,6 +37,7 @@ const NAV_ITEMS = [
   { id: 'theme' as const, label: 'Theme', icon: Palette },
   { id: 'preview' as const, label: 'Preview', icon: Play },
   { id: 'storage' as const, label: 'Storage', icon: HardDrive },
+  { id: 'packs' as const, label: 'Packs', icon: Package },
   { id: 'export' as const, label: 'Export', icon: Download },
 ]
 
@@ -148,7 +152,7 @@ function App() {
   const [dirty, setDirty] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveConflict, setSaveConflict] = useState<ProjectGraphV2 | null>(null)
-  const [importConflict, setImportConflict] = useState<ProjectGraphV2 | null>(null)
+  const [importConflict, setImportConflict] = useState<{ graph: ProjectGraphV2; embeddedPackageBytes: Uint8Array[] } | null>(null)
   const [importPending, setImportPending] = useState<{ archive: ReadArchiveResult; fileName: string } | null>(null)
   const [confirmClear, setConfirmClear] = useState(false)
   const [deleteCandidate, setDeleteCandidate] = useState<SpriteProjectV2 | null>(null)
@@ -165,8 +169,12 @@ function App() {
   const [desktopFingerprint, setDesktopFingerprint] = useState<ProjectFingerprint | null>(null)
   const [desktopRecents, setDesktopRecents] = useState<RecentProject[]>([])
   const [desktopConflict, setDesktopConflict] = useState(false)
+  const [desktopEmbeddedPackageBytes, setDesktopEmbeddedPackageBytes] = useState<Uint8Array[]>([])
   const [confirmClose, setConfirmClose] = useState(false)
   const [colorDrafts, setColorDrafts] = useState<Partial<Record<TokenId, string>>>({})
+  const [, setPackRegistryRevision] = useState(0)
+  const [packActivation, setPackActivation] = useState<ContentPack | null>(null)
+  const [missingReplacement, setMissingReplacement] = useState<ContentPack | null>(null)
   const newProjectButton = useRef<HTMLButtonElement>(null)
   const renameButton = useRef<HTMLButtonElement>(null)
   const importInput = useRef<HTMLInputElement>(null)
@@ -182,16 +190,61 @@ function App() {
     requestAnimationFrame(() => overlayTrigger.current?.focus())
   }
 
-  const pack = project ? packById(project.packId) : null
-  const blockers = project ? exportBlockers(project) : []
-  const ready = project ? isExportReady(project) : false
+  const activePackLock = project && graph ? graph.project.packLocks.find(lock => lock.packId === project.packId) ?? null : null
+  const pack = activePackLock ? packByLock(activePackLock) : null
+  const blockers = project && pack ? exportBlockers(project, pack) : []
+  const ready = project && pack ? isExportReady(project, pack) : false
   const selectedAsset = project && pack
     ? pack.assets.find(item => item.id === project.character.selections[selectedSlot]) ?? null
     : null
+  const activationImpact = packActivation && project && pack ? (() => {
+    const selectedIds = Object.values(project.character.selections).filter((id): id is string => Boolean(id))
+    const retained = selectedIds.filter(id => packActivation.assets.some(asset => asset.id === id))
+    const removed = selectedIds.filter(id => !packActivation.assets.some(asset => asset.id === id))
+    const added = packActivation.assets.filter(asset => !pack.assets.some(current => current.id === asset.id)).map(asset => asset.id)
+    return { retained, removed, added }
+  })() : null
 
   const refreshProjects = async () => setProjects(await repository.listProjects())
 
+  const hydrateProjectEmbeddedPacks = async (projectId: string) => {
+    clearEmbeddedRuntimePacks()
+    const records = await repository.projectEmbeddedPackages(projectId)
+    for (const record of records) {
+      const parsed = await readSpritePackResponsive(record.packageBytes)
+      for (const [hash, bytes] of Object.entries(parsed.pngs)) await registerSheetPng(hash, bytes)
+      registerRuntimePack(runtimePackFromInstalled({
+        packId: parsed.pack.id,
+        version: parsed.pack.version,
+        packageSha256: parsed.packageSha256,
+        packDocumentSha256: parsed.packDocumentSha256,
+        origin: 'embedded-project',
+        enabled: false,
+        installedAt: '1980-01-01T00:00:00.000Z',
+        packageBytes: parsed.bytes,
+        pack: parsed.pack,
+        provenance: parsed.provenance,
+      }))
+    }
+  }
+
+  const hydratePackageBytes = async (packages: Uint8Array[], origin: 'installed-local' | 'embedded-project') => {
+    if (origin === 'embedded-project') clearEmbeddedRuntimePacks()
+    const hydratedPackages: Uint8Array[] = []
+    for (const bytes of packages) {
+      const parsed = await readSpritePackResponsive(bytes)
+      hydratedPackages.push(parsed.bytes)
+      for (const [hash, png] of Object.entries(parsed.pngs)) await registerSheetPng(hash, png)
+      registerRuntimePack(runtimePackFromInstalled({ packId: parsed.pack.id, version: parsed.pack.version, packageSha256: parsed.packageSha256, packDocumentSha256: parsed.packDocumentSha256, origin, enabled: origin === 'installed-local', installedAt: '1980-01-01T00:00:00.000Z', packageBytes: parsed.bytes, pack: parsed.pack, provenance: parsed.provenance }))
+    }
+    return hydratedPackages
+  }
+
+  const hydrateStartupProject = useEffectEvent(hydrateProjectEmbeddedPacks)
+  const hydrateStartupPackages = useEffectEvent(hydratePackageBytes)
+
   const openProject = async (projectId: string) => {
+    await hydrateProjectEmbeddedPacks(projectId)
     const next = await repository.loadGraph(projectId)
     if (!next) {
       setLoadError('The selected project is no longer available.')
@@ -281,9 +334,9 @@ function App() {
   }
 
   const restoreSafeProject = async () => {
-    if (!project || !graph) return
-    const next = switchPack(project, project.packId)
-    setGraph(applyLegacyProjection(graph, next, await packLockFor(next.packId)))
+    if (!project || !graph || !pack) return
+    const next = switchPack(project, pack)
+    setGraph(applyLegacyProjection(graph, next, await packLockForPack(pack)))
     editVersion.current += 1
     setLoadError(null)
     setDirty(true)
@@ -291,15 +344,81 @@ function App() {
     setAnnouncement('Safe project restored with compatible pack defaults.')
   }
 
-  const handlePackChange = async (packId: string) => {
+  const locateMissingPack = async (file: File) => {
+    if (!activePackLock) return
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer())
+      const parsed = await readSpritePackResponsive(bytes)
+      if (parsed.pack.id !== activePackLock.packId || parsed.pack.version !== activePackLock.version || parsed.packDocumentSha256 !== activePackLock.sha256) throw new ProductError({ code: 'missing-pack', message: 'Selected package does not match the project exact pack lock.', operation: 'pack:locate', recoverable: true })
+      let installed
+      if (window.spriteHost) {
+        const listed = await window.spriteHost.listInstalledPacks()
+        if (!listed.ok) throw new ProductError(listed.error)
+        const expectedIndexRevision = Math.max(0, ...listed.value.map(item => item.indexRevision))
+        const result = await window.spriteHost.installPack({ bytes: parsed.bytes, enabled: true, expectedIndexRevision })
+        if (!result.ok) throw new ProductError(result.error)
+        installed = { packId: result.value.packId, version: result.value.version, packageSha256: result.value.packageSha256, packDocumentSha256: result.value.packDocumentSha256, origin: 'installed-local' as const, enabled: result.value.enabled, installedAt: result.value.installedAt, packageBytes: result.value.packageBytes, pack: parsed.pack, provenance: parsed.provenance }
+      } else installed = await repository.installPack(parsed.bytes)
+      for (const [hash, png] of Object.entries(parsed.pngs)) await registerSheetPng(hash, png)
+      registerRuntimePack(runtimePackFromInstalled(installed))
+      setPackRegistryRevision(value => value + 1)
+      setAnnouncement(`Exact pack ${installed.packId} ${installed.version} installed; project rendering resumed unchanged.`)
+    } catch (error) {
+      setAnnouncement(`${error instanceof Error ? error.message : 'Exact pack recovery failed.'}${error instanceof ProductError ? ` (${error.code})` : ''}`)
+    }
+  }
+
+  const replaceMissingPackInCopy = async () => {
+    if (!graph || !project || !missingReplacement) return
+    const copyBase = copyProjectGraph(graph, `${graph.project.name} (replacement copy)`)
+    const replacementProject = switchPack(legacyProjection(copyBase), missingReplacement)
+    const copy = applyLegacyProjection(copyBase, replacementProject, await packLockForPack(missingReplacement))
+    if (window.spriteHost) {
+      setGraph(copy)
+      setDesktopLocation(null)
+      setDesktopFingerprint(null)
+      setDesktopEmbeddedPackageBytes([])
+      setDirty(true)
+    } else {
+      await repository.createGraph(copy)
+      setGraph(copy)
+      setDirty(false)
+      await refreshProjects()
+    }
+    setMissingReplacement(null)
+    setView('project')
+    setAnnouncement(`${copy.project.name} created with ${missingReplacement.name}; the original blocked project and exact lock are unchanged.`)
+  }
+
+  const applyPackChange = async (nextPack: ContentPack, checkpoint: boolean) => {
     if (!project || !graph) return
-    const nextPack = packById(packId)
-    const next = switchPack(project, packId)
-    setGraph(applyLegacyProjection(graph, next, await packLockFor(packId)))
+    let baseGraph = graph
+    if (checkpoint && !window.spriteHost) {
+      baseGraph = await repository.saveGraph(graph, graph.project.revision, 'pack replacement')
+      await refreshProjects()
+    } else if (checkpoint && window.spriteHost && desktopLocation) {
+      const saved = await saveDesktopProject()
+      if (!saved) return
+    }
+    const next = switchPack(legacyProjection(baseGraph), nextPack)
+    setGraph(applyLegacyProjection(baseGraph, next, await packLockForPack(nextPack)))
     editVersion.current += 1
     setSelectedSlot('body')
     setDirty(true)
+    setPackActivation(null)
     setAnnouncement(`${nextPack.name} selected. Incompatible selections were replaced with pack defaults.`)
+  }
+
+  const handlePackChange = async (selectionKey: string) => {
+    if (!project || !graph) return
+    const nextPack = packBySelectionKey(selectionKey)
+    if (!nextPack) return
+    if (nextPack.origin && nextPack.origin !== 'bundled') {
+      rememberOverlayTrigger()
+      setPackActivation(nextPack)
+      return
+    }
+    await applyPackChange(nextPack, false)
   }
 
   const resolveReload = async () => {
@@ -333,7 +452,7 @@ function App() {
 
   const exportArchive = async () => {
     if (!graph) return
-    const bytes = await writeProjectArchive(graph)
+    const bytes = await writeProjectArchive(graph, 'sprite-project/0.1.0', await repository.projectPackageBytes(graph))
     const safeName = graph.project.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'project'
     downloadBytes(bytes, `${safeName}.spriteproject`)
     setAnnouncement('Portable project archive downloaded with verified checksums.')
@@ -361,10 +480,11 @@ function App() {
     try {
       const existing = await repository.loadGraph(imported.project.id)
       if (existing) {
-        setImportConflict(imported)
+        setImportConflict({ graph: imported, embeddedPackageBytes: importPending.archive.embeddedPacks.map(pack => pack.bytes) })
         return
       }
-      await repository.createGraph(imported)
+      await repository.createGraph(imported, importPending.archive.embeddedPacks.map(pack => pack.bytes))
+      await hydrateProjectEmbeddedPacks(imported.project.id)
       setGraph(imported)
       setDirty(false)
       await refreshProjects()
@@ -378,9 +498,10 @@ function App() {
 
   const replaceImportedProject = async () => {
     if (!importConflict) return
-    const current = await repository.loadGraph(importConflict.project.id)
+    const current = await repository.loadGraph(importConflict.graph.project.id)
     if (!current) return
-    const replaced = await repository.saveGraph({ ...importConflict, project: { ...importConflict.project, revision: current.project.revision } }, current.project.revision, 'archive replace')
+    const replaced = await repository.saveGraph({ ...importConflict.graph, project: { ...importConflict.graph.project, revision: current.project.revision } }, current.project.revision, 'archive replace', new Date().toISOString(), importConflict.embeddedPackageBytes)
+    await hydrateProjectEmbeddedPacks(replaced.project.id)
     setGraph(replaced)
     setImportConflict(null)
     setDirty(false)
@@ -391,8 +512,9 @@ function App() {
 
   const copyImportedProject = async () => {
     if (!importConflict) return
-    const copy = copyProjectGraph(importConflict, `${importConflict.project.name} (imported copy)`)
-    await repository.createGraph(copy)
+    const copy = copyProjectGraph(importConflict.graph, `${importConflict.graph.project.name} (imported copy)`)
+    await repository.createGraph(copy, importConflict.embeddedPackageBytes)
+    await hydrateProjectEmbeddedPacks(copy.project.id)
     setGraph(copy)
     setImportConflict(null)
     setDirty(false)
@@ -486,7 +608,9 @@ function App() {
       setAnnouncement(`${response.error.message} (${response.error.code})`)
       return
     }
+    const hydratedPackages = await hydratePackageBytes(response.value.embeddedPackageBytes, 'embedded-project')
     setGraph(response.value.graph)
+    setDesktopEmbeddedPackageBytes(hydratedPackages)
     setDesktopLocation(response.value.location)
     setDesktopFingerprint(response.value.fingerprint)
     setDirty(false)
@@ -517,7 +641,7 @@ function App() {
       }
       destination = chosen.value
     }
-    const response = await window.spriteHost.saveProject({ destinationGrantId: destination.grantId, graph, expectedFingerprint: destination.grantId === desktopLocation?.grantId ? desktopFingerprint : null, overwriteExternal })
+    const response = await window.spriteHost.saveProject({ destinationGrantId: destination.grantId, graph, expectedFingerprint: destination.grantId === desktopLocation?.grantId ? desktopFingerprint : null, overwriteExternal, embeddedPackageBytes: desktopEmbeddedPackageBytes })
     if (!response.ok) {
       if (response.error.code === 'external-modification') {
         rememberOverlayTrigger()
@@ -544,7 +668,7 @@ function App() {
     if (!graph || !window.spriteHost) return
     const chosen = await window.spriteHost.chooseProjectFile('save')
     if (!chosen.ok || !chosen.value) return
-    const response = await window.spriteHost.writeArchive({ destinationGrantId: chosen.value.grantId, graph })
+    const response = await window.spriteHost.writeArchive({ destinationGrantId: chosen.value.grantId, graph, embeddedPackageBytes: desktopEmbeddedPackageBytes })
     setAnnouncement(response.ok ? `Portable archive written to ${response.value.location.displayPath}.` : `${response.error.message} (${response.error.code})`)
   }
 
@@ -555,7 +679,9 @@ function App() {
       setAnnouncement(`${response.error.message} (${response.error.code})`)
       return
     }
+    const hydratedPackages = await hydratePackageBytes(response.value.embeddedPackageBytes, 'embedded-project')
     setGraph(response.value.graph)
+    setDesktopEmbeddedPackageBytes(hydratedPackages)
     setDesktopLocation(response.value.location)
     setDesktopFingerprint(response.value.fingerprint)
     setDirty(false)
@@ -615,7 +741,7 @@ function App() {
     if (!project || !ready) return
     setExportStatus(`Building ${target} package...`)
     try {
-      const result = await buildPackage(project, target)
+      const result = await buildPackage(project, target, pack ?? undefined)
       if (window.spriteHost) {
         const chosen = await window.spriteHost.chooseExportDirectory()
         if (!chosen.ok || !chosen.value) return
@@ -638,13 +764,23 @@ function App() {
     let active = true
     void (async () => {
       if (window.spriteHost) {
-        const [host, recent] = await Promise.all([window.spriteHost.getHostInfo(), window.spriteHost.listRecentProjects()])
+        const [host, recent, installed] = await Promise.all([window.spriteHost.getHostInfo(), window.spriteHost.listRecentProjects(), window.spriteHost.listInstalledPacks()])
         if (!active) return
         if (host.ok) setHostInfo(host.value)
         if (recent.ok) setDesktopRecents(recent.value)
+        if (installed.ok) await hydrateStartupPackages(installed.value.map(item => item.packageBytes), 'installed-local')
         setAnnouncement('Portable desktop workspace ready. Open a project or create a new one.')
         setLoading(false)
         return
+      }
+      const installedPacks = await repository.listInstalledPacks()
+      for (const installed of installedPacks) {
+        for (const asset of installed.pack.assets) {
+          if (asset.source.kind !== 'sheet-v1') continue
+          const bytes = await repository.readPackBlob(asset.source.pngSha256)
+          if (bytes) await registerSheetPng(asset.source.pngSha256, bytes)
+        }
+        registerRuntimePack(runtimePackFromInstalled(installed))
       }
       const migration = await repository.migrateLegacy(localStorage)
       if (!active) return
@@ -657,7 +793,8 @@ function App() {
       setProjects(available)
       const preferredId = migration.projectId ?? available[0]?.id
       if (preferredId) {
-        const restored = await repository.loadGraph(preferredId)
+          await hydrateStartupProject(preferredId)
+          const restored = await repository.loadGraph(preferredId)
         if (active && restored) {
           setGraph(restored)
           setAnnouncement(`${restored.project.name} restored from local workspace.`)
@@ -739,7 +876,18 @@ function App() {
   }, [project])
 
   const renderView = () => {
-    if (!project || !pack) return null
+    if (view === 'packs') return <PackWorkspace repository={repository} protectedLock={activePackLock} onAnnouncement={setAnnouncement} onLibraryChange={() => setPackRegistryRevision(value => value + 1)} onOpenProject={projectId => void openProject(projectId)} onOpenStorage={() => setView('storage')} />
+    if (!project) return null
+    if (!pack && activePackLock) return (
+      <section className="view" aria-labelledby="missing-pack-heading">
+        <div className="view-heading"><div><p className="eyebrow">Project dependency blocked</p><h1 id="missing-pack-heading">Exact pack unavailable</h1></div></div>
+        <div className="readiness blocked" role="alert"><div className="readiness-icon"><AlertTriangle /></div><div><p className="eyebrow">No substitution performed</p><h2>{activePackLock.packId} · {activePackLock.version}</h2><p>Checksum {activePackLock.sha256}. The project remains intact, but preview and export are blocked until this exact pack is located.</p></div></div>
+        <div className="action-row"><label className="button primary" htmlFor="missing-pack-file"><Upload /> Locate exact pack</label><button className="button secondary" type="button" onClick={() => setView('packs')}>Open pack library</button></div>
+        <input id="missing-pack-file" className="sr-only" type="file" accept=".spritepack" onChange={event => { const file = event.target.files?.[0]; if (file) void locateMissingPack(file); event.target.value = '' }} />
+        <section className="storage-section missing-replacement" aria-labelledby="missing-replacement-heading"><div className="panel-heading"><div><p className="eyebrow">Optional recovery copy</p><h2 id="missing-replacement-heading">Replace with compatible local content</h2></div></div><p>The original project stays blocked and unchanged. A new project ID receives the selected pack defaults after impact confirmation.</p><div className="action-row">{selectablePacks().filter(item => item.id !== activePackLock.packId).map(candidate => <button key={packSelectionKey(candidate)} className="button secondary" type="button" onClick={() => setMissingReplacement(candidate)}>Use {candidate.name} {candidate.version} in a copy</button>)}</div></section>
+      </section>
+    )
+    if (!pack) return null
     if (view === 'project') return (
       <section className="view" aria-labelledby="project-heading">
         <div className="view-heading">
@@ -766,7 +914,7 @@ function App() {
       return (
         <section className="view" aria-labelledby="compose-heading">
           <div className="view-heading"><div><p className="eyebrow">Recipe</p><h1 id="compose-heading">Compose</h1></div></div>
-          <label className="field compact"><span>Content pack</span><select value={pack.id} onChange={event => void handlePackChange(event.target.value)}>{PACKS.map(item => <option key={item.id} value={item.id}>{item.name} · {item.version}</option>)}</select><small>{pack.description}</small></label>
+          <label className="field compact"><span>Content pack</span><select value={packSelectionKey(pack)} onChange={event => void handlePackChange(event.target.value)}>{selectablePacks(pack).map(item => <option key={packSelectionKey(item)} value={packSelectionKey(item)}>{item.name} · {item.version}</option>)}</select><small>{pack.description}</small></label>
           <div className="slot-tabs" role="tablist" aria-label="Character slots">
             {SLOT_IDS.map(slot => <button key={slot} type="button" role="tab" aria-selected={selectedSlot === slot} onClick={() => setSelectedSlot(slot)}><span>{slot}</span>{project.character.selections[slot] ? <Check /> : <span className="required-dot" aria-label={REQUIRED_SLOTS.includes(slot as never) ? 'Required' : 'Optional'} />}</button>)}
           </div>
@@ -850,7 +998,7 @@ function App() {
       </section>
     )
 
-    const credits = creditsFor(project)
+    const credits = creditsFor(project, pack)
     return (
       <section className="view" aria-labelledby="export-heading">
         <div className="view-heading"><div><p className="eyebrow">Delivery</p><h1 id="export-heading">Export</h1></div></div>
@@ -890,11 +1038,11 @@ function App() {
       </header>
       <div className="app-body">
         <nav className="workflow-nav" aria-label="Project workflow">
-          {NAV_ITEMS.map(item => { const Icon = item.icon; return <button key={item.id} type="button" disabled={!project} aria-current={view === item.id ? 'page' : undefined} onClick={() => setView(item.id)}><Icon /><span>{item.label}</span></button> })}
+          {NAV_ITEMS.map(item => { const Icon = item.icon; return <button key={item.id} type="button" disabled={!project && item.id !== 'packs'} aria-current={view === item.id ? 'page' : undefined} onClick={() => setView(item.id)}><Icon /><span>{item.label}</span></button> })}
           <div className="nav-progress" aria-label="Workflow progress">{NAV_ITEMS.map(item => <i key={item.id} className={project && (item.id !== 'export' || ready) ? 'complete' : ''} />)}</div>
         </nav>
-        <main className="workspace">
-          {!project ? (
+        <main className={`workspace ${view === 'packs' || (project && !pack) ? 'pack-mode' : ''}`}>
+          {!project && view !== 'packs' ? (
             <section className="empty-workspace">
               <div className="empty-glyph"><Layers3 /></div>
               <p className="eyebrow">Local-first character studio</p>
@@ -910,12 +1058,14 @@ function App() {
                 {!loading && <button className="button primary" type="button" onClick={() => setDialogMode('new')}><Plus /> New project</button>}
               </div>
             </section>
+          ) : view === 'packs' || (project && !pack) ? (
+            <div className="content-pane content-pane--wide">{renderView()}</div>
           ) : (
             <>
               <div className="content-pane">{renderView()}</div>
               <aside className="preview-pane" aria-label="Character preview">
-                <div className="preview-heading"><div><p className="eyebrow">Live character</p><h2>{project.character.name}</h2></div><span className={`readiness-pill ${ready ? 'ready' : 'blocked'}`}>{ready ? <Check /> : <AlertTriangle />}{ready ? 'Ready' : 'Blocked'}</span></div>
-                <SpriteCanvas project={project} compact={view !== 'preview'} />
+                <div className="preview-heading"><div><p className="eyebrow">Live character</p><h2>{project!.character.name}</h2></div><span className={`readiness-pill ${ready ? 'ready' : 'blocked'}`}>{ready ? <Check /> : <AlertTriangle />}{ready ? 'Ready' : 'Blocked'}</span></div>
+                <SpriteCanvas project={project!} pack={pack ?? undefined} compact={view !== 'preview'} />
                 <div className="preview-actions"><button type="button" className="button quiet" onClick={() => setView('preview')}><Play /> Open preview</button><button type="button" className="button quiet" onClick={() => setView('export')}><Download /> Export</button></div>
               </aside>
             </>
@@ -945,6 +1095,12 @@ function App() {
       {importConflict && <ChoiceDialog title="Project already exists" description="Choose whether to replace the existing project while preserving a recovery checkpoint, or import a separate copy." onCancel={() => dismissOverlay(() => setImportConflict(null))} choices={[
         { label: 'Replace existing project with imported version', action: replaceImportedProject },
         { label: 'Import as new project', action: copyImportedProject, primary: true },
+      ]} />}
+      {packActivation && <ChoiceDialog title={`Activate ${packActivation.name} ${packActivation.version}?`} description={`The current project state will be checkpointed before its exact lock changes. Compatibility: ${activationImpact?.retained.length ?? 0} selected asset IDs retained, ${activationImpact?.removed.length ?? 0} unavailable, ${activationImpact?.added.length ?? 0} target-only assets. Defaults replace incompatible selections; rendered pixels and credits are expected to change. Other projects are unchanged.`} onCancel={() => dismissOverlay(() => setPackActivation(null))} choices={[
+        { label: 'Create checkpoint and activate', action: async () => applyPackChange(packActivation, true), primary: true },
+      ]} />}
+      {missingReplacement && project && <ChoiceDialog title={`Create a ${missingReplacement.name} replacement copy?`} description={`${Object.values(project.character.selections).filter(Boolean).length} current selections cannot be verified without the missing pack and will be replaced by ${missingReplacement.name} defaults. The new copy gets a new project ID; the original exact lock, project bytes, and recovery path remain unchanged.`} onCancel={() => dismissOverlay(() => setMissingReplacement(null))} choices={[
+        { label: 'Create replacement copy', action: replaceMissingPackInCopy, primary: true },
       ]} />}
       {confirmClear && <ChoiceDialog title="Clear browser workspace?" description="This removes all projects and recovery data stored by this browser. Downloaded .spriteproject files are not affected." onCancel={() => dismissOverlay(() => setConfirmClear(false))} choices={[
         { label: 'Clear all local data', action: clearWorkspace, destructive: true },

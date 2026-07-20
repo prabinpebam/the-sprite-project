@@ -15,8 +15,9 @@ export interface Provenance {
   author: string
   source: string
   sourceUrl: string
-  license: 'CC0-1.0'
-  chosenLicense: 'CC0-1.0'
+  license: string
+  chosenLicense: string
+  attributionText?: string | null
 }
 
 export interface PixelPart {
@@ -39,6 +40,10 @@ export interface PackAsset {
   parts: PixelPart[]
   coverage: AnimationId[]
   provenance: Provenance
+  sheet?: {
+    pngSha256: string
+    sourceColorBindings: Record<string, { kind: 'fixed' } | { kind: 'token'; token: TokenId; shade: -2 | -1 | 0 | 1 | 2 }>
+  }
 }
 
 export interface ContentPack {
@@ -48,6 +53,10 @@ export interface ContentPack {
   description: string
   assets: PackAsset[]
   defaults: Record<SlotId, string | null>
+  origin?: 'bundled' | 'installed-local' | 'authored-local' | 'embedded-project'
+  packageSha256?: string
+  packDocumentSha256?: string
+  enabled?: boolean
 }
 
 export type ThemeTokens = Record<TokenId, string>
@@ -140,4 +149,5 @@ export interface CreditRecord extends Provenance {
   assetNames: string[]
   packId: string
   packVersion: string
+  packageSha256?: string
 }

@@ -1,0 +1,186 @@
+{
+  "id": "PERF-UPD002-001",
+  "completedAt": "2026-07-20T19:46:15.738Z",
+  "fixture": {
+    "class": "large-supported",
+    "note": "Eight unique deterministic PNGs with incompressible ancillary data; complete humanoid coverage and provenance."
+  },
+  "compressedBytes": 66291703,
+  "web": {
+    "host": "web",
+    "compressedBytes": 66291703,
+    "thresholds": {
+      "firstStatusMs": 100,
+      "maxStatusGapMs": 500,
+      "totalMs": 10000,
+      "maxLongTaskMs": 100
+    },
+    "observed": {
+      "firstStatusMs": 1.3999999985098839,
+      "maxStatusGapMs": 325.80000000074506,
+      "totalMs": 845.8999999985099,
+      "maxLongTaskMs": 0,
+      "statusUpdates": [
+        {
+          "at": 2832.800000000745,
+          "text": "Validating local packqueued · 0.0 s"
+        },
+        {
+          "at": 2922.10000000149,
+          "text": "Validating local packcontainer · 0.0 s"
+        },
+        {
+          "at": 2922.300000000745,
+          "text": "Validating local packextract · 0.0 s"
+        },
+        {
+          "at": 2942.2000000029802,
+          "text": "Validating local packmanifest · 0.0 s"
+        },
+        {
+          "at": 2943.10000000149,
+          "text": "Validating local packchecksums · 0.0 s"
+        },
+        {
+          "at": 2985.5,
+          "text": "Validating local packschema · 0.1 s"
+        },
+        {
+          "at": 2988.900000002235,
+          "text": "Validating local packimages · 0.1 s"
+        },
+        {
+          "at": 3314.7000000029802,
+          "text": "Validating local packimages · 0.4 s"
+        },
+        {
+          "at": 3613.800000000745,
+          "text": "Validating local packcomplete · 0.7 s"
+        }
+      ]
+    }
+  },
+  "electron": {
+    "host": "electron",
+    "compressedBytes": 66291703,
+    "thresholds": {
+      "firstStatusMs": 100,
+      "maxStatusGapMs": 500,
+      "totalMs": 10000,
+      "maxLongTaskMs": 100
+    },
+    "observed": {
+      "firstStatusMs": 2.099999997764826,
+      "maxStatusGapMs": 415.6000000014901,
+      "totalMs": 1883.0999999977648,
+      "maxLongTaskMs": 72,
+      "statusUpdates": [
+        {
+          "at": 3743.5,
+          "text": "Validating local packqueued · 0.0 s"
+        },
+        {
+          "at": 4159.10000000149,
+          "text": "Validating local packqueued · 0.4 s"
+        },
+        {
+          "at": 4508.199999999255,
+          "text": "Validating local packqueued · 0.0 s"
+        },
+        {
+          "at": 4520.400000002235,
+          "text": "Validating local packcontainer · 0.0 s"
+        },
+        {
+          "at": 4521.400000002235,
+          "text": "Validating local packextract · 0.0 s"
+        },
+        {
+          "at": 4538.400000002235,
+          "text": "Validating local packmanifest · 0.0 s"
+        },
+        {
+          "at": 4539.5,
+          "text": "Validating local packchecksums · 0.0 s"
+        },
+        {
+          "at": 4755.300000000745,
+          "text": "Validating local packschema · 0.3 s"
+        },
+        {
+          "at": 4757.400000002235,
+          "text": "Validating local packimages · 0.3 s"
+        },
+        {
+          "at": 4907.5,
+          "text": "Validating local packimages · 0.4 s"
+        },
+        {
+          "at": 5311.400000002235,
+          "text": "Validating local packimages · 0.8 s"
+        },
+        {
+          "at": 5420.300000000745,
+          "text": "Validating local packcomplete · 0.9 s"
+        }
+      ]
+    }
+  },
+  "draftAndPreview": {
+    "id": "BENCH-UPD002-001",
+    "startedAt": "2026-07-20T19:44:23.715Z",
+    "completedAt": "2026-07-20T19:44:26.365Z",
+    "environment": {
+      "platform": "win32",
+      "architecture": "x64",
+      "node": "v24.13.0",
+      "logicalCpus": 32
+    },
+    "fixture": {
+      "class": "large-supported",
+      "note": "Eight unique deterministic PNGs with incompressible ancillary data; complete humanoid coverage and provenance."
+    },
+    "thresholds": {
+      "validationTotalMs": 10000,
+      "draftSaveP95Ms": 2000,
+      "previewP95Ms": 250
+    },
+    "observed": {
+      "largeCompressedBytes": 66291703,
+      "largeExpandedBytes": 66289015,
+      "largeAssetCount": 8,
+      "fixtureBuildMs": 1812.2008999999998,
+      "validationTotalMs": 449.0104000000001,
+      "coreDiagnosticMaxEventLoopStallMs": 353.924,
+      "draftSaveP50Ms": 1.3562000000001717,
+      "draftSaveP95Ms": 2.0452000000000226,
+      "draftSaveMaxMs": 2.4515000000001237,
+      "previewP50Ms": 1.097099999999955,
+      "previewP95Ms": 2.2687999999998283,
+      "previewMaxMs": 4.4430999999999585,
+      "overLimitCode": "pack-limit",
+      "ordinaryPackageSha256": "b0c742380971056292710359171b9650fd9cc98e6e83a41388d526b2102aace2"
+    },
+    "checks": {
+      "validationWithinTenSeconds": true,
+      "draftSaveP95WithinTwoSeconds": true,
+      "previewP95Within250Ms": true,
+      "oneOverCompressedLimitFailsStable": true
+    },
+    "status": "passed"
+  },
+  "checks": {
+    "webFirstStatus": true,
+    "webStatusCadence": true,
+    "webTotal": true,
+    "webNoLongTask": true,
+    "electronFirstStatus": true,
+    "electronStatusCadence": true,
+    "electronTotal": true,
+    "electronNoLongTask": true,
+    "draftSaveP95": true,
+    "previewP95": true,
+    "oneOverLimit": true
+  },
+  "status": "passed"
+}

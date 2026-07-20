@@ -29,4 +29,5 @@ node .github/skills/agentic-product-delivery/scripts/validate-product-update.mjs
 
 | Update | Baseline | Status | Summary |
 |---|---|---|---|
-| `UPD-001-dual-host-mvp` | `f29c9f9` / `RUN-MVP-001` | Specified | GitHub Pages/IndexedDB web host plus portable Electron/project-folder host over one shared core |
+| `UPD-001-dual-host-mvp` | `f29c9f9` / `RUN-MVP-001` | Implemented | GitHub Pages/IndexedDB web host plus portable Electron/project-folder host over one shared core |
+| `UPD-002-local-content-pack-ecosystem` | `4e890b0` / `RUN-UPD001-001` | Implemented | Data-only local pack installation, lifecycle, authoring, exact project embedding, offline use, and cross-host transfer |

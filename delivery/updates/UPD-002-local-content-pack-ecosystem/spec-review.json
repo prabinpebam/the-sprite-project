@@ -36,36 +36,458 @@
     "product/electron/main.ts"
   ],
   "dimensions": [
-    { "id": "product-truth", "applicable": true, "score": 9, "definitionOf10": "The update proves the Phase 4 outcome that compatible legally traceable humanoid content can grow independently of application releases, with named users, no-change consequence, evidence, and owner approval boundary.", "evidence": ["change-proposal.md", "customer-promise.md", "docs/planning/overview.html"], "findingIds": [] },
-    { "id": "scope-alternatives", "applicable": true, "score": 9, "definitionOf10": "Selected scope is the smallest coherent install+author+manage ecosystem promise; terrain, scenes, non-humanoids, remote distribution, executable content, editor, marketplace, and engine adapter are explicitly evaluated and excluded.", "evidence": ["change-proposal.md", "scope-ledger.md", "decisions.md"], "findingIds": [] },
-    { "id": "architecture", "applicable": true, "score": 9, "definitionOf10": "Shared pack/runtime/draft/archive/license contracts, repositories, renderer, project embedding, bridge v2, ownership, dependency direction, and rollout fit current UPD-001 architecture without hidden design decisions.", "evidence": ["engineering-spec.md", "impact-analysis.md", "execution-plan.md"], "findingIds": ["F-UPD002-001", "F-UPD002-002", "F-UPD002-010", "F-UPD002-012"] },
-    { "id": "data-failure", "applicable": true, "score": 9, "definitionOf10": "Every pack/draft/project state transition defines strict data, identity, transactions, concurrency, interruption, quota, removal, missing content, and rollback with stable errors and no partial mutation.", "evidence": ["engineering-spec.md", "threat-model.md", "task-flows.md"], "findingIds": ["F-UPD002-003", "F-UPD002-007", "F-UPD002-008", "F-UPD002-009"] },
-    { "id": "quality-attributes", "applicable": true, "score": 9, "definitionOf10": "Correctness, durability, recoverability, security, legal traceability, compatibility, accessibility, performance, capacity, offline, maintainability, and distribution have measurable scenarios and reference boundaries.", "evidence": ["quality-scenarios.md", "release-gate.md", "threat-model.md"], "findingIds": ["F-UPD002-005"] },
-    { "id": "verification-release", "applicable": true, "score": 9, "definitionOf10": "Every promise/flow/behavior maps to actual-host, adversarial, performance, accessibility, compatibility, release, and rollback evidence with exact completion arithmetic and a truthful baseline entry condition.", "evidence": ["traceability.json", "release-gate.md", "evidence/README.md", "baseline.json"], "findingIds": [] },
-    { "id": "implementation-readiness", "applicable": true, "score": 9, "definitionOf10": "A fresh implementer can execute nine dependency-gated packages without choosing product behavior, format semantics, storage topology, errors, security authority, compatibility, or UX recovery states.", "evidence": ["engineering-spec.md", "product-design-spec.md", "execution-plan.md", "adversarial rounds 1-3"], "findingIds": ["F-UPD002-013", "F-UPD002-014"] },
-    { "id": "ux-accessibility", "applicable": true, "score": 9, "definitionOf10": "Every view, command, dialog, status, failure, recovery, responsive layout, keyboard path, focus transition, naming rule, 200% reflow, target size, and reduced-motion behavior is explicit and testable.", "evidence": ["product-design-spec.md", "experience-architecture.md", "release-gate.md"], "findingIds": [] },
-    { "id": "developer-experience", "applicable": true, "score": 9, "definitionOf10": "Technical artists can create valid packages without JSON and implementers have deterministic formats, validation reports, fixtures, source ownership, and extension governance.", "evidence": ["product-design-spec.md", "engineering-spec.md", "customer-promise.md"], "findingIds": ["F-UPD002-006", "F-UPD002-013", "F-UPD002-014"] },
-    { "id": "security-privacy", "applicable": true, "score": 9, "definitionOf10": "All local package, PNG, URL, project embedding, browser quota, Electron grant, reparse, executable-content, diagnostics, and provenance threats have bounded mitigations and pre-mutation fixtures.", "evidence": ["threat-model.md", "engineering-spec.md sections 4, 8, 12, 13"], "findingIds": ["F-UPD002-010", "F-UPD002-011"] },
-    { "id": "reliability-operability", "applicable": true, "score": 9, "definitionOf10": "Interrupted install/remove/draft/project operations retain last-known-good state, expose stable diagnostics and recovery, and support independently withdrawable local releases without invented server operations.", "evidence": ["quality-scenarios.md", "threat-model.md", "release-gate.md"], "findingIds": ["F-UPD002-008"] },
-    { "id": "performance-capacity", "applicable": true, "score": 9, "definitionOf10": "Pack, image, draft, storage, worker/concurrency, status cadence, main-thread, validation, preview, autosave, and quota boundaries are numeric and map to benchmark fixtures.", "evidence": ["engineering-spec.md hard limits/resource scheduling", "quality-scenarios.md QS-209 through QS-211"], "findingIds": ["F-UPD002-005"] },
-    { "id": "migration-compatibility", "applicable": true, "score": 9, "definitionOf10": "Existing locks/projects/archives/outputs remain unchanged; new pack/draft/project archive versions, embedded precedence, old-reader failure, registry upgrades, and rollback readers are exact and testable.", "evidence": ["impact-analysis.md", "engineering-spec.md sections 5, 11, 14", "release-gate.md"], "findingIds": ["F-UPD002-001", "F-UPD002-002", "F-UPD002-004"] },
-    { "id": "deployment-distribution", "applicable": true, "score": 9, "definitionOf10": "Web and portable Electron release together with reproducible artifacts, actual Pages/clean-machine gates, feature withdrawal rules, backward readers, and no local content deletion during rollback.", "evidence": ["baseline.json entry condition", "release-gate.md rollout/rollback", "quality-scenarios.md QS-214"], "findingIds": [] }
+    {
+      "id": "product-truth",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "The update proves the Phase 4 outcome that compatible legally traceable humanoid content can grow independently of application releases, with named users, no-change consequence, evidence, and owner approval boundary.",
+      "evidence": [
+        "change-proposal.md",
+        "customer-promise.md",
+        "docs/planning/overview.html"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "scope-alternatives",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Selected scope is the smallest coherent install+author+manage ecosystem promise; terrain, scenes, non-humanoids, remote distribution, executable content, editor, marketplace, and engine adapter are explicitly evaluated and excluded.",
+      "evidence": [
+        "change-proposal.md",
+        "scope-ledger.md",
+        "decisions.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "architecture",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Shared pack/runtime/draft/archive/license contracts, repositories, renderer, project embedding, bridge v2, ownership, dependency direction, and rollout fit current UPD-001 architecture without hidden design decisions.",
+      "evidence": [
+        "engineering-spec.md",
+        "impact-analysis.md",
+        "execution-plan.md"
+      ],
+      "findingIds": [
+        "F-UPD002-001",
+        "F-UPD002-002",
+        "F-UPD002-010",
+        "F-UPD002-012"
+      ]
+    },
+    {
+      "id": "data-failure",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Every pack/draft/project state transition defines strict data, identity, transactions, concurrency, interruption, quota, removal, missing content, and rollback with stable errors and no partial mutation.",
+      "evidence": [
+        "engineering-spec.md",
+        "threat-model.md",
+        "task-flows.md"
+      ],
+      "findingIds": [
+        "F-UPD002-003",
+        "F-UPD002-007",
+        "F-UPD002-008",
+        "F-UPD002-009"
+      ]
+    },
+    {
+      "id": "quality-attributes",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Correctness, durability, recoverability, security, legal traceability, compatibility, accessibility, performance, capacity, offline, maintainability, and distribution have measurable scenarios and reference boundaries.",
+      "evidence": [
+        "quality-scenarios.md",
+        "release-gate.md",
+        "threat-model.md"
+      ],
+      "findingIds": [
+        "F-UPD002-005"
+      ]
+    },
+    {
+      "id": "verification-release",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Every promise/flow/behavior maps to actual-host, adversarial, performance, accessibility, compatibility, release, and rollback evidence with exact completion arithmetic and a truthful baseline entry condition.",
+      "evidence": [
+        "traceability.json",
+        "release-gate.md",
+        "evidence/README.md",
+        "baseline.json"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "implementation-readiness",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "A fresh implementer can execute nine dependency-gated packages without choosing product behavior, format semantics, storage topology, errors, security authority, compatibility, or UX recovery states.",
+      "evidence": [
+        "engineering-spec.md",
+        "product-design-spec.md",
+        "execution-plan.md",
+        "adversarial rounds 1-3"
+      ],
+      "findingIds": [
+        "F-UPD002-013",
+        "F-UPD002-014"
+      ]
+    },
+    {
+      "id": "ux-accessibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Every view, command, dialog, status, failure, recovery, responsive layout, keyboard path, focus transition, naming rule, 200% reflow, target size, and reduced-motion behavior is explicit and testable.",
+      "evidence": [
+        "product-design-spec.md",
+        "experience-architecture.md",
+        "release-gate.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "developer-experience",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Technical artists can create valid packages without JSON and implementers have deterministic formats, validation reports, fixtures, source ownership, and extension governance.",
+      "evidence": [
+        "product-design-spec.md",
+        "engineering-spec.md",
+        "customer-promise.md"
+      ],
+      "findingIds": [
+        "F-UPD002-006",
+        "F-UPD002-013",
+        "F-UPD002-014"
+      ]
+    },
+    {
+      "id": "security-privacy",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "All local package, PNG, URL, project embedding, browser quota, Electron grant, reparse, executable-content, diagnostics, and provenance threats have bounded mitigations and pre-mutation fixtures.",
+      "evidence": [
+        "threat-model.md",
+        "engineering-spec.md sections 4, 8, 12, 13"
+      ],
+      "findingIds": [
+        "F-UPD002-010",
+        "F-UPD002-011"
+      ]
+    },
+    {
+      "id": "reliability-operability",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Interrupted install/remove/draft/project operations retain last-known-good state, expose stable diagnostics and recovery, and support independently withdrawable local releases without invented server operations.",
+      "evidence": [
+        "quality-scenarios.md",
+        "threat-model.md",
+        "release-gate.md"
+      ],
+      "findingIds": [
+        "F-UPD002-008"
+      ]
+    },
+    {
+      "id": "performance-capacity",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Pack, image, draft, storage, worker/concurrency, status cadence, main-thread, validation, preview, autosave, and quota boundaries are numeric and map to benchmark fixtures.",
+      "evidence": [
+        "engineering-spec.md hard limits/resource scheduling",
+        "quality-scenarios.md QS-209 through QS-211"
+      ],
+      "findingIds": [
+        "F-UPD002-005"
+      ]
+    },
+    {
+      "id": "migration-compatibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Existing locks/projects/archives/outputs remain unchanged; new pack/draft/project archive versions, embedded precedence, old-reader failure, registry upgrades, and rollback readers are exact and testable.",
+      "evidence": [
+        "impact-analysis.md",
+        "engineering-spec.md sections 5, 11, 14",
+        "release-gate.md"
+      ],
+      "findingIds": [
+        "F-UPD002-001",
+        "F-UPD002-002",
+        "F-UPD002-004"
+      ]
+    },
+    {
+      "id": "deployment-distribution",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Web and portable Electron release together with reproducible artifacts, actual Pages/clean-machine gates, feature withdrawal rules, backward readers, and no local content deletion during rollback.",
+      "evidence": [
+        "baseline.json entry condition",
+        "release-gate.md rollout/rollback",
+        "quality-scenarios.md QS-214"
+      ],
+      "findingIds": []
+    }
   ],
   "findings": [
-    { "id": "F-UPD002-001", "dimension": "architecture", "severity": "critical", "confidence": 10, "title": "Project archive v2 and old-reader contract was incomplete", "evidence": [{ "source": "engineering-spec.md section 11", "claim": "Round one lacked an exact manifest, version detection, embedded paths, limits, and validation order." }], "problem": "A non-bundled project could not be serialized or rejected by an old reader without implementation invention.", "impact": "Cross-host project portability and no-data-loss compatibility were unimplementable.", "remediation": "Defined strict manifest v2, literal detection, embedded records/paths, limits, validation order, bundled exclusion, and old-reader unsupported-version behavior.", "verification": "Project archive v1/v2, old-reader, malformed embedded, limit, and bidirectional actual-host fixtures.", "disposition": "fixed" },
-    { "id": "F-UPD002-002", "dimension": "migration-compatibility", "severity": "critical", "confidence": 10, "title": "Pack lock and package checksum semantics were ambiguous", "evidence": [{ "source": "engineering-spec.md section 5", "claim": "Round two identified potential conflict between existing canonical pack-document locks and new complete package identity." }], "problem": "Using one SHA field for two meanings could force silent project migration or mismatched embedded resolution.", "impact": "Existing locks and cross-host hashes could drift.", "remediation": "Kept PackLockRef.sha256 as canonical pack.json hash for all origins and separated complete package SHA-256 into installed/archive identity.", "verification": "Existing lock hash fixtures, package/pack hash mismatch fixtures, and unedited project regressions.", "disposition": "fixed" },
-    { "id": "F-UPD002-003", "dimension": "data-failure", "severity": "critical", "confidence": 10, "title": "Draft repository and concurrency topology was underspecified", "evidence": [{ "source": "engineering-spec.md section 7", "claim": "Round one/two required physical stores, blob ownership, transaction sets, revision behavior, recovery, and deletion." }], "problem": "Draft persistence, quota recovery, and concurrent blob references required architectural guesses.", "impact": "Draft work or source art could be lost or orphaned.", "remediation": "Specified shared IndexedDB stores for both hosts, limits, immutable blob references, one owning transaction, first-commit-wins, post-commit deletion recheck, and deterministic recovery ZIP.", "verification": "Web/Electron draft repository contract, stale-tab, quota, interruption, refcount, recovery export, and reopen tests.", "disposition": "fixed" },
-    { "id": "F-UPD002-004", "dimension": "migration-compatibility", "severity": "high", "confidence": 10, "title": "Embedded pack lifecycle and local enabled precedence was unclear", "evidence": [{ "source": "engineering-spec.md sections 9 and 11", "claim": "Review required project-scoped validation/install semantics and destination-local enablement behavior." }], "problem": "Opening a transferred project could silently install or disable content differently by host.", "impact": "Offline and cross-host parity could diverge.", "remediation": "Embedded packages remain project-scoped, authoritative for that project, never globally install without action, preserve bytes, and ignore global disabled state for locked resolution.", "verification": "SC-PACK-EMBEDDED-OFFLINE and exact-global/disabled/corrupt/round-trip fixtures.", "disposition": "fixed" },
-    { "id": "F-UPD002-005", "dimension": "performance-capacity", "severity": "high", "confidence": 9, "title": "Maximum package resource strategy was missing", "evidence": [{ "source": "quality-scenarios.md QS-209", "claim": "A 64 MiB package and 10-second target require bounded scheduling." }], "problem": "Concurrency, memory, worker, progress, cancellation, and main-thread ownership were unspecified.", "impact": "A compliant implementation could freeze or exhaust memory.", "remediation": "Specified sequential streamed entries, max two PNG workers, per-asset decoded cap, cache ownership, progress cadence, cancellation, and 100 ms main-thread ceiling.", "verification": "Maximum/one-over benchmark with memory, duration, progress, long-task, and cancellation capture.", "disposition": "fixed" },
-    { "id": "F-UPD002-006", "dimension": "developer-experience", "severity": "high", "confidence": 9, "title": "License profile extension and registry ownership was undefined", "evidence": [{ "source": "engineering-spec.md section 6", "claim": "A finite license vocabulary needs schema, source path, approval, exported wording, and unknown-profile behavior." }], "problem": "Hosts or future contributors could diverge or imply unreviewed legal support.", "impact": "Pack validation and credits could become inconsistent or legally misleading.", "remediation": "Defined LicenseProfile schema, one host-neutral module, unknown-profile failure, immutable package provenance, product-owner update governance, and no-legal-advice boundary.", "verification": "Registry completeness, unknown/chosen-not-offered, attribution wording, host parity, and review-approval tests.", "disposition": "fixed" },
-    { "id": "F-UPD002-007", "dimension": "data-failure", "severity": "critical", "confidence": 10, "title": "Alpha-preserving token rendering was ambiguous", "evidence": [{ "source": "engineering-spec.md section 3", "claim": "Deterministic cross-host pixels require an exact rule for partially transparent mapped colors." }], "problem": "Hosts could replace or preserve semi-transparent RGB differently.", "impact": "Preview/export hashes and author expectations would diverge.", "remediation": "Defined RGB lookup for alpha 1..255, RGB replacement/fixed semantics, alpha preservation, alpha-zero output, no heuristic branch, and reference alpha fixtures.", "verification": "Pure compositor and web/Electron pixel fixtures at alpha 1,64,128,254,255.", "disposition": "fixed" },
-    { "id": "F-UPD002-008", "dimension": "reliability-operability", "severity": "high", "confidence": 9, "title": "Quota and partial draft commit recovery was incomplete", "evidence": [{ "source": "engineering-spec.md section 7", "claim": "Draft promises require retained in-memory edits, last commit, atomic rollback, and recovery export." }], "problem": "Storage exhaustion could expose partial drafts or lose unsaved source bytes.", "impact": "Creator work could be lost.", "remediation": "Defined atomic transaction visibility, dirty in-memory retention, last committed guarantees, safe cleanup/limits, and deterministic recovery artifact.", "verification": "Quota at each transaction stage, process kill, cleanup, download recovery, and read-back fixtures.", "disposition": "fixed" },
-    { "id": "F-UPD002-009", "dimension": "data-failure", "severity": "medium", "confidence": 9, "title": "Meaningful draft edits were subjective", "evidence": [{ "source": "engineering-spec.md section 7", "claim": "Autosave needed exact triggers and non-triggers." }], "problem": "Teams could save transient preview state or miss durable edits.", "impact": "Performance and reopen behavior would be inconsistent.", "remediation": "Enumerated all identity/asset/mapping/provenance triggers and focus/selection/preview/filter/validation non-triggers.", "verification": "Mutation classification table and autosave timing tests.", "disposition": "fixed" },
-    { "id": "F-UPD002-010", "dimension": "security-privacy", "severity": "critical", "confidence": 10, "title": "Pack error topology and exhaustive stable mapping were absent", "evidence": [{ "source": "engineering-spec.md section 8", "claim": "Threats and recovery flows required exact shared HostError/ProductError integration." }], "problem": "Implementers could create nested or divergent error layers and unstable host behavior.", "impact": "Adversarial parity and actionable recovery could not be tested.", "remediation": "Added complete code registry, fixture mapping, direct HostErrorCode/ProductError union integration, warning behavior, and existing-host-code boundary.", "verification": "Every adversarial fixture asserts the same top-level code and pre-mutation capture on both hosts.", "disposition": "fixed" },
-    { "id": "F-UPD002-011", "dimension": "security-privacy", "severity": "high", "confidence": 10, "title": "Electron pack grants and atomic reparse-safe I/O were incomplete", "evidence": [{ "source": "engineering-spec.md section 12", "claim": "New privileged methods needed exact grant ownership, scope, lifetime, path resolution, replacement, and rollback." }], "problem": "Renderer forgery or path replacement could expand filesystem authority.", "impact": "Arbitrary read/write or TOCTOU failures were possible.", "remediation": "Defined main-memory webContents-bound grants, scopes/expiry, reparse validation, temp sibling write/flush/read-back/hash, re-resolution, atomic replacement, rollback, and unsupported-filesystem failure.", "verification": "Forged/wrong-owner/wrong-scope/stale grant and symlink/junction/TOCTOU/failure fixtures in packaged Electron.", "disposition": "fixed" },
-    { "id": "F-UPD002-012", "dimension": "architecture", "severity": "medium", "confidence": 9, "title": "Bundled runtime adapter ownership and reversibility was unclear", "evidence": [{ "source": "engineering-spec.md section 10", "claim": "Unifying bundled primitives and installed sheets could accidentally branch by host/UI or change baseline pixels." }], "problem": "Adapter placement and old implementation oracle were unspecified.", "impact": "Renderer duplication or baseline regression risk remained.", "remediation": "Placed adapter in host-neutral pack-runtime, retained primitive oracle until exact hashes pass, and required rollback-compatible reader.", "verification": "Dependency scan and all bundled frame/sheet/export/credit hash regressions.", "disposition": "fixed" },
-    { "id": "F-UPD002-013", "dimension": "implementation-readiness", "severity": "medium", "confidence": 10, "title": "Shared license registry path remained implicit", "evidence": [{ "source": "engineering-spec.md section 6", "claim": "Round three found the registry schema but no single module path." }], "problem": "Adapters could duplicate license literals.", "impact": "Validation/credit behavior could diverge.", "remediation": "Bound LICENSE_PROFILES to product/src/domain/license-profiles.ts and prohibited package/settings/network overrides.", "verification": "Duplicate-literal scan and shared import tests.", "disposition": "fixed" },
-    { "id": "F-UPD002-014", "dimension": "implementation-readiness", "severity": "medium", "confidence": 10, "title": "Draft recovery ZIP layout remained implicit", "evidence": [{ "source": "engineering-spec.md section 7", "claim": "Round three found a named recovery artifact without exact paths or import semantics." }], "problem": "Hosts could produce incompatible recovery files or imply unsupported restore.", "impact": "Manual recovery and tests would be ambiguous.", "remediation": "Defined manifest/draft/assets/report/README paths, canonical rules, checksum inventory, and explicit non-importable manual-recovery purpose.", "verification": "Web/Electron deterministic recovery entry/hash/report fixture and Add-pack rejection test.", "disposition": "fixed" }
+    {
+      "id": "F-UPD002-001",
+      "dimension": "architecture",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Project archive v2 and old-reader contract was incomplete",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 11",
+          "claim": "Round one lacked an exact manifest, version detection, embedded paths, limits, and validation order."
+        }
+      ],
+      "problem": "A non-bundled project could not be serialized or rejected by an old reader without implementation invention.",
+      "impact": "Cross-host project portability and no-data-loss compatibility were unimplementable.",
+      "remediation": "Defined strict manifest v2, literal detection, embedded records/paths, limits, validation order, bundled exclusion, and old-reader unsupported-version behavior.",
+      "verification": "Project archive v1/v2, old-reader, malformed embedded, limit, and bidirectional actual-host fixtures.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-002",
+      "dimension": "migration-compatibility",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Pack lock and package checksum semantics were ambiguous",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 5",
+          "claim": "Round two identified potential conflict between existing canonical pack-document locks and new complete package identity."
+        }
+      ],
+      "problem": "Using one SHA field for two meanings could force silent project migration or mismatched embedded resolution.",
+      "impact": "Existing locks and cross-host hashes could drift.",
+      "remediation": "Kept PackLockRef.sha256 as canonical pack.json hash for all origins and separated complete package SHA-256 into installed/archive identity.",
+      "verification": "Existing lock hash fixtures, package/pack hash mismatch fixtures, and unedited project regressions.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-003",
+      "dimension": "data-failure",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Draft repository and concurrency topology was underspecified",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 7",
+          "claim": "Round one/two required physical stores, blob ownership, transaction sets, revision behavior, recovery, and deletion."
+        }
+      ],
+      "problem": "Draft persistence, quota recovery, and concurrent blob references required architectural guesses.",
+      "impact": "Draft work or source art could be lost or orphaned.",
+      "remediation": "Specified shared IndexedDB stores for both hosts, limits, immutable blob references, one owning transaction, first-commit-wins, post-commit deletion recheck, and deterministic recovery ZIP.",
+      "verification": "Web/Electron draft repository contract, stale-tab, quota, interruption, refcount, recovery export, and reopen tests.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-004",
+      "dimension": "migration-compatibility",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Embedded pack lifecycle and local enabled precedence was unclear",
+      "evidence": [
+        {
+          "source": "engineering-spec.md sections 9 and 11",
+          "claim": "Review required project-scoped validation/install semantics and destination-local enablement behavior."
+        }
+      ],
+      "problem": "Opening a transferred project could silently install or disable content differently by host.",
+      "impact": "Offline and cross-host parity could diverge.",
+      "remediation": "Embedded packages remain project-scoped, authoritative for that project, never globally install without action, preserve bytes, and ignore global disabled state for locked resolution.",
+      "verification": "SC-PACK-EMBEDDED-OFFLINE and exact-global/disabled/corrupt/round-trip fixtures.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-005",
+      "dimension": "performance-capacity",
+      "severity": "high",
+      "confidence": 9,
+      "title": "Maximum package resource strategy was missing",
+      "evidence": [
+        {
+          "source": "quality-scenarios.md QS-209",
+          "claim": "A 64 MiB package and 10-second target require bounded scheduling."
+        }
+      ],
+      "problem": "Concurrency, memory, worker, progress, cancellation, and main-thread ownership were unspecified.",
+      "impact": "A compliant implementation could freeze or exhaust memory.",
+      "remediation": "Specified sequential streamed entries, max two PNG workers, per-asset decoded cap, cache ownership, progress cadence, cancellation, and 100 ms main-thread ceiling.",
+      "verification": "Maximum/one-over benchmark with memory, duration, progress, long-task, and cancellation capture.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-006",
+      "dimension": "developer-experience",
+      "severity": "high",
+      "confidence": 9,
+      "title": "License profile extension and registry ownership was undefined",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 6",
+          "claim": "A finite license vocabulary needs schema, source path, approval, exported wording, and unknown-profile behavior."
+        }
+      ],
+      "problem": "Hosts or future contributors could diverge or imply unreviewed legal support.",
+      "impact": "Pack validation and credits could become inconsistent or legally misleading.",
+      "remediation": "Defined LicenseProfile schema, one host-neutral module, unknown-profile failure, immutable package provenance, product-owner update governance, and no-legal-advice boundary.",
+      "verification": "Registry completeness, unknown/chosen-not-offered, attribution wording, host parity, and review-approval tests.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-007",
+      "dimension": "data-failure",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Alpha-preserving token rendering was ambiguous",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 3",
+          "claim": "Deterministic cross-host pixels require an exact rule for partially transparent mapped colors."
+        }
+      ],
+      "problem": "Hosts could replace or preserve semi-transparent RGB differently.",
+      "impact": "Preview/export hashes and author expectations would diverge.",
+      "remediation": "Defined RGB lookup for alpha 1..255, RGB replacement/fixed semantics, alpha preservation, alpha-zero output, no heuristic branch, and reference alpha fixtures.",
+      "verification": "Pure compositor and web/Electron pixel fixtures at alpha 1,64,128,254,255.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-008",
+      "dimension": "reliability-operability",
+      "severity": "high",
+      "confidence": 9,
+      "title": "Quota and partial draft commit recovery was incomplete",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 7",
+          "claim": "Draft promises require retained in-memory edits, last commit, atomic rollback, and recovery export."
+        }
+      ],
+      "problem": "Storage exhaustion could expose partial drafts or lose unsaved source bytes.",
+      "impact": "Creator work could be lost.",
+      "remediation": "Defined atomic transaction visibility, dirty in-memory retention, last committed guarantees, safe cleanup/limits, and deterministic recovery artifact.",
+      "verification": "Quota at each transaction stage, process kill, cleanup, download recovery, and read-back fixtures.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-009",
+      "dimension": "data-failure",
+      "severity": "medium",
+      "confidence": 9,
+      "title": "Meaningful draft edits were subjective",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 7",
+          "claim": "Autosave needed exact triggers and non-triggers."
+        }
+      ],
+      "problem": "Teams could save transient preview state or miss durable edits.",
+      "impact": "Performance and reopen behavior would be inconsistent.",
+      "remediation": "Enumerated all identity/asset/mapping/provenance triggers and focus/selection/preview/filter/validation non-triggers.",
+      "verification": "Mutation classification table and autosave timing tests.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-010",
+      "dimension": "security-privacy",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Pack error topology and exhaustive stable mapping were absent",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 8",
+          "claim": "Threats and recovery flows required exact shared HostError/ProductError integration."
+        }
+      ],
+      "problem": "Implementers could create nested or divergent error layers and unstable host behavior.",
+      "impact": "Adversarial parity and actionable recovery could not be tested.",
+      "remediation": "Added complete code registry, fixture mapping, direct HostErrorCode/ProductError union integration, warning behavior, and existing-host-code boundary.",
+      "verification": "Every adversarial fixture asserts the same top-level code and pre-mutation capture on both hosts.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-011",
+      "dimension": "security-privacy",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Electron pack grants and atomic reparse-safe I/O were incomplete",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 12",
+          "claim": "New privileged methods needed exact grant ownership, scope, lifetime, path resolution, replacement, and rollback."
+        }
+      ],
+      "problem": "Renderer forgery or path replacement could expand filesystem authority.",
+      "impact": "Arbitrary read/write or TOCTOU failures were possible.",
+      "remediation": "Defined main-memory webContents-bound grants, scopes/expiry, reparse validation, temp sibling write/flush/read-back/hash, re-resolution, atomic replacement, rollback, and unsupported-filesystem failure.",
+      "verification": "Forged/wrong-owner/wrong-scope/stale grant and symlink/junction/TOCTOU/failure fixtures in packaged Electron.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-012",
+      "dimension": "architecture",
+      "severity": "medium",
+      "confidence": 9,
+      "title": "Bundled runtime adapter ownership and reversibility was unclear",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 10",
+          "claim": "Unifying bundled primitives and installed sheets could accidentally branch by host/UI or change baseline pixels."
+        }
+      ],
+      "problem": "Adapter placement and old implementation oracle were unspecified.",
+      "impact": "Renderer duplication or baseline regression risk remained.",
+      "remediation": "Placed adapter in host-neutral pack-runtime, retained primitive oracle until exact hashes pass, and required rollback-compatible reader.",
+      "verification": "Dependency scan and all bundled frame/sheet/export/credit hash regressions.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-013",
+      "dimension": "implementation-readiness",
+      "severity": "medium",
+      "confidence": 10,
+      "title": "Shared license registry path remained implicit",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 6",
+          "claim": "Round three found the registry schema but no single module path."
+        }
+      ],
+      "problem": "Adapters could duplicate license literals.",
+      "impact": "Validation/credit behavior could diverge.",
+      "remediation": "Bound LICENSE_PROFILES to product/src/domain/license-profiles.ts and prohibited package/settings/network overrides.",
+      "verification": "Duplicate-literal scan and shared import tests.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD002-014",
+      "dimension": "implementation-readiness",
+      "severity": "medium",
+      "confidence": 10,
+      "title": "Draft recovery ZIP layout remained implicit",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 7",
+          "claim": "Round three found a named recovery artifact without exact paths or import semantics."
+        }
+      ],
+      "problem": "Hosts could produce incompatible recovery files or imply unsupported restore.",
+      "impact": "Manual recovery and tests would be ambiguous.",
+      "remediation": "Defined manifest/draft/assets/report/README paths, canonical rules, checksum inventory, and explicit non-importable manual-recovery purpose.",
+      "verification": "Web/Electron deterministic recovery entry/hash/report fixture and Add-pack rejection test.",
+      "disposition": "fixed"
+    }
   ],
   "unresolvedDecisions": [],
   "editsMade": [
@@ -102,17 +524,58 @@
   "adversarialReview": {
     "maxRounds": 3,
     "rounds": [
-      { "round": 1, "reviewer": "independent unfamiliar implementer", "result": "fail", "critical": 4, "high": 7, "medium": 4, "fixed": 15, "summary": "Found missing or insufficiently explicit archive v2, draft storage, alpha rendering, credit merge, resource, license, embedded, quota, enablement, error, provenance, adapter, and autosave contracts." },
-      { "round": 2, "reviewer": "independent unfamiliar implementer", "result": "fail", "critical": 5, "high": 4, "medium": 3, "fixed": 12, "summary": "Verified round-one repairs and exposed integration ambiguity in error topology, lock/package checksums, bundled embedding, final writer, transaction isolation, embedded precedence, grant/I/O safety, registry, and recovery details." },
-      { "round": 3, "reviewer": "independent unfamiliar implementer", "result": "pass", "critical": 0, "high": 0, "medium": 2, "fixed": 2, "summary": "Confirmed all material contracts executable; requested only shared license registry path and deterministic draft recovery layout, both repaired before final record." }
+      {
+        "round": 1,
+        "reviewer": "independent unfamiliar implementer",
+        "result": "fail",
+        "critical": 4,
+        "high": 7,
+        "medium": 4,
+        "fixed": 15,
+        "summary": "Found missing or insufficiently explicit archive v2, draft storage, alpha rendering, credit merge, resource, license, embedded, quota, enablement, error, provenance, adapter, and autosave contracts."
+      },
+      {
+        "round": 2,
+        "reviewer": "independent unfamiliar implementer",
+        "result": "fail",
+        "critical": 5,
+        "high": 4,
+        "medium": 3,
+        "fixed": 12,
+        "summary": "Verified round-one repairs and exposed integration ambiguity in error topology, lock/package checksums, bundled embedding, final writer, transaction isolation, embedded precedence, grant/I/O safety, registry, and recovery details."
+      },
+      {
+        "round": 3,
+        "reviewer": "independent unfamiliar implementer",
+        "result": "pass",
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "fixed": 2,
+        "summary": "Confirmed all material contracts executable; requested only shared license registry path and deterministic draft recovery layout, both repaired before final record."
+      }
     ],
     "remainingConcerns": []
   },
   "stabilization": {
-    "state": "candidate",
-    "approvalRef": "",
-    "approvalId": "",
-    "settledDecisionIds": [],
-    "justifiedChanges": []
+    "state": "locked",
+    "lockId": "LOCK-UPD-002-001",
+    "lockManifest": "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-lock.json",
+    "lockedBy": "product owner",
+    "decisionOwnerApproval": true,
+    "approvalRef": "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-approval.json",
+    "approvalId": "APPROVAL-UPD-002-LOCK-001",
+    "productVisionAlignment": "A local-first data-only content ecosystem lets compatible humanoid art grow independently of application releases while preserving exact locks, provenance, offline custody, and one shared web/Electron product core.",
+    "settledDecisionIds": [
+      "DEC-UPD002-PHASE-BOUNDARY",
+      "DEC-UPD002-PACK-FORMAT",
+      "DEC-UPD002-HUMANOID-PROFILE",
+      "DEC-UPD002-DATA-ONLY",
+      "DEC-UPD002-SIDE-BY-SIDE",
+      "DEC-UPD002-LICENSE-PROFILES",
+      "DEC-UPD002-ADAPTER-DEFER"
+    ],
+    "justifiedChanges": [],
+    "lockedAt": "2026-07-20T17:24:37.671Z"
   }
 }

@@ -11,4 +11,10 @@ export const CHANNELS = {
   inspectArchive: 'archive:inspect',
   writeArchive: 'archive:write',
   writeExport: 'export:write',
+  choosePackFile: 'dialog:pack-file',
+  readPack: 'pack:read',
+  listInstalledPacks: 'pack:list',
+  installPack: 'pack:install',
+  removePack: 'pack:remove',
+  writePack: 'pack:write',
 } as const

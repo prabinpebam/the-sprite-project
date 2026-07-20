@@ -25,7 +25,7 @@
 - **Environment:** Supported web or packaged Electron host
 - **Success:** The exact pack is installed, offline-ready, and available to new recipes
 - **Interruptions:** Cancel before commit; Duplicate version; Quota or disk capacity; Host closes during validation
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-INVALID
 
@@ -37,7 +37,7 @@
 - **Environment:** Malformed, hostile, unsupported, or oversized .spritepack fixture
 - **Success:** The package is rejected with a stable code and no repository or project mutation
 - **Interruptions:** Traversal; Checksum mismatch; Malformed PNG; Future schema; Unknown license; Compression bomb
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-LIBRARY
 
@@ -49,7 +49,7 @@
 - **Environment:** Online or offline
 - **Success:** The library accurately distinguishes bundled, installed, embedded, disabled, missing, and in-use versions
 - **Interruptions:** Unavailable source; Corrupt local record; Storage estimate unavailable
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-UPDATE
 
@@ -61,7 +61,7 @@
 - **Environment:** Both hosts
 - **Success:** Versions coexist and only explicit project action changes a lock after preview and checkpoint
 - **Interruptions:** Same version different checksum; Breaking asset removal; Update cancelled
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-REMOVE
 
@@ -73,7 +73,7 @@
 - **Environment:** Pack library
 - **Success:** Unused versions remove after confirmation; referenced versions remain intact with affected projects named
 - **Interruptions:** Removal cancelled; Pack becomes referenced concurrently; Filesystem or IndexedDB failure
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-MISSING-RECOVERY
 
@@ -85,7 +85,7 @@
 - **Environment:** Web or Electron
 - **Success:** Installing or locating the exact checksum resumes the project; replacement creates a copy and preserves the original lock
 - **Interruptions:** Wrong version; Right ID/version but wrong checksum; User cancels
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-AUTHOR-START
 
@@ -97,7 +97,7 @@
 - **Environment:** Pack authoring workspace
 - **Success:** A draft contains valid metadata and at least one decoded, classified asset
 - **Interruptions:** Invalid dimensions; Non-PNG input; Duplicate asset ID; User cancels
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-AUTHOR-TOKENS
 
@@ -109,7 +109,7 @@
 - **Environment:** Token mapping and runtime preview
 - **Success:** Every source color has an explicit fixed or token+shade disposition and preview matches exported runtime pixels
 - **Interruptions:** Ambiguous anti-aliased color; Unmapped color; Invalid shade; Preview decode failure
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-AUTHOR-PROVENANCE
 
@@ -121,7 +121,7 @@
 - **Environment:** Pack authoring workspace
 - **Success:** Validation proves every asset has supported, internally consistent provenance and generated credits
 - **Interruptions:** Unsupported license; Missing source URL; Chosen license not offered; Attribution omitted
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-AUTHOR-RECOVERY
 
@@ -133,7 +133,7 @@
 - **Environment:** Browser restart or Electron relaunch
 - **Success:** The latest committed draft and imported bytes reopen, validation state recomputes, and recovery export is available
 - **Interruptions:** Quota full; Interrupted asset write; Unsupported future draft
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-CROSS-HOST
 
@@ -145,7 +145,7 @@
 - **Environment:** Local .spritepack and .spriteproject transfer
 - **Success:** Pack bytes, project locks, preview hashes, generic/Godot exports, and credits remain identical
 - **Interruptions:** Pack already installed; Pack missing; Checksum conflict; Archive cancelled
-- **Status:** specified
+- **Status:** implemented
 
 ## SC-PACK-EMBEDDED-OFFLINE
 
@@ -157,4 +157,4 @@
 - **Environment:** Disconnected supported web or packaged Electron host
 - **Success:** Embedded exact locks validate project-scoped, preview/save/archive/generic/Godot/credits complete, and no global pack or enabled-state mutation occurs
 - **Interruptions:** Corrupt embedded package; Lock/checksum mismatch; Exact global package already installed; User cancels
-- **Status:** specified
+- **Status:** implemented

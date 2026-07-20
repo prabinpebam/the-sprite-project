@@ -6,10 +6,25 @@ import { packLockFor } from '../domain/pack-locks'
 import { parseProjectGraphV2 } from '../domain/schemas'
 import { sha256Hex } from '../domain/sha256'
 import type { CharacterRecipeV1, ProjectGraphV2, SpriteProjectV2 } from '../domain/types'
+import { readSpritePack } from '../domain/spritepack'
+import type { InstalledPackVersion, PackDraftAssetV1, PackDraftV1, PackOrigin } from '../domain/pack-types'
 
 export const WORKSPACE_DB_NAME = 'the-sprite-project-workspace-v1'
 export const REVISION_CHANNEL_NAME = 'the-sprite-project-project-revisions-v1'
 export const LEGACY_PROJECT_KEY = 'the-sprite-project:mvp:project:v1'
+
+export const PACK_DRAFT_LIMITS = {
+  drafts: 32,
+  assets: 128,
+  sourceBytes: 16 * 1024 * 1024,
+  referencedBytes: 128 * 1024 * 1024,
+  userOwnedBytes: 512 * 1024 * 1024,
+} as const
+
+export function assertPackDraftCapacity(kind: 'drafts' | 'assets' | 'sourceBytes' | 'referencedBytes' | 'userOwnedBytes', observed: number): void {
+  const allowed = PACK_DRAFT_LIMITS[kind]
+  if (observed > allowed) throw new ProductError({ code: 'draft-limit', message: `Pack draft ${kind} exceeds the supported limit.`, operation: 'draft:capacity', recoverable: true, details: { observed, allowed } })
+}
 
 export interface SnapshotRecord {
   projectId: string
@@ -39,6 +54,15 @@ interface RecipeRecord {
   projectId: string
   recipeId: string
   recipe: CharacterRecipeV1
+}
+
+export interface ProjectEmbeddedPack {
+  projectId: string
+  packageSha256: string
+  packageBytes: Uint8Array
+  packId: string
+  version: string
+  packDocumentSha256: string
 }
 
 interface WorkspaceSchema extends DBSchema {
@@ -72,6 +96,26 @@ interface WorkspaceSchema extends DBSchema {
   settings: {
     key: string
     value: { key: string; value: unknown }
+  }
+  packVersions: {
+    key: [string, string, string]
+    value: InstalledPackVersion
+    indexes: { 'by-pack': string; 'by-installed': string }
+  }
+  packDrafts: {
+    key: string
+    value: PackDraftV1
+    indexes: { 'by-updated': string }
+  }
+  packDraftAssets: {
+    key: [string, string]
+    value: PackDraftAssetV1
+    indexes: { 'by-draft': string }
+  }
+  projectEmbeddedPacks: {
+    key: [string, string]
+    value: ProjectEmbeddedPack
+    indexes: { 'by-project': string }
   }
 }
 
@@ -113,18 +157,33 @@ export class WorkspaceRepository {
 
   async database(): Promise<IDBPDatabase<WorkspaceSchema>> {
     if (!this.#database) {
-      this.#database = openDB<WorkspaceSchema>(this.databaseName, 1, {
-        upgrade(database) {
-          const projects = database.createObjectStore('projects', { keyPath: 'id' })
-          projects.createIndex('by-updated', 'updatedAt')
-          const recipes = database.createObjectStore('recipes', { keyPath: ['projectId', 'recipeId'] })
-          recipes.createIndex('by-project', 'projectId')
-          const snapshots = database.createObjectStore('snapshots', { keyPath: ['projectId', 'revision'] })
-          snapshots.createIndex('by-project', 'projectId')
-          database.createObjectStore('packs', { keyPath: ['packId', 'version'] })
-          database.createObjectStore('packBlobs', { keyPath: 'sha256' })
-          database.createObjectStore('migrations', { keyPath: 'id' })
-          database.createObjectStore('settings', { keyPath: 'key' })
+      this.#database = openDB<WorkspaceSchema>(this.databaseName, 3, {
+        upgrade(database, oldVersion) {
+          if (oldVersion < 1) {
+            const projects = database.createObjectStore('projects', { keyPath: 'id' })
+            projects.createIndex('by-updated', 'updatedAt')
+            const recipes = database.createObjectStore('recipes', { keyPath: ['projectId', 'recipeId'] })
+            recipes.createIndex('by-project', 'projectId')
+            const snapshots = database.createObjectStore('snapshots', { keyPath: ['projectId', 'revision'] })
+            snapshots.createIndex('by-project', 'projectId')
+            database.createObjectStore('packs', { keyPath: ['packId', 'version'] })
+            database.createObjectStore('packBlobs', { keyPath: 'sha256' })
+            database.createObjectStore('migrations', { keyPath: 'id' })
+            database.createObjectStore('settings', { keyPath: 'key' })
+          }
+          if (oldVersion < 2) {
+            const versions = database.createObjectStore('packVersions', { keyPath: ['packId', 'version', 'packageSha256'] })
+            versions.createIndex('by-pack', 'packId')
+            versions.createIndex('by-installed', 'installedAt')
+            const drafts = database.createObjectStore('packDrafts', { keyPath: 'id' })
+            drafts.createIndex('by-updated', 'updatedAt')
+            const assets = database.createObjectStore('packDraftAssets', { keyPath: ['draftId', 'assetId'] })
+            assets.createIndex('by-draft', 'draftId')
+          }
+          if (oldVersion < 3) {
+            const embedded = database.createObjectStore('projectEmbeddedPacks', { keyPath: ['projectId', 'packageSha256'] })
+            embedded.createIndex('by-project', 'projectId')
+          }
         },
       })
     }
@@ -152,10 +211,15 @@ export class WorkspaceRepository {
     return parseProjectGraphV2({ project, recipes: Object.fromEntries(recipeRecords.map(record => [record.recipeId, record.recipe])) })
   }
 
-  async createGraph(graphValue: ProjectGraphV2): Promise<ProjectGraphV2> {
+  async createGraph(graphValue: ProjectGraphV2, embeddedPackageBytes: Uint8Array[] = []): Promise<ProjectGraphV2> {
     const graph = parseProjectGraphV2(graphValue)
+    const embedded = await Promise.all(embeddedPackageBytes.map(bytes => readSpritePack(bytes)))
+    for (const pack of embedded) {
+      const lock = graph.project.packLocks.find(item => item.packId === pack.pack.id)
+      if (!lock || lock.version !== pack.pack.version || lock.sha256 !== pack.packDocumentSha256) throw new ProductError({ code: 'missing-pack', message: 'Embedded package does not match an exact project lock.', operation: 'project:create', recoverable: true })
+    }
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'packs'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'packs', 'projectEmbeddedPacks'], 'readwrite')
     if (await transaction.objectStore('projects').get(graph.project.id)) {
       await transaction.done
       throw new ProductError({ code: 'path-conflict', message: 'A project with this ID already exists.', operation: 'project:create', recoverable: true })
@@ -165,14 +229,27 @@ export class WorkspaceRepository {
       await transaction.objectStore('recipes').put({ projectId: graph.project.id, recipeId, recipe: graph.recipes[recipeId] })
     }
     for (const lock of graph.project.packLocks) await transaction.objectStore('packs').put({ ...lock, bundled: true })
+    for (const pack of embedded) await transaction.objectStore('projectEmbeddedPacks').put({
+      projectId: graph.project.id,
+      packageSha256: pack.packageSha256,
+      packageBytes: Uint8Array.from(pack.bytes),
+      packId: pack.pack.id,
+      version: pack.pack.version,
+      packDocumentSha256: pack.packDocumentSha256,
+    })
     await transaction.done
     return graph
   }
 
-  async saveGraph(graphValue: ProjectGraphV2, expectedRevision: number, reason = 'autosave', now = new Date().toISOString()): Promise<ProjectGraphV2> {
+  async saveGraph(graphValue: ProjectGraphV2, expectedRevision: number, reason = 'autosave', now = new Date().toISOString(), embeddedPackageBytes?: Uint8Array[]): Promise<ProjectGraphV2> {
     const graph = parseProjectGraphV2(graphValue)
+    const embedded = embeddedPackageBytes ? await Promise.all(embeddedPackageBytes.map(bytes => readSpritePack(bytes))) : null
+    if (embedded) for (const pack of embedded) {
+      const lock = graph.project.packLocks.find(item => item.packId === pack.pack.id)
+      if (!lock || lock.version !== pack.pack.version || lock.sha256 !== pack.packDocumentSha256) throw new ProductError({ code: 'missing-pack', message: 'Embedded package does not match an exact project lock.', operation: 'project:save', recoverable: true })
+    }
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'packs'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'packs', 'projectEmbeddedPacks'], 'readwrite')
     const projects = transaction.objectStore('projects')
     const currentProject = await projects.get(graph.project.id)
     if (!currentProject || currentProject.revision !== expectedRevision) {
@@ -207,6 +284,18 @@ export class WorkspaceRepository {
       await transaction.objectStore('recipes').put({ projectId: next.project.id, recipeId, recipe: next.recipes[recipeId] })
     }
     for (const lock of next.project.packLocks) await transaction.objectStore('packs').put({ ...lock, bundled: true })
+    if (embedded) {
+      const priorKeys = await transaction.objectStore('projectEmbeddedPacks').index('by-project').getAllKeys(next.project.id)
+      await Promise.all(priorKeys.map(key => transaction.objectStore('projectEmbeddedPacks').delete(key)))
+      for (const pack of embedded) await transaction.objectStore('projectEmbeddedPacks').put({
+        projectId: next.project.id,
+        packageSha256: pack.packageSha256,
+        packageBytes: Uint8Array.from(pack.bytes),
+        packId: pack.pack.id,
+        version: pack.pack.version,
+        packDocumentSha256: pack.packDocumentSha256,
+      })
+    }
     await transaction.done
     this.#revisionChannel?.postMessage({ projectId: next.project.id, revision: next.project.revision })
     await this.applySnapshotRetention(next.project.id, now)
@@ -227,18 +316,20 @@ export class WorkspaceRepository {
 
   async deleteProject(projectId: string): Promise<void> {
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'snapshots'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'projectEmbeddedPacks'], 'readwrite')
     await transaction.objectStore('projects').delete(projectId)
     const recipes = await transaction.objectStore('recipes').index('by-project').getAllKeys(projectId)
     const snapshots = await transaction.objectStore('snapshots').index('by-project').getAllKeys(projectId)
+    const embedded = await transaction.objectStore('projectEmbeddedPacks').index('by-project').getAllKeys(projectId)
     await Promise.all(recipes.map(key => transaction.objectStore('recipes').delete(key)))
     await Promise.all(snapshots.map(key => transaction.objectStore('snapshots').delete(key)))
+    await Promise.all(embedded.map(key => transaction.objectStore('projectEmbeddedPacks').delete(key)))
     await transaction.done
   }
 
   async clearAll(): Promise<void> {
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'packs', 'packBlobs', 'migrations', 'settings'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'packs', 'packBlobs', 'migrations', 'settings', 'packVersions', 'packDrafts', 'packDraftAssets', 'projectEmbeddedPacks'], 'readwrite')
     await Promise.all([...transaction.objectStoreNames].map(name => transaction.objectStore(name).clear()))
     await transaction.done
   }
@@ -352,6 +443,196 @@ export class WorkspaceRepository {
 
   async migrationRecord(id: string): Promise<MigrationRecord | undefined> {
     return (await this.database()).get('migrations', id)
+  }
+
+  async listInstalledPacks(): Promise<InstalledPackVersion[]> {
+    const database = await this.database()
+    return (await database.getAllFromIndex('packVersions', 'by-installed')).sort((left, right) => right.installedAt.localeCompare(left.installedAt))
+  }
+
+  async projectEmbeddedPackages(projectId: string): Promise<ProjectEmbeddedPack[]> {
+    const database = await this.database()
+    return database.getAllFromIndex('projectEmbeddedPacks', 'by-project', projectId)
+  }
+
+  async projectPackageBytes(graphValue: ProjectGraphV2): Promise<Uint8Array[]> {
+    const graph = parseProjectGraphV2(graphValue)
+    const [embedded, installed] = await Promise.all([this.projectEmbeddedPackages(graph.project.id), this.listInstalledPacks()])
+    const packages = new Map<string, Uint8Array>()
+    for (const item of embedded) {
+      const lock = graph.project.packLocks.find(value => value.packId === item.packId && value.version === item.version && value.sha256 === item.packDocumentSha256)
+      if (lock) packages.set(item.packageSha256, Uint8Array.from(item.packageBytes))
+    }
+    for (const item of installed) {
+      const lock = graph.project.packLocks.find(value => value.packId === item.packId && value.version === item.version && value.sha256 === item.packDocumentSha256)
+      if (lock) packages.set(item.packageSha256, Uint8Array.from(item.packageBytes))
+    }
+    return [...packages.values()]
+  }
+
+  async installPack(packageBytes: Uint8Array, origin: PackOrigin = 'installed-local', now = new Date().toISOString()): Promise<InstalledPackVersion> {
+    const parsed = await readSpritePack(packageBytes)
+    const database = await this.database()
+    const transaction = database.transaction(['packVersions', 'packBlobs'], 'readwrite')
+    const versions = await transaction.objectStore('packVersions').index('by-pack').getAll(parsed.pack.id)
+    const exact = versions.find(item => item.version === parsed.pack.version && item.packageSha256 === parsed.packageSha256)
+    if (exact) {
+      await transaction.done
+      return exact
+    }
+    if (versions.some(item => item.version === parsed.pack.version)) {
+      await transaction.done
+      throw new ProductError({ code: 'pack-conflict', message: 'This pack ID and version is already installed with different bytes.', operation: 'pack:install', recoverable: true, details: { packId: parsed.pack.id, version: parsed.pack.version } })
+    }
+    for (const [hash, bytes] of Object.entries(parsed.pngs)) {
+      const existing = await transaction.objectStore('packBlobs').get(hash)
+      await transaction.objectStore('packBlobs').put(existing
+        ? { ...existing, referenceCount: existing.referenceCount + 1 }
+        : { sha256: hash, bytes, referenceCount: 1, userOwned: true })
+    }
+    const installed: InstalledPackVersion = {
+      packId: parsed.pack.id,
+      version: parsed.pack.version,
+      packageSha256: parsed.packageSha256,
+      packDocumentSha256: parsed.packDocumentSha256,
+      origin,
+      enabled: true,
+      installedAt: now,
+      packageBytes: Uint8Array.from(packageBytes),
+      pack: parsed.pack,
+      provenance: parsed.provenance,
+    }
+    await transaction.objectStore('packVersions').put(installed)
+    await transaction.done
+    const readBack = await database.get('packVersions', [installed.packId, installed.version, installed.packageSha256])
+    if (!readBack) throw new ProductError({ code: 'io-failed', message: 'Installed pack failed read-back.', operation: 'pack:install', recoverable: true })
+    return readBack
+  }
+
+  async setPackEnabled(identity: Pick<InstalledPackVersion, 'packId' | 'version' | 'packageSha256'>, enabled: boolean): Promise<InstalledPackVersion> {
+    const database = await this.database()
+    const key: [string, string, string] = [identity.packId, identity.version, identity.packageSha256]
+    const current = await database.get('packVersions', key)
+    if (!current) throw new ProductError({ code: 'pack-missing', message: 'Installed pack is unavailable.', operation: 'pack:enable', recoverable: true })
+    const next = { ...current, enabled }
+    await database.put('packVersions', next)
+    return next
+  }
+
+  async removePack(identity: Pick<InstalledPackVersion, 'packId' | 'version' | 'packageSha256'>): Promise<void> {
+    const database = await this.database()
+    const transaction = database.transaction(['packVersions', 'packBlobs', 'projects'], 'readwrite')
+    const key: [string, string, string] = [identity.packId, identity.version, identity.packageSha256]
+    const current = await transaction.objectStore('packVersions').get(key)
+    if (!current) {
+      await transaction.done
+      return
+    }
+    const projects = await transaction.objectStore('projects').getAll()
+    const dependencies = projects.filter(project => project.packLocks.some(lock => lock.packId === current.packId && lock.version === current.version && lock.sha256 === current.packDocumentSha256))
+    if (dependencies.length) {
+      await transaction.done
+      throw new ProductError({ code: 'pack-in-use', message: 'Pack version is used by local projects.', operation: 'pack:remove', recoverable: true, details: { dependentProjects: dependencies.length } })
+    }
+    await transaction.objectStore('packVersions').delete(key)
+    for (const asset of current.pack.assets) {
+      if (asset.source.kind !== 'sheet-v1') continue
+      const blob = await transaction.objectStore('packBlobs').get(asset.source.pngSha256)
+      if (!blob) continue
+      if (blob.referenceCount <= 1) await transaction.objectStore('packBlobs').delete(blob.sha256)
+      else await transaction.objectStore('packBlobs').put({ ...blob, referenceCount: blob.referenceCount - 1 })
+    }
+    await transaction.done
+  }
+
+  async createPackDraft(name = 'Untitled pack', now = new Date().toISOString()): Promise<PackDraftV1> {
+    const database = await this.database()
+    assertPackDraftCapacity('drafts', (await database.count('packDrafts')) + 1)
+    const id = crypto.randomUUID()
+    const draft: PackDraftV1 = {
+      draftSchemaVersion: 1,
+      id,
+      revision: 0,
+      packId: `local.${id}`,
+      version: '0.1.0',
+      name,
+      description: '',
+      subjectProfile: 'humanoid-lpc-64',
+      assetIds: [],
+      activeAssetId: null,
+      createdAt: now,
+      updatedAt: now,
+      lastExportedPackageSha256: null,
+    }
+    await database.add('packDrafts', draft)
+    return draft
+  }
+
+  async listPackDrafts(): Promise<PackDraftV1[]> {
+    const database = await this.database()
+    return (await database.getAllFromIndex('packDrafts', 'by-updated')).sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+  }
+
+  async loadPackDraft(id: string): Promise<{ draft: PackDraftV1; assets: PackDraftAssetV1[] } | null> {
+    const database = await this.database()
+    const transaction = database.transaction(['packDrafts', 'packDraftAssets'], 'readonly')
+    const draft = await transaction.objectStore('packDrafts').get(id)
+    if (!draft) return null
+    const assets = await transaction.objectStore('packDraftAssets').index('by-draft').getAll(id)
+    await transaction.done
+    return { draft, assets }
+  }
+
+  async savePackDraft(draftValue: PackDraftV1, assets: PackDraftAssetV1[], expectedRevision: number, now = new Date().toISOString()): Promise<PackDraftV1> {
+    assertPackDraftCapacity('assets', assets.length)
+    const database = await this.database()
+    const transaction = database.transaction(['packDrafts', 'packDraftAssets', 'packBlobs'], 'readwrite')
+    const current = await transaction.objectStore('packDrafts').get(draftValue.id)
+    if (!current || current.revision !== expectedRevision) {
+      await transaction.done
+      throw new ProductError({ code: 'draft-conflict', message: 'The pack draft has a newer revision.', operation: 'draft:save', recoverable: true, details: { expectedRevision, actualRevision: current?.revision ?? -1 } })
+    }
+    const priorAssets = await transaction.objectStore('packDraftAssets').index('by-draft').getAll(draftValue.id)
+    const nextHashes = new Map<string, number>()
+    const priorHashes = new Map<string, number>()
+    for (const asset of assets) nextHashes.set(asset.sourceBlobSha256, (nextHashes.get(asset.sourceBlobSha256) ?? 0) + 1)
+    for (const asset of priorAssets) priorHashes.set(asset.sourceBlobSha256, (priorHashes.get(asset.sourceBlobSha256) ?? 0) + 1)
+    let sourceBytes = 0
+    for (const hash of nextHashes.keys()) {
+      const blob = await transaction.objectStore('packBlobs').get(hash)
+      if (!blob) throw new ProductError({ code: 'draft-limit', message: 'A draft source blob is unavailable.', operation: 'draft:save', recoverable: true, details: { hash } })
+      sourceBytes += blob.bytes.length
+    }
+    assertPackDraftCapacity('referencedBytes', sourceBytes)
+    const next = { ...draftValue, revision: expectedRevision + 1, updatedAt: now }
+    await transaction.objectStore('packDrafts').put(next)
+    const priorKeys = await transaction.objectStore('packDraftAssets').index('by-draft').getAllKeys(draftValue.id)
+    await Promise.all(priorKeys.map(key => transaction.objectStore('packDraftAssets').delete(key)))
+    await Promise.all(assets.map(asset => transaction.objectStore('packDraftAssets').put(asset)))
+    for (const hash of new Set([...priorHashes.keys(), ...nextHashes.keys()])) {
+      const blob = await transaction.objectStore('packBlobs').get(hash)
+      if (blob) await transaction.objectStore('packBlobs').put({ ...blob, referenceCount: Math.max(0, blob.referenceCount + (nextHashes.get(hash) ?? 0) - (priorHashes.get(hash) ?? 0)) })
+    }
+    await transaction.done
+    return next
+  }
+
+  async storePackDraftSource(bytes: Uint8Array): Promise<string> {
+    assertPackDraftCapacity('sourceBytes', bytes.length)
+    const hash = await sha256Hex(bytes)
+    const database = await this.database()
+    const current = await database.get('packBlobs', hash)
+    if (!current) {
+      const userOwnedBytes = (await database.getAll('packBlobs')).filter(blob => blob.userOwned).reduce((sum, blob) => sum + blob.bytes.length, 0)
+      assertPackDraftCapacity('userOwnedBytes', userOwnedBytes + bytes.length)
+      await database.put('packBlobs', { sha256: hash, bytes: Uint8Array.from(bytes), referenceCount: 0, userOwned: true })
+    }
+    return hash
+  }
+
+  async readPackBlob(hash: string): Promise<Uint8Array | null> {
+    const record = await (await this.database()).get('packBlobs', hash)
+    return record ? Uint8Array.from(record.bytes) : null
   }
 
 }

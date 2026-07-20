@@ -1,6 +1,6 @@
 import { packById, selectedAssets } from './packs'
 import { presetById, resolveTheme } from './themes'
-import { REQUIRED_SLOTS, type CreditRecord, type SlotId, type SpriteProject } from './types'
+import { REQUIRED_SLOTS, type ContentPack, type CreditRecord, type SlotId, type SpriteProject } from './types'
 
 export const STORAGE_KEY = 'the-sprite-project:mvp:project:v1'
 
@@ -27,8 +27,8 @@ export function createProject(name: string, now = new Date().toISOString()): Spr
   }
 }
 
-export function switchPack(project: SpriteProject, packId: string): SpriteProject {
-  const pack = packById(packId)
+export function switchPack(project: SpriteProject, target: string | ContentPack): SpriteProject {
+  const pack = typeof target === 'string' ? packById(target) : target
   return touch({
     ...project,
     packId: pack.id,
@@ -44,8 +44,8 @@ export function missingRequiredSlots(project: SpriteProject): SlotId[] {
   return REQUIRED_SLOTS.filter(slot => !project.character.selections[slot])
 }
 
-export function exportBlockers(project: SpriteProject): string[] {
-  const pack = packById(project.packId)
+export function exportBlockers(project: SpriteProject, packValue?: ContentPack): string[] {
+  const pack = packValue ?? packById(project.packId)
   const missing = missingRequiredSlots(project).map(slot => `Select a ${slot} layer.`)
   const assets = selectedAssets(pack, project.character.selections)
   const invalid = Object.values(project.character.selections)
@@ -58,16 +58,16 @@ export function exportBlockers(project: SpriteProject): string[] {
   return [...missing, ...invalid, ...provenance]
 }
 
-export function isExportReady(project: SpriteProject): boolean {
-  return exportBlockers(project).length === 0
+export function isExportReady(project: SpriteProject, packValue?: ContentPack): boolean {
+  return exportBlockers(project, packValue).length === 0
 }
 
 export function resolvedTheme(project: SpriteProject) {
   return resolveTheme(project.theme, project.character.overrides)
 }
 
-export function creditsFor(project: SpriteProject): CreditRecord[] {
-  const pack = packById(project.packId)
+export function creditsFor(project: SpriteProject, packValue?: ContentPack): CreditRecord[] {
+  const pack = packValue ?? packById(project.packId)
   const groups = new Map<string, CreditRecord>()
   for (const item of selectedAssets(pack, project.character.selections)) {
     const key = [item.provenance.author, item.provenance.source, item.provenance.chosenLicense].join('|')
@@ -79,6 +79,7 @@ export function creditsFor(project: SpriteProject): CreditRecord[] {
       groups.set(key, {
         ...item.provenance,
         assetIds: [item.id], assetNames: [item.name], packId: pack.id, packVersion: pack.version,
+        ...(pack.packageSha256 ? { packageSha256: pack.packageSha256 } : {}),
       })
     }
   }

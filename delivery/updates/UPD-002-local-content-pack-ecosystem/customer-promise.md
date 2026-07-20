@@ -4,7 +4,7 @@
 
 **Baseline:** 4e890b082d4df3b2758cdcc27f7f905bfee3afe0 / RUN-UPD001-001
 
-**Status:** specified
+**Status:** implemented
 
 **Target user:** Solo and small-team 2D game developers and technical artists who need to add legally traceable humanoid content without waiting for an application release
 
@@ -20,7 +20,7 @@
 - **Quality expectation:** Install is transactional, deterministic, host-consistent, and completes within 10 seconds for the maximum supported package on the reference machine
 - **Recovery expectation:** Invalid, incompatible, duplicate, oversized, or interrupted installs preserve the source file and existing pack repository and return a stable error with a next action
 - **Acceptance evidence:** Shared adversarial fixtures plus actual-UI install, rejection, update, removal, and offline runs pass on web and packaged Electron
-- **Status:** specified
+- **Status:** implemented
 
 ## CP-PACK-AUTHOR - A technical artist can turn LPC-compatible humanoid layer sheets into a reusable, token-aware, legally attributed pack without writing JSON.
 
@@ -32,7 +32,7 @@
 - **Quality expectation:** Drafts autosave locally, validation points to exact assets and fields, and exported bytes are reproducible from an unchanged draft
 - **Recovery expectation:** Decode, validation, quota, interruption, or export failure retains the draft and original imports and offers retry, remove offending asset, or export recovery data
 - **Acceptance evidence:** Actual-UI authoring, reload, validation, correction, preview, export, and self-install flows pass with exact render and credit fixtures
-- **Status:** specified
+- **Status:** implemented
 
 ## CP-PACK-LIFECYCLE - A developer can manage installed pack versions without silently changing or stranding existing projects.
 
@@ -44,7 +44,7 @@
 - **Quality expectation:** No lifecycle command mutates project pack locks implicitly; current projects and last-known-good content remain available through failures
 - **Recovery expectation:** In-use removal is blocked; unavailable content leaves the project intact in a deterministic blocked state
 - **Acceptance evidence:** Version, dependency, remove, missing-lock, rollback, and regression fixtures pass on both hosts
-- **Status:** specified
+- **Status:** implemented
 
 ## CP-PACK-PORTABILITY - A developer can move authored packs and projects that use them between web and Electron without content, rendering, or provenance drift.
 
@@ -56,8 +56,8 @@
 - **Quality expectation:** Canonical pack payload hashes, project locks, selected assets, runtime pixels, and credits match exactly across hosts
 - **Recovery expectation:** A missing, conflicting, or tampered pack fails before project mutation and preserves both sources
 - **Acceptance evidence:** Bidirectional pack and project round trips pass from actual web and packaged Electron UIs
-- **Status:** specified
+- **Status:** implemented
 
 ## Review Boundary
 
-These promises are specified, not approved or implemented. UPD-001 remains the immutable implementation baseline. Product-owner approval is required before implementation dispatch.
+These promises are approved and implementation is authorized under LOCK-UPD-002-001. Status promotion remains evidence-owned; approval is not implementation or verification.

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "approvalId": "APPROVAL-UPD-002-LOCK-001",
+  "kind": "specification-lock-and-change-control",
+  "lockId": "LOCK-UPD-002-001",
+  "reviewId": "REVIEW-UPD-002-001",
+  "ownerRole": "product owner",
+  "approvedAt": "2026-07-20",
+  "sourceType": "direct-user-request",
+  "sourceReference": "User instruction: This looks good, go ahead and implement this as per our product update pipeline.",
+  "statement": "Approve UPD-002 Local Content Pack Ecosystem as specified, approve all seven proposed decisions, authorize implementation through the product update pipeline, and reschedule UPD-001 actual Pages and clean-machine verification as release gates without promoting UPD-001 beyond implemented.",
+  "lockedDecisionIds": [
+    "DEC-UPD002-PHASE-BOUNDARY",
+    "DEC-UPD002-PACK-FORMAT",
+    "DEC-UPD002-HUMANOID-PROFILE",
+    "DEC-UPD002-DATA-ONLY",
+    "DEC-UPD002-SIDE-BY-SIDE",
+    "DEC-UPD002-LICENSE-PROFILES",
+    "DEC-UPD002-ADAPTER-DEFER"
+  ],
+  "approvedDecisionIds": [
+    "DEC-UPD002-PHASE-BOUNDARY",
+    "DEC-UPD002-PACK-FORMAT",
+    "DEC-UPD002-HUMANOID-PROFILE",
+    "DEC-UPD002-DATA-ONLY",
+    "DEC-UPD002-SIDE-BY-SIDE",
+    "DEC-UPD002-LICENSE-PROFILES",
+    "DEC-UPD002-ADAPTER-DEFER"
+  ],
+  "approvedChangeIds": []
+}

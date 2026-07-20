@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { drawFrame, pixelHash } from '../domain/render'
-import type { SpriteProject } from '../domain/types'
+import type { ContentPack, SpriteProject } from '../domain/types'
 
 interface SpriteCanvasProps {
   project: SpriteProject
+  pack?: ContentPack
   compact?: boolean
 }
 
-export function SpriteCanvas({ project, compact = false }: SpriteCanvasProps) {
+export function SpriteCanvas({ project, pack, compact = false }: SpriteCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [frame, setFrame] = useState(0)
   const [hash, setHash] = useState('00000000')
@@ -19,9 +20,9 @@ export function SpriteCanvas({ project, compact = false }: SpriteCanvasProps) {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    drawFrame(canvas, project, frame)
+    drawFrame(canvas, project, frame, pack)
     setHash(pixelHash(canvas))
-  }, [frame, project])
+  }, [frame, pack, project])
 
   useEffect(() => {
     if (!project.preview.playing || project.preview.animation === 'idle') return

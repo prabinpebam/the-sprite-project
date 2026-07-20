@@ -27,6 +27,7 @@
     "ADR-002 Dual-Host Local-First Product",
     "LOCK-UPD-001-002"
   ],
-  "entryCondition": "UPD-002 implementation begins only after UPD-001 external release verification completes or the product owner explicitly reschedules that gate without changing the UPD-002 contract.",
+  "entryCondition": "Product owner explicitly authorized implementation on 2026-07-20 and rescheduled UPD-001 actual Pages and clean-machine verification as release gates that do not block UPD-002 development. UPD-001 remains implemented, not verified.",
+  "entryConditionState": "rescheduled-by-product-owner",
   "note": "UPD-002 layers a data-only local pack ecosystem above UPD-001. It does not rewrite dual-host, project, archive, security, recovery, or export evidence."
 }

@@ -1,8 +1,8 @@
 # UPD-002 Product-Owner Review Brief
 
-## Review Request
+## Approval Record
 
-Approve, revise, or reject the proposed **Local Content Pack Ecosystem** boundary. Approval authorizes specification stabilization and later implementation dispatch; it does not claim implementation or verification.
+The product owner approved the **Local Content Pack Ecosystem** boundary and authorized implementation on 2026-07-20. This record does not claim implementation or verification.
 
 ## Recommendation
 
@@ -32,7 +32,7 @@ A developer can:
 - 14 applicable review lenses, all 9/10
 - 3 unfamiliar-implementer rounds ending PASS
 
-## Decisions Requiring Approval
+## Approved Decisions
 
 | Decision | Recommendation | Why |
 |---|---|---|
@@ -60,9 +60,9 @@ Project schema stays version 2. Bundled-only projects remain project archive v1 
 
 Terrain, scenes, structures/props, non-humanoid rigs, arbitrary animation geometry, pixel editing, folder watching/live content, remote URL install, marketplace, executable plugins, arbitrary license prose, bulk repository conversion, and a new engine adapter.
 
-## Entry Condition
+## Entry Condition Disposition
 
-Implementation begins only after UPD-001 actual Pages and clean-machine release verification completes, or the product owner explicitly reschedules that gate without changing or overstating UPD-001 status.
+The product owner explicitly rescheduled UPD-001 actual Pages and clean-machine verification as release gates that do not block UPD-002 development. UPD-001 remains implemented, not verified.
 
 ## Review Evidence
 
@@ -74,8 +74,6 @@ Implementation begins only after UPD-001 actual Pages and clean-machine release 
 - Alternatives and impact: `change-proposal.md`, `impact-analysis.md`
 - Deep review: `spec-review.json`
 
-## Approval Outcomes
+## Implementation Authorization
 
-- **Approve as written:** create exact owner approval artifact, stabilize/lock the approved spec, then begin `WP-UPD002-CONTRACTS` when the entry condition is met.
-- **Request bounded revision:** amend affected promises/decisions and rerun only invalidated traceability/review gates.
-- **Reject/defer:** retain this package as a reviewed proposal; no implementation or pack-format commitment is made.
+`spec-approval.json` is the exact approval artifact. `LOCK-UPD-002-001` protects the approved contract. Implementation proceeds in `execution-plan.md` dependency order; later material changes require justified lock reopening.
