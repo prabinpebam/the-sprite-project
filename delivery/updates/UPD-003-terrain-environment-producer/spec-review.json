@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 2,
+  "reviewId": "REVIEW-UPD-003-001",
+  "target": "delivery/updates/UPD-003-terrain-environment-producer",
+  "reviewedAt": "2026-07-21",
+  "depth": "deep",
+  "verdict": "ready",
+  "materialitySignals": [
+    "new customer promise and complete producer workflow",
+    "new strict terrain document and deterministic procedural pixel output",
+    "project graph, IndexedDB, folder, snapshot, and archive compatibility changes",
+    "new archive format with old-reader fail-closed behavior",
+    "new generic and Godot 4.7.1 downstream artifacts",
+    "shared web, packaged Electron, offline, and cross-host parity claims",
+    "retained character, content-pack, security, and release baselines"
+  ],
+  "sources": [
+    "delivery/updates/UPD-003-terrain-environment-producer/traceability.json",
+    "delivery/updates/UPD-003-terrain-environment-producer/change-proposal.md",
+    "delivery/updates/UPD-003-terrain-environment-producer/impact-analysis.md",
+    "delivery/updates/UPD-003-terrain-environment-producer/product-design-spec.md",
+    "delivery/updates/UPD-003-terrain-environment-producer/engineering-spec.md",
+    "delivery/updates/UPD-003-terrain-environment-producer/quality-scenarios.md",
+    "delivery/updates/UPD-003-terrain-environment-producer/threat-model.md",
+    "delivery/updates/UPD-003-terrain-environment-producer/release-gate.md",
+    "delivery/updates/UPD-002-local-content-pack-ecosystem/spec-lock.json",
+    "product/src/domain/types.ts",
+    "product/src/domain/schemas.ts",
+    "product/src/domain/archive.ts",
+    "product/src/web/repository.ts",
+    "product/electron/main.ts",
+    "product/tests/godot-terrain-fixture/generate_fixture.gd"
+  ],
+  "dimensions": [
+    {
+      "id": "product-truth",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "The update proves the roadmap terrain outcome for an indie developer with observable create, customize, persist, transfer, and engine-ready delivery results while preserving the character producer.",
+      "evidence": [
+        "change-proposal.md",
+        "customer-promise.md",
+        "baseline.json"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "scope-alternatives",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "One optional built-in static terrain document is shown to be the smallest coherent second producer, with packs, scenes, transitions, animation, structures, arbitrary maps, and token redesign explicitly rejected or deferred.",
+      "evidence": [
+        "scope-ledger.md",
+        "decisions.md",
+        "impact-analysis.md"
+      ],
+      "findingIds": [
+        "F-UPD003-007"
+      ]
+    },
+    {
+      "id": "architecture",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Host-neutral terrain types, renderer, persistence, archive v3, exports, UI ownership, and unchanged bridge boundaries are exact and fit the existing project graph without hidden authority.",
+      "evidence": [
+        "engineering-spec.md",
+        "execution-plan.md",
+        "product/electron/main.ts"
+      ],
+      "findingIds": [
+        "F-UPD003-002",
+        "F-UPD003-003",
+        "F-UPD003-006"
+      ]
+    },
+    {
+      "id": "data-failure",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Terrain validation, revisions, snapshots, migration, atomic commits, archive inventories, old-reader rejection, external modification, invalid drafts, and rollback all name exact no-partial-mutation behavior.",
+      "evidence": [
+        "engineering-spec.md",
+        "threat-model.md",
+        "task-flows.md"
+      ],
+      "findingIds": [
+        "F-UPD003-004",
+        "F-UPD003-005",
+        "F-UPD003-006"
+      ]
+    },
+    {
+      "id": "quality-attributes",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Correctness, determinism, compatibility, durability, conflict safety, accessibility, performance, downstream validity, offline operation, security, recovery, and rollback have categorical measurable scenarios.",
+      "evidence": [
+        "quality-scenarios.md",
+        "release-gate.md"
+      ],
+      "findingIds": [
+        "F-UPD003-001",
+        "F-UPD003-002"
+      ]
+    },
+    {
+      "id": "verification-release",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "All promises, flows, 28 behaviors, 64 material-mask fixtures, host paths, compatibility obligations, Godot consumer checks, performance thresholds, rollback, and inherited external gates have exact evidence requirements.",
+      "evidence": [
+        "traceability.json",
+        "quality-scenarios.md",
+        "release-gate.md",
+        "evidence/README.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "implementation-readiness",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "A fresh implementer can execute seven dependency-gated work packages without choosing product behavior, deterministic bytes, storage topology, archive semantics, engine metadata, error ownership, or UX recovery behavior.",
+      "evidence": [
+        "engineering-spec.md",
+        "product-design-spec.md",
+        "execution-plan.md",
+        "adversarial rounds 1-3"
+      ],
+      "findingIds": [
+        "F-UPD003-001",
+        "F-UPD003-002",
+        "F-UPD003-003",
+        "F-UPD003-004"
+      ]
+    },
+    {
+      "id": "ux-accessibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Empty, create, material, palette, paint, erase, fill, removal, export, invalid, conflict, recovery, keyboard grid, focus, reflow, targets, contrast, and reduced-motion behavior are explicit and testable.",
+      "evidence": [
+        "product-design-spec.md",
+        "experience-architecture.md",
+        "release-gate.md"
+      ],
+      "findingIds": [
+        "F-UPD003-005",
+        "F-UPD003-007"
+      ]
+    },
+    {
+      "id": "developer-experience",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Generic consumers and Godot 4.7.1 users receive deterministic documented artifacts that require no manual slicing or peering reconstruction, with a pinned downstream fixture.",
+      "evidence": [
+        "engineering-spec.md sections 9-10",
+        "product-design-spec.md section 7",
+        "product/tests/godot-terrain-fixture/generate_fixture.gd"
+      ],
+      "findingIds": [
+        "F-UPD003-003"
+      ]
+    },
+    {
+      "id": "security-privacy",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Strict bounded terrain JSON and archive paths retain the existing local-only trust model, Electron grants, data-only boundary, pre-mutation validation, and zero telemetry/network authority.",
+      "evidence": [
+        "threat-model.md",
+        "engineering-spec.md sections 3, 8, 13"
+      ],
+      "findingIds": [
+        "F-UPD003-004"
+      ]
+    },
+    {
+      "id": "reliability-operability",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Interrupted saves, stale revisions, quota/I/O failures, external edits, malformed archives, feature withdrawal, recovery snapshots, and reader-only rollback preserve last-known-good character and terrain state.",
+      "evidence": [
+        "quality-scenarios.md",
+        "release-gate.md",
+        "threat-model.md"
+      ],
+      "findingIds": [
+        "F-UPD003-006"
+      ]
+    },
+    {
+      "id": "performance-capacity",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Document, map, tile, atlas, JSON, interaction, render, export, and main-thread boundaries are numeric and map to ordinary and one-over fixtures on both hosts.",
+      "evidence": [
+        "engineering-spec.md section 12",
+        "quality-scenarios.md QS-309 and Capacity Boundaries",
+        "release-gate.md Performance Gate"
+      ],
+      "findingIds": [
+        "F-UPD003-002"
+      ]
+    },
+    {
+      "id": "migration-compatibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "DB v3-to-v4, graph null normalization, archive v1/v2 preservation, archive v3 mandatory terrain, old-reader timing, cross-host transfer, and rollback reader preservation are exact and testable.",
+      "evidence": [
+        "engineering-spec.md sections 4, 7, 8, 14",
+        "quality-scenarios.md QS-304 through QS-307 and QS-315"
+      ],
+      "findingIds": [
+        "F-UPD003-004",
+        "F-UPD003-006"
+      ]
+    },
+    {
+      "id": "deployment-distribution",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Web and Electron readers/writers release together, offline and packaged evidence is mandatory, feature withdrawal retains readers and data, and inherited actual Pages/clean-machine gates remain truthful external obligations.",
+      "evidence": [
+        "release-gate.md",
+        "baseline.json",
+        "quality-scenarios.md QS-311 and QS-315"
+      ],
+      "findingIds": [
+        "F-UPD003-005"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-UPD003-001",
+      "dimension": "quality-attributes",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Terrain palette derivation did not define output bytes",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 5",
+          "claim": "Round two found adjustHex without channel math, step size, or per-material role offsets."
+        }
+      ],
+      "problem": "Independent implementations could derive different palette bytes from the same project theme.",
+      "impact": "Atlas, export, and cross-host hashes could diverge.",
+      "remediation": "Specified immutable inputs, exact role-token offsets, uniform RGB step 12, inclusive clamping, lowercase output, and an example vector.",
+      "verification": "Unit vectors for all roles/materials plus repeated web/Electron atlas hash equality.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD003-002",
+      "dimension": "architecture",
+      "severity": "critical",
+      "confidence": 10,
+      "title": "Procedural terrain rendering was descriptive rather than executable",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 6",
+          "claim": "Round two found unspecified PRNG, mark count, pixel offsets, side colors, overlap, and corner precedence."
+        }
+      ],
+      "problem": "A competent implementer still had to invent deterministic pixels.",
+      "impact": "The core visual producer, manifest hash, performance fixtures, and host parity were untestable.",
+      "remediation": "Defined exact xorshift32 seed/steps, twelve marks, coordinates and dimensions, absent-side bands, overwrite precedence, prohibited operations, and atlas-to-map copying.",
+      "verification": "All 64 material-mask pixel fixtures, repeated hashes, map-cell source equality, and actual-host cross-export comparison.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD003-003",
+      "dimension": "developer-experience",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Godot TileSet metadata and fallback strategy were unresolved",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 10 and Godot 4.7.1 probe",
+          "claim": "Initial spec left source IDs, mode, side mapping, excluded layers, direct-load feasibility, and helper fallback open."
+        }
+      ],
+      "problem": "The exporter and downstream fixture required engine-format design during implementation.",
+      "impact": "Godot delivery could load but select wrong neighbors or require undocumented reconstruction.",
+      "remediation": "Pinned Godot 4.7.1; specified source/terrain IDs, atlas coordinates, MATCH_SIDES, exact N/E/S/W peering fields, exclusions, direct .tres loading, and structural fixture governance; a real probe generated one source and sixteen tiles.",
+      "verification": "Pinned headless fixture imports the PNG, loads source 0, and asserts tile count, region size, terrain mode/count, and representative masks.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD003-004",
+      "dimension": "migration-compatibility",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Archive format 3 strictness and old-reader timing needed closure",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 8",
+          "claim": "Review required mandatory terrain fields/entry, character-only prohibition, malformed behavior, and the exact rejection step."
+        }
+      ],
+      "problem": "Readers could accept terrain-less v3 archives or parse project data before recognizing an unsupported version.",
+      "impact": "Compatibility could expose partial state or silently weaken archive contracts.",
+      "remediation": "Required terrainSchemaVersion 1 and exactly one inventoried terrain.json, forbade character-only v3, and fixed old-reader rejection at manifest step 2 before inventory or graph parsing.",
+      "verification": "v1/v2 byte regressions, v3 round trip, missing/duplicate terrain tamper fixtures, and baseline old-reader no-mutation test.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD003-005",
+      "dimension": "ux-accessibility",
+      "severity": "medium",
+      "confidence": 9,
+      "title": "Color draft and offline export ownership were implicit",
+      "evidence": [
+        {
+          "source": "product-design-spec.md sections 5 and 7",
+          "claim": "Round one required a precise transient invalid-text boundary and local export path."
+        }
+      ],
+      "problem": "Invalid color text could leak into persistence and offline export could be interpreted as service-worker/network work.",
+      "impact": "Users could reopen invalid state or see inconsistent offline failures.",
+      "remediation": "Made invalid text component-local and non-dirty/non-serializable, and bound rendering/export to bundled Canvas 2D code, local materials, in-memory encoding, and browser download APIs.",
+      "verification": "Invalid-draft reload test and service-worker-controlled zero-request paint/save/generic/Godot export flow.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD003-006",
+      "dimension": "data-failure",
+      "severity": "medium",
+      "confidence": 10,
+      "title": "Terrain persistence migration and desktop conflict inclusion needed exactness",
+      "evidence": [
+        {
+          "source": "engineering-spec.md section 7 and product/electron/main.ts",
+          "claim": "Review required store creation/reopen behavior and proof that terrain.json participates in the existing fingerprint."
+        }
+      ],
+      "problem": "An implementation could recreate/clear storage or omit external terrain edits from conflict detection.",
+      "impact": "Reopen durability and desktop no-overwrite guarantees could fail.",
+      "remediation": "Specified create-if-absent v3-to-v4 behavior, no reopen clearing, one complete graph transaction, and manifest-plus-inventory fingerprint inclusion before save.",
+      "verification": "DB upgrade/reopen fixtures, interruption/stale revision tests, and packaged external terrain.json conflict flow.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD003-007",
+      "dimension": "scope-alternatives",
+      "severity": "low",
+      "confidence": 9,
+      "title": "Fixed 12x8 map rationale was not explicit",
+      "evidence": [
+        {
+          "source": "traceability.json DEC-UPD003-BOUNDARY and OUT-UPD003-ARBITRARY-MAP",
+          "claim": "Round one found the fixed size but not its product-boundary rationale."
+        }
+      ],
+      "problem": "A future reader could mistake the verification canvas for an arbitrary level-size choice.",
+      "impact": "Later scope discussion could reopen level-editor semantics without evidence.",
+      "remediation": "Recorded 12x8 as a bounded verification surface for edges, corners, holes, accessibility, persistence, and performance, not a game-level format.",
+      "verification": "Generated decisions and exclusions reproduce the canonical rationale and UI never exposes dimensions/import/export.",
+      "disposition": "fixed"
+    }
+  ],
+  "unresolvedDecisions": [],
+  "editsMade": [
+    "Selected one optional built-in static terrain document as the smallest coherent next producer and excluded adjacent scene/pack/editor scope.",
+    "Created and validated the 119-record canonical update graph and complete product, UX, engineering, quality, threat, release, rollback, and evidence contracts.",
+    "Specified exact palette derivation, xorshift32 tile pixels, cardinal masks, storage transactions, archive v3, old-reader behavior, generic export, and Godot 4.7.1 metadata.",
+    "Clarified invalid color drafts, fixed-map rationale, offline export ownership, IndexedDB migration, Electron fingerprints, and character-theme isolation.",
+    "Ran a real Godot 4.7.1 ResourceSaver probe that produced one TileSet source and sixteen tiles.",
+    "Repaired all promoted findings through three unfamiliar-implementer rounds and regenerated canonical projections."
+  ],
+  "implementationReadiness": {
+    "unfamiliarImplementerPass": true,
+    "blockingFindingIds": [],
+    "implementationSequence": [
+      "WP-UPD003-SPEC: validated review, approval, generated projections, and specification lock",
+      "WP-UPD003-CONTRACTS: strict terrain types/schema, materials, masks, renderer, and baseline hash regressions",
+      "WP-UPD003-PERSISTENCE: IndexedDB v4 and Electron complete-graph save/reopen/snapshot/conflict behavior",
+      "WP-UPD003-ARCHIVE: deterministic archive v3, v1/v2 preservation, old-reader and adversarial fixtures",
+      "WP-UPD003-EXPORT: generic package, direct Godot 4.7.1 TileSet, credits, and downstream fixture",
+      "WP-UPD003-UX: terrain empty/workspace/removal/export/recovery views in web and packaged Electron",
+      "WP-UPD003-REGRESSION: actual UI, cross-host, offline, accessibility, performance, rollback, and all retained baselines"
+    ],
+    "verificationGates": [
+      "Traceability, generated docs, product-update, review, and lock validators pass",
+      "All 64 material-mask fixtures and palette vectors are exact and repeatable",
+      "Character-only graph, repository, archive v1/v2, renderer, generic/Godot export, packs, and credits do not drift",
+      "Archive v3 rejects tamper and old readers reject literal 3 before graph parsing or mutation",
+      "Pinned Godot 4.7.1 loads source 0 and validates sixteen tiles plus representative peering masks",
+      "All eight flows and 28 behaviors pass production web and packaged Electron evidence",
+      "Bidirectional cross-host, controlled offline, 320px/200%, performance, conflict, rollback, and inherited external release gates remain categorical"
+    ]
+  },
+  "conditions": [],
+  "adversarialReview": {
+    "maxRounds": 3,
+    "rounds": [
+      {
+        "round": 1,
+        "reviewer": "independent unfamiliar implementer",
+        "result": "fail",
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 2,
+        "fixed": 5,
+        "summary": "The raw review incorrectly classified intentionally absent implementation as specification defects; triage retained valid color-draft, Godot, offline, fixed-map, and version-pinning clarity findings and repaired them."
+      },
+      {
+        "round": 2,
+        "reviewer": "independent unfamiliar implementer with implementation-status exclusion",
+        "result": "fail",
+        "critical": 2,
+        "high": 2,
+        "medium": 6,
+        "low": 1,
+        "fixed": 11,
+        "summary": "Found genuine deterministic-byte gaps in palette and tile rendering plus archive, peering, migration, fingerprint, draft, offline, and fixture exactness; all promoted findings were repaired in canonical specs."
+      },
+      {
+        "round": 3,
+        "reviewer": "independent unfamiliar implementer delta verification",
+        "result": "pass",
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "fixed": 0,
+        "summary": "Verified every repaired deterministic, persistence, archive, Godot, draft, and offline contract; found no contradiction, unresolved material decision, or required product invention."
+      }
+    ],
+    "remainingConcerns": []
+  },
+  "stabilization": {
+    "state": "locked",
+    "lockId": "LOCK-UPD-003-001",
+    "lockManifest": "delivery/updates/UPD-003-terrain-environment-producer/spec-lock.json",
+    "lockedAt": "2026-07-21T18:31:13.150Z",
+    "lockedBy": "product owner",
+    "decisionOwnerApproval": true,
+    "approvalRef": "delivery/updates/UPD-003-terrain-environment-producer/spec-approval.json",
+    "approvalId": "APPROVAL-UPD-003-LOCK-001",
+    "productVisionAlignment": "A deterministic built-in terrain producer proves that the local-first project can carry a structurally different second producer across web and Electron without turning the MVP into a scene editor or weakening character compatibility.",
+    "settledDecisionIds": [
+      "DEC-UPD003-BOUNDARY",
+      "DEC-UPD003-CARDINAL",
+      "DEC-UPD003-GRAPH",
+      "DEC-UPD003-ARCHIVE",
+      "DEC-UPD003-PALETTE",
+      "DEC-UPD003-BUILTIN"
+    ],
+    "justifiedChanges": []
+  }
+}

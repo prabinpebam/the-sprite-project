@@ -8,6 +8,10 @@ import { createProject } from './project'
 import { sha256Hex } from './sha256'
 import { readSpritePack } from './spritepack'
 import { spritePackFixtureBytes } from './spritepack-test-fixture'
+import { createTerrainDocument } from './terrain'
+import { createCharacter } from './project-v2'
+import { packById } from './packs'
+import { ProductError } from './errors'
 
 async function fixture() {
   const legacy = createProject('Portable Hero', '2026-07-19T00:00:00.000Z')
@@ -35,6 +39,15 @@ function mutateFirstCentralEntry(archive: Uint8Array, mutate: (view: DataView, o
     }
   }
   throw new Error('Central directory not found.')
+}
+
+function readWithSingleCharacterBaseline(bytes: Uint8Array, mutation: () => void): void {
+  const entries = unzipSync(bytes)
+  const project = JSON.parse(new TextDecoder().decode(entries['project.json'])) as { recipeIds?: unknown[] }
+  if (!Array.isArray(project.recipeIds) || project.recipeIds.length !== 1) {
+    throw new ProductError({ code: 'invalid-project', message: 'Baseline reader supports exactly one character.', operation: 'archive:read', recoverable: true })
+  }
+  mutation()
 }
 
 describe('spriteproject archives', () => {
@@ -81,8 +94,47 @@ describe('spriteproject archives', () => {
     const valid = await writeProjectArchive(await fixture())
     const entries = unzipSync(valid)
     const manifest = JSON.parse(new TextDecoder().decode(entries['archive-manifest.json']))
-    entries['archive-manifest.json'] = Uint8Array.from(canonicalJsonBytes({ ...manifest, archiveFormatVersion: 3 }))
+    entries['archive-manifest.json'] = Uint8Array.from(canonicalJsonBytes({ ...manifest, archiveFormatVersion: 4 }))
     await expect(readProjectArchive(zipSync(entries))).rejects.toMatchObject({ code: 'unsupported-version' })
+  })
+
+  it('writes deterministic archive v3 with one terrain document and restores the complete graph', async () => {
+    const graph = await fixture()
+    graph.terrain = createTerrainDocument(graph.project.theme, 'grass', graph.project.createdAt, 'terrain-1')
+    const first = await writeProjectArchive(graph)
+    expect(await writeProjectArchive(graph)).toEqual(first)
+    const restored = await readProjectArchive(first)
+    expect(restored.manifest.archiveFormatVersion).toBe(3)
+    expect(restored.manifest.terrainSchemaVersion).toBe(1)
+    expect(restored.manifest.entries.filter(entry => entry.path === 'terrain.json')).toHaveLength(1)
+    expect(restored.graph).toEqual(graph)
+  })
+
+  it('inventories every character separately and rejects multi-character data in the baseline reader before mutation', async () => {
+    const graph = await fixture()
+    graph.terrain = createTerrainDocument(graph.project.theme, 'dirt', graph.project.createdAt, 'terrain-1')
+    const cast = createCharacter(graph, 'Scout', packById('wayfarer'), '2026-07-22T00:00:00.000Z', 'scout')
+    const archive = await writeProjectArchive(cast)
+    expect(await writeProjectArchive(cast)).toEqual(archive)
+    const restored = await readProjectArchive(archive)
+    expect(restored.graph).toEqual(cast)
+    expect(restored.manifest.entries.filter(entry => entry.path.startsWith('recipes/')).map(entry => entry.path)).toEqual([
+      `recipes/${graph.project.activeRecipeId}.json`,
+      'recipes/scout.json',
+    ].sort())
+    let mutated = false
+    expect(() => readWithSingleCharacterBaseline(archive, () => { mutated = true })).toThrowError(expect.objectContaining({ code: 'invalid-project' }))
+    expect(mutated).toBe(false)
+  })
+
+  it('rejects format 3 with missing or invalid terrain before returning a graph', async () => {
+    const graph = await fixture()
+    graph.terrain = createTerrainDocument(graph.project.theme, 'stone', graph.project.createdAt, 'terrain-1')
+    const valid = await writeProjectArchive(graph)
+    const missingEntries = unzipSync(valid)
+    delete missingEntries['terrain.json']
+    await expect(readProjectArchive(zipSync(missingEntries))).rejects.toMatchObject({ code: 'archive-invalid' })
+    await expect(readProjectArchive(await replacePayload(valid, 'terrain.json', canonicalJsonBytes({ ...graph.terrain, hostPath: 'C:\\terrain' })))).rejects.toMatchObject({ code: 'archive-invalid' })
   })
 
   it('writes archive v2 only for an exact non-bundled lock and restores immutable embedded bytes', async () => {

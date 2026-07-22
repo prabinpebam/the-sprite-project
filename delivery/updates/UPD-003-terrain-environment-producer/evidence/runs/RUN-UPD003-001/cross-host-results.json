@@ -1,0 +1,132 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.upd003.cross-host.config.ts"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.upd003.cross-host.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/delivery/updates/UPD-003-terrain-environment-producer/evidence/runs/RUN-UPD003-001/cross-host-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "upd003-cross-host.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../delivery/updates/UPD-003-terrain-environment-producer/evidence/runs/RUN-UPD003-001/cross-host-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../delivery/updates/UPD-003-terrain-environment-producer/evidence/runs/RUN-UPD003-001/cross-host-report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run build && npm run preview -- --host 127.0.0.1 --port 4177",
+      "url": "http://127.0.0.1:4177",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "upd003-cross-host.spec.ts",
+      "file": "upd003-cross-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-TERRAIN-CROSS-HOST preserves archive v3, terrain pixels, map, character, and credits web to Electron to web",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3686,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T18:52:39.745Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d54ead55de94a176401e-bb25ec0fa88f4356cf76",
+          "file": "upd003-cross-host.spec.ts",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-21T18:52:31.293Z",
+    "duration": 12787.355000000001,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

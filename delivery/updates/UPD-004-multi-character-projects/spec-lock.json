@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "lockId": "LOCK-UPD-004-001",
+  "state": "locked",
+  "target": "delivery/updates/UPD-004-multi-character-projects",
+  "baselineReviewId": "REVIEW-UPD-004-001",
+  "lockedBy": "product owner",
+  "approvalRef": "delivery/updates/UPD-004-multi-character-projects/spec-approval.json",
+  "approvalId": "APPROVAL-UPD-004-LOCK-001",
+  "approvalEvidence": "The direct 2026-07-22 product-owner request authorized detailed multi-character project scope and complete execution through the product update pipeline.",
+  "productVisionAlignment": "A bounded cast collection turns the existing recipe graph into a coherent multi-asset project while preserving local-first hosts, terrain, deterministic exports, and recovery.",
+  "workspaceRoot": "../../..",
+  "settledDecisionIds": [
+    "DEC-UPD004-COLLECTION",
+    "DEC-UPD004-SAVE",
+    "DEC-UPD004-SCHEMA",
+    "DEC-UPD004-ACTIVE",
+    "DEC-UPD004-THEME",
+    "DEC-UPD004-DELETE",
+    "DEC-UPD004-EXPORT"
+  ],
+  "allowedWithoutReopen": [
+    "implementation code conforming to the locked contracts",
+    "traceability status, run, issue, and decision evidence updates owned by generated evidence",
+    "regeneration of derived projections from unchanged canonical sources",
+    "test fixtures, diagnostics, and evidence harnesses that do not alter product semantics"
+  ],
+  "reopenTriggers": [
+    "evidence-backed contract defect, infeasibility, data loss, security, privacy, or untestable behavior",
+    "material implementation, user, operational, performance, compatibility, or downstream evidence",
+    "decision-owner change to promise, target user, platform, deadline, law, or dependency constraint",
+    "measured user value or lifecycle cost improvement exceeding full change and revalidation cost"
+  ],
+  "consistencyChecks": [
+    {
+      "type": "generated-files",
+      "script": "delivery/updates/UPD-004-multi-character-projects/generate-docs.mjs",
+      "outputs": [
+        "delivery/updates/UPD-004-multi-character-projects/customer-promise.md",
+        "delivery/updates/UPD-004-multi-character-projects/scenarios.md",
+        "delivery/updates/UPD-004-multi-character-projects/capabilities.md",
+        "delivery/updates/UPD-004-multi-character-projects/task-flows.md",
+        "delivery/updates/UPD-004-multi-character-projects/experience-architecture.md"
+      ]
+    }
+  ],
+  "finalization": {
+    "reviewPath": "delivery/updates/UPD-004-multi-character-projects/spec-review.json"
+  },
+  "entries": [
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/baseline.json",
+      "mode": "bytes",
+      "sha256": "f773b36e3c46ac3415f5e97feaada1658492968626e70ec41e52509a56617d58"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/change-proposal.md",
+      "mode": "bytes",
+      "sha256": "91b0b3f345eecdaa9b6b38d7e01bdd2e46a1cf1ae1deaf10367be59fca0a7b78"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/impact-analysis.md",
+      "mode": "bytes",
+      "sha256": "2a602d593922149dcaa65a95694a38a92f02ecabdd10ae1951ff8b51f1af303a"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/traceability.json",
+      "mode": "traceability-contract",
+      "sha256": "083595c489bc6b306923ece08b5c5daf4f8dafd355f140ee0d10eaccffbaba28"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/product-design-spec.md",
+      "mode": "bytes",
+      "sha256": "89a28ae6e7ce97937d3f98c1b6cc946efc5375be16b0bdf7c3cb636f3137b02e"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/engineering-spec.md",
+      "mode": "bytes",
+      "sha256": "0e07494da2a83114e4246de0b0eda8cbb791cb6660b24c1bd693145012993046"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/quality-scenarios.md",
+      "mode": "bytes",
+      "sha256": "8533fad24f3b46d6829c69469bac8948ea462e85fda4187a3660d526f274c6c6"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/threat-model.md",
+      "mode": "bytes",
+      "sha256": "732d2d25698dc04324119f96952ff1abc1492902c472707b9b026d8be61af422"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/release-gate.md",
+      "mode": "bytes",
+      "sha256": "c059f69ed87b0ae7593a90722f1664a3dafe18e60525670ea3f82d0a6ca5dcd8"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/decisions.md",
+      "mode": "bytes",
+      "sha256": "cd11997f3aaf3cccb80e05299a19c99042dd6f36575ca19c14035555b834fb6c"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/scope-ledger.md",
+      "mode": "bytes",
+      "sha256": "7afd6cb5fd05149361b7b219a51fe37f2d2711866bde7166adfd945f1e6a3801"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/execution-plan.md",
+      "mode": "bytes",
+      "sha256": "c94af2e4e8b799fc241d35441c566e224bac1af10d419988aa41fc5320f4ac0c"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/spec-review.json",
+      "mode": "review-contract",
+      "sha256": "14f49d843cb4c3e035509a429f2c17ad8959fa3a562e90b5dff4fc59526874db"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/spec-approval.json",
+      "mode": "bytes",
+      "sha256": "09bbb0171a69f80f74e7865b1fe00e38f9515b04572c0a0b2c6dcc237e05c18d"
+    },
+    {
+      "path": "delivery/updates/UPD-004-multi-character-projects/owner-review.md",
+      "mode": "bytes",
+      "sha256": "ca1b3028afde02ea461872b16d473a02d60b2054bda9ee9a2dbc87918d7855c9"
+    }
+  ],
+  "lockedAt": "2026-07-22T03:01:38.538Z"
+}

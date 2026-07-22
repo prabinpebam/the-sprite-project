@@ -61,6 +61,25 @@ export interface ContentPack {
 
 export type ThemeTokens = Record<TokenId, string>
 
+export type TerrainMaterialId = 'grass' | 'dirt' | 'sand' | 'stone'
+export type TerrainColorRole = 'surface' | 'detail' | 'edge' | 'shadow'
+export type TerrainPalette = Record<TerrainColorRole, `#${string}`>
+
+export interface TerrainDocumentV1 {
+  schemaVersion: 1
+  id: string
+  name: string
+  materialId: TerrainMaterialId
+  palette: TerrainPalette
+  map: {
+    width: 12
+    height: 8
+    occupied: boolean[]
+  }
+  createdAt: string
+  updatedAt: string
+}
+
 export interface ThemePreset {
   id: string
   name: string
@@ -125,6 +144,7 @@ export interface SpriteProjectV2 {
 export interface ProjectGraphV2 {
   project: SpriteProjectV2
   recipes: Record<string, CharacterRecipeV1>
+  terrain: TerrainDocumentV1 | null
 }
 
 export interface AnimationFrame {

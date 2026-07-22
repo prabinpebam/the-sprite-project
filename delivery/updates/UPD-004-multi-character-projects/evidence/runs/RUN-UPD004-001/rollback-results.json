@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "runId": "RUN-UPD004-001",
+  "result": "passed",
+  "checks": {
+    "oneCharacterProjectsRemainValid": true,
+    "multiCharacterArchiveRoundTrip": true,
+    "singleCharacterReaderRejectsBeforeMutation": true,
+    "removedCharacterSnapshotRestore": true,
+    "siblingCanonicalBytesPreserved": true,
+    "terrainCanonicalBytesPreserved": true,
+    "folderStaleRecipeRemovedAfterSave": true,
+    "localDataDeletionDuringWithdrawal": false
+  },
+  "source": "unit-results.json, playwright-results.json, electron-results.json, and cross-host-results.json"
+}

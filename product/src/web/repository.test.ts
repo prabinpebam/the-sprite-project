@@ -6,6 +6,9 @@ import { migrateProjectV1ToV2 } from '../domain/migration'
 import { packLockFor } from '../domain/pack-locks'
 import { readSpritePack } from '../domain/spritepack'
 import { spritePackFixture, spritePackFixtureBytes } from '../domain/spritepack-test-fixture'
+import { createTerrainDocument } from '../domain/terrain'
+import { createCharacter, removeCharacter } from '../domain/project-v2'
+import { packById } from '../domain/packs'
 import type { PackDraftAssetV1 } from '../domain/pack-types'
 import { assertPackDraftCapacity, classifyStoragePressure, LEGACY_PROJECT_KEY, PACK_DRAFT_LIMITS, WorkspaceRepository } from './repository'
 
@@ -51,6 +54,43 @@ describe('web workspace repository', () => {
     const saved = await value.saveGraph(edited, 0, 'autosave', '2026-07-20T00:00:00.000Z')
     expect(saved.project.revision).toBe(1)
     expect((await value.snapshots(saved.project.id))[0].graph.project.name).toBe('Repository Hero')
+  })
+
+  it('persists terrain atomically and snapshots the prior terrain', async () => {
+    const value = await repository()
+    const candidate = await graph('Terrain Repository')
+    candidate.terrain = createTerrainDocument(candidate.project.theme, 'grass', candidate.project.createdAt, 'terrain-1')
+    const created = await value.createGraph(candidate)
+    expect((await value.loadGraph(created.project.id))?.terrain).toEqual(candidate.terrain)
+
+    const editedTerrain = structuredClone(candidate.terrain)
+    editedTerrain.map.occupied[0] = false
+    editedTerrain.updatedAt = '2026-07-20T00:00:00.000Z'
+    const saved = await value.saveGraph({ ...created, terrain: editedTerrain }, 0, 'autosave', editedTerrain.updatedAt)
+    expect((await value.loadGraph(saved.project.id))?.terrain?.map.occupied[0]).toBe(false)
+    expect((await value.snapshots(saved.project.id))[0].graph.terrain?.map.occupied[0]).toBe(true)
+
+    await value.deleteProject(saved.project.id)
+    expect(await value.loadGraph(saved.project.id)).toBeNull()
+    expect(await (await value.database()).get('terrainDocuments', saved.project.id)).toBeUndefined()
+  })
+
+  it('persists separate character records and deletes a removed recipe in the same revision', async () => {
+    const value = await repository()
+    const candidate = await graph('Cast Repository')
+    candidate.terrain = createTerrainDocument(candidate.project.theme, 'stone', candidate.project.createdAt, 'terrain-1')
+    const withScout = createCharacter(candidate, 'Scout', packById('wayfarer'), '2026-07-20T00:00:00.000Z', 'scout')
+    const created = await value.createGraph(withScout)
+    expect((await value.loadGraph(created.project.id))?.project.recipeIds).toHaveLength(2)
+
+    const withoutScout = removeCharacter(created, 'scout', '2026-07-21T00:00:00.000Z')
+    const saved = await value.saveGraph(withoutScout, 0, 'character removal', '2026-07-21T00:00:00.000Z')
+    const reopened = await value.loadGraph(saved.project.id)
+    expect(reopened).toEqual(saved)
+    expect(Object.keys(reopened!.recipes)).toEqual(saved.project.recipeIds)
+    expect(await (await value.database()).get('recipes', [saved.project.id, 'scout'])).toBeUndefined()
+    expect((await value.snapshots(saved.project.id))[0].graph.recipes.scout.name).toBe('Scout')
+    expect(reopened?.terrain).toEqual(candidate.terrain)
   })
 
   it('writes nothing when the expected revision is stale', async () => {

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "lockId": "LOCK-UPD-003-001",
+  "state": "locked",
+  "target": "delivery/updates/UPD-003-terrain-environment-producer",
+  "baselineReviewId": "REVIEW-UPD-003-001",
+  "lockedAt": "2026-07-21T18:31:13.150Z",
+  "lockedBy": "product owner",
+  "approvalRef": "delivery/updates/UPD-003-terrain-environment-producer/spec-approval.json",
+  "approvalId": "APPROVAL-UPD-003-LOCK-001",
+  "approvalEvidence": "The direct 2026-07-21 product-owner request authorized selecting, fully specifying, documenting, locking, and implementing the next coherent MVP increment through the product update pipeline.",
+  "productVisionAlignment": "A deterministic built-in terrain producer proves that the local-first project can carry a structurally different second producer across web and Electron without turning the MVP into a scene editor or weakening character compatibility.",
+  "workspaceRoot": "../../..",
+  "settledDecisionIds": [
+    "DEC-UPD003-BOUNDARY",
+    "DEC-UPD003-CARDINAL",
+    "DEC-UPD003-GRAPH",
+    "DEC-UPD003-ARCHIVE",
+    "DEC-UPD003-PALETTE",
+    "DEC-UPD003-BUILTIN"
+  ],
+  "allowedWithoutReopen": [
+    "implementation code that conforms to the locked contracts",
+    "traceability status, decision evidence, run, and issue updates owned by generated evidence",
+    "regeneration of derived customer-promise, scenario, capability, task-flow, experience, and docs pages from unchanged canonical sources",
+    "test fixtures, benchmarks, diagnostics, and evidence harnesses that do not alter product semantics"
+  ],
+  "reopenTriggers": [
+    "evidence-backed contract defect, infeasibility, data-loss, security, privacy, or untestable behavior",
+    "material new implementation, user, operational, performance, compatibility, or downstream-consumer evidence",
+    "decision-owner change to promise, product vision, target user, platform, funding, deadline, law, or dependency constraint",
+    "measured user value, risk reduction, or lifecycle cost reduction that exceeds full change and revalidation cost"
+  ],
+  "consistencyChecks": [
+    {
+      "type": "generated-files",
+      "script": "delivery/updates/UPD-003-terrain-environment-producer/generate-docs.mjs",
+      "outputs": [
+        "delivery/updates/UPD-003-terrain-environment-producer/customer-promise.md",
+        "delivery/updates/UPD-003-terrain-environment-producer/scenarios.md",
+        "delivery/updates/UPD-003-terrain-environment-producer/capabilities.md",
+        "delivery/updates/UPD-003-terrain-environment-producer/task-flows.md",
+        "delivery/updates/UPD-003-terrain-environment-producer/experience-architecture.md",
+        "docs/execution/updates/upd-003-terrain-environment-producer.html"
+      ]
+    }
+  ],
+  "finalization": {
+    "reviewPath": "delivery/updates/UPD-003-terrain-environment-producer/spec-review.json"
+  },
+  "entries": [
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/baseline.json",
+      "mode": "bytes",
+      "sha256": "2735e5961171eb3fb279699a4c57882902835d2da6c4198a6a01dee9f92de6dc"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/change-proposal.md",
+      "mode": "bytes",
+      "sha256": "c21cc2405f5e182a8978fd9e091a6b6b367b8dcd8af3037f940ef7461d2a6b5c"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/impact-analysis.md",
+      "mode": "bytes",
+      "sha256": "daeec60bfebef1d57b0200c7dbc43266e6ebcb5aa65f349947ae1c86ef193eef"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/traceability.json",
+      "mode": "traceability-contract",
+      "sha256": "fdb1042d52ac4c382408bf99e23ba822d8ab442b3f71763cac86a7989e1547cc"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/product-design-spec.md",
+      "mode": "bytes",
+      "sha256": "3ace9645116c048138866b7004aded488c1ca89f9dde584031d737a4e22ef875"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/engineering-spec.md",
+      "mode": "bytes",
+      "sha256": "d228387ede020f782f7a5878ac2e372afe31d04f0917e2b7b2d9c71d45110abe"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/quality-scenarios.md",
+      "mode": "bytes",
+      "sha256": "f3c22499c7537d0757d0915ca2847a3666c11e7d79d7b18204f267d0c593460e"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/threat-model.md",
+      "mode": "bytes",
+      "sha256": "068012481e30e80b3ca54eb3b78629f9450ac1ad925437022e51d8a99f953cff"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/release-gate.md",
+      "mode": "bytes",
+      "sha256": "2d12586107a35f3ab4246c76467da5577fd4c4dde1e1302396d20edd6f07f0c2"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/decisions.md",
+      "mode": "bytes",
+      "sha256": "32518f2fbed268b5886b8c5aae7019981a5890d344bec3dd48d6472317e0a682"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/scope-ledger.md",
+      "mode": "bytes",
+      "sha256": "ec4adf75b2eec20c7e1667aaa2d9eb0e4427f85b71da83138e29abcbe70df726"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/execution-plan.md",
+      "mode": "bytes",
+      "sha256": "545861e0b521f2e8aab9739ae79e7b72063dfe146df7bd85e7389645588c4765"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/spec-review.json",
+      "mode": "review-contract",
+      "sha256": "40d65b40f17be0cb76c504c25104fcec9f0b2fdbb3646f74959e68d201327083"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/spec-approval.json",
+      "mode": "bytes",
+      "sha256": "7d4247da451b06fce3409e237a3d263a067e2bae62f9f22fc529ae31ab5c1507"
+    },
+    {
+      "path": "delivery/updates/UPD-003-terrain-environment-producer/owner-review.md",
+      "mode": "bytes",
+      "sha256": "6bbd8d8944323a93c8502e70d6c2fa8f039f2e9fe4e44f419b69867e7ae7934c"
+    },
+    {
+      "path": "docs/execution/updates/upd-003-terrain-environment-producer.html",
+      "mode": "html-contract",
+      "sha256": "0386a18c836ebf34192aee76a6aaf9e6702afa9f8dc9d7562d2894b335ecac9e"
+    }
+  ]
+}

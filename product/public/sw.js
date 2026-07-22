@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sprite-project-shell-v1'
+const CACHE_NAME = 'sprite-project-shell-v2'
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg']
 
 self.addEventListener('install', event => {
@@ -20,11 +20,21 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return
   const url = new URL(request.url)
   if (url.origin !== self.location.origin) return
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request).then(response => {
+      if (response.ok) {
+        const copy = response.clone()
+        void caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy))
+      }
+      return response
+    }).catch(() => caches.match('./index.html')))
+    return
+  }
   event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
     if (response.ok) {
       const copy = response.clone()
       void caches.open(CACHE_NAME).then(cache => cache.put(request, copy))
     }
     return response
-  }).catch(() => caches.match('./index.html'))))
+  })))
 })

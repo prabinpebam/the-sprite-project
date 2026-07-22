@@ -1,0 +1,263 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.upd004.config.ts"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.upd004.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/delivery/updates/UPD-004-multi-character-projects/evidence/runs/RUN-UPD004-001/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "upd004-character-flows.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../delivery/updates/UPD-004-multi-character-projects/evidence/runs/RUN-UPD004-001/playwright-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../delivery/updates/UPD-004-multi-character-projects/evidence/runs/RUN-UPD004-001/report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run build && npm run preview -- --host 127.0.0.1 --port 4180",
+      "url": "http://127.0.0.1:4180",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "upd004-character-flows.spec.ts",
+      "file": "upd004-character-flows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-CHARACTER-CREATE-SWITCH-MANAGE independently saves and recovers a project cast",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1587,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-22T03:13:27.415Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTgwLyIsCiAgInRpdGxlIjogIkNhc3QgUHJvamVjdCAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgInZpZXdwb3J0IjogWwogICAgMTQ0MCwKICAgIDkwMAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgImFjdGl2ZVJvd3MiOiBbCiAgICAiR3VhcmRBY3RpdmVXYXlmYXJlciAxLjAuMCDCtyBSZWFkeSBFZGl0IGFjdGl2ZSBjaGFyYWN0ZXIiCiAgXSwKICAiY2hhcmFjdGVyUm93cyI6IFsKICAgICJIZXJvV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiU2NvdXRXYXlmYXJlciAxLjAuMCDCtyBSZWFkeU9wZW4gY2hhcmFjdGVyIiwKICAgICJHdWFyZEFjdGl2ZVdheWZhcmVyIDEuMC4wIMK3IFJlYWR5IEVkaXQgYWN0aXZlIGNoYXJhY3RlciIKICBdLAogICJjYW52YXNlcyI6IFsKICAgIHsKICAgICAgImxhYmVsIjogIkd1YXJkLCB3YWxrLCBmYWNpbmcgc291dGgiLAogICAgICAiaGFzaCI6ICI0MTBhMTQ1NSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "01a4060220aa1f10e49b-66590a963d78b53db1fb",
+          "file": "upd004-character-flows.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "QS-CHARACTER-REFLOW keeps collection controls usable at 320px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 366,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-22T03:13:29.093Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTgwLyIsCiAgInRpdGxlIjogIkNhc3QgUHJvamVjdCAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgInZpZXdwb3J0IjogWwogICAgMzIwLAogICAgODAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiYWN0aXZlUm93cyI6IFsKICAgICJTY291dEFjdGl2ZVdheWZhcmVyIDEuMC4wIMK3IFJlYWR5IEVkaXQgYWN0aXZlIGNoYXJhY3RlciIKICBdLAogICJjaGFyYWN0ZXJSb3dzIjogWwogICAgIkhlcm9XYXlmYXJlciAxLjAuMCDCtyBSZWFkeU9wZW4gY2hhcmFjdGVyIiwKICAgICJTY291dEFjdGl2ZVdheWZhcmVyIDEuMC4wIMK3IFJlYWR5IEVkaXQgYWN0aXZlIGNoYXJhY3RlciIKICBdLAogICJjYW52YXNlcyI6IFsKICAgIHsKICAgICAgImxhYmVsIjogIlNjb3V0LCB3YWxrLCBmYWNpbmcgc291dGgiLAogICAgICAiaGFzaCI6ICI0MTBhMTQ1NSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "01a4060220aa1f10e49b-2083d70a0a46a813fa0b",
+          "file": "upd004-character-flows.spec.ts",
+          "line": 114,
+          "column": 1
+        },
+        {
+          "title": "TF-CHARACTER-RETURN manages, reopens, and exports a character offline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 688,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-22T03:13:29.464Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTgwLyIsCiAgInRpdGxlIjogIkNhc3QgUHJvamVjdCAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgInZpZXdwb3J0IjogWwogICAgMTQ0MCwKICAgIDkwMAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgImFjdGl2ZVJvd3MiOiBbXSwKICAiY2hhcmFjdGVyUm93cyI6IFtdLAogICJjYW52YXNlcyI6IFsKICAgIHsKICAgICAgImxhYmVsIjogIk9mZmxpbmUgU2NvdXQsIHdhbGssIGZhY2luZyBzb3V0aCIsCiAgICAgICJoYXNoIjogIjQxMGExNDU1IgogICAgfQogIF0sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "01a4060220aa1f10e49b-536ccff17ac4ab44ae98",
+          "file": "upd004-character-flows.spec.ts",
+          "line": 124,
+          "column": 1
+        },
+        {
+          "title": "QS-CHARACTER-CAPACITY-PERFORMANCE enforces 16 characters and host thresholds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4910,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-22T03:13:30.160Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "performance.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJob3N0IjogImNocm9taXVtIiwKICAidGhyZXNob2xkcyI6IHsKICAgICJzd2l0Y2hQOTVNcyI6IDUwLAogICAgInNhdmVSZW9wZW5NcyI6IDIwMDAsCiAgICAibWF4TG9uZ1Rhc2tNcyI6IDEwMAogIH0sCiAgIm9ic2VydmVkIjogewogICAgInA5NU1zIjogMzQuMjk5OTk5OTk5ODEzNzM1LAogICAgIm1heExvbmdUYXNrTXMiOiAwLAogICAgInNhbXBsZXMiOiAxMDAsCiAgICAic2F2ZVJlb3Blbk1zIjogMTQzLjQyOTA5OTk5OTk5OTM4CiAgfQp9"
+                    },
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTgwLyIsCiAgInRpdGxlIjogIkNhc3QgUHJvamVjdCAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgInZpZXdwb3J0IjogWwogICAgMTQ0MCwKICAgIDkwMAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgImFjdGl2ZVJvd3MiOiBbCiAgICAiQ2hhcmFjdGVyIDJBY3RpdmVXYXlmYXJlciAxLjAuMCDCtyBSZWFkeSBFZGl0IGFjdGl2ZSBjaGFyYWN0ZXIiCiAgXSwKICAiY2hhcmFjdGVyUm93cyI6IFsKICAgICJIZXJvV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDJBY3RpdmVXYXlmYXJlciAxLjAuMCDCtyBSZWFkeSBFZGl0IGFjdGl2ZSBjaGFyYWN0ZXIiLAogICAgIkNoYXJhY3RlciAzV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDRXYXlmYXJlciAxLjAuMCDCtyBSZWFkeU9wZW4gY2hhcmFjdGVyIiwKICAgICJDaGFyYWN0ZXIgNVdheWZhcmVyIDEuMC4wIMK3IFJlYWR5T3BlbiBjaGFyYWN0ZXIiLAogICAgIkNoYXJhY3RlciA2V2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDdXYXlmYXJlciAxLjAuMCDCtyBSZWFkeU9wZW4gY2hhcmFjdGVyIiwKICAgICJDaGFyYWN0ZXIgOFdheWZhcmVyIDEuMC4wIMK3IFJlYWR5T3BlbiBjaGFyYWN0ZXIiLAogICAgIkNoYXJhY3RlciA5V2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDEwV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDExV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDEyV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDEzV2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDE0V2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDE1V2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIsCiAgICAiQ2hhcmFjdGVyIDE2V2F5ZmFyZXIgMS4wLjAgwrcgUmVhZHlPcGVuIGNoYXJhY3RlciIKICBdLAogICJjYW52YXNlcyI6IFsKICAgIHsKICAgICAgImxhYmVsIjogIkNoYXJhY3RlciAyLCB3YWxrLCBmYWNpbmcgc291dGgiLAogICAgICAiaGFzaCI6ICI0MTBhMTQ1NSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "01a4060220aa1f10e49b-8acfecbd1677f89a337d",
+          "file": "upd004-character-flows.spec.ts",
+          "line": 145,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-22T03:13:21.023Z",
+    "duration": 14301.331,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

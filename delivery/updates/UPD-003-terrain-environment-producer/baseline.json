@@ -1,0 +1,34 @@
+{
+  "updateId": "UPD-003",
+  "baseline": {
+    "name": "Implemented Local Content Pack Ecosystem",
+    "gitRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935",
+    "evidenceRunId": "RUN-UPD002-001",
+    "traceabilityModel": "delivery/updates/UPD-002-local-content-pack-ecosystem/traceability.json",
+    "status": "implemented",
+    "recordCount": 164,
+    "verifiedFlowCount": 11,
+    "verifiedBehaviorCount": 40
+  },
+  "policy": {
+    "immutable": true,
+    "inheritVerifiedStatus": false,
+    "changedRecordsRequireNewEvidence": true,
+    "affectedRetainedFlowsRequireRegression": true
+  },
+  "retainedProductClaims": [
+    "CP-PACK-INSTALL",
+    "CP-PACK-AUTHOR",
+    "CP-PACK-LIFECYCLE",
+    "CP-PACK-PORTABILITY"
+  ],
+  "retainedArchitectureDecisions": [
+    "ADR-001 Zero-Server Web Platform",
+    "ADR-002 Dual-Host Local-First Product",
+    "LOCK-UPD-001-002",
+    "LOCK-UPD-002-001"
+  ],
+  "entryCondition": "The product owner directly requested the next MVP scope, detailed specification, documentation update, and complete implementation on 2026-07-21. The roadmap and prior exclusions assign terrain to Phase 5 after UPD-002 pack evidence.",
+  "entryConditionState": "authorized-by-product-owner",
+  "note": "UPD-003 adds an optional terrain document and archive-v3 reader/writer above the implemented baseline. It does not rewrite character, humanoid pack, project.json schema-v2, archive-v1/v2, or existing export semantics."
+}

@@ -26,8 +26,8 @@
   <p>The North Star does not imply paid infrastructure. The accepted host strategy combines
      <a href="../architecture/decisions/0001-zero-server-web-platform.html">a complete zero-server web baseline</a>
     with <a href="../architecture/decisions/0002-dual-host-local-first-product.html">an optional portable Electron
-    host</a>. Both hosts and the local content-pack ecosystem are implemented through UPD-002;
-    terrain and additional producers remain sequenced behind that evidence. A backend still requires a separate
+    host</a>. Both hosts, the local content-pack ecosystem, the bounded static terrain producer, and multi-character project casts are implemented
+    through UPD-004; expanded terrain, collection organization, scenes, and additional producers remain sequenced behind that evidence. A backend still requires a separate
     funded product update and ADR.</p>
 </div>
 
@@ -79,7 +79,7 @@
   <thead><tr><th>Area</th><th>North Star capability</th><th>Where it begins</th></tr></thead>
   <tbody>
     <tr><td>Characters</td><td>Humanoids, themed packs, creatures, mounts, and rider composition</td><td>MVP humanoid producer</td></tr>
-    <tr><td>World generation</td><td>Autotiled terrain, transitions, biomes, buildings, and props</td><td>Post-MVP second producer</td></tr>
+    <tr><td>World generation</td><td>Autotiled terrain, transitions, biomes, buildings, and props</td><td>UPD-003 static cardinal terrain</td></tr>
     <tr><td>Visual language</td><td>Project-wide themes across all generated and edited assets</td><td>MVP character tokens</td></tr>
     <tr><td>Editing</td><td>Pixel, animation, and map editing without leaving the project</td><td>Deferred until generation is proven</td></tr>
     <tr><td>Composition</td><td>Place and verify complete scenes with anchors and depth sorting</td><td>Shared asset fields in MVP</td></tr>

@@ -23,12 +23,16 @@
 </div>
 
 <div class="slate-callout slate-callout--success" role="note">
-  <p class="slate-callout__title">Implemented expansion · UPD-002</p>
+  <p class="slate-callout__title">Implemented expansions · UPD-002 through UPD-004</p>
   <p>The browser and portable Electron hosts are implemented through
      <a href="../execution/updates/upd-001-dual-host-mvp.html">UPD-001</a>. The implemented content expansion is
      <a href="../execution/updates/upd-002-local-content-pack-ecosystem.html">UPD-002 · Local Content Pack
-     Ecosystem</a>: compatible humanoid packs can grow independently of application releases while exact locks,
-     local custody, provenance, offline use, and cross-host parity remain intact.</p>
+    Ecosystem</a>: compatible humanoid packs can grow independently of application releases while exact locks,
+    local custody, provenance, offline use, and cross-host parity remain intact. The next bounded expansion,
+    <a href="../execution/updates/upd-003-terrain-environment-producer.html">UPD-003 · Terrain Environment
+    Producer</a>, adds one optional static terrain document and proves a structurally different second producer.
+    <a href="../execution/updates/upd-004-multi-character-projects.html">UPD-004 · Multi-character Projects</a>
+    activates the reserved recipe collection so up to 16 independently named character recipes can share one project, theme, terrain, persistence lifecycle, and portable backup.</p>
 </div>
 
 <div class="slate-callout slate-callout--info" role="note">
@@ -104,7 +108,7 @@
 <table>
   <thead><tr><th>Foundation</th><th>MVP use</th><th>Later extension</th></tr></thead>
   <tbody>
-    <tr><td>Versioned project</td><td>Contains character recipes and a theme</td><td>Adds terrain, props, and scenes</td></tr>
+    <tr><td>Versioned project</td><td>Contains character recipes, a theme, and optional static terrain</td><td>Adds props and scenes</td></tr>
     <tr><td>Pack manifest</td><td>Describes character layers and licenses</td><td>Describes biome, structure, and community packs</td></tr>
     <tr><td>Shared asset identity</td><td>References selected sprite layers</td><td>References every generated or imported asset</td></tr>
     <tr><td>Animation descriptor</td><td>Idle and walk frame cycles</td><td>Animated terrain, props, effects, and authored motion</td></tr>
@@ -116,7 +120,7 @@
 </table>
 
 <h2>Explicitly deferred</h2>
-<p>Terrain generation, structures and props, scene composition, manual pixel editing, animation authoring,
+<p>Expanded terrain generation (transitions, animation, arbitrary maps, biomes, and terrain packs), structures and props, scene composition, manual pixel editing, animation authoring,
    mounts and creatures, material maps, user-facing pack creation, a marketplace, Unity integration, live sync,
    CLI/API access, cloud accounts, and collaboration remain outside the MVP.</p>
 

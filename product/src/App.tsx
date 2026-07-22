@@ -1,15 +1,18 @@
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { unzipSync } from 'fflate'
 import {
-  AlertTriangle, Box, Check, CheckCircle2, Download, FileArchive, FolderOpen,
-  Gamepad2, HardDrive, History, Info, Layers3, Palette, Pause, Pencil, Play, Plus, RotateCcw,
+  AlertTriangle, Box, Check, CheckCircle2, Copy, Download, FileArchive, FolderOpen,
+  Gamepad2, HardDrive, History, Info, Layers3, Map, Palette, Pause, Pencil, Play, Plus, RotateCcw,
   Package, Save, ShieldCheck, Sparkles, Trash2, Upload, X,
 } from 'lucide-react'
 import './App.css'
 import { SpriteCanvas } from './components/SpriteCanvas'
 import { PackWorkspace } from './components/PackWorkspace'
+import { EnvironmentWorkspace } from './components/EnvironmentWorkspace'
 import { readProjectArchive, writeProjectArchive, type ReadArchiveResult } from './domain/archive'
 import { buildPackage, downloadBytes } from './domain/export'
+import { buildTerrainPackage } from './domain/terrain-export'
+import { TERRAIN_MATERIALS, terrainPixelHash, renderTerrainAtlas } from './domain/terrain'
 import { ProductError } from './domain/errors'
 import { packLockForPack } from './domain/pack-locks'
 import { assetsForSlot, clearEmbeddedRuntimePacks, packByLock, packBySelectionKey, packSelectionKey, PACKS, registerRuntimePack, selectablePacks } from './domain/packs'
@@ -19,22 +22,24 @@ import {
   creditsFor, exportBlockers, isExportReady, resolvedTheme,
   switchPack, touch,
 } from './domain/project'
-import { applyLegacyProjection, copyProjectGraph, createProjectGraph, legacyProjection } from './domain/project-v2'
+import { activateCharacter, applyLegacyProjection, copyProjectGraph, createCharacter, createProjectGraph, duplicateCharacter, duplicateCharacterName, legacyProjection, removeCharacter, renameCharacter } from './domain/project-v2'
 import { isValidHex, presetById, THEME_PRESETS, TOKEN_DESCRIPTIONS, TOKEN_LABELS } from './domain/themes'
 import {
   DIRECTIONS, REQUIRED_SLOTS, SLOT_IDS, TOKEN_IDS,
-  type AnimationId, type ContentPack, type Direction, type ProjectGraphV2, type SlotId, type SpriteProject, type SpriteProjectV2, type TokenId,
+  type AnimationId, type ContentPack, type Direction, type ProjectGraphV2, type SlotId, type SpriteProject, type SpriteProjectV2, type TerrainDocumentV1, type TokenId,
 } from './domain/types'
 import { classifyStoragePressure, type DisposableDataPreview, type SnapshotRecord, type StoragePressure, WorkspaceRepository } from './web/repository'
 import type { ApprovedLocation, HostInfo, ProjectFingerprint, RecentProject } from './host/bridge'
 
-type ViewId = 'project' | 'compose' | 'theme' | 'preview' | 'storage' | 'packs' | 'export'
+type ViewId = 'project' | 'compose' | 'theme' | 'terrain' | 'preview' | 'storage' | 'packs' | 'export' | 'terrain-export'
 type DialogMode = 'new' | 'rename' | null
+type CharacterDialogState = { mode: 'create' | 'duplicate' | 'rename'; recipeId: string; initialName: string } | null
 
 const NAV_ITEMS = [
   { id: 'project' as const, label: 'Project', icon: FolderOpen },
   { id: 'compose' as const, label: 'Compose', icon: Layers3 },
   { id: 'theme' as const, label: 'Theme', icon: Palette },
+  { id: 'terrain' as const, label: 'Terrain', icon: Map },
   { id: 'preview' as const, label: 'Preview', icon: Play },
   { id: 'storage' as const, label: 'Storage', icon: HardDrive },
   { id: 'packs' as const, label: 'Packs', icon: Package },
@@ -73,6 +78,30 @@ function ProjectDialog({ mode, initialName, onCancel, onSubmit }: {
             {mode === 'new' ? 'Create project' : 'Save name'}
           </button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function CharacterNameDialog({ mode, initialName, onCancel, onSubmit }: {
+  mode: 'create' | 'duplicate' | 'rename'
+  initialName: string
+  onCancel: () => void
+  onSubmit: (name: string) => string | null
+}) {
+  const [name, setName] = useState(initialName)
+  const [error, setError] = useState<string | null>(null)
+  const title = mode === 'create' ? 'Create character' : mode === 'duplicate' ? 'Duplicate character' : 'Rename character'
+  const submit = () => {
+    const nextError = onSubmit(name)
+    setError(nextError)
+  }
+  return (
+    <div className="dialog-backdrop" role="presentation" onKeyDown={event => { if (event.key === 'Escape') onCancel() }}>
+      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="character-dialog-title">
+        <div className="dialog-heading"><div><p className="eyebrow">Project character</p><h2 id="character-dialog-title">{title}</h2></div><button className="icon-button" type="button" aria-label="Cancel" onClick={onCancel}><X /></button></div>
+        <label className="field" htmlFor="character-name"><span>Character name</span><input id="character-name" autoFocus value={name} aria-invalid={Boolean(error)} aria-describedby={error ? 'character-name-error' : undefined} onChange={event => { setName(event.target.value); setError(null) }} onKeyDown={event => { if (event.key === 'Enter') submit() }} />{error && <small id="character-name-error" className="field-error">{error}</small>}</label>
+        <div className="dialog-actions"><button type="button" className="button secondary" onClick={onCancel}>Cancel</button><button type="button" className="button primary" onClick={submit}>{mode === 'create' ? 'Create character' : mode === 'duplicate' ? 'Duplicate character' : 'Save character name'}</button></div>
       </div>
     </div>
   )
@@ -149,6 +178,8 @@ function App() {
   const [view, setView] = useState<ViewId>('project')
   const [selectedSlot, setSelectedSlot] = useState<SlotId>('body')
   const [dialogMode, setDialogMode] = useState<DialogMode>(null)
+  const [characterDialog, setCharacterDialog] = useState<CharacterDialogState>(null)
+  const [characterDeleteId, setCharacterDeleteId] = useState<string | null>(null)
   const [dirty, setDirty] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveConflict, setSaveConflict] = useState<ProjectGraphV2 | null>(null)
@@ -162,6 +193,7 @@ function App() {
   const [disposablePreview, setDisposablePreview] = useState<DisposableDataPreview | null>(null)
   const [announcement, setAnnouncement] = useState('Opening local workspace.')
   const [exportStatus, setExportStatus] = useState('No package generated in this session.')
+  const [terrainExportStatus, setTerrainExportStatus] = useState('No terrain package generated in this session.')
   const [storageStatus, setStorageStatus] = useState('Checking browser storage.')
   const [online, setOnline] = useState(navigator.onLine)
   const [hostInfo, setHostInfo] = useState<HostInfo | null>(null)
@@ -171,6 +203,7 @@ function App() {
   const [desktopConflict, setDesktopConflict] = useState(false)
   const [desktopEmbeddedPackageBytes, setDesktopEmbeddedPackageBytes] = useState<Uint8Array[]>([])
   const [confirmClose, setConfirmClose] = useState(false)
+  const [confirmTerrainRemoval, setConfirmTerrainRemoval] = useState(false)
   const [colorDrafts, setColorDrafts] = useState<Partial<Record<TokenId, string>>>({})
   const [, setPackRegistryRevision] = useState(0)
   const [packActivation, setPackActivation] = useState<ContentPack | null>(null)
@@ -297,6 +330,44 @@ function App() {
     editVersion.current += 1
     setDirty(true)
     if (message) setAnnouncement(message)
+  }
+
+  const updateTerrain = (terrain: TerrainDocumentV1, message?: string) => {
+    setGraph(current => current ? { ...current, terrain } : current)
+    editVersion.current += 1
+    setDirty(true)
+    if (message) setAnnouncement(message)
+  }
+
+  const commitCharacterGraph = (next: ProjectGraphV2, message: string) => {
+    setGraph(next)
+    editVersion.current += 1
+    setDirty(true)
+    setAnnouncement(message)
+  }
+
+  const submitCharacterName = (name: string): string | null => {
+    if (!graph || !characterDialog) return 'Character project is unavailable.'
+    try {
+      const next = characterDialog.mode === 'create'
+        ? pack ? createCharacter(graph, name, pack) : null
+        : characterDialog.mode === 'duplicate'
+          ? duplicateCharacter(graph, characterDialog.recipeId, name)
+          : renameCharacter(graph, characterDialog.recipeId, name)
+      if (!next) return 'The active character pack is unavailable.'
+      commitCharacterGraph(next, characterDialog.mode === 'create' ? `${next.recipes[next.project.activeRecipeId].name} created and opened.` : characterDialog.mode === 'duplicate' ? `${next.recipes[next.project.activeRecipeId].name} duplicated and opened.` : `Character renamed to ${next.recipes[characterDialog.recipeId].name}.`)
+      setCharacterDialog(null)
+      return null
+    } catch (error) {
+      return error instanceof Error ? error.message : 'Character could not be changed.'
+    }
+  }
+
+  const openCharacter = (recipeId: string) => {
+    if (!graph || graph.project.activeRecipeId === recipeId) return
+    const next = activateCharacter(graph, recipeId)
+    commitCharacterGraph(next, `${next.recipes[recipeId].name} is now the active character.`)
+    setView('project')
   }
 
   const closeDialog = () => {
@@ -760,6 +831,29 @@ function App() {
     }
   }
 
+  const runTerrainExport = async (target: 'generic' | 'godot') => {
+    if (!graph?.terrain) return
+    setTerrainExportStatus(`Building ${target} terrain package...`)
+    try {
+      const result = await buildTerrainPackage(graph, target)
+      if (window.spriteHost) {
+        const chosen = await window.spriteHost.chooseExportDirectory()
+        if (!chosen.ok || !chosen.value) return
+        const entries = Object.entries(unzipSync(result.bytes)).map(([relativePath, bytes]) => ({ relativePath, bytes }))
+        const written = await window.spriteHost.writeExport({ destinationGrantId: chosen.value.grantId, entries })
+        if (!written.ok) throw new ProductError(written.error)
+        setTerrainExportStatus(`${written.value.filesWritten.length} terrain files written to ${written.value.location.displayPath}. Atlas #${result.renderHash}.`)
+        setAnnouncement(`${target === 'godot' ? 'Godot 4.7.1' : 'Generic'} terrain files written directly.`)
+      } else {
+        downloadBytes(result.bytes, result.filename)
+        setTerrainExportStatus(`${result.filename} downloaded. Atlas #${result.renderHash}.`)
+        setAnnouncement(`${target === 'godot' ? 'Godot 4.7.1' : 'Generic'} terrain package downloaded.`)
+      }
+    } catch (error) {
+      setTerrainExportStatus(error instanceof ProductError ? `${error.message} (${error.code})` : error instanceof Error ? error.message : 'Terrain export failed.')
+    }
+  }
+
   useEffect(() => {
     let active = true
     void (async () => {
@@ -894,10 +988,23 @@ function App() {
           <div><p className="eyebrow">Local workspace</p><h1 id="project-heading">{project.name}</h1></div>
           <button ref={renameButton} className="button secondary" type="button" onClick={() => setDialogMode('rename')}><Pencil /> Rename project</button>
         </div>
+        <section className="character-collection" aria-labelledby="characters-heading">
+          <div className="panel-heading"><div><p className="eyebrow">Project cast</p><h2 id="characters-heading">Characters</h2></div><div className="character-create"><button className="button primary" type="button" disabled={graph!.project.recipeIds.length >= 16} onClick={event => { rememberOverlayTrigger(event.currentTarget); setCharacterDialog({ mode: 'create', recipeId: graph!.project.activeRecipeId, initialName: '' }) }}><Plus /> Create character</button>{graph!.project.recipeIds.length >= 16 && <small>Maximum 16 characters per project</small>}</div></div>
+          <div className="character-list" role="list" aria-label="Project characters">
+            {graph!.project.recipeIds.map(recipeId => {
+              const recipe = graph!.recipes[recipeId]
+              const active = graph!.project.activeRecipeId === recipeId
+              const lock = graph!.project.packLocks.find(item => item.packId === recipe.packId)
+              const recipePack = lock ? packByLock(lock) : null
+              const recipeReady = recipePack ? isExportReady(legacyProjection(graph!, recipeId), recipePack) : false
+              return <div key={recipeId} role="listitem" aria-current={active ? 'true' : undefined} className={`character-row ${active ? 'active' : ''}`}><div className="character-row__identity"><div><strong>{recipe.name}</strong>{active && <span className="active-label">Active</span>}</div><span>{recipePack ? `${recipePack.name} ${recipePack.version}` : `${recipe.packId} unavailable`} · {recipeReady ? 'Ready' : 'Blocked'}</span></div><div className="action-row">{active ? <button className="button secondary" type="button" onClick={() => setView('compose')}><Layers3 /> Edit active character</button> : <button className="button secondary" type="button" onClick={() => openCharacter(recipeId)}>Open character</button>}<button className="icon-button" type="button" aria-label={`Duplicate ${recipe.name}`} onClick={event => { rememberOverlayTrigger(event.currentTarget); setCharacterDialog({ mode: 'duplicate', recipeId, initialName: duplicateCharacterName(graph!, recipeId) }) }}><Copy /></button><button className="icon-button" type="button" aria-label={`Rename ${recipe.name}`} onClick={event => { rememberOverlayTrigger(event.currentTarget); setCharacterDialog({ mode: 'rename', recipeId, initialName: recipe.name }) }}><Pencil /></button><button className="icon-button" type="button" aria-label={`Delete ${recipe.name}`} disabled={graph!.project.recipeIds.length === 1} onClick={event => { rememberOverlayTrigger(event.currentTarget); setCharacterDeleteId(recipeId) }}><Trash2 /></button></div></div>
+            })}
+          </div>
+        </section>
         <div className="project-facts">
-          <div><span>Character</span><strong>{project.character.name}</strong></div>
+          <div><span>Active character</span><strong>{project.character.name}</strong></div>
+          <div><span>Characters</span><strong>{graph!.project.recipeIds.length} of 16</strong></div>
           <div><span>Content pack</span><strong>{pack.name} {pack.version}</strong></div>
-          <div><span>Theme</span><strong>{presetById(project.themePresetId).name}</strong></div>
           <div><span>Output</span><strong>{ready ? 'Ready' : 'Blocked'}</strong></div>
         </div>
         <StatusStrip blockers={blockers} />
@@ -913,7 +1020,7 @@ function App() {
       const optional = !REQUIRED_SLOTS.includes(selectedSlot as never)
       return (
         <section className="view" aria-labelledby="compose-heading">
-          <div className="view-heading"><div><p className="eyebrow">Recipe</p><h1 id="compose-heading">Compose</h1></div></div>
+          <div className="view-heading"><div><p className="eyebrow">Recipe · {project.character.name}</p><h1 id="compose-heading">Compose</h1></div><div className="active-character-context" role="status" aria-label="Active character"><span>Active character</span><strong>{project.character.name}</strong></div></div>
           <label className="field compact"><span>Content pack</span><select value={packSelectionKey(pack)} onChange={event => void handlePackChange(event.target.value)}>{selectablePacks(pack).map(item => <option key={packSelectionKey(item)} value={packSelectionKey(item)}>{item.name} · {item.version}</option>)}</select><small>{pack.description}</small></label>
           <div className="slot-tabs" role="tablist" aria-label="Character slots">
             {SLOT_IDS.map(slot => <button key={slot} type="button" role="tab" aria-selected={selectedSlot === slot} onClick={() => setSelectedSlot(slot)}><span>{slot}</span>{project.character.selections[slot] ? <Check /> : <span className="required-dot" aria-label={REQUIRED_SLOTS.includes(slot as never) ? 'Required' : 'Optional'} />}</button>)}
@@ -931,7 +1038,7 @@ function App() {
 
     if (view === 'theme') return (
       <section className="view" aria-labelledby="theme-heading">
-        <div className="view-heading"><div><p className="eyebrow">Semantic palette</p><h1 id="theme-heading">Theme</h1></div></div>
+        <div className="view-heading"><div><p className="eyebrow">Semantic palette · {project.character.name}</p><h1 id="theme-heading">Theme</h1></div></div>
         <fieldset className="preset-list"><legend>Theme preset</legend>{THEME_PRESETS.map(item => <label key={item.id} className="preset-option"><input type="radio" name="theme-preset" checked={project.themePresetId === item.id} onChange={() => applyPreset(item.id)} /><span className="preset-swatches">{TOKEN_IDS.slice(0, 4).map(token => <i key={token} style={{ backgroundColor: item.tokens[token] }} />)}</span><span><strong>{item.name}</strong><small>{item.description}</small></span></label>)}</fieldset>
         <div className="token-table" aria-label="Theme tokens">
           {TOKEN_IDS.map(token => {
@@ -944,9 +1051,30 @@ function App() {
       </section>
     )
 
+    if (view === 'terrain') return <EnvironmentWorkspace terrain={graph?.terrain ?? null} theme={project.theme} onChange={updateTerrain} onOpenExport={() => setView('terrain-export')} onRequestRemove={() => { rememberOverlayTrigger(); setConfirmTerrainRemoval(true) }} onAnnouncement={setAnnouncement} />
+
+    if (view === 'terrain-export') {
+      const terrain = graph?.terrain ?? null
+      if (!terrain) return <EnvironmentWorkspace terrain={null} theme={project.theme} onChange={updateTerrain} onOpenExport={() => setView('terrain-export')} onRequestRemove={() => {}} onAnnouncement={setAnnouncement} />
+      const material = TERRAIN_MATERIALS[terrain.materialId]
+      const atlasHash = terrainPixelHash(renderTerrainAtlas(terrain))
+      return (
+        <section className="view" aria-labelledby="terrain-export-heading">
+          <div className="view-heading"><div><p className="eyebrow">Terrain delivery</p><h1 id="terrain-export-heading">Terrain export</h1></div><button className="button secondary" type="button" onClick={() => setView('terrain')}><Map /> Back to terrain</button></div>
+          <div className="readiness ready" role="status" aria-label="Terrain export readiness"><div className="readiness-icon"><ShieldCheck /></div><div><p className="eyebrow">Export readiness</p><h2>Ready</h2><p>{material.name} · 128 × 128 atlas · 32px tiles · #{atlasHash}</p></div></div>
+          <div className="export-options">
+            <section><FileArchive /><div><h2>Generic terrain package</h2><p>Autotile atlas, complete mask manifest, build metadata, and exact credits.</p><ul><li>16 cardinal masks</li><li>Deterministic RGBA PNG</li><li>Portable JSON contract</li></ul></div><button type="button" className="button primary" onClick={() => void runTerrainExport('generic')}><Download /> Download terrain package</button></section>
+            <section><Gamepad2 /><div><h2>Godot 4.7.1 terrain package</h2><p>Generic files plus a directly loadable TileSet with all side peering bits.</p><ul><li>Source ID 0</li><li>Match sides terrain</li><li>No manual slicing</li></ul></div><button type="button" className="button primary" onClick={() => void runTerrainExport('godot')}><Download /> Download Godot terrain package</button></section>
+          </div>
+          <div className="credits-panel" aria-label="Terrain credits"><div className="panel-heading"><div><p className="eyebrow">Selected material</p><h2>Credits</h2></div><span>{material.id}</span></div><div className="credit-row"><ShieldCheck /><div><strong>{material.provenance.source}</strong><span>{material.provenance.author} · {material.provenance.chosenLicense}</span><small>{material.provenance.sourceUrl}</small></div></div></div>
+          <p className="export-status" role="status">{terrainExportStatus}</p>
+        </section>
+      )
+    }
+
     if (view === 'preview') return (
       <section className="view" aria-labelledby="preview-heading">
-        <div className="view-heading"><div><p className="eyebrow">Animation coverage</p><h1 id="preview-heading">Preview</h1></div></div>
+        <div className="view-heading"><div><p className="eyebrow">Animation coverage · {project.character.name}</p><h1 id="preview-heading">Preview</h1></div></div>
         <div className="control-section"><h2>Animation</h2><div className="segmented" role="radiogroup" aria-label="Animation">{(['idle', 'walk'] as AnimationId[]).map(item => <label key={item}><input type="radio" name="animation" checked={project.preview.animation === item} onChange={() => setPreview({ animation: item })} /><span>{item}</span></label>)}</div></div>
         <div className="control-section"><h2>Direction</h2><div className="segmented" role="radiogroup" aria-label="Direction">{DIRECTIONS.map(item => <label key={item}><input type="radio" name="direction" checked={project.preview.direction === item} onChange={() => setPreview({ direction: item as Direction })} /><span>{item}</span></label>)}</div></div>
         <div className="playback-panel">
@@ -1001,7 +1129,7 @@ function App() {
     const credits = creditsFor(project, pack)
     return (
       <section className="view" aria-labelledby="export-heading">
-        <div className="view-heading"><div><p className="eyebrow">Delivery</p><h1 id="export-heading">Export</h1></div></div>
+        <div className="view-heading"><div><p className="eyebrow">Delivery · active character</p><h1 id="export-heading">Export {project.character.name}</h1></div></div>
         <div className={`readiness ${ready ? 'ready' : 'blocked'}`} role="status" aria-label="Export readiness"><div className="readiness-icon">{ready ? <ShieldCheck /> : <AlertTriangle />}</div><div><p className="eyebrow">Export readiness</p><h2>{ready ? 'Ready' : 'Blocked'}</h2><p>{ready ? `${pack.name} recipe has complete frames and provenance.` : blockers.join(' ')}</p></div></div>
         <div className="export-options">
           <section><FileArchive /><div><h2>Generic package</h2><p>PNG spritesheet, animation JSON, build manifest, and exact credits.</p><ul><li>64 × 64 frames</li><li>Idle and walk · four directions</li><li>Portable JSON contract</li></ul></div><button type="button" className="button primary" disabled={!ready} onClick={() => void runExport('generic')}><Download /> Download generic package</button></section>
@@ -1079,6 +1207,7 @@ function App() {
       }} />
       <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
       {dialogMode && <ProjectDialog mode={dialogMode} initialName={dialogMode === 'rename' ? project?.name ?? '' : ''} onCancel={closeDialog} onSubmit={submitProjectDialog} />}
+      {characterDialog && <CharacterNameDialog mode={characterDialog.mode} initialName={characterDialog.initialName} onCancel={() => dismissOverlay(() => setCharacterDialog(null))} onSubmit={submitCharacterName} />}
       {importPending && <ImportSummaryDialog archive={importPending.archive} fileName={importPending.fileName} onCancel={() => dismissOverlay(() => setImportPending(null))} onImport={confirmArchiveImport} />}
       {deleteCandidate && <ConfirmNameDialog projectName={deleteCandidate.name} onCancel={() => dismissOverlay(() => setDeleteCandidate(null))} onConfirm={deleteLocalProject} />}
       {snapshotCandidate && <ChoiceDialog title={`Restore revision ${snapshotCandidate.revision}?`} description="The current graph will be preserved as a pre-restore checkpoint before this recovery point replaces it." onCancel={() => dismissOverlay(() => setSnapshotCandidate(null))} choices={[
@@ -1113,6 +1242,12 @@ function App() {
       {confirmClose && <ChoiceDialog title="Save changes before closing?" description={`${project?.name ?? 'This project'} has unsaved changes.`} onCancel={() => setConfirmClose(false)} choices={[
         { label: 'Save', action: closeAfterSave, primary: true },
         { label: 'Discard', action: discardAndClose, destructive: true },
+      ]} />}
+      {confirmTerrainRemoval && graph?.terrain && <ChoiceDialog title="Remove terrain from this project?" description={`${graph.terrain.name} uses ${TERRAIN_MATERIALS[graph.terrain.materialId].name}. The next save creates the normal project snapshot. Character recipe, packs, theme, and character exports are unaffected.`} onCancel={() => dismissOverlay(() => setConfirmTerrainRemoval(false))} choices={[
+        { label: 'Remove terrain document', action: () => { setGraph(current => current ? { ...current, terrain: null } : current); editVersion.current += 1; setDirty(true); setConfirmTerrainRemoval(false); setAnnouncement('Terrain removed. Character state is unchanged.') }, destructive: true },
+      ]} />}
+      {characterDeleteId && graph?.recipes[characterDeleteId] && <ChoiceDialog title={`Delete ${graph.recipes[characterDeleteId].name}?`} description={`${graph.recipes[characterDeleteId].name} uses ${graph.recipes[characterDeleteId].packId}${graph.project.activeRecipeId === characterDeleteId ? ' and is currently active' : ''}. The next save creates a recovery snapshot. Other characters, project theme, packs, terrain, and exports are unchanged.`} onCancel={() => dismissOverlay(() => setCharacterDeleteId(null))} choices={[
+        { label: 'Delete character permanently', action: () => { const deletedName = graph.recipes[characterDeleteId].name; const next = removeCharacter(graph, characterDeleteId); commitCharacterGraph(next, `${deletedName} removed. ${next.recipes[next.project.activeRecipeId].name} is active.`); setCharacterDeleteId(null) }, destructive: true },
       ]} />}
     </div>
   )

@@ -1,0 +1,35 @@
+<header class="slate-hero">
+  <p class="slate-hero__eyebrow">Product update · UPD-004</p>
+  <h1 class="slate-hero__title">Multi-character Projects</h1>
+  <p class="slate-hero__summary">Maintain a bounded cast of independently named and serialized character recipes inside one local-first project.</p>
+</header>
+
+<aside class="slate-tldr">
+  <p class="slate-tldr__label">TL;DR</p>
+  <p><strong>3 promises, 6 scenarios, 12 capabilities, 7 task flows, and 25 objective behaviors</strong> define this update. Status: <strong>implemented</strong>.</p>
+</aside>
+
+<div class="slate-callout slate-callout--success" role="note">
+  <p class="slate-callout__title">Canonical local run · RUN-UPD004-001</p>
+  <p>Up to 16 character recipes create, switch, edit, duplicate, rename, delete, save, recover, transfer, and export through public UI. Separate IndexedDB records and folder files remain one atomic project revision; sibling recipes and terrain stay isolated.</p>
+</div>
+
+<h2>Delivered promises</h2>
+<div class="slate-card-grid" data-cols="2">
+  <article class="slate-card"><h3 class="slate-card__title"><code>CP-CHARACTER-COLLECTION</code></h3><p class="slate-card__body">Keep a named cast in one project and choose the active editing/export target.</p></article>
+  <article class="slate-card"><h3 class="slate-card__title"><code>CP-CHARACTER-ISOLATION</code></h3><p class="slate-card__body">Edit and serialize each recipe without changing siblings or terrain.</p></article>
+  <article class="slate-card"><h3 class="slate-card__title"><code>CP-CHARACTER-PORTABILITY</code></h3><p class="slate-card__body">Reopen and transfer the complete cast across web and Electron.</p></article>
+</div>
+
+<h2>Evidence summary</h2>
+<table><thead><tr><th>Gate</th><th>Result</th></tr></thead><tbody>
+  <tr><td>Unit, contract, compatibility</td><td>87 passed</td></tr>
+  <tr><td>Dedicated web / Electron / cross-host</td><td>4 / 1 / 1 passed</td></tr>
+  <tr><td>Retained web / Electron / cross-host / Pages</td><td>37 / 8 / 1 / 1 passed</td></tr>
+  <tr><td>Chromium switching / save-reopen</td><td>34.3ms p95 / 143.4ms</td></tr>
+  <tr><td>Electron switching</td><td>12.1ms p95</td></tr>
+  <tr><td>Runtime vulnerabilities</td><td>0</td></tr>
+</tbody></table>
+
+<h2>Deliberate boundaries</h2>
+<p>Folders, tags, search, reorder, batch export, scenes, per-character project themes, cross-project recipe import/merge, cloud collaboration, drag-and-drop, and unbounded collections remain excluded. Actual Pages publication and independent clean-machine Windows observation remain external release gates.</p>

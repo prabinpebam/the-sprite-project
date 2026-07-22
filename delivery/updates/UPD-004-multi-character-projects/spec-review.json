@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 2,
+  "reviewId": "REVIEW-UPD-004-001",
+  "target": "delivery/updates/UPD-004-multi-character-projects",
+  "reviewedAt": "2026-07-22",
+  "depth": "deep",
+  "verdict": "ready",
+  "materialitySignals": [
+    "new customer promise and collection workflow",
+    "project recipe cardinality and active-context change",
+    "IndexedDB and folder deletion semantics",
+    "archive and old-reader compatibility",
+    "shared web, packaged Electron, offline, and cross-host evidence obligations"
+  ],
+  "sources": [
+    "delivery/updates/UPD-004-multi-character-projects/traceability.json",
+    "delivery/updates/UPD-004-multi-character-projects/product-design-spec.md",
+    "delivery/updates/UPD-004-multi-character-projects/engineering-spec.md",
+    "product/src/domain/schemas.ts",
+    "product/src/domain/project-v2.ts",
+    "product/src/web/repository.ts",
+    "product/src/domain/archive.ts",
+    "product/electron/main.ts",
+    "product/src/App.tsx"
+  ],
+  "dimensions": [
+    {
+      "id": "product-truth",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "The cast-management promise is observable through create, switch, isolated edit, recovery, save, transfer, and active export.",
+      "evidence": [
+        "change-proposal.md",
+        "customer-promise.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "scope-alternatives",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "A flat bounded collection is justified as the smallest coherent increment and every adjacent organization/export/scene expectation is decided.",
+      "evidence": [
+        "scope-ledger.md",
+        "decisions.md"
+      ],
+      "findingIds": [
+        "F-UPD004-001"
+      ]
+    },
+    {
+      "id": "architecture",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Existing recipe records, graph, archive, folder, and bridge boundaries are reused with exact ownership and dependency direction.",
+      "evidence": [
+        "engineering-spec.md",
+        "impact-analysis.md"
+      ],
+      "findingIds": [
+        "F-UPD004-003",
+        "F-UPD004-004"
+      ]
+    },
+    {
+      "id": "data-failure",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Every CRUD, stale-save, partial-write, deletion, archive, and rollback path defines no-partial-mutation recovery.",
+      "evidence": [
+        "engineering-spec.md",
+        "threat-model.md"
+      ],
+      "findingIds": [
+        "F-UPD004-002",
+        "F-UPD004-004"
+      ]
+    },
+    {
+      "id": "quality-attributes",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Isolation, durability, compatibility, accessibility, performance, offline, host parity, and rollback are categorical and measurable.",
+      "evidence": [
+        "quality-scenarios.md",
+        "release-gate.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "verification-release",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "All 25 behaviors, affected baseline flows, hosts, migration, performance, rollback, and external gates have explicit evidence.",
+      "evidence": [
+        "traceability.json",
+        "release-gate.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "implementation-readiness",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "A fresh implementer can execute signatures, errors, state transitions, UI behavior, storage, archive, and tests without product invention.",
+      "evidence": [
+        "engineering-spec.md",
+        "product-design-spec.md",
+        "adversarial rounds 1-3"
+      ],
+      "findingIds": [
+        "F-UPD004-001",
+        "F-UPD004-002",
+        "F-UPD004-003",
+        "F-UPD004-004"
+      ]
+    },
+    {
+      "id": "ux-accessibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Collection, dialogs, exact errors, active semantics, focus, keyboard, reflow, and destructive recovery are testable.",
+      "evidence": [
+        "product-design-spec.md",
+        "experience-architecture.md"
+      ],
+      "findingIds": [
+        "F-UPD004-001",
+        "F-UPD004-002"
+      ]
+    },
+    {
+      "id": "developer-experience",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Active export and separate recipe files remain explicit and compatible for downstream users.",
+      "evidence": [
+        "product-design-spec.md",
+        "engineering-spec.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "security-privacy",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Strict bounded JSON, ID-owned paths, no new authority, and fail-before-mutation behavior preserve the local trust model.",
+      "evidence": [
+        "threat-model.md"
+      ],
+      "findingIds": [
+        "F-UPD004-002"
+      ]
+    },
+    {
+      "id": "reliability-operability",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Snapshots, conflicts, atomic replacement, stale-file deletion, and rollback preserve complete casts.",
+      "evidence": [
+        "quality-scenarios.md",
+        "release-gate.md"
+      ],
+      "findingIds": [
+        "F-UPD004-004"
+      ]
+    },
+    {
+      "id": "performance-capacity",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Recipe/name bounds and measured switch/save thresholds are numeric with recorded environments.",
+      "evidence": [
+        "engineering-spec.md",
+        "quality-scenarios.md"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "migration-compatibility",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "One-character compatibility, relaxed v2 cardinality, old-reader rejection, archive order, and rollback are exact.",
+      "evidence": [
+        "impact-analysis.md",
+        "engineering-spec.md"
+      ],
+      "findingIds": [
+        "F-UPD004-003"
+      ]
+    },
+    {
+      "id": "deployment-distribution",
+      "applicable": true,
+      "score": 9,
+      "definitionOf10": "Web/Electron readers and writers release together with inherited external gates and no data-deleting rollback.",
+      "evidence": [
+        "release-gate.md"
+      ],
+      "findingIds": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-UPD004-001",
+      "dimension": "ux-accessibility",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Duplicate naming and row command semantics were ambiguous",
+      "evidence": [
+        {
+          "source": "product-design-spec.md sections 3 and 6",
+          "claim": "Initial contract did not define suffix selection or inactive-row commands."
+        }
+      ],
+      "problem": "Implementations could generate different names or require activation before management.",
+      "impact": "Visible behavior and automation would diverge.",
+      "remediation": "Specified smallest unique copy suffix and exact active/inactive command sets.",
+      "verification": "Name vectors and actual UI management flow.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD004-002",
+      "dimension": "data-failure",
+      "severity": "high",
+      "confidence": 10,
+      "title": "Name errors and modal recovery needed exact contracts",
+      "evidence": [
+        {
+          "source": "product-design-spec.md sections 4, 6, and 7",
+          "claim": "Initial contract lacked exact messages, aria state, draft retention, and focus targets."
+        }
+      ],
+      "problem": "Invalid operations could dismiss dialogs or become inaccessible.",
+      "impact": "Users could lose drafts or misunderstand no-mutation failures.",
+      "remediation": "Specified exact messages, error codes, aria-invalid, focus, draft, capacity, and fallback behavior.",
+      "verification": "Domain failures plus keyboard/focus actual UI evidence.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD004-003",
+      "dimension": "migration-compatibility",
+      "severity": "medium",
+      "confidence": 10,
+      "title": "Schema and archive compatibility sequence required closure",
+      "evidence": [
+        {
+          "source": "engineering-spec.md sections 1 and 5",
+          "claim": "Cardinality, order, orphan/duplicate recipe, and old-reader timing were initially descriptive."
+        }
+      ],
+      "problem": "Readers could disagree about inventory or partial loading.",
+      "impact": "Cross-host and rollback guarantees would be untestable.",
+      "remediation": "Specified exact v2 validator changes, canonical path order, validation sequence, and fail-before-return behavior.",
+      "verification": "Multi-recipe round trip, tamper, and baseline reader fixtures.",
+      "disposition": "fixed"
+    },
+    {
+      "id": "F-UPD004-004",
+      "dimension": "architecture",
+      "severity": "medium",
+      "confidence": 10,
+      "title": "Pack and folder ownership needed repository-aligned rules",
+      "evidence": [
+        {
+          "source": "engineering-spec.md sections 3 and 4",
+          "claim": "Initial contract left pack input and unrelated folder file preservation open."
+        }
+      ],
+      "problem": "Implementation could copy active selections, drop sibling locks, or promise unsupported folder preservation.",
+      "impact": "Sibling renders or desktop saves could drift.",
+      "remediation": "Bound creation to active pack defaults/exact lock, duplication to source state, lock merging, and existing atomic canonical folder replacement.",
+      "verification": "Domain lock/isolation tests and packaged folder inventory evidence.",
+      "disposition": "fixed"
+    }
+  ],
+  "unresolvedDecisions": [],
+  "editsMade": [
+    "Defined deterministic duplicate naming, active/inactive row commands, exact validation errors, focus, and capacity behavior.",
+    "Fixed host-neutral CRUD signatures, name normalization, error codes, pack-lock ownership, and active source of truth.",
+    "Specified IndexedDB stale-row deletion, canonical Electron folder replacement, archive ordering/validation, old-reader rejection, rollback, and performance environment.",
+    "Regenerated and validated the 103-record product update graph after each repair round."
+  ],
+  "implementationReadiness": {
+    "unfamiliarImplementerPass": true,
+    "blockingFindingIds": [],
+    "implementationSequence": [
+      "WP-UPD004-SPEC",
+      "WP-UPD004-DOMAIN",
+      "WP-UPD004-PERSISTENCE",
+      "WP-UPD004-UX",
+      "WP-UPD004-HOSTS",
+      "WP-UPD004-REGRESSION",
+      "WP-UPD004-PROMOTION"
+    ],
+    "verificationGates": [
+      "Product update, generated projections, review, approval, and lock validate",
+      "1–16 schema and all CRUD/name/pack/isolation vectors pass",
+      "Repository stale-row, archive, old-reader, rollback, and Electron folder inventory pass",
+      "Actual web, packaged Electron, offline, cross-host, accessibility, and performance flows pass",
+      "All retained MVP through UPD-003 regressions pass with no sibling or terrain drift"
+    ]
+  },
+  "conditions": [],
+  "adversarialReview": {
+    "maxRounds": 3,
+    "rounds": [
+      {
+        "round": 1,
+        "reviewer": "independent unfamiliar implementer",
+        "result": "fail",
+        "critical": 0,
+        "high": 3,
+        "medium": 4,
+        "low": 3,
+        "fixed": 10,
+        "summary": "Triage discarded absent-implementation findings and repaired valid error, pack, archive, focus, folder, and active-state ambiguities."
+      },
+      {
+        "round": 2,
+        "reviewer": "independent delta reviewer",
+        "result": "fail",
+        "critical": 0,
+        "high": 2,
+        "medium": 9,
+        "low": 2,
+        "fixed": 13,
+        "summary": "Closed deterministic duplicate naming, exact messages, command sets, defaults, validation sequence, slot behavior, and performance environment."
+      },
+      {
+        "round": 3,
+        "reviewer": "independent final delta verifier",
+        "result": "pass",
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "fixed": 0,
+        "summary": "Found no remaining material product or architecture invention and recommended locking all seven decisions."
+      }
+    ],
+    "remainingConcerns": []
+  },
+  "stabilization": {
+    "state": "locked",
+    "lockId": "LOCK-UPD-004-001",
+    "lockedBy": "product owner",
+    "lockManifest": "delivery/updates/UPD-004-multi-character-projects/spec-lock.json",
+    "productVisionAlignment": "A bounded cast collection activates the existing recipe architecture while preserving local-first project identity, terrain, deterministic exports, and recovery.",
+    "decisionOwnerApproval": true,
+    "approvalRef": "delivery/updates/UPD-004-multi-character-projects/spec-approval.json",
+    "approvalId": "APPROVAL-UPD-004-LOCK-001",
+    "settledDecisionIds": [
+      "DEC-UPD004-COLLECTION",
+      "DEC-UPD004-SAVE",
+      "DEC-UPD004-SCHEMA",
+      "DEC-UPD004-ACTIVE",
+      "DEC-UPD004-THEME",
+      "DEC-UPD004-DELETE",
+      "DEC-UPD004-EXPORT"
+    ],
+    "justifiedChanges": [],
+    "lockedAt": "2026-07-22T03:01:38.538Z"
+  }
+}

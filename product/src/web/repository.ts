@@ -5,7 +5,7 @@ import { migrateProjectV1ToV2 } from '../domain/migration'
 import { packLockFor } from '../domain/pack-locks'
 import { parseProjectGraphV2 } from '../domain/schemas'
 import { sha256Hex } from '../domain/sha256'
-import type { CharacterRecipeV1, ProjectGraphV2, SpriteProjectV2 } from '../domain/types'
+import type { CharacterRecipeV1, ProjectGraphV2, SpriteProjectV2, TerrainDocumentV1 } from '../domain/types'
 import { readSpritePack } from '../domain/spritepack'
 import type { InstalledPackVersion, PackDraftAssetV1, PackDraftV1, PackOrigin } from '../domain/pack-types'
 
@@ -56,6 +56,11 @@ interface RecipeRecord {
   recipe: CharacterRecipeV1
 }
 
+interface TerrainRecord {
+  projectId: string
+  terrain: TerrainDocumentV1
+}
+
 export interface ProjectEmbeddedPack {
   projectId: string
   packageSha256: string
@@ -75,6 +80,10 @@ interface WorkspaceSchema extends DBSchema {
     key: [string, string]
     value: RecipeRecord
     indexes: { 'by-project': string }
+  }
+  terrainDocuments: {
+    key: string
+    value: TerrainRecord
   }
   snapshots: {
     key: [string, number]
@@ -157,7 +166,7 @@ export class WorkspaceRepository {
 
   async database(): Promise<IDBPDatabase<WorkspaceSchema>> {
     if (!this.#database) {
-      this.#database = openDB<WorkspaceSchema>(this.databaseName, 3, {
+      this.#database = openDB<WorkspaceSchema>(this.databaseName, 4, {
         upgrade(database, oldVersion) {
           if (oldVersion < 1) {
             const projects = database.createObjectStore('projects', { keyPath: 'id' })
@@ -184,6 +193,7 @@ export class WorkspaceRepository {
             const embedded = database.createObjectStore('projectEmbeddedPacks', { keyPath: ['projectId', 'packageSha256'] })
             embedded.createIndex('by-project', 'projectId')
           }
+          if (oldVersion < 4 && !database.objectStoreNames.contains('terrainDocuments')) database.createObjectStore('terrainDocuments', { keyPath: 'projectId' })
         },
       })
     }
@@ -203,12 +213,13 @@ export class WorkspaceRepository {
 
   async loadGraph(projectId: string): Promise<ProjectGraphV2 | null> {
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes'], 'readonly')
+    const transaction = database.transaction(['projects', 'recipes', 'terrainDocuments'], 'readonly')
     const project = await transaction.objectStore('projects').get(projectId)
     if (!project) return null
     const recipeRecords = await transaction.objectStore('recipes').index('by-project').getAll(projectId)
+    const terrainRecord = await transaction.objectStore('terrainDocuments').get(projectId)
     await transaction.done
-    return parseProjectGraphV2({ project, recipes: Object.fromEntries(recipeRecords.map(record => [record.recipeId, record.recipe])) })
+    return parseProjectGraphV2({ project, recipes: Object.fromEntries(recipeRecords.map(record => [record.recipeId, record.recipe])), terrain: terrainRecord?.terrain ?? null })
   }
 
   async createGraph(graphValue: ProjectGraphV2, embeddedPackageBytes: Uint8Array[] = []): Promise<ProjectGraphV2> {
@@ -219,7 +230,7 @@ export class WorkspaceRepository {
       if (!lock || lock.version !== pack.pack.version || lock.sha256 !== pack.packDocumentSha256) throw new ProductError({ code: 'missing-pack', message: 'Embedded package does not match an exact project lock.', operation: 'project:create', recoverable: true })
     }
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'packs', 'projectEmbeddedPacks'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'terrainDocuments', 'packs', 'projectEmbeddedPacks'], 'readwrite')
     if (await transaction.objectStore('projects').get(graph.project.id)) {
       await transaction.done
       throw new ProductError({ code: 'path-conflict', message: 'A project with this ID already exists.', operation: 'project:create', recoverable: true })
@@ -228,6 +239,7 @@ export class WorkspaceRepository {
     for (const recipeId of graph.project.recipeIds) {
       await transaction.objectStore('recipes').put({ projectId: graph.project.id, recipeId, recipe: graph.recipes[recipeId] })
     }
+    if (graph.terrain) await transaction.objectStore('terrainDocuments').put({ projectId: graph.project.id, terrain: graph.terrain })
     for (const lock of graph.project.packLocks) await transaction.objectStore('packs').put({ ...lock, bundled: true })
     for (const pack of embedded) await transaction.objectStore('projectEmbeddedPacks').put({
       projectId: graph.project.id,
@@ -249,7 +261,7 @@ export class WorkspaceRepository {
       if (!lock || lock.version !== pack.pack.version || lock.sha256 !== pack.packDocumentSha256) throw new ProductError({ code: 'missing-pack', message: 'Embedded package does not match an exact project lock.', operation: 'project:save', recoverable: true })
     }
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'packs', 'projectEmbeddedPacks'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'terrainDocuments', 'snapshots', 'packs', 'projectEmbeddedPacks'], 'readwrite')
     const projects = transaction.objectStore('projects')
     const currentProject = await projects.get(graph.project.id)
     if (!currentProject || currentProject.revision !== expectedRevision) {
@@ -264,7 +276,8 @@ export class WorkspaceRepository {
     }
 
     const recipeRecords = await transaction.objectStore('recipes').index('by-project').getAll(graph.project.id)
-    const currentGraph = parseProjectGraphV2({ project: currentProject, recipes: Object.fromEntries(recipeRecords.map(record => [record.recipeId, record.recipe])) })
+    const terrainRecord = await transaction.objectStore('terrainDocuments').get(graph.project.id)
+    const currentGraph = parseProjectGraphV2({ project: currentProject, recipes: Object.fromEntries(recipeRecords.map(record => [record.recipeId, record.recipe])), terrain: terrainRecord?.terrain ?? null })
     const protectedReason = ['migration', 'pack replacement', 'conflict overwrite', 'archive replace'].includes(reason)
     await transaction.objectStore('snapshots').put({
       projectId: graph.project.id,
@@ -280,9 +293,15 @@ export class WorkspaceRepository {
       project: { ...graph.project, revision: expectedRevision + 1, updatedAt: now },
     })
     await transaction.objectStore('projects').put(next.project)
-    for (const recipeId of next.project.recipeIds) {
-      await transaction.objectStore('recipes').put({ projectId: next.project.id, recipeId, recipe: next.recipes[recipeId] })
+    const recipeStore = transaction.objectStore('recipes')
+    for (const record of recipeRecords) {
+      if (!next.project.recipeIds.includes(record.recipeId)) await recipeStore.delete([next.project.id, record.recipeId])
     }
+    for (const recipeId of next.project.recipeIds) {
+      await recipeStore.put({ projectId: next.project.id, recipeId, recipe: next.recipes[recipeId] })
+    }
+    if (next.terrain) await transaction.objectStore('terrainDocuments').put({ projectId: next.project.id, terrain: next.terrain })
+    else await transaction.objectStore('terrainDocuments').delete(next.project.id)
     for (const lock of next.project.packLocks) await transaction.objectStore('packs').put({ ...lock, bundled: true })
     if (embedded) {
       const priorKeys = await transaction.objectStore('projectEmbeddedPacks').index('by-project').getAllKeys(next.project.id)
@@ -316,8 +335,9 @@ export class WorkspaceRepository {
 
   async deleteProject(projectId: string): Promise<void> {
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'projectEmbeddedPacks'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'terrainDocuments', 'snapshots', 'projectEmbeddedPacks'], 'readwrite')
     await transaction.objectStore('projects').delete(projectId)
+    await transaction.objectStore('terrainDocuments').delete(projectId)
     const recipes = await transaction.objectStore('recipes').index('by-project').getAllKeys(projectId)
     const snapshots = await transaction.objectStore('snapshots').index('by-project').getAllKeys(projectId)
     const embedded = await transaction.objectStore('projectEmbeddedPacks').index('by-project').getAllKeys(projectId)
@@ -329,7 +349,7 @@ export class WorkspaceRepository {
 
   async clearAll(): Promise<void> {
     const database = await this.database()
-    const transaction = database.transaction(['projects', 'recipes', 'snapshots', 'packs', 'packBlobs', 'migrations', 'settings', 'packVersions', 'packDrafts', 'packDraftAssets', 'projectEmbeddedPacks'], 'readwrite')
+    const transaction = database.transaction(['projects', 'recipes', 'terrainDocuments', 'snapshots', 'packs', 'packBlobs', 'migrations', 'settings', 'packVersions', 'packDrafts', 'packDraftAssets', 'projectEmbeddedPacks'], 'readwrite')
     await Promise.all([...transaction.objectStoreNames].map(name => transaction.objectStore(name).clear()))
     await transaction.done
   }

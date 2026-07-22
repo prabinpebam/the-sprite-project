@@ -1,0 +1,1505 @@
+{
+  "modelVersion": "1.0.0",
+  "update": {
+    "id": "UPD-004",
+    "title": "Multi-character projects",
+    "status": "implemented",
+    "requestedAt": "2026-07-22",
+    "baselineRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935",
+    "baselineEvidenceRun": "RUN-UPD003-001",
+    "hosts": [
+      "shared",
+      "web",
+      "desktop",
+      "cross-host"
+    ]
+  },
+  "stage": {
+    "id": "STAGE-CHARACTER-COLLECTION-001",
+    "name": "Multiple independently saved characters per project",
+    "status": "implemented",
+    "targetUser": "Solo and small-team 2D game developers maintaining a coherent cast",
+    "qualityGate": "A developer can create, switch, independently edit, save, recover, transfer, and export multiple named characters in one local-first project without sibling or terrain drift"
+  },
+  "sources": [
+    "delivery/updates/UPD-003-terrain-environment-producer/traceability.json",
+    "product/src/domain/types.ts",
+    "product/src/domain/schemas.ts",
+    "product/src/domain/project-v2.ts",
+    "product/src/web/repository.ts",
+    "product/src/domain/archive.ts",
+    "product/src/App.tsx"
+  ],
+  "promises": [
+    {
+      "id": "CP-CHARACTER-COLLECTION",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "A developer can keep a named cast of characters in one project and deliberately choose which character is active.",
+      "user": "Developer building a coherent cast",
+      "context": "One project shares theme, packs, terrain, persistence, and backups",
+      "trigger": "They create or open another character",
+      "outcome": "The collection shows every named character and the active editing/export target",
+      "quality": "Up to 16 characters remain responsive, named, accessible, and unambiguous",
+      "recovery": "Invalid creation, rename, capacity, or deletion writes nothing and explains recovery",
+      "evidence": "Actual web and packaged Electron collection flows"
+    },
+    {
+      "id": "CP-CHARACTER-ISOLATION",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "A developer can edit and save each character separately without changing sibling character recipes.",
+      "user": "Developer iterating on several characters",
+      "context": "Project contains two or more recipes",
+      "trigger": "They compose, override, duplicate, rename, or delete one character",
+      "outcome": "Only the intended recipe changes while one atomic project save preserves all recipes",
+      "quality": "Sibling and terrain canonical bytes remain unchanged outside deliberate shared theme/preview edits",
+      "recovery": "Snapshots, conflicts, and cancellation preserve last committed recipes",
+      "evidence": "Negative hash, persistence, snapshot, and UI evidence"
+    },
+    {
+      "id": "CP-CHARACTER-PORTABILITY",
+      "status": "implemented",
+      "host": "cross-host",
+      "statement": "A developer can reopen and transfer the complete character collection across web and Electron while exporting the active character explicitly.",
+      "user": "Developer using browser and portable Windows hosts",
+      "context": "Project has multiple characters and optional terrain",
+      "trigger": "They save, back up, import, relaunch, or export",
+      "outcome": "Names, order, active recipe, recipe bytes, terrain, and active export semantics survive",
+      "quality": "Checksums and output hashes match across hosts and old readers fail before mutation",
+      "recovery": "Malformed archives and stale writes produce no partial collection",
+      "evidence": "Bidirectional actual-host archive and retained regression evidence"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SC-CHARACTER-CREATE",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-CHARACTER-COLLECTION",
+        "CP-CHARACTER-ISOLATION"
+      ],
+      "actor": "Developer adding an NPC",
+      "startingState": "Project has one character",
+      "intent": "Create another safe character",
+      "environment": "Web or Electron",
+      "success": "Named default recipe is appended and active",
+      "interruptions": [
+        "Duplicate name",
+        "Capacity reached",
+        "Cancel"
+      ]
+    },
+    {
+      "id": "SC-CHARACTER-SWITCH-EDIT",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-CHARACTER-COLLECTION",
+        "CP-CHARACTER-ISOLATION"
+      ],
+      "actor": "Developer alternating cast members",
+      "startingState": "Two characters differ",
+      "intent": "Edit one without sibling drift",
+      "environment": "Compose, Theme, Preview",
+      "success": "Active render/edit changes and sibling bytes do not",
+      "interruptions": [
+        "Missing pack",
+        "Unsaved switch",
+        "Invalid override"
+      ]
+    },
+    {
+      "id": "SC-CHARACTER-MANAGE",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-CHARACTER-COLLECTION",
+        "CP-CHARACTER-ISOLATION"
+      ],
+      "actor": "Developer managing variants",
+      "startingState": "Collection has multiple characters",
+      "intent": "Duplicate, rename, or remove a character",
+      "environment": "Project collection",
+      "success": "Identity/order/fallback are deterministic and recoverable",
+      "interruptions": [
+        "Duplicate name",
+        "Delete active",
+        "Delete sole",
+        "Cancel"
+      ]
+    },
+    {
+      "id": "SC-CHARACTER-RETURN",
+      "status": "implemented",
+      "host": "web",
+      "promiseIds": [
+        "CP-CHARACTER-ISOLATION",
+        "CP-CHARACTER-PORTABILITY"
+      ],
+      "actor": "Returning browser user",
+      "startingState": "Saved collection and terrain exist",
+      "intent": "Continue exact active character",
+      "environment": "IndexedDB/offline",
+      "success": "All recipes and active ID restore exactly",
+      "interruptions": [
+        "Stale tab",
+        "Quota",
+        "Snapshot restore"
+      ]
+    },
+    {
+      "id": "SC-CHARACTER-DESKTOP",
+      "status": "implemented",
+      "host": "desktop",
+      "promiseIds": [
+        "CP-CHARACTER-ISOLATION",
+        "CP-CHARACTER-PORTABILITY"
+      ],
+      "actor": "Portable Windows user",
+      "startingState": "Folder project has multiple recipe files",
+      "intent": "Edit and save collection",
+      "environment": "Packaged Electron",
+      "success": "Canonical recipe files match graph and stale files are removed",
+      "interruptions": [
+        "External edit",
+        "Permission failure",
+        "Unsaved close"
+      ]
+    },
+    {
+      "id": "SC-CHARACTER-CROSS-HOST",
+      "status": "implemented",
+      "host": "cross-host",
+      "promiseIds": [
+        "CP-CHARACTER-PORTABILITY"
+      ],
+      "actor": "Developer changing hosts",
+      "startingState": "Three-character project with terrain",
+      "intent": "Round-trip complete project",
+      "environment": ".spriteproject",
+      "success": "Every recipe/terrain hash and active export matches",
+      "interruptions": [
+        "Old reader",
+        "Tamper",
+        "Import conflict"
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "UC-CHARACTER-LIST",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can inspect every character and the active target.",
+      "scenarioIds": [
+        "SC-CHARACTER-CREATE",
+        "SC-CHARACTER-SWITCH-EDIT"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-CREATE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can create a named character from active pack defaults.",
+      "scenarioIds": [
+        "SC-CHARACTER-CREATE"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-SWITCH",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can make a listed character active.",
+      "scenarioIds": [
+        "SC-CHARACTER-SWITCH-EDIT"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-EDIT",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can edit only the active character recipe.",
+      "scenarioIds": [
+        "SC-CHARACTER-SWITCH-EDIT"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-DUPLICATE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can duplicate a character under a new identity.",
+      "scenarioIds": [
+        "SC-CHARACTER-MANAGE"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-RENAME",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can rename one character without changing its ID or content.",
+      "scenarioIds": [
+        "SC-CHARACTER-MANAGE"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-DELETE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can delete a non-sole character after confirmation.",
+      "scenarioIds": [
+        "SC-CHARACTER-MANAGE"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-SAVE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can save separate recipe records in one atomic project revision.",
+      "scenarioIds": [
+        "SC-CHARACTER-RETURN",
+        "SC-CHARACTER-DESKTOP"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-RESTORE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can restore a removed or changed character from a project snapshot.",
+      "scenarioIds": [
+        "SC-CHARACTER-MANAGE",
+        "SC-CHARACTER-RETURN"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-EXPORT-ACTIVE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can export the explicitly active character.",
+      "scenarioIds": [
+        "SC-CHARACTER-SWITCH-EDIT",
+        "SC-CHARACTER-CROSS-HOST"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-TRANSFER",
+      "status": "implemented",
+      "host": "cross-host",
+      "statement": "User can transfer every recipe and optional terrain in one project archive.",
+      "scenarioIds": [
+        "SC-CHARACTER-CROSS-HOST"
+      ]
+    },
+    {
+      "id": "UC-CHARACTER-OFFLINE",
+      "status": "implemented",
+      "host": "web",
+      "statement": "User can manage and save the collection offline after installation.",
+      "scenarioIds": [
+        "SC-CHARACTER-RETURN"
+      ]
+    }
+  ],
+  "informationArchitecture": [
+    {
+      "id": "IA-CHARACTER-COLLECTION",
+      "status": "implemented",
+      "name": "Character collection",
+      "contains": [
+        "ordered recipe IDs",
+        "active recipe ID",
+        "capacity"
+      ]
+    },
+    {
+      "id": "IA-CHARACTER-RECIPE",
+      "status": "implemented",
+      "name": "Character recipe",
+      "contains": [
+        "stable ID",
+        "unique name",
+        "pack ID",
+        "selections",
+        "overrides"
+      ]
+    },
+    {
+      "id": "IA-ACTIVE-CHARACTER",
+      "status": "implemented",
+      "name": "Active character context",
+      "contains": [
+        "name",
+        "readiness",
+        "preview",
+        "export target"
+      ]
+    },
+    {
+      "id": "IA-PROJECT-SAVE",
+      "status": "implemented",
+      "name": "Atomic project save",
+      "contains": [
+        "project",
+        "recipe records",
+        "terrain",
+        "revision",
+        "snapshot"
+      ]
+    }
+  ],
+  "navigation": [
+    {
+      "id": "NAV-CHARACTER-PROJECT",
+      "status": "implemented",
+      "label": "Project",
+      "destination": "VIEW-CHARACTER-COLLECTION",
+      "backBehavior": "Active recipe and edits remain"
+    },
+    {
+      "id": "NAV-CHARACTER-EDIT",
+      "status": "implemented",
+      "label": "Edit character",
+      "destination": "VIEW-COMPOSE",
+      "backBehavior": "Returns to collection with active recipe"
+    },
+    {
+      "id": "NAV-CHARACTER-STORAGE",
+      "status": "implemented",
+      "label": "Storage",
+      "destination": "VIEW-STORAGE",
+      "backBehavior": "Collection remains in graph"
+    },
+    {
+      "id": "NAV-CHARACTER-EXPORT",
+      "status": "implemented",
+      "label": "Export",
+      "destination": "VIEW-EXPORT",
+      "backBehavior": "Active character remains selected"
+    }
+  ],
+  "views": [
+    {
+      "id": "VIEW-CHARACTER-COLLECTION",
+      "status": "implemented",
+      "name": "Project character collection",
+      "purpose": "List, activate, create, and manage characters",
+      "informationIds": [
+        "IA-CHARACTER-COLLECTION",
+        "IA-CHARACTER-RECIPE",
+        "IA-ACTIVE-CHARACTER"
+      ]
+    },
+    {
+      "id": "VIEW-CHARACTER-NAME",
+      "status": "implemented",
+      "name": "Character name dialog",
+      "purpose": "Create, duplicate, or rename with validation",
+      "informationIds": [
+        "IA-CHARACTER-RECIPE"
+      ]
+    },
+    {
+      "id": "VIEW-CHARACTER-DELETE",
+      "status": "implemented",
+      "name": "Delete character confirmation",
+      "purpose": "Confirm isolated recoverable deletion",
+      "informationIds": [
+        "IA-CHARACTER-RECIPE",
+        "IA-PROJECT-SAVE"
+      ]
+    },
+    {
+      "id": "VIEW-COMPOSE",
+      "status": "implemented",
+      "name": "Existing compose view",
+      "purpose": "Edit active recipe",
+      "informationIds": [
+        "IA-ACTIVE-CHARACTER",
+        "IA-CHARACTER-RECIPE"
+      ]
+    },
+    {
+      "id": "VIEW-STORAGE",
+      "status": "implemented",
+      "name": "Existing storage view",
+      "purpose": "Save, restore, and transfer complete graph",
+      "informationIds": [
+        "IA-PROJECT-SAVE",
+        "IA-CHARACTER-COLLECTION"
+      ]
+    },
+    {
+      "id": "VIEW-EXPORT",
+      "status": "implemented",
+      "name": "Existing character export view",
+      "purpose": "Export active character explicitly",
+      "informationIds": [
+        "IA-ACTIVE-CHARACTER"
+      ]
+    }
+  ],
+  "uiElements": [
+    {
+      "id": "UI-CHARACTER-LIST",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "list",
+      "name": "Project characters"
+    },
+    {
+      "id": "UI-CHARACTER-CREATE",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "button",
+      "name": "Create character"
+    },
+    {
+      "id": "UI-CHARACTER-OPEN",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "button",
+      "name": "Open character"
+    },
+    {
+      "id": "UI-CHARACTER-EDIT",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "button",
+      "name": "Edit active character"
+    },
+    {
+      "id": "UI-CHARACTER-DUPLICATE",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "button",
+      "name": "Duplicate character"
+    },
+    {
+      "id": "UI-CHARACTER-RENAME",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "button",
+      "name": "Rename character"
+    },
+    {
+      "id": "UI-CHARACTER-DELETE",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-COLLECTION",
+      "role": "button",
+      "name": "Delete character"
+    },
+    {
+      "id": "UI-CHARACTER-NAME",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-NAME",
+      "role": "textbox",
+      "name": "Character name"
+    },
+    {
+      "id": "UI-CHARACTER-NAME-CONFIRM",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-NAME",
+      "role": "button",
+      "name": "Confirm character"
+    },
+    {
+      "id": "UI-CHARACTER-DELETE-CONFIRM",
+      "status": "implemented",
+      "viewId": "VIEW-CHARACTER-DELETE",
+      "role": "button",
+      "name": "Delete character permanently"
+    },
+    {
+      "id": "UI-ACTIVE-CHARACTER-STATUS",
+      "status": "implemented",
+      "viewId": "VIEW-COMPOSE",
+      "role": "status",
+      "name": "Active character"
+    },
+    {
+      "id": "UI-CHARACTER-SAVE",
+      "status": "implemented",
+      "viewId": "VIEW-STORAGE",
+      "role": "button",
+      "name": "Save project"
+    },
+    {
+      "id": "UI-CHARACTER-RESTORE",
+      "status": "implemented",
+      "viewId": "VIEW-STORAGE",
+      "role": "button",
+      "name": "Restore recovery point"
+    },
+    {
+      "id": "UI-CHARACTER-EXPORT",
+      "status": "implemented",
+      "viewId": "VIEW-EXPORT",
+      "role": "button",
+      "name": "Download generic package"
+    }
+  ],
+  "expectedBehaviors": [
+    {
+      "id": "EB-CHARACTER-LIST",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CREATE",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Project view lists every recipe once with name, pack, readiness, and exactly one visible Active label plus aria-current=true."
+    },
+    {
+      "id": "EB-CHARACTER-CREATE-VALIDATE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CREATE",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Blank, case-insensitive duplicate, over-80, and seventeenth character attempts keep the modal/draft open, show an adjacent error, and write nothing."
+    },
+    {
+      "id": "EB-CHARACTER-CREATE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CREATE",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Valid create appends one default recipe with a new ID, activates it, marks Unsaved, and preserves siblings and terrain."
+    },
+    {
+      "id": "EB-CHARACTER-SWITCH",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-SWITCH-EDIT",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Open character changes only active ID/project timestamp, updates named preview context, and marks Unsaved."
+    },
+    {
+      "id": "EB-CHARACTER-EDIT",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-SWITCH-EDIT",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Composition and overrides mutate only the active recipe while sibling and terrain canonical bytes stay equal."
+    },
+    {
+      "id": "EB-CHARACTER-EXPORT",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-SWITCH-EDIT",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Character export names and contains the active recipe only; switching produces that sibling's distinct output."
+    },
+    {
+      "id": "EB-CHARACTER-DUPLICATE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-MANAGE",
+      "stepIds": [
+        "S0",
+        "S1"
+      ],
+      "oracle": "Duplicate prefill uses unique '<name> copy' then the smallest suffix 2+, deep-copies source pack/selections/overrides under a new ID/name, appends and activates it, and preserves source bytes."
+    },
+    {
+      "id": "EB-CHARACTER-RENAME",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-MANAGE",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Rename changes only selected recipe name and project timestamp; invalid name writes nothing."
+    },
+    {
+      "id": "EB-CHARACTER-DELETE-CANCEL",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-MANAGE",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Delete dialog names exact character/pack; Cancel restores trigger focus and graph equality."
+    },
+    {
+      "id": "EB-CHARACTER-DELETE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-MANAGE",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Delete removes only target, blocks sole deletion, and active deletion selects next then previous deterministically."
+    },
+    {
+      "id": "EB-CHARACTER-RESTORE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-MANAGE",
+      "stepIds": [
+        "S5"
+      ],
+      "oracle": "Snapshot restore returns deleted recipe, order, active ID, sibling bytes, and terrain exactly."
+    },
+    {
+      "id": "EB-CHARACTER-AUTOSAVE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-RETURN",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Collection edit uses existing 750ms revision transaction with one pre-replacement snapshot."
+    },
+    {
+      "id": "EB-CHARACTER-REOPEN",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-RETURN",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Reload restores all recipe names/order/state, active ID, and terrain hashes exactly."
+    },
+    {
+      "id": "EB-CHARACTER-CONFLICT",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-RETURN",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Stale collection write stores nothing and exposes existing reload/overwrite checkpoint/save-copy/cancel choices."
+    },
+    {
+      "id": "EB-CHARACTER-OFFLINE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-RETURN",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Installed web app creates, switches, saves, reopens, and exports characters with zero required network requests."
+    },
+    {
+      "id": "EB-CHARACTER-DESKTOP-OPEN",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-DESKTOP",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Packaged Electron opens all recipe files through existing opaque grants and shows correct active character."
+    },
+    {
+      "id": "EB-CHARACTER-DESKTOP-SAVE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-DESKTOP",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Desktop save writes one file per listed recipe, removes stale canonical recipe files, and fingerprints complete inventory."
+    },
+    {
+      "id": "EB-CHARACTER-DESKTOP-CONFLICT",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-DESKTOP",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "External edit to any recipe file causes existing conflict flow before overwrite."
+    },
+    {
+      "id": "EB-CHARACTER-UNSAVED-CLOSE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-DESKTOP",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Collection edits participate in existing Save/Discard/Cancel close without new IPC or bypass."
+    },
+    {
+      "id": "EB-CHARACTER-ARCHIVE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CROSS-HOST",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Archive inventories exactly one recipe file per recipe ID and retains optional terrain/embedded packs."
+    },
+    {
+      "id": "EB-CHARACTER-CROSS-OPEN",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CROSS-HOST",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Other host validates every recipe before rendering and matches all recipe/terrain hashes."
+    },
+    {
+      "id": "EB-CHARACTER-CROSS-RETURN",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CROSS-HOST",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Unedited return preserves project/recipe/terrain semantics and active-character exports without host metadata."
+    },
+    {
+      "id": "EB-CHARACTER-OLD-READER",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-CROSS-HOST",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Single-character baseline reader rejects multi-character project schema before graph return or mutation."
+    },
+    {
+      "id": "EB-CHARACTER-BASELINE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-REGRESSION",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Every retained one-character, pack, terrain, archive, export, offline, and host flow passes unchanged."
+    },
+    {
+      "id": "EB-CHARACTER-PERFORMANCE",
+      "status": "implemented",
+      "flowId": "TF-CHARACTER-REGRESSION",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "100 visible switches have p95 <=50ms and 16-recipe save/reopen <=2s with no task >100ms."
+    }
+  ],
+  "flows": [
+    {
+      "id": "TF-CHARACTER-CREATE",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-CHARACTER-CREATE"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-LIST",
+        "UC-CHARACTER-CREATE"
+      ],
+      "preconditions": [
+        "Project has one character"
+      ],
+      "completion": "A second named default character is active without sibling or terrain drift",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Inspect collection",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-LIST",
+          "navigationId": "NAV-CHARACTER-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-LIST"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Open create and test invalid names",
+          "viewId": "VIEW-CHARACTER-NAME",
+          "uiId": "UI-CHARACTER-NAME",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-CREATE-VALIDATE"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Confirm valid character",
+          "viewId": "VIEW-CHARACTER-NAME",
+          "uiId": "UI-CHARACTER-NAME-CONFIRM",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-CREATE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-CHARACTER-SWITCH-EDIT",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-CHARACTER-SWITCH-EDIT"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-SWITCH",
+        "UC-CHARACTER-EDIT",
+        "UC-CHARACTER-EXPORT-ACTIVE"
+      ],
+      "preconditions": [
+        "At least two characters exist"
+      ],
+      "completion": "Active character edits and exports distinctly while sibling remains unchanged",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open another character",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-OPEN",
+          "navigationId": "NAV-CHARACTER-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-SWITCH"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Choose Edit active character, then change composition and override",
+          "viewId": "VIEW-COMPOSE",
+          "uiId": "UI-CHARACTER-EDIT",
+          "navigationId": "NAV-CHARACTER-EDIT",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-EDIT"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Export active then switch and export sibling",
+          "viewId": "VIEW-EXPORT",
+          "uiId": "UI-CHARACTER-EXPORT",
+          "navigationId": "NAV-CHARACTER-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-EXPORT"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-CHARACTER-MANAGE",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-CHARACTER-MANAGE"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-DUPLICATE",
+        "UC-CHARACTER-RENAME",
+        "UC-CHARACTER-DELETE",
+        "UC-CHARACTER-RESTORE"
+      ],
+      "preconditions": [
+        "Collection has at least two characters"
+      ],
+      "completion": "Duplicate/rename/delete are isolated and deletion is recoverable",
+      "steps": [
+        {
+          "id": "S0",
+          "action": "Choose Duplicate character",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-DUPLICATE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DUPLICATE"
+          ]
+        },
+        {
+          "id": "S1",
+          "action": "Confirm duplicate name",
+          "viewId": "VIEW-CHARACTER-NAME",
+          "uiId": "UI-CHARACTER-NAME-CONFIRM",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DUPLICATE"
+          ]
+        },
+        {
+          "id": "S1A",
+          "action": "Choose Rename character",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-RENAME",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-RENAME"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Enter and confirm a unique name",
+          "viewId": "VIEW-CHARACTER-NAME",
+          "uiId": "UI-CHARACTER-NAME",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-RENAME"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Open delete and cancel",
+          "viewId": "VIEW-CHARACTER-DELETE",
+          "uiId": "UI-CHARACTER-DELETE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DELETE-CANCEL"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Confirm delete",
+          "viewId": "VIEW-CHARACTER-DELETE",
+          "uiId": "UI-CHARACTER-DELETE-CONFIRM",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DELETE"
+          ]
+        },
+        {
+          "id": "S5",
+          "action": "Restore project snapshot",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-RESTORE",
+          "navigationId": "NAV-CHARACTER-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-RESTORE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-CHARACTER-RETURN",
+      "status": "implemented",
+      "host": "web",
+      "scenarioIds": [
+        "SC-CHARACTER-RETURN"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-SAVE",
+        "UC-CHARACTER-RESTORE",
+        "UC-CHARACTER-OFFLINE"
+      ],
+      "preconditions": [
+        "Browser project has multiple characters"
+      ],
+      "completion": "Collection persists, conflicts safely, and works offline",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Edit and autosave",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-SAVE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-AUTOSAVE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Reload",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-LIST",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-REOPEN"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Resolve stale-tab save",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "navigationId": "NAV-CHARACTER-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-CONFLICT"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Restart offline and manage collection",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-CREATE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-OFFLINE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-CHARACTER-DESKTOP",
+      "status": "implemented",
+      "host": "desktop",
+      "scenarioIds": [
+        "SC-CHARACTER-DESKTOP"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-SAVE",
+        "UC-CHARACTER-SWITCH"
+      ],
+      "preconditions": [
+        "Packaged Electron is open"
+      ],
+      "completion": "Folder collection saves and detects external recipe edits securely",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open folder project",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "navigationId": "NAV-CHARACTER-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DESKTOP-OPEN"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Delete recipe and save",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DESKTOP-SAVE"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Externally edit a recipe and save",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-DESKTOP-CONFLICT"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Close with collection edits",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-LIST",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-UNSAVED-CLOSE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-CHARACTER-CROSS-HOST",
+      "status": "implemented",
+      "host": "cross-host",
+      "scenarioIds": [
+        "SC-CHARACTER-CROSS-HOST"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-TRANSFER",
+        "UC-CHARACTER-EXPORT-ACTIVE"
+      ],
+      "preconditions": [
+        "Three-character project with terrain exists"
+      ],
+      "completion": "Collection round trips with exact active and output parity",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Export project archive",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "navigationId": "NAV-CHARACTER-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-ARCHIVE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Open on other host",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-LIST",
+          "navigationId": "NAV-CHARACTER-PROJECT",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-CROSS-OPEN"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Re-export and return",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-CROSS-RETURN"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Open with old reader",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-CHARACTER-SAVE",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-OLD-READER"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-CHARACTER-REGRESSION",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-CHARACTER-SWITCH-EDIT",
+        "SC-CHARACTER-RETURN",
+        "SC-CHARACTER-DESKTOP",
+        "SC-CHARACTER-CROSS-HOST"
+      ],
+      "capabilityIds": [
+        "UC-CHARACTER-EDIT",
+        "UC-CHARACTER-SAVE",
+        "UC-CHARACTER-TRANSFER"
+      ],
+      "preconditions": [
+        "Baseline fixtures and hosts exist"
+      ],
+      "completion": "Existing single-character and terrain promises do not drift",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Run retained product flows",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-ACTIVE-CHARACTER-STATUS",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-BASELINE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Measure switching and max collection save",
+          "viewId": "VIEW-CHARACTER-COLLECTION",
+          "uiId": "UI-CHARACTER-OPEN",
+          "expectedBehaviorIds": [
+            "EB-CHARACTER-PERFORMANCE"
+          ]
+        }
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "OUT-UPD004-FOLDERS",
+      "status": "excluded",
+      "expectation": "Organize characters with folders, tags, search, or reorder",
+      "reason": "A bounded flat cast proves identity and isolation first",
+      "consequence": "Stable creation order only",
+      "disposition": "Future collection organization update"
+    },
+    {
+      "id": "OUT-UPD004-BATCH-EXPORT",
+      "status": "excluded",
+      "expectation": "Export every character in one command",
+      "reason": "Batch naming, partial failure, and destination collision are separate delivery semantics",
+      "consequence": "Switch and export active character",
+      "disposition": "Future delivery automation"
+    },
+    {
+      "id": "OUT-UPD004-SCENES",
+      "status": "excluded",
+      "expectation": "Place several characters together with terrain",
+      "reason": "Collection ownership does not define scene transforms or runtime composition",
+      "consequence": "Independent previews/exports",
+      "disposition": "Scene stage"
+    },
+    {
+      "id": "OUT-UPD004-PER-CHARACTER-THEME",
+      "status": "excluded",
+      "expectation": "Give each character a complete independent project theme",
+      "reason": "Existing project theme plus recipe overrides already provides coherent shared mood and local exceptions",
+      "consequence": "Theme shared; overrides local",
+      "disposition": "Revisit with measured need"
+    },
+    {
+      "id": "OUT-UPD004-IMPORT-MERGE",
+      "status": "excluded",
+      "expectation": "Import or merge one recipe from another project",
+      "reason": "Pack-lock and identity collision resolution requires a distinct transfer contract",
+      "consequence": "Whole-project archive transfer only",
+      "disposition": "Future recipe transfer update"
+    },
+    {
+      "id": "OUT-UPD004-COLLABORATION",
+      "status": "excluded",
+      "expectation": "Cloud sync or concurrent collaborative character editing",
+      "reason": "Product remains local-first and zero-server",
+      "consequence": "Existing local conflict choices",
+      "disposition": "Not in current local-first roadmap"
+    },
+    {
+      "id": "OUT-UPD004-DRAG-DROP",
+      "status": "excluded",
+      "expectation": "Drag characters to reorder or group",
+      "reason": "Order has no gameplay/export meaning in this update",
+      "consequence": "Creation order is fixed",
+      "disposition": "Collection organization update"
+    },
+    {
+      "id": "OUT-UPD004-UNBOUNDED",
+      "status": "excluded",
+      "expectation": "Create unlimited characters",
+      "reason": "A 16-recipe bound keeps UI, save, archive, and performance categorical",
+      "consequence": "Seventeenth creation is blocked",
+      "disposition": "Increase only from measured capacity evidence"
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP-UPD004-SPEC",
+      "status": "implemented",
+      "dependsOn": [],
+      "traceIds": [
+        "CP-CHARACTER-COLLECTION",
+        "CP-CHARACTER-ISOLATION",
+        "CP-CHARACTER-PORTABILITY"
+      ],
+      "gate": "Complete update, review, approval, and lock validate"
+    },
+    {
+      "id": "WP-UPD004-DOMAIN",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD004-SPEC"
+      ],
+      "traceIds": [
+        "IA-CHARACTER-COLLECTION",
+        "IA-CHARACTER-RECIPE",
+        "TF-CHARACTER-CREATE",
+        "TF-CHARACTER-MANAGE"
+      ],
+      "gate": "Strict cardinality, CRUD, pack-lock, and isolation tests pass"
+    },
+    {
+      "id": "WP-UPD004-PERSISTENCE",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD004-DOMAIN"
+      ],
+      "traceIds": [
+        "TF-CHARACTER-RETURN",
+        "IA-PROJECT-SAVE",
+        "EB-CHARACTER-ARCHIVE",
+        "EB-CHARACTER-OLD-READER"
+      ],
+      "gate": "Repository deletion, snapshots, archives, and rollback pass"
+    },
+    {
+      "id": "WP-UPD004-UX",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD004-DOMAIN"
+      ],
+      "traceIds": [
+        "VIEW-CHARACTER-COLLECTION",
+        "VIEW-CHARACTER-NAME",
+        "VIEW-CHARACTER-DELETE",
+        "TF-CHARACTER-SWITCH-EDIT"
+      ],
+      "gate": "Collection and dialogs pass keyboard/reflow actual UI"
+    },
+    {
+      "id": "WP-UPD004-HOSTS",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD004-PERSISTENCE",
+        "WP-UPD004-UX"
+      ],
+      "traceIds": [
+        "TF-CHARACTER-DESKTOP",
+        "TF-CHARACTER-CROSS-HOST"
+      ],
+      "gate": "Packaged Electron and bidirectional host flows pass"
+    },
+    {
+      "id": "WP-UPD004-REGRESSION",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD004-HOSTS"
+      ],
+      "traceIds": [
+        "TF-CHARACTER-REGRESSION",
+        "EB-CHARACTER-BASELINE",
+        "EB-CHARACTER-PERFORMANCE"
+      ],
+      "gate": "All retained flows and performance pass"
+    },
+    {
+      "id": "WP-UPD004-PROMOTION",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD004-REGRESSION"
+      ],
+      "traceIds": [
+        "CP-CHARACTER-COLLECTION",
+        "CP-CHARACTER-ISOLATION",
+        "CP-CHARACTER-PORTABILITY"
+      ],
+      "gate": "Evidence-owned lifecycle promotion and docs validate"
+    }
+  ],
+  "runs": [
+    {
+      "id": "RUN-UPD004-001",
+      "status": "verified",
+      "completedAt": "2026-07-22T08:50:00.000Z",
+      "sourceRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935 plus recorded UPD-003 and UPD-004 working-tree implementations",
+      "environment": {
+        "web": "Playwright 1.61.1 Chromium production preview at 1440x900 and 320x800 with controlled service-worker offline restart",
+        "desktop": "Packaged Electron 40.10.6 Windows x64 portable build on Windows 10.0.26220 with frozen 18-method bridge",
+        "crossHost": "Production web UI to packaged Electron UI to production web UI using deterministic .spriteproject archive",
+        "quality": "Vitest 4.1.10 strict schema, CRUD/isolation, IndexedDB, archive, old-reader, terrain, pack, rollback, and performance fixtures",
+        "pagesSimulation": "Exact /the-sprite-project/ service-worker scope"
+      },
+      "flowIds": [
+        "TF-CHARACTER-CREATE",
+        "TF-CHARACTER-SWITCH-EDIT",
+        "TF-CHARACTER-MANAGE",
+        "TF-CHARACTER-RETURN",
+        "TF-CHARACTER-DESKTOP",
+        "TF-CHARACTER-CROSS-HOST",
+        "TF-CHARACTER-REGRESSION"
+      ],
+      "expectedBehaviorIds": [
+        "EB-CHARACTER-LIST",
+        "EB-CHARACTER-CREATE-VALIDATE",
+        "EB-CHARACTER-CREATE",
+        "EB-CHARACTER-SWITCH",
+        "EB-CHARACTER-EDIT",
+        "EB-CHARACTER-EXPORT",
+        "EB-CHARACTER-DUPLICATE",
+        "EB-CHARACTER-RENAME",
+        "EB-CHARACTER-DELETE-CANCEL",
+        "EB-CHARACTER-DELETE",
+        "EB-CHARACTER-RESTORE",
+        "EB-CHARACTER-AUTOSAVE",
+        "EB-CHARACTER-REOPEN",
+        "EB-CHARACTER-CONFLICT",
+        "EB-CHARACTER-OFFLINE",
+        "EB-CHARACTER-DESKTOP-OPEN",
+        "EB-CHARACTER-DESKTOP-SAVE",
+        "EB-CHARACTER-DESKTOP-CONFLICT",
+        "EB-CHARACTER-UNSAVED-CLOSE",
+        "EB-CHARACTER-ARCHIVE",
+        "EB-CHARACTER-CROSS-OPEN",
+        "EB-CHARACTER-CROSS-RETURN",
+        "EB-CHARACTER-OLD-READER",
+        "EB-CHARACTER-BASELINE",
+        "EB-CHARACTER-PERFORMANCE"
+      ],
+      "evidence": [
+        "unit-results.json",
+        "playwright-results.json",
+        "report/index.html",
+        "artifacts/*",
+        "electron-results.json",
+        "electron-report/index.html",
+        "electron-artifacts/*",
+        "cross-host-results.json",
+        "cross-host-report/index.html",
+        "cross-host-artifacts/*",
+        "regression-web-results.json",
+        "regression-electron-results.json",
+        "regression-cross-host-results.json",
+        "pages-results.json",
+        "performance-summary.json",
+        "rollback-results.json",
+        "dependency-audit.json",
+        "product/release/the-sprite-project-0.1.0-windows-x64-portable.zip"
+      ],
+      "release": {
+        "version": "0.1.0",
+        "artifact": "the-sprite-project-0.1.0-windows-x64-portable.zip",
+        "sha256": "b622616eb087e77717335df376de48fd51e6bf5fb5b2237365fc1987fe6e3e5a"
+      },
+      "results": {
+        "unitContractQuality": {
+          "expected": 87,
+          "unexpected": 0,
+          "snapshotOracles": 1
+        },
+        "dedicatedUpd004Web": {
+          "expected": 4,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "dedicatedUpd004Electron": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "dedicatedUpd004CrossHost": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "retainedWeb": {
+          "expected": 37,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "retainedElectron": {
+          "expected": 8,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "retainedCrossHost": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "pagesSubpathSimulation": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "performance": "passed",
+        "rollback": "passed",
+        "runtimeDependencyVulnerabilities": 0,
+        "severityZeroToTwoIssues": 0,
+        "undeclaredAnomalies": 0
+      },
+      "anomalies": [],
+      "unverifiedReleaseGates": [
+        "Actual GitHub Pages publication, deployed smoke/offline run, and deployed rollback/withdrawal rehearsal",
+        "Independent clean-machine Windows launch, unsigned SmartScreen observation, and executable rollback"
+      ]
+    }
+  ],
+  "issues": [],
+  "decisions": [
+    {
+      "id": "DEC-UPD004-COLLECTION",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Project owns 1–16 ordered character recipes and one active recipe.",
+      "reversible": true,
+      "evidence": "User request and existing recipeIds architecture"
+    },
+    {
+      "id": "DEC-UPD004-SAVE",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Recipes serialize separately but commit in one atomic project revision.",
+      "reversible": false,
+      "evidence": "Existing repository and recovery model"
+    },
+    {
+      "id": "DEC-UPD004-SCHEMA",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Retain project schema v2 and archive formats because existing fields and paths reserve multiplicity.",
+      "reversible": false,
+      "evidence": "Current strict graph and archive design"
+    },
+    {
+      "id": "DEC-UPD004-ACTIVE",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Persisted activeRecipeId is the sole active-character source of truth.",
+      "reversible": false,
+      "evidence": "Avoids UI/graph selection drift"
+    },
+    {
+      "id": "DEC-UPD004-THEME",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Project theme and preview remain shared; character selections and overrides remain recipe-local.",
+      "reversible": true,
+      "evidence": "Preserves verified schemas and coherent project mood"
+    },
+    {
+      "id": "DEC-UPD004-DELETE",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Minimum one recipe; active deletion chooses next then previous and is snapshot recoverable.",
+      "reversible": true,
+      "evidence": "Prevents empty active context and provides deterministic recovery"
+    },
+    {
+      "id": "DEC-UPD004-EXPORT",
+      "status": "specified",
+      "decisionState": "proposed",
+      "decision": "Existing character export targets active recipe only; batch export is excluded.",
+      "reversible": true,
+      "evidence": "Smallest unambiguous extension of current export contract"
+    }
+  ]
+}

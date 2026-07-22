@@ -1,10 +1,11 @@
 import { z } from 'zod'
-import { ANIMATIONS, DIRECTIONS, SLOT_IDS, TOKEN_IDS, type ProjectGraphV2, type SpriteProject, type SpriteProjectV2 } from './types'
+import { ANIMATIONS, DIRECTIONS, SLOT_IDS, TOKEN_IDS, type ProjectGraphV2, type SpriteProject, type SpriteProjectV2, type TerrainDocumentV1 } from './types'
 
 const utcTimestamp = z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/)
 const sha256 = z.string().regex(/^[a-f0-9]{64}$/)
 const identifier = z.string().min(1)
 const optionalAsset = z.string().min(1).nullable()
+const characterName = z.string().min(1).max(80).refine(value => value === value.trim().normalize('NFC'), 'Character name must be trimmed and NFC-normalized.')
 
 const themeSchema = z.object(Object.fromEntries(TOKEN_IDS.map(token => [token, z.string().regex(/^#[a-fA-F0-9]{6}$/)])) as Record<(typeof TOKEN_IDS)[number], z.ZodString>).strict()
 const selectionsSchema = z.object(Object.fromEntries(SLOT_IDS.map(slot => [slot, optionalAsset])) as Record<(typeof SLOT_IDS)[number], typeof optionalAsset>).strict()
@@ -20,7 +21,7 @@ export const previewSchema = z.object({
 
 const legacyRecipeSchema = z.object({
   id: identifier,
-  name: z.string().min(1),
+  name: characterName,
   packId: identifier,
   selections: selectionsSchema,
   overrides: overridesSchema,
@@ -86,12 +87,27 @@ export const archiveManifestV2Schema = z.object({
   entries: z.array(archiveManifestEntrySchema).min(4),
 }).strict()
 
+export const archiveManifestV3Schema = z.object({
+  archiveFormatVersion: z.literal(3),
+  projectSchemaVersion: z.literal(2),
+  packLockVersion: z.literal(1),
+  terrainSchemaVersion: z.literal(1),
+  projectId: identifier,
+  createdWith: z.string().min(1),
+  embeddedPacks: z.array(archiveEmbeddedPackSchema).min(1).max(16).optional(),
+  entries: z.array(archiveManifestEntrySchema).min(6),
+}).strict().superRefine((manifest, context) => {
+  if (manifest.entries.filter(entry => entry.path === 'terrain.json').length !== 1) {
+    context.addIssue({ code: 'custom', path: ['entries'], message: 'Archive format 3 requires exactly one terrain.json entry.' })
+  }
+})
+
 export const projectV2Schema = z.object({
   schemaVersion: z.literal(2),
   id: identifier,
   name: z.string().min(1),
   activeRecipeId: identifier,
-  recipeIds: z.array(identifier).length(1),
+  recipeIds: z.array(identifier).min(1).max(16),
   packLocks: z.array(packLockSchema).min(1),
   themePresetId: identifier,
   theme: themeSchema,
@@ -100,14 +116,37 @@ export const projectV2Schema = z.object({
   updatedAt: utcTimestamp,
   revision: z.number().int().safe().nonnegative(),
 }).strict().superRefine((project, context) => {
-  if (project.recipeIds[0] !== project.activeRecipeId) {
-    context.addIssue({ code: 'custom', path: ['activeRecipeId'], message: 'activeRecipeId must be the sole recipeIds entry.' })
+  if (!project.recipeIds.includes(project.activeRecipeId)) {
+    context.addIssue({ code: 'custom', path: ['activeRecipeId'], message: 'activeRecipeId must be listed in recipeIds.' })
+  }
+  if (new Set(project.recipeIds).size !== project.recipeIds.length) {
+    context.addIssue({ code: 'custom', path: ['recipeIds'], message: 'Recipe IDs must be unique.' })
   }
   const packIds = project.packLocks.map(lock => lock.packId)
   if (new Set(packIds).size !== packIds.length) {
     context.addIssue({ code: 'custom', path: ['packLocks'], message: 'Pack lock IDs must be unique.' })
   }
 })
+
+export const terrainDocumentV1Schema = z.object({
+  schemaVersion: z.literal(1),
+  id: z.string().min(1).max(128),
+  name: z.string().trim().min(1).max(120),
+  materialId: z.enum(['grass', 'dirt', 'sand', 'stone']),
+  palette: z.object({
+    surface: z.string().regex(/^#[a-fA-F0-9]{6}$/),
+    detail: z.string().regex(/^#[a-fA-F0-9]{6}$/),
+    edge: z.string().regex(/^#[a-fA-F0-9]{6}$/),
+    shadow: z.string().regex(/^#[a-fA-F0-9]{6}$/),
+  }).strict(),
+  map: z.object({
+    width: z.literal(12),
+    height: z.literal(8),
+    occupied: z.array(z.boolean()).length(96),
+  }).strict(),
+  createdAt: utcTimestamp,
+  updatedAt: utcTimestamp,
+}).strict()
 
 export function parseProjectV1(value: unknown): SpriteProject {
   return projectV1Schema.parse(value) as SpriteProject
@@ -117,17 +156,29 @@ export function parseProjectV2(value: unknown): SpriteProjectV2 {
   return projectV2Schema.parse(value) as SpriteProjectV2
 }
 
+export function parseTerrainDocumentV1(value: unknown): TerrainDocumentV1 {
+  return terrainDocumentV1Schema.parse(value) as TerrainDocumentV1
+}
+
 export function parseProjectGraphV2(value: unknown): ProjectGraphV2 {
-  const envelope = z.object({ project: z.unknown(), recipes: z.record(z.string(), z.unknown()) }).strict().parse(value)
+  const envelope = z.union([
+    z.object({ project: z.unknown(), recipes: z.record(z.string(), z.unknown()), terrain: z.unknown().nullable() }).strict(),
+    z.object({ project: z.unknown(), recipes: z.record(z.string(), z.unknown()) }).strict(),
+  ]).parse(value)
   const project = parseProjectV2(envelope.project)
   const recipes = Object.fromEntries(Object.entries(envelope.recipes).map(([key, recipe]) => [key, recipeV1Schema.parse(recipe)]))
+  const terrain = 'terrain' in envelope && envelope.terrain !== null ? parseTerrainDocumentV1(envelope.terrain) : null
 
   if (Object.keys(recipes).length !== project.recipeIds.length) throw new Error('Recipe graph contains unlisted or missing recipes.')
+  const characterNames = new Set<string>()
   for (const recipeId of project.recipeIds) {
     const recipe = recipes[recipeId]
     if (!recipe || recipe.id !== recipeId) throw new Error(`Recipe ${recipeId} does not resolve by ID.`)
     if (!project.packLocks.some(lock => lock.packId === recipe.packId)) throw new Error(`Recipe ${recipeId} references an unlocked pack.`)
+    const normalizedName = recipe.name.normalize('NFC').toLocaleLowerCase('en-US')
+    if (characterNames.has(normalizedName)) throw new Error(`Character name ${recipe.name} is duplicated.`)
+    characterNames.add(normalizedName)
   }
 
-  return { project, recipes } as ProjectGraphV2
+  return { project, recipes, terrain } as ProjectGraphV2
 }

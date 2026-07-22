@@ -23,6 +23,8 @@ export const HOST_ERROR_CODES = [
   'pack-disabled',
   'draft-conflict',
   'draft-limit',
+  'invalid-character-name',
+  'character-limit',
   'image-invalid',
   'image-profile-invalid',
   'image-color-limit',

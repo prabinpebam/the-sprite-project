@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "approvalId": "APPROVAL-UPD-004-LOCK-001",
+  "kind": "specification-lock-and-change-control",
+  "lockId": "LOCK-UPD-004-001",
+  "reviewId": "REVIEW-UPD-004-001",
+  "ownerRole": "product owner",
+  "approvedAt": "2026-07-22",
+  "sourceType": "direct-user-request",
+  "sourceReference": "User instruction: I should be able to create multiple characters in the same project and save them separately within the project. Detail out this user need and use product update pipeline to execute this.",
+  "statement": "Approve the bounded multi-character project contract and authorize complete implementation through the product update pipeline.",
+  "lockedDecisionIds": ["DEC-UPD004-COLLECTION", "DEC-UPD004-SAVE", "DEC-UPD004-SCHEMA", "DEC-UPD004-ACTIVE", "DEC-UPD004-THEME", "DEC-UPD004-DELETE", "DEC-UPD004-EXPORT"],
+  "approvedDecisionIds": ["DEC-UPD004-COLLECTION", "DEC-UPD004-SAVE", "DEC-UPD004-SCHEMA", "DEC-UPD004-ACTIVE", "DEC-UPD004-THEME", "DEC-UPD004-DELETE", "DEC-UPD004-EXPORT"],
+  "approvedChangeIds": []
+}

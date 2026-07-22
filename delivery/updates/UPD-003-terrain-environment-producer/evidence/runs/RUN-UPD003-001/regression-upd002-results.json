@@ -1,0 +1,409 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/upd002-pack-flows.spec.ts",
+      "tests/upd002-cross-host.spec.ts",
+      "--config",
+      "playwright.upd002.config.ts",
+      "--reporter=json",
+      "--output=test-results-upd003-regression-upd002-recorded"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.upd002.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/product/test-results-upd003-regression-upd002-recorded",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "upd002-pack-flows.spec.ts",
+          "upd002-cross-host.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run build && npm run preview -- --host 127.0.0.1 --port 4175",
+      "url": "http://127.0.0.1:4175",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "upd002-cross-host.spec.ts",
+      "file": "upd002-cross-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-PACK-CROSS-HOST preserves and renders embedded exact packages web to Electron to web",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4680,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:40.770Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3faede896f45cfa4fefd-a34ce6d0911ea19a06d5",
+          "file": "upd002-cross-host.spec.ts",
+          "line": 27,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "upd002-pack-flows.spec.ts",
+      "file": "upd002-pack-flows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-PACK-INSTALL-LIBRARY-ACTIVATE installs exact content and protects an active lock",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2148,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:45.579Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-d3a30b23b9a8c4001b53",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "QS-PACK-REFLOW keeps pack authoring usable at constrained 200%-equivalent layout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 526,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:47.738Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-624a2c719cfb7f9d644a",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 82,
+          "column": 1
+        },
+        {
+          "title": "TF-PACK-INVALID rejects before mutation and exports an actionable report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 493,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:48.274Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-318821c283642aefb919",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 107,
+          "column": 1
+        },
+        {
+          "title": "TF-PACK-UPDATE installs side by side, previews impact, activates, and rolls back",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2924,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:48.775Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-401e031b3d052246b411",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 124,
+          "column": 1
+        },
+        {
+          "title": "TF-PACK-MISSING-RECOVERY blocks substitution, creates a copy, and locates the exact pack",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1990,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:51.705Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-d6a70968bcd29a972798",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 158,
+          "column": 1
+        },
+        {
+          "title": "TF-PACK-AUTHOR-RECOVERY creates, autosaves, reopens, recovers, and self-installs a pack",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2156,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:53.704Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-ee74676e38e98e3b3414",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 197,
+          "column": 1
+        },
+        {
+          "title": "TF-PACK-DRAFT-RECOVERY preserves stale-tab edits and saves a separate copy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2257,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:55.867Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-638804e1e67073fcfe8b",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 240,
+          "column": 1
+        },
+        {
+          "title": "QS-PACK-MAX-PERFORMANCE validates a near-maximum pack without blocking UI",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3499,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:03:58.132Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "performance.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJob3N0IjogIndlYiIsCiAgImNvbXByZXNzZWRCeXRlcyI6IDY2MjkxNzAzLAogICJ0aHJlc2hvbGRzIjogewogICAgImZpcnN0U3RhdHVzTXMiOiAxMDAsCiAgICAibWF4U3RhdHVzR2FwTXMiOiA1MDAsCiAgICAidG90YWxNcyI6IDEwMDAwLAogICAgIm1heExvbmdUYXNrTXMiOiAxMDAKICB9LAogICJvYnNlcnZlZCI6IHsKICAgICJmaXJzdFN0YXR1c01zIjogMC44MDAwMDAwMDA3NDUwNTgxLAogICAgIm1heFN0YXR1c0dhcE1zIjogMzM1LjYwMDAwMDAwMTQ5MDEsCiAgICAidG90YWxNcyI6IDgzMy41LAogICAgIm1heExvbmdUYXNrTXMiOiAwLAogICAgInN0YXR1c1VwZGF0ZXMiOiBbCiAgICAgIHsKICAgICAgICAiYXQiOiAyNTM2LjY5OTk5OTk5OTI1NSwKICAgICAgICAidGV4dCI6ICJWYWxpZGF0aW5nIGxvY2FsIHBhY2txdWV1ZWQgwrcgMC4wIHMiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiYXQiOiAyNjExLjUsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrY29udGFpbmVyIMK3IDAuMCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMjYxMS42OTk5OTk5OTkyNTUsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrZXh0cmFjdCDCtyAwLjAgcyIKICAgICAgfSwKICAgICAgewogICAgICAgICJhdCI6IDI2MjgsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrbWFuaWZlc3QgwrcgMC4wIHMiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiYXQiOiAyNjI5LjMwMDAwMDAwMDc0NSwKICAgICAgICAidGV4dCI6ICJWYWxpZGF0aW5nIGxvY2FsIHBhY2tjaGVja3N1bXMgwrcgMC4wIHMiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiYXQiOiAyNjY4LjYwMDAwMDAwMTQ5LAogICAgICAgICJ0ZXh0IjogIlZhbGlkYXRpbmcgbG9jYWwgcGFja3NjaGVtYSDCtyAwLjEgcyIKICAgICAgfSwKICAgICAgewogICAgICAgICJhdCI6IDI2NzAuODk5OTk5OTk4NTEsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNraW1hZ2VzIMK3IDAuMSBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzAwNi41LAogICAgICAgICJ0ZXh0IjogIlZhbGlkYXRpbmcgbG9jYWwgcGFja2ltYWdlcyDCtyAwLjQgcyIKICAgICAgfSwKICAgICAgewogICAgICAgICJhdCI6IDMxOTAuMTAwMDAwMDAxNDksCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrY29tcGxldGUgwrcgMC42IHMiCiAgICAgIH0KICAgIF0KICB9Cn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b796d88ca807b2aad17-e5de7d75c76f6a7dc90b",
+          "file": "upd002-pack-flows.spec.ts",
+          "line": 259,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-21T19:03:33.182Z",
+    "duration": 28971.588,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

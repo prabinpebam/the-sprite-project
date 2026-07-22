@@ -1,0 +1,356 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests-electron/packaged-host.spec.ts",
+      "--config",
+      "playwright.electron.config.ts",
+      "--reporter=json",
+      "--output=test-results-upd003-regression-electron-recorded"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.electron.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests-electron",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/product/test-results-upd003-regression-electron-recorded",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests-electron",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "packaged-host.spec.ts",
+      "file": "packaged-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-DESKTOP-PORTABLE-LAUNCH exposes a secure visible host and creates a project",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1884,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:14.993Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0aXRsZSI6ICJEZXNrdG9wIEZpZWxkIFRlc3QgLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJicmlkZ2VLZXlzIjogWwogICAgImNob29zZUV4cG9ydERpcmVjdG9yeSIsCiAgICAiY2hvb3NlUGFja0ZpbGUiLAogICAgImNob29zZVByb2plY3RGaWxlIiwKICAgICJjaG9vc2VQcm9qZWN0Rm9sZGVyIiwKICAgICJmb3JnZXRSZWNlbnRQcm9qZWN0IiwKICAgICJnZXRIb3N0SW5mbyIsCiAgICAiaW5zcGVjdEFyY2hpdmUiLAogICAgImluc3RhbGxQYWNrIiwKICAgICJsaXN0SW5zdGFsbGVkUGFja3MiLAogICAgImxpc3RSZWNlbnRQcm9qZWN0cyIsCiAgICAib3BlblJlY2VudFByb2plY3QiLAogICAgInJlYWRQYWNrIiwKICAgICJyZWFkUHJvamVjdCIsCiAgICAicmVtb3ZlUGFjayIsCiAgICAic2F2ZVByb2plY3QiLAogICAgIndyaXRlQXJjaGl2ZSIsCiAgICAid3JpdGVFeHBvcnQiLAogICAgIndyaXRlUGFjayIKICBdLAogICJicmlkZ2VGcm96ZW4iOiB0cnVlLAogICJub2RlUHJvY2Vzc1R5cGUiOiAidW5kZWZpbmVkIiwKICAibm9kZVJlcXVpcmVUeXBlIjogInVuZGVmaW5lZCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuL1xuRGVza3RvcCBGaWVsZCBUZXN0XG5Qb3J0YWJsZSDCtyAwLjEuMFxuUFJPSkVDVCBXT1JLU1BBQ0VcbkRlc2t0b3AgRmllbGQgVGVzdFxuVW5zYXZlZCBjaGFuZ2VzXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTCBXT1JLU1BBQ0VcblxuRGVza3RvcCBGaWVsZCBUZXN0XG5SZW5hbWUgcHJvamVjdFxuQ0hBUkFDVEVSXG5IZXJvXG5DT05URU5UIFBBQ0tcbldheWZhcmVyIDEuMC4wXG5USEVNRVxuSGVhcnRoXG5PVVRQVVRcblJlYWR5XG5Db21wbGV0ZSByZWNpcGVcbklkbGUgYW5kIHdhbGsgYXJlIGNvdmVyZWQgaW4gZm91ciBkaXJlY3Rpb25zLlxuQ29tcG9zZSBjaGFyYWN0ZXJcblJlc3RvcmUgc2FmZSBwcm9qZWN0XG5cbkxJVkUgQ0hBUkFDVEVSXG5cbkhlcm9cblJlYWR5XG5XQUxLXG5TT1VUSFxuNFhcbiM0MTBBMTQ1NVxuT3BlbiBwcmV2aWV3XG5FeHBvcnRcbkRlc2t0b3AgRmllbGQgVGVzdCBjcmVhdGVkIHdpdGggYSBjb21wbGV0ZSBXYXlmYXJlciBzdGFydGVyIGNoYXJhY3Rlci4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-128a4ff742471719a100",
+          "file": "packaged-host.spec.ts",
+          "line": 49,
+          "column": 1
+        },
+        {
+          "title": "TF-DESKTOP-PROJECT-FOLDER saves, detects external changes, and writes outputs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1748,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:16.897Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0aXRsZSI6ICJXaW5kb3cgZWRpdCAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgImJyaWRnZUtleXMiOiBbCiAgICAiY2hvb3NlRXhwb3J0RGlyZWN0b3J5IiwKICAgICJjaG9vc2VQYWNrRmlsZSIsCiAgICAiY2hvb3NlUHJvamVjdEZpbGUiLAogICAgImNob29zZVByb2plY3RGb2xkZXIiLAogICAgImZvcmdldFJlY2VudFByb2plY3QiLAogICAgImdldEhvc3RJbmZvIiwKICAgICJpbnNwZWN0QXJjaGl2ZSIsCiAgICAiaW5zdGFsbFBhY2siLAogICAgImxpc3RJbnN0YWxsZWRQYWNrcyIsCiAgICAibGlzdFJlY2VudFByb2plY3RzIiwKICAgICJvcGVuUmVjZW50UHJvamVjdCIsCiAgICAicmVhZFBhY2siLAogICAgInJlYWRQcm9qZWN0IiwKICAgICJyZW1vdmVQYWNrIiwKICAgICJzYXZlUHJvamVjdCIsCiAgICAid3JpdGVBcmNoaXZlIiwKICAgICJ3cml0ZUV4cG9ydCIsCiAgICAid3JpdGVQYWNrIgogIF0sCiAgImJyaWRnZUZyb3plbiI6IHRydWUsCiAgIm5vZGVQcm9jZXNzVHlwZSI6ICJ1bmRlZmluZWQiLAogICJub2RlUmVxdWlyZVR5cGUiOiAidW5kZWZpbmVkIiwKICAiYm9keVRleHQiOiAiVGhlIFNwcml0ZSBQcm9qZWN0XG4vXG5XaW5kb3cgZWRpdFxuUG9ydGFibGUgwrcgMC4xLjBcblBST0pFQ1QgV09SS1NQQUNFXG5XaW5kb3cgZWRpdFxuU2F2ZWQgbG9jYWxseVxuTmV3IHByb2plY3RcblNhdmUgcHJvamVjdFxuUHJvamVjdFxuQ29tcG9zZVxuVGhlbWVcblRlcnJhaW5cblByZXZpZXdcblN0b3JhZ2VcblBhY2tzXG5FeHBvcnRcblxuUE9SVEFCTEUgREVTS1RPUCBIT1NUXG5cblByb2plY3QgZmlsZXNcbldpbmRvd3MgeDY0IMK3IDAuMS4wXG5BcHByb3ZlZCBwcm9qZWN0IGxvY2F0aW9uXG5DOlxcVXNlcnNcXFBSQUJJTn4yXFxBcHBEYXRhXFxMb2NhbFxcVGVtcFxcc3ByaXRlLXByb2plY3QtZWxlY3Ryb24tT0IwOHFOXFxSZWxvY2F0ZWQgUHJvamVjdFxuTWFuaWZlc3QgNzFmNDg0ZTJkYjQ54oCmIMK3IDUgY2Fub25pY2FsIGVudHJpZXNcbk9wZW4gcHJvamVjdCBmb2xkZXJcbk9wZW4gLnNwcml0ZXByb2plY3RcblNhdmVcblNhdmUgQXNcbkV4cG9ydCAuc3ByaXRlcHJvamVjdFxuXG5MT0NBTCBIT1NUIFNFVFRJTkdTXG5cblJlY2VudCBwcm9qZWN0c1xuMiByZW1lbWJlcmVkXG5BdmFpbGFibGVcbkM6XFxVc2Vyc1xcUFJBQklOfjJcXEFwcERhdGFcXExvY2FsXFxUZW1wXFxzcHJpdGUtcHJvamVjdC1lbGVjdHJvbi1PQjA4cU5cXFJlbG9jYXRlZCBQcm9qZWN0XG5PcGVuXG5BdmFpbGFibGVcbkM6XFxVc2Vyc1xcUFJBQklOfjJcXEFwcERhdGFcXExvY2FsXFxUZW1wXFxzcHJpdGUtcHJvamVjdC1lbGVjdHJvbi1PQjA4cU5cXERlc2t0b3AgSGVybyBQcm9qZWN0XG5PcGVuXG5cblJlbmRlcmVyIGlzb2xhdGlvbiBhY3RpdmUuIE5vZGUuanMgYW5kIHJhdyBmaWxlc3lzdGVtIHBhdGhzIGFyZSBub3QgZXhwb3NlZCB0byB0aGlzIGludGVyZmFjZS5cblxuTElWRSBDSEFSQUNURVJcblxuSGVyb1xuUmVhZHlcbldBTEtcblNPVVRIXG40WFxuIzQxMEExNDU1XG5PcGVuIHByZXZpZXdcbkV4cG9ydFxuUG9ydGFibGUgYXJjaGl2ZSB3cml0dGVuIHRvIEM6XFxVc2Vyc1xcUFJBQklOfjJcXEFwcERhdGFcXExvY2FsXFxUZW1wXFxzcHJpdGUtcHJvamVjdC1lbGVjdHJvbi1PQjA4cU5cXGRlc2t0b3AtaGVyby5zcHJpdGVwcm9qZWN0LiIsCiAgInZpZXdwb3J0IjogWwogICAgMTQ0MCwKICAgIDkwMAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UKfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-9fb4746bd8b33dd982b7",
+          "file": "packaged-host.spec.ts",
+          "line": 91,
+          "column": 1
+        },
+        {
+          "title": "TF-DESKTOP-UNSAVED-CLOSE requires Save, Discard, or Cancel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1106,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:18.653Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-b6447531000aa84baa19",
+          "file": "packaged-host.spec.ts",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "TF-DESKTOP-UNSAVED-CLOSE saves successfully before closing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 873,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:19.765Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-1ef659e888d7395019e0",
+          "file": "packaged-host.spec.ts",
+          "line": 181,
+          "column": 1
+        },
+        {
+          "title": "TF-DESKTOP-PACK-LIFECYCLE validates, installs, disables, and removes through main",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2216,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:20.644Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0aXRsZSI6ICJUaGUgU3ByaXRlIFByb2plY3QiLAogICJicmlkZ2VLZXlzIjogWwogICAgImNob29zZUV4cG9ydERpcmVjdG9yeSIsCiAgICAiY2hvb3NlUGFja0ZpbGUiLAogICAgImNob29zZVByb2plY3RGaWxlIiwKICAgICJjaG9vc2VQcm9qZWN0Rm9sZGVyIiwKICAgICJmb3JnZXRSZWNlbnRQcm9qZWN0IiwKICAgICJnZXRIb3N0SW5mbyIsCiAgICAiaW5zcGVjdEFyY2hpdmUiLAogICAgImluc3RhbGxQYWNrIiwKICAgICJsaXN0SW5zdGFsbGVkUGFja3MiLAogICAgImxpc3RSZWNlbnRQcm9qZWN0cyIsCiAgICAib3BlblJlY2VudFByb2plY3QiLAogICAgInJlYWRQYWNrIiwKICAgICJyZWFkUHJvamVjdCIsCiAgICAicmVtb3ZlUGFjayIsCiAgICAic2F2ZVByb2plY3QiLAogICAgIndyaXRlQXJjaGl2ZSIsCiAgICAid3JpdGVFeHBvcnQiLAogICAgIndyaXRlUGFjayIKICBdLAogICJicmlkZ2VGcm96ZW4iOiB0cnVlLAogICJub2RlUHJvY2Vzc1R5cGUiOiAidW5kZWZpbmVkIiwKICAibm9kZVJlcXVpcmVUeXBlIjogInVuZGVmaW5lZCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuL1xuRGVza3RvcCB3b3Jrc3BhY2VcblBvcnRhYmxlIMK3IDAuMS4wXG5QUk9KRUNUIFdPUktTUEFDRVxuTm8gcHJvamVjdCBvcGVuXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTCBDT05URU5UIEVDT1NZU1RFTVxuXG5QYWNrc1xuQWRkIHBhY2tcbkNyZWF0ZSBwYWNrXG4yXG5hdmFpbGFibGUgdmVyc2lvbnNcbjBcbmxvY2FsIGVuYWJsZWRcbjBcbmF1dGhvcmluZyBkcmFmdHNcbjwxXG5LaUIgbG9jYWwgY29udGVudFxuRmlsdGVyIHBhY2tzXG5cbk9GRkxJTkUgTE9DQUwgTElCUkFSWVxuXG5JbnN0YWxsZWQgdmVyc2lvbnNcbjAgb2YgMCBsb2NhbFxuXG5ObyBsb2NhbCBwYWNrcyBpbnN0YWxsZWQuIEJ1bmRsZWQgV2F5ZmFyZXIgYW5kIEhhcmJvciByZW1haW4gYXZhaWxhYmxlLlxuXG5SRUFELU9OTFkgU09VUkNFU1xuXG5CdW5kbGVkIGFuZCBwcm9qZWN0LXNjb3BlZFxuMiB2aXNpYmxlXG5XYXlmYXJlciDCtyAxLjAuMFxud2F5ZmFyZXJcbjEyIGFzc2V0cyDCtyBidW5kbGVkIMK3IHNoaXBzIHdpdGggdGhlIGFwcGxpY2F0aW9uXG4gUmVhZHkgb2ZmbGluZVxuSGFyYm9yIFdhdGNoIMK3IDEuMC4wXG5oYXJib3JcbjkgYXNzZXRzIMK3IGJ1bmRsZWQgwrcgc2hpcHMgd2l0aCB0aGUgYXBwbGljYXRpb25cbiBSZWFkeSBvZmZsaW5lXG5cbkFVVEhPUkVEIExPQ0FMTFlcblxuRHJhZnRzXG4wIGRyYWZ0c1xuXG5DcmVhdGUgYSBwYWNrIHRvIHR1cm4gY29tcGF0aWJsZSAyNTbDlzUxMiBQTkcgbGF5ZXIgc2hlZXRzIGludG8gcmV1c2FibGUgbG9jYWwgY29udGVudC5cblxuRmllbGQgS2l0IDEuMC4wIHJlbW92ZWQuIiwKICAidmlld3BvcnQiOiBbCiAgICAxNDI1LAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-9192e4deec316a8cd195",
+          "file": "packaged-host.spec.ts",
+          "line": 196,
+          "column": 1
+        },
+        {
+          "title": "TF-DESKTOP-PACK-AUTHOR writes and self-installs through the secure bridge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3312,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:22.869Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0aXRsZSI6ICJUaGUgU3ByaXRlIFByb2plY3QiLAogICJicmlkZ2VLZXlzIjogWwogICAgImNob29zZUV4cG9ydERpcmVjdG9yeSIsCiAgICAiY2hvb3NlUGFja0ZpbGUiLAogICAgImNob29zZVByb2plY3RGaWxlIiwKICAgICJjaG9vc2VQcm9qZWN0Rm9sZGVyIiwKICAgICJmb3JnZXRSZWNlbnRQcm9qZWN0IiwKICAgICJnZXRIb3N0SW5mbyIsCiAgICAiaW5zcGVjdEFyY2hpdmUiLAogICAgImluc3RhbGxQYWNrIiwKICAgICJsaXN0SW5zdGFsbGVkUGFja3MiLAogICAgImxpc3RSZWNlbnRQcm9qZWN0cyIsCiAgICAib3BlblJlY2VudFByb2plY3QiLAogICAgInJlYWRQYWNrIiwKICAgICJyZWFkUHJvamVjdCIsCiAgICAicmVtb3ZlUGFjayIsCiAgICAic2F2ZVByb2plY3QiLAogICAgIndyaXRlQXJjaGl2ZSIsCiAgICAid3JpdGVFeHBvcnQiLAogICAgIndyaXRlUGFjayIKICBdLAogICJicmlkZ2VGcm96ZW4iOiB0cnVlLAogICJub2RlUHJvY2Vzc1R5cGUiOiAidW5kZWZpbmVkIiwKICAibm9kZVJlcXVpcmVUeXBlIjogInVuZGVmaW5lZCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuL1xuRGVza3RvcCB3b3Jrc3BhY2VcblBvcnRhYmxlIMK3IDAuMS4wXG5QUk9KRUNUIFdPUktTUEFDRVxuTm8gcHJvamVjdCBvcGVuXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTCBDT05URU5UIEVDT1NZU1RFTVxuXG5QYWNrc1xuQWRkIHBhY2tcbkNyZWF0ZSBwYWNrXG4zXG5hdmFpbGFibGUgdmVyc2lvbnNcbjFcbmxvY2FsIGVuYWJsZWRcbjFcbmF1dGhvcmluZyBkcmFmdHNcbjJcbktpQiBsb2NhbCBjb250ZW50XG5GaWx0ZXIgcGFja3NcblxuT0ZGTElORSBMT0NBTCBMSUJSQVJZXG5cbkluc3RhbGxlZCB2ZXJzaW9uc1xuMSBvZiAxIGxvY2FsXG5VbnRpdGxlZCBwYWNrIMK3IDAuMS4wXG5sb2NhbC4yMWE2MjI2Yi0xZmQ1LTQxNWUtYTE2OC03YThjMWQ3YjEyYjAgwrcgNDc4MGViYjNjZjQ24oCmXG4xIGFzc2V0cyDCtyBhdXRob3JlZC1sb2NhbCDCtyAyMDQ1IGJ5dGVzIMK3IDAgZGVwZW5kZW50IHByb2plY3RzXG5FbmFibGVkXG5cblJFQUQtT05MWSBTT1VSQ0VTXG5cbkJ1bmRsZWQgYW5kIHByb2plY3Qtc2NvcGVkXG4yIHZpc2libGVcbldheWZhcmVyIMK3IDEuMC4wXG53YXlmYXJlclxuMTIgYXNzZXRzIMK3IGJ1bmRsZWQgwrcgc2hpcHMgd2l0aCB0aGUgYXBwbGljYXRpb25cbiBSZWFkeSBvZmZsaW5lXG5IYXJib3IgV2F0Y2ggwrcgMS4wLjBcbmhhcmJvclxuOSBhc3NldHMgwrcgYnVuZGxlZCDCtyBzaGlwcyB3aXRoIHRoZSBhcHBsaWNhdGlvblxuIFJlYWR5IG9mZmxpbmVcblxuQVVUSE9SRUQgTE9DQUxMWVxuXG5EcmFmdHNcbjEgZHJhZnRzXG5VbnRpdGxlZCBwYWNrXG5sb2NhbC4yMWE2MjI2Yi0xZmQ1LTQxNWUtYTE2OC03YThjMWQ3YjEyYjAgwrcgMC4xLjBcblJldmlzaW9uIDEgwrcgMSBhc3NldHNcblVudGl0bGVkIHBhY2sgaW5zdGFsbGVkIGFzIGFuIGF1dGhvcmVkIHRlc3QgY29weS4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0MjUsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-3c5cc300c5665259f2dd",
+          "file": "packaged-host.spec.ts",
+          "line": 220,
+          "column": 1
+        },
+        {
+          "title": "QS-DESKTOP-PACK-MAX-PERFORMANCE validates a near-maximum pack without blocking window",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4747,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:04:26.191Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "performance.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJob3N0IjogImVsZWN0cm9uIiwKICAiY29tcHJlc3NlZEJ5dGVzIjogNjYyOTE3MDMsCiAgInRocmVzaG9sZHMiOiB7CiAgICAiZmlyc3RTdGF0dXNNcyI6IDEwMCwKICAgICJtYXhTdGF0dXNHYXBNcyI6IDUwMCwKICAgICJ0b3RhbE1zIjogMTAwMDAsCiAgICAibWF4TG9uZ1Rhc2tNcyI6IDEwMAogIH0sCiAgIm9ic2VydmVkIjogewogICAgImZpcnN0U3RhdHVzTXMiOiAxLjkwMDAwMDAwMjIzNTE3NDIsCiAgICAibWF4U3RhdHVzR2FwTXMiOiA0MDQuMTk5OTk5OTk5MjU0OTQsCiAgICAidG90YWxNcyI6IDE4NzYuNjAwMDAwMDAxNDkwMSwKICAgICJtYXhMb25nVGFza01zIjogNzUsCiAgICAic3RhdHVzVXBkYXRlcyI6IFsKICAgICAgewogICAgICAgICJhdCI6IDI0NTIuMTAwMDAwMDAxNDksCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrcXVldWVkIMK3IDAuMCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMjg1Ni4zMDAwMDAwMDA3NDUsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrcXVldWVkIMK3IDAuNCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzE5NC42OTk5OTk5OTkyNTUsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrcXVldWVkIMK3IDAuMCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzIwNy42OTk5OTk5OTkyNTUsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNrY29udGFpbmVyIMK3IDAuMCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzIwOC42MDAwMDAwMDE0OSwKICAgICAgICAidGV4dCI6ICJWYWxpZGF0aW5nIGxvY2FsIHBhY2tleHRyYWN0IMK3IDAuMCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzIyNSwKICAgICAgICAidGV4dCI6ICJWYWxpZGF0aW5nIGxvY2FsIHBhY2ttYW5pZmVzdCDCtyAwLjAgcyIKICAgICAgfSwKICAgICAgewogICAgICAgICJhdCI6IDMyMjYuMTk5OTk5OTk5MjU1LAogICAgICAgICJ0ZXh0IjogIlZhbGlkYXRpbmcgbG9jYWwgcGFja2NoZWNrc3VtcyDCtyAwLjAgcyIKICAgICAgfSwKICAgICAgewogICAgICAgICJhdCI6IDM0MTguMzAwMDAwMDAwNzQ1LAogICAgICAgICJ0ZXh0IjogIlZhbGlkYXRpbmcgbG9jYWwgcGFja3NjaGVtYSDCtyAwLjIgcyIKICAgICAgfSwKICAgICAgewogICAgICAgICJhdCI6IDM0MjAuNjAwMDAwMDAxNDksCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNraW1hZ2VzIMK3IDAuMiBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzYwNC45MDAwMDAwMDIyMzUsCiAgICAgICAgInRleHQiOiAiVmFsaWRhdGluZyBsb2NhbCBwYWNraW1hZ2VzIMK3IDAuNCBzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImF0IjogMzk5Ni4xMDAwMDAwMDE0OSwKICAgICAgICAidGV4dCI6ICJWYWxpZGF0aW5nIGxvY2FsIHBhY2tpbWFnZXMgwrcgMC44IHMiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiYXQiOiA0MDgxLjMwMDAwMDAwMDc0NSwKICAgICAgICAidGV4dCI6ICJWYWxpZGF0aW5nIGxvY2FsIHBhY2tjb21wbGV0ZSDCtyAwLjkgcyIKICAgICAgfQogICAgXQogIH0KfQ=="
+                    },
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0aXRsZSI6ICJUaGUgU3ByaXRlIFByb2plY3QiLAogICJicmlkZ2VLZXlzIjogWwogICAgImNob29zZUV4cG9ydERpcmVjdG9yeSIsCiAgICAiY2hvb3NlUGFja0ZpbGUiLAogICAgImNob29zZVByb2plY3RGaWxlIiwKICAgICJjaG9vc2VQcm9qZWN0Rm9sZGVyIiwKICAgICJmb3JnZXRSZWNlbnRQcm9qZWN0IiwKICAgICJnZXRIb3N0SW5mbyIsCiAgICAiaW5zcGVjdEFyY2hpdmUiLAogICAgImluc3RhbGxQYWNrIiwKICAgICJsaXN0SW5zdGFsbGVkUGFja3MiLAogICAgImxpc3RSZWNlbnRQcm9qZWN0cyIsCiAgICAib3BlblJlY2VudFByb2plY3QiLAogICAgInJlYWRQYWNrIiwKICAgICJyZWFkUHJvamVjdCIsCiAgICAicmVtb3ZlUGFjayIsCiAgICAic2F2ZVByb2plY3QiLAogICAgIndyaXRlQXJjaGl2ZSIsCiAgICAid3JpdGVFeHBvcnQiLAogICAgIndyaXRlUGFjayIKICBdLAogICJicmlkZ2VGcm96ZW4iOiB0cnVlLAogICJub2RlUHJvY2Vzc1R5cGUiOiAidW5kZWZpbmVkIiwKICAibm9kZVJlcXVpcmVUeXBlIjogInVuZGVmaW5lZCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuL1xuRGVza3RvcCB3b3Jrc3BhY2VcblBvcnRhYmxlIMK3IDAuMS4wXG5QUk9KRUNUIFdPUktTUEFDRVxuTm8gcHJvamVjdCBvcGVuXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTCBDT05URU5UIEVDT1NZU1RFTVxuXG5QYWNrc1xuQWRkIHBhY2tcbkNyZWF0ZSBwYWNrXG4yXG5hdmFpbGFibGUgdmVyc2lvbnNcbjBcbmxvY2FsIGVuYWJsZWRcbjBcbmF1dGhvcmluZyBkcmFmdHNcbjwxXG5LaUIgbG9jYWwgY29udGVudFxuRmlsdGVyIHBhY2tzXG5cbk9GRkxJTkUgTE9DQUwgTElCUkFSWVxuXG5JbnN0YWxsZWQgdmVyc2lvbnNcbjAgb2YgMCBsb2NhbFxuXG5ObyBsb2NhbCBwYWNrcyBpbnN0YWxsZWQuIEJ1bmRsZWQgV2F5ZmFyZXIgYW5kIEhhcmJvciByZW1haW4gYXZhaWxhYmxlLlxuXG5SRUFELU9OTFkgU09VUkNFU1xuXG5CdW5kbGVkIGFuZCBwcm9qZWN0LXNjb3BlZFxuMiB2aXNpYmxlXG5XYXlmYXJlciDCtyAxLjAuMFxud2F5ZmFyZXJcbjEyIGFzc2V0cyDCtyBidW5kbGVkIMK3IHNoaXBzIHdpdGggdGhlIGFwcGxpY2F0aW9uXG4gUmVhZHkgb2ZmbGluZVxuSGFyYm9yIFdhdGNoIMK3IDEuMC4wXG5oYXJib3JcbjkgYXNzZXRzIMK3IGJ1bmRsZWQgwrcgc2hpcHMgd2l0aCB0aGUgYXBwbGljYXRpb25cbiBSZWFkeSBvZmZsaW5lXG5cbkFVVEhPUkVEIExPQ0FMTFlcblxuRHJhZnRzXG4wIGRyYWZ0c1xuXG5DcmVhdGUgYSBwYWNrIHRvIHR1cm4gY29tcGF0aWJsZSAyNTbDlzUxMiBQTkcgbGF5ZXIgc2hlZXRzIGludG8gcmV1c2FibGUgbG9jYWwgY29udGVudC5cblxuVkFMSURBVEVEIExPQ0FMIFBBQ0tBR0VcblxuSW5zdGFsbCBMYXJnZSBCZW5jaG1hcmsgUGFjaz9cbkZpbGVcbmxhcmdlLWJlbmNobWFyay5zcHJpdGVwYWNrXG5JZGVudGl0eVxuaW8uZXhhbXBsZS5sYXJnZS1iZW5jaG1hcmsgwrcgMS4wLjBcbkNoZWNrc3VtXG4wYzhlZTdiOGM4MDc3Nzc5NTM4Mjg4MmJiZGNmNGYxZDJkY2QxZjMxYzk1Njk0ZDQwMjlmZGIzN2MxMWFkZDA5XG5Qcm9maWxlXG5IdW1hbm9pZCBMUEMgNjRcbkNvdmVyYWdlXG5Db21wbGV0ZSBpZGxlICsgd2FsayDCtyBzb3V0aCwgd2VzdCwgZWFzdCwgbm9ydGhcbkFzc2V0c1xuOFxuVG9rZW4gYmluZGluZ3Ncbjggc2VtYW50aWMgbWFwcGluZ3NcbkxpY2Vuc2VzXG5DQzAtMS4wXG5FeHBhbmRlZFxuNjYyODkwMTUgYnl0ZXNcbkR1cGxpY2F0ZSBzdGF0ZVxuTmV3IGV4YWN0IHZlcnNpb25cblxuVGhpcyBpcyB2YWxpZGF0ZWQgbG9jYWwgZGF0YSwgbm90IHRydXN0ZWQgZXhlY3V0YWJsZSBjb250ZW50LlxuXG5DYW5jZWxcbkluc3RhbGwgcGFja1xuUGFjayB2YWxpZGF0ZWQgYnkgdGhlIGRlc2t0b3AgaG9zdC4gUmV2aWV3IGJlZm9yZSBpbnN0YWxsYXRpb24uIiwKICAidmlld3BvcnQiOiBbCiAgICAxNDI1LAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "18e4546b8d261d760b3c-063c05ad5f4c9f1a3779",
+          "file": "packaged-host.spec.ts",
+          "line": 243,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-21T19:04:14.405Z",
+    "duration": 16699.559,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "runId": "RUN-UPD003-001",
+  "result": "passed",
+  "checks": {
+    "archiveV3ReaderOnlyOpen": true,
+    "terrainJsonPreserved": true,
+    "terrainCanonicalBytesPreserved": true,
+    "archiveRoundTripBytesPreserved": true,
+    "characterGraphPreserved": true,
+    "terrainBelow64KiB": true,
+    "archiveV2OnlyReaderRejectsV3BeforeMutation": true,
+    "localDataDeletionDuringWithdrawal": false
+  },
+  "source": "unit-results.json UPD-003 quality gates"
+}

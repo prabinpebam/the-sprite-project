@@ -1,0 +1,1713 @@
+{
+  "modelVersion": "1.0.0",
+  "update": {
+    "id": "UPD-003",
+    "title": "Terrain Environment Producer",
+    "status": "implemented",
+    "requestedAt": "2026-07-21",
+    "baselineRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935",
+    "baselineEvidenceRun": "RUN-UPD002-001",
+    "hosts": [
+      "shared",
+      "web",
+      "desktop",
+      "cross-host"
+    ]
+  },
+  "stage": {
+    "id": "STAGE-TERRAIN-001",
+    "name": "Add the second real asset producer",
+    "status": "implemented",
+    "targetUser": "Solo and small-team 2D game developers who need coherent 32px ground tiles alongside their existing character work",
+    "qualityGate": "A developer can create, paint, theme, save, transfer, and export a deterministic cardinal terrain tileset from the same local-first project without changing existing character semantics or requiring a server"
+  },
+  "sources": [
+    "docs/planning/overview.html",
+    "docs/north-star/overview.html",
+    "docs/design/generators/environment-generator.html",
+    "docs/design/systems/composition-model.html",
+    "docs/design/systems/token-coherence.html",
+    "delivery/updates/UPD-002-local-content-pack-ecosystem/traceability.json",
+    "product/src/domain/types.ts",
+    "product/src/domain/archive.ts",
+    "product/src/domain/export.ts"
+  ],
+  "promises": [
+    {
+      "id": "CP-TERRAIN-CREATE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "A developer can create a coherent 32px terrain tileset without drawing every edge and corner manually.",
+      "user": "Developer building a top-down 2D map",
+      "context": "The project already contains or may later contain a character and shared visual theme",
+      "trigger": "They open Terrain and choose a ground material",
+      "outcome": "The product deterministically generates all sixteen cardinal-neighbor tiles and a live paintable map preview",
+      "quality": "Every mask is present, seams are deterministic, previews update within one frame for ordinary maps, and identical documents produce identical pixels",
+      "recovery": "Invalid or incomplete terrain state remains editable, names exact blockers, and never corrupts the character recipe",
+      "evidence": "Pure mask/render fixtures plus actual-UI creation, painting, theming, and recovery flows pass on web and packaged Electron"
+    },
+    {
+      "id": "CP-TERRAIN-PROJECT",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "A developer can keep terrain and character work in one local-first project while each producer retains its own versioned document.",
+      "user": "Returning developer alternating between character and terrain work",
+      "context": "One project may contain a verified character recipe and one optional terrain document",
+      "trigger": "They save, reopen, snapshot, copy, import, or recover the project",
+      "outcome": "Both producers preserve exact semantic state and use one project identity, revision, storage lifecycle, and portable backup",
+      "quality": "Character-only project bytes and render/export hashes remain unchanged; terrain transactions use the existing optimistic revision and recovery model",
+      "recovery": "Old readers reject terrain archives before mutation; conflicts, invalid documents, and interrupted writes preserve the last committed graph",
+      "evidence": "Repository, archive-v3, migration, conflict, snapshot, copy, offline, and regression fixtures pass"
+    },
+    {
+      "id": "CP-TERRAIN-DELIVERY",
+      "status": "implemented",
+      "host": "cross-host",
+      "statement": "A developer can move and export terrain between web and Electron and use it in Godot without manual tile slicing or rule reconstruction.",
+      "user": "Developer shipping a Godot tilemap from either host",
+      "context": "A project contains a valid terrain document",
+      "trigger": "They export generic or Godot terrain output or transfer a project backup",
+      "outcome": "Both hosts emit identical atlas pixels, mask metadata, terrain credits, and Godot TileSet resource inputs",
+      "quality": "Archive, atlas, manifest, credits, and Godot metadata hashes match across hosts; output stays offline-capable",
+      "recovery": "Blocked export names exact terrain issues and produces no partial package; archive conflicts preserve both project versions",
+      "evidence": "Actual web-to-Electron-to-web project round trip and generic/Godot artifact inspection pass"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SC-TERRAIN-FIRST",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-TERRAIN-CREATE",
+        "CP-TERRAIN-PROJECT"
+      ],
+      "actor": "Developer starting a map",
+      "startingState": "Character project has no terrain document",
+      "intent": "Create useful ground tiles quickly",
+      "environment": "Web or packaged Electron",
+      "success": "A default grass terrain exists with all masks and a painted preview",
+      "interruptions": [
+        "Cancel creation",
+        "Storage failure",
+        "Reduced motion"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-PAINT",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-TERRAIN-CREATE"
+      ],
+      "actor": "Developer evaluating autotiling",
+      "startingState": "Terrain document exists",
+      "intent": "Paint a small map and see correct edges",
+      "environment": "Pointer or keyboard accessible grid",
+      "success": "Painting recomputes neighboring masks and visible pixels deterministically",
+      "interruptions": [
+        "Erase tile",
+        "Fill map",
+        "Undo reset"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-THEME",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-TERRAIN-CREATE",
+        "CP-TERRAIN-PROJECT"
+      ],
+      "actor": "Developer matching terrain to a character",
+      "startingState": "Terrain and character share a project",
+      "intent": "Change ground mood coherently",
+      "environment": "Terrain palette controls",
+      "success": "Terrain colors derive from project theme then allow terrain-local overrides without changing character tokens",
+      "interruptions": [
+        "Invalid hex",
+        "Reset override",
+        "Preset change"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-RETURN",
+      "status": "implemented",
+      "host": "web",
+      "promiseIds": [
+        "CP-TERRAIN-PROJECT"
+      ],
+      "actor": "Returning browser user",
+      "startingState": "Saved project contains terrain",
+      "intent": "Continue exact terrain work",
+      "environment": "IndexedDB and offline restart",
+      "success": "Map, material, palette, atlas hash, and character hash reopen unchanged",
+      "interruptions": [
+        "Stale tab",
+        "Quota pressure",
+        "Snapshot restore"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-DESKTOP",
+      "status": "implemented",
+      "host": "desktop",
+      "promiseIds": [
+        "CP-TERRAIN-PROJECT",
+        "CP-TERRAIN-DELIVERY"
+      ],
+      "actor": "Portable Windows user",
+      "startingState": "Project folder or archive contains terrain",
+      "intent": "Continue and export through native locations",
+      "environment": "Packaged Electron with opaque grants",
+      "success": "Terrain opens, saves atomically, and exports without renderer filesystem authority",
+      "interruptions": [
+        "External modification",
+        "Permission failure",
+        "Unsaved close"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-EXPORT",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-TERRAIN-DELIVERY"
+      ],
+      "actor": "Developer preparing engine assets",
+      "startingState": "Terrain document is valid",
+      "intent": "Export complete terrain output",
+      "environment": "Generic or Godot export",
+      "success": "Package contains atlas PNG, cardinal-mask manifest, credits, and optional Godot terrain resource",
+      "interruptions": [
+        "Incomplete palette",
+        "PNG encode failure",
+        "Destination failure"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-CROSS-HOST",
+      "status": "implemented",
+      "host": "cross-host",
+      "promiseIds": [
+        "CP-TERRAIN-PROJECT",
+        "CP-TERRAIN-DELIVERY"
+      ],
+      "actor": "Developer using both hosts",
+      "startingState": "One host saved a terrain project",
+      "intent": "Continue on the other host",
+      "environment": ".spriteproject archive v3",
+      "success": "Project and exports round trip with identical terrain and character hashes",
+      "interruptions": [
+        "Older host",
+        "Archive tamper",
+        "Import conflict"
+      ]
+    },
+    {
+      "id": "SC-TERRAIN-COMPATIBILITY",
+      "status": "implemented",
+      "host": "shared",
+      "promiseIds": [
+        "CP-TERRAIN-PROJECT"
+      ],
+      "actor": "Existing MVP user",
+      "startingState": "Character-only v1/v2 archive or project exists",
+      "intent": "Upgrade without drift",
+      "environment": "Updated web or Electron host",
+      "success": "Character-only bytes, behavior, exports, packs, and credits remain unchanged",
+      "interruptions": [
+        "Legacy migration",
+        "Rollback reader",
+        "Future terrain schema"
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "UC-TERRAIN-CREATE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can add one terrain document to an existing project.",
+      "scenarioIds": [
+        "SC-TERRAIN-FIRST"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-REMOVE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can remove terrain after explicit confirmation without deleting the character recipe.",
+      "scenarioIds": [
+        "SC-TERRAIN-FIRST"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-CHOOSE-MATERIAL",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can choose grass, dirt, sand, or stone as the generated material.",
+      "scenarioIds": [
+        "SC-TERRAIN-FIRST",
+        "SC-TERRAIN-THEME"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-SEE-TILES",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can inspect all sixteen cardinal-neighbor autotile variants and their mask IDs.",
+      "scenarioIds": [
+        "SC-TERRAIN-FIRST",
+        "SC-TERRAIN-PAINT"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-PAINT",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can paint and erase cells on a fixed 12 by 8 test map.",
+      "scenarioIds": [
+        "SC-TERRAIN-PAINT"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-FILL",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can fill or clear the complete test map.",
+      "scenarioIds": [
+        "SC-TERRAIN-PAINT"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-RECOLOR",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can edit terrain surface, detail, edge, and shadow colors.",
+      "scenarioIds": [
+        "SC-TERRAIN-THEME"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-RESET-THEME",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can reset terrain colors to values derived from the active project theme.",
+      "scenarioIds": [
+        "SC-TERRAIN-THEME"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-SEE-READINESS",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can see exact terrain persistence and export blockers.",
+      "scenarioIds": [
+        "SC-TERRAIN-FIRST",
+        "SC-TERRAIN-EXPORT"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-SAVE",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can save terrain with the same project revision and snapshot lifecycle.",
+      "scenarioIds": [
+        "SC-TERRAIN-RETURN",
+        "SC-TERRAIN-DESKTOP"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-REOPEN",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can reopen the exact terrain map and atlas pixels.",
+      "scenarioIds": [
+        "SC-TERRAIN-RETURN",
+        "SC-TERRAIN-DESKTOP",
+        "SC-TERRAIN-COMPATIBILITY"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-RECOVER",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can recover terrain through project snapshots, copies, and archive conflict choices.",
+      "scenarioIds": [
+        "SC-TERRAIN-RETURN",
+        "SC-TERRAIN-CROSS-HOST"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-EXPORT-GENERIC",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can download a generic terrain package with atlas, mask metadata, and credits.",
+      "scenarioIds": [
+        "SC-TERRAIN-EXPORT"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-EXPORT-GODOT",
+      "status": "implemented",
+      "host": "shared",
+      "statement": "User can download Godot terrain metadata without manual tile slicing.",
+      "scenarioIds": [
+        "SC-TERRAIN-EXPORT"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-EXPORT-DIRECT",
+      "status": "implemented",
+      "host": "desktop",
+      "statement": "User can write terrain outputs directly to an approved desktop export folder.",
+      "scenarioIds": [
+        "SC-TERRAIN-DESKTOP"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-TRANSFER",
+      "status": "implemented",
+      "host": "cross-host",
+      "statement": "User can transfer terrain in a versioned portable project archive.",
+      "scenarioIds": [
+        "SC-TERRAIN-CROSS-HOST"
+      ]
+    },
+    {
+      "id": "UC-TERRAIN-WORK-OFFLINE",
+      "status": "implemented",
+      "host": "web",
+      "statement": "User can paint, save, reopen, and export terrain offline after one complete load.",
+      "scenarioIds": [
+        "SC-TERRAIN-RETURN"
+      ]
+    }
+  ],
+  "informationArchitecture": [
+    {
+      "id": "IA-TERRAIN-DOCUMENT",
+      "status": "implemented",
+      "name": "Terrain document",
+      "contains": [
+        "schema version",
+        "material",
+        "palette",
+        "12x8 occupancy map",
+        "created and updated timestamps"
+      ]
+    },
+    {
+      "id": "IA-TERRAIN-MATERIAL",
+      "status": "implemented",
+      "name": "Terrain material",
+      "contains": [
+        "stable ID",
+        "display name",
+        "texture seed",
+        "default palette",
+        "provenance"
+      ]
+    },
+    {
+      "id": "IA-TERRAIN-TILESET",
+      "status": "implemented",
+      "name": "Cardinal autotile set",
+      "contains": [
+        "16 masks",
+        "32px tile geometry",
+        "128x128 atlas",
+        "mask-to-region metadata"
+      ]
+    },
+    {
+      "id": "IA-TERRAIN-MAP",
+      "status": "implemented",
+      "name": "Terrain preview map",
+      "contains": [
+        "12 columns",
+        "8 rows",
+        "occupied cells",
+        "computed cardinal masks"
+      ]
+    },
+    {
+      "id": "IA-TERRAIN-EXPORT",
+      "status": "implemented",
+      "name": "Terrain export",
+      "contains": [
+        "atlas PNG",
+        "terrain manifest",
+        "build manifest",
+        "credits",
+        "Godot resource when selected"
+      ]
+    },
+    {
+      "id": "IA-TERRAIN-PROVENANCE",
+      "status": "implemented",
+      "name": "Terrain provenance",
+      "contains": [
+        "generator source",
+        "author",
+        "license",
+        "material IDs"
+      ]
+    }
+  ],
+  "navigation": [
+    {
+      "id": "NAV-TERRAIN",
+      "status": "implemented",
+      "label": "Terrain",
+      "destination": "VIEW-TERRAIN",
+      "backBehavior": "Project and character state remain unchanged"
+    },
+    {
+      "id": "NAV-TERRAIN-EXPORT",
+      "status": "implemented",
+      "label": "Terrain export",
+      "destination": "VIEW-TERRAIN-EXPORT",
+      "backBehavior": "Returns to terrain with map unchanged"
+    },
+    {
+      "id": "NAV-TERRAIN-STORAGE",
+      "status": "implemented",
+      "label": "Storage",
+      "destination": "VIEW-STORAGE",
+      "backBehavior": "Terrain remains in the current project graph"
+    }
+  ],
+  "views": [
+    {
+      "id": "VIEW-TERRAIN-EMPTY",
+      "status": "implemented",
+      "name": "Terrain empty state",
+      "purpose": "Explain and create the optional second producer",
+      "informationIds": [
+        "IA-TERRAIN-DOCUMENT"
+      ]
+    },
+    {
+      "id": "VIEW-TERRAIN",
+      "status": "implemented",
+      "name": "Terrain workspace",
+      "purpose": "Choose material, paint the map, inspect generated tiles, and recolor terrain",
+      "informationIds": [
+        "IA-TERRAIN-DOCUMENT",
+        "IA-TERRAIN-MATERIAL",
+        "IA-TERRAIN-TILESET",
+        "IA-TERRAIN-MAP",
+        "IA-TERRAIN-PROVENANCE"
+      ]
+    },
+    {
+      "id": "VIEW-TERRAIN-REMOVE",
+      "status": "implemented",
+      "name": "Remove terrain confirmation",
+      "purpose": "Remove only the terrain document after explicit identity and recovery summary",
+      "informationIds": [
+        "IA-TERRAIN-DOCUMENT"
+      ]
+    },
+    {
+      "id": "VIEW-TERRAIN-EXPORT",
+      "status": "implemented",
+      "name": "Terrain export",
+      "purpose": "Inspect readiness, credits, and produce generic or Godot outputs",
+      "informationIds": [
+        "IA-TERRAIN-EXPORT",
+        "IA-TERRAIN-PROVENANCE",
+        "IA-TERRAIN-TILESET"
+      ]
+    },
+    {
+      "id": "VIEW-STORAGE",
+      "status": "implemented",
+      "name": "Existing project storage",
+      "purpose": "Save, snapshot, backup, import, copy, and recover the complete graph",
+      "informationIds": [
+        "IA-TERRAIN-DOCUMENT"
+      ]
+    }
+  ],
+  "uiElements": [
+    {
+      "id": "UI-TERRAIN-CREATE",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN-EMPTY",
+      "role": "button",
+      "name": "Create terrain"
+    },
+    {
+      "id": "UI-TERRAIN-MATERIAL",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "radio",
+      "name": "Terrain material"
+    },
+    {
+      "id": "UI-TERRAIN-MAP",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "grid",
+      "name": "Terrain preview map"
+    },
+    {
+      "id": "UI-TERRAIN-CELL",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "gridcell",
+      "name": "Terrain cell"
+    },
+    {
+      "id": "UI-TERRAIN-FILL",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "button",
+      "name": "Fill map"
+    },
+    {
+      "id": "UI-TERRAIN-ATLAS",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "img",
+      "name": "Generated autotile atlas"
+    },
+    {
+      "id": "UI-TERRAIN-COLOR",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "textbox",
+      "name": "Terrain color"
+    },
+    {
+      "id": "UI-TERRAIN-RESET",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "button",
+      "name": "Reset terrain theme"
+    },
+    {
+      "id": "UI-TERRAIN-STATUS",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "status",
+      "name": "Terrain status"
+    },
+    {
+      "id": "UI-TERRAIN-REMOVE",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "button",
+      "name": "Remove terrain"
+    },
+    {
+      "id": "UI-TERRAIN-REMOVE-CONFIRM",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN-REMOVE",
+      "role": "button",
+      "name": "Remove terrain document"
+    },
+    {
+      "id": "UI-TERRAIN-EXPORT-NAV",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN",
+      "role": "button",
+      "name": "Open terrain export"
+    },
+    {
+      "id": "UI-TERRAIN-EXPORT-GENERIC",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN-EXPORT",
+      "role": "button",
+      "name": "Download terrain package"
+    },
+    {
+      "id": "UI-TERRAIN-EXPORT-GODOT",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN-EXPORT",
+      "role": "button",
+      "name": "Download Godot terrain package"
+    },
+    {
+      "id": "UI-TERRAIN-CREDITS",
+      "status": "implemented",
+      "viewId": "VIEW-TERRAIN-EXPORT",
+      "role": "region",
+      "name": "Terrain credits"
+    },
+    {
+      "id": "UI-TERRAIN-BACKUP",
+      "status": "implemented",
+      "viewId": "VIEW-STORAGE",
+      "role": "button",
+      "name": "Download project backup"
+    }
+  ],
+  "expectedBehaviors": [
+    {
+      "id": "EB-TERRAIN-CREATE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-FIRST",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Create terrain adds one schema-version-1 terrain document with grass defaults and leaves the character recipe, lock, pixels, and credits unchanged."
+    },
+    {
+      "id": "EB-TERRAIN-DEFAULT",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-FIRST",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "The initial document fills a 12x8 map, displays a nonblank preview, and generates exactly sixteen 32px cardinal-mask tiles in a 128x128 atlas."
+    },
+    {
+      "id": "EB-TERRAIN-REMOVE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-FIRST",
+      "stepIds": [
+        "S3",
+        "S4"
+      ],
+      "oracle": "Remove opens a confirmation; confirmation creates a normal project snapshot on save, deletes only terrain state, and preserves character state while cancel writes nothing."
+    },
+    {
+      "id": "EB-TERRAIN-MATERIAL",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-PAINT",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Selecting grass, dirt, sand, or stone changes stable material identity, derived defaults, atlas pixels, preview pixels, and credits in one edit."
+    },
+    {
+      "id": "EB-TERRAIN-PAINT",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-PAINT",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Toggling a cell changes only that occupancy value and recomputes its cardinal mask plus the four direct neighbors."
+    },
+    {
+      "id": "EB-TERRAIN-FILL-CLEAR",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-PAINT",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Fill makes all 96 cells occupied; Clear makes all cells empty; both are one undoable project edit and never resize the grid."
+    },
+    {
+      "id": "EB-TERRAIN-MASKS",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-PAINT",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Atlas and map expose mask IDs 0 through 15 using N=1, E=2, S=4, W=8; identical documents produce identical hashes."
+    },
+    {
+      "id": "EB-TERRAIN-THEME-DERIVE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-THEME",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Reset derives four terrain colors deterministically from the active project theme without adding or changing global character token fields."
+    },
+    {
+      "id": "EB-TERRAIN-THEME-EDIT",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-THEME",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "A valid #RRGGBB terrain color updates atlas and map pixels; invalid text stays visible, reports an adjacent error, and does not mutate committed terrain."
+    },
+    {
+      "id": "EB-TERRAIN-THEME-ISOLATE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-THEME",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Terrain-local overrides never change character theme values, selected assets, character render hash, or character export hash."
+    },
+    {
+      "id": "EB-TERRAIN-AUTOSAVE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-RETURN",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "A terrain edit marks Unsaved in one frame and commits through the existing 750ms project revision transaction with a prior snapshot."
+    },
+    {
+      "id": "EB-TERRAIN-REOPEN",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-RETURN",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Reload or relaunch restores the exact terrain document, map occupancy, atlas hash, map hash, and unchanged character hash."
+    },
+    {
+      "id": "EB-TERRAIN-CONFLICT",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-RETURN",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "A stale terrain edit writes nothing and offers the existing reload, overwrite-with-checkpoint, save-copy, or cancel choices."
+    },
+    {
+      "id": "EB-TERRAIN-OFFLINE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-RETURN",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "After one controlled load, terrain paint, theme, save, reopen, backup, and export complete with zero required network requests."
+    },
+    {
+      "id": "EB-TERRAIN-GENERIC",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-EXPORT",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Generic export emits terrain-atlas.png, terrain-manifest.json, build-manifest.json, credits.json, and CREDITS.txt with exact 32px regions for all sixteen masks."
+    },
+    {
+      "id": "EB-TERRAIN-GODOT",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-EXPORT",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Godot export adds terrain_tileset.tres and README-GODOT-TERRAIN.md whose atlas coordinates, tile size, source ID, and terrain peering bits match the manifest."
+    },
+    {
+      "id": "EB-TERRAIN-CREDITS",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-EXPORT",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Terrain credits name generator source, author, CC0 license, material ID, and project identity with no unselected material."
+    },
+    {
+      "id": "EB-TERRAIN-EXPORT-BLOCK",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-EXPORT",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Invalid palette, schema, or empty required atlas state blocks both commands, names exact issues, and emits no partial download or filesystem output."
+    },
+    {
+      "id": "EB-TERRAIN-EXPORT-NAV",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-EXPORT",
+      "stepIds": [
+        "S0"
+      ],
+      "oracle": "Open terrain export preserves the terrain document and shows current readiness, atlas identity, and credits before enabling commands."
+    },
+    {
+      "id": "EB-TERRAIN-DESKTOP-OPEN",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-DESKTOP",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Packaged Electron opens archive-v3 or folder terrain through existing opaque project grants with no new renderer path authority."
+    },
+    {
+      "id": "EB-TERRAIN-DESKTOP-SAVE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-DESKTOP",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Desktop save writes terrain.json atomically with the complete graph and fingerprints it for external-change detection."
+    },
+    {
+      "id": "EB-TERRAIN-DESKTOP-EXPORT",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-DESKTOP",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Desktop generic and Godot terrain exports write only canonical relative entries to the approved export directory and read back successfully."
+    },
+    {
+      "id": "EB-TERRAIN-UNSAVED-CLOSE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-DESKTOP",
+      "stepIds": [
+        "S4"
+      ],
+      "oracle": "Terrain edits participate in the existing Save, Discard, or Cancel close contract without a producer-specific bypass."
+    },
+    {
+      "id": "EB-TERRAIN-ARCHIVE-V3",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-CROSS-HOST",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "A terrain project writes archive format 3 with terrain.json in the complete manifest; character-only archives remain byte-compatible v1/v2."
+    },
+    {
+      "id": "EB-TERRAIN-CROSS-OPEN",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-CROSS-HOST",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "The other host opens terrain only after checksum and strict terrain schema validation and renders identical atlas/map hashes."
+    },
+    {
+      "id": "EB-TERRAIN-CROSS-RETURN",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-CROSS-HOST",
+      "stepIds": [
+        "S3"
+      ],
+      "oracle": "Unedited re-export preserves terrain document semantics, character semantics, and all generated terrain output hashes without host metadata."
+    },
+    {
+      "id": "EB-TERRAIN-OLD-READER",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-COMPATIBILITY",
+      "stepIds": [
+        "S1"
+      ],
+      "oracle": "Archive-v1/v2 readers see literal format 3 and fail with unsupported-version before returning or mutating a project."
+    },
+    {
+      "id": "EB-TERRAIN-BASELINE",
+      "status": "implemented",
+      "flowId": "TF-TERRAIN-COMPATIBILITY",
+      "stepIds": [
+        "S2"
+      ],
+      "oracle": "Every retained MVP, UPD-001, and UPD-002 character, pack, archive-v1/v2, generic/Godot, offline, and cross-host regression passes unchanged."
+    }
+  ],
+  "flows": [
+    {
+      "id": "TF-TERRAIN-FIRST",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-TERRAIN-FIRST"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-CREATE",
+        "UC-TERRAIN-REMOVE",
+        "UC-TERRAIN-SEE-TILES",
+        "UC-TERRAIN-SEE-READINESS"
+      ],
+      "preconditions": [
+        "Project is open",
+        "No terrain document exists"
+      ],
+      "completion": "Optional terrain is created, inspected, and removable without character drift",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Create terrain",
+          "viewId": "VIEW-TERRAIN-EMPTY",
+          "uiId": "UI-TERRAIN-CREATE",
+          "navigationId": "NAV-TERRAIN",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-CREATE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Inspect generated map and atlas",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-ATLAS",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-DEFAULT"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Choose Remove terrain",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-REMOVE",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-REMOVE"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Confirm removal or cancel",
+          "viewId": "VIEW-TERRAIN-REMOVE",
+          "uiId": "UI-TERRAIN-REMOVE-CONFIRM",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-REMOVE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-PAINT",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-TERRAIN-PAINT"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-CHOOSE-MATERIAL",
+        "UC-TERRAIN-PAINT",
+        "UC-TERRAIN-FILL",
+        "UC-TERRAIN-SEE-TILES"
+      ],
+      "preconditions": [
+        "Terrain exists"
+      ],
+      "completion": "Painted map and complete autotile set reflect exact cardinal masks",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Choose material",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-MATERIAL",
+          "navigationId": "NAV-TERRAIN",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-MATERIAL"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Paint and erase cells",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-CELL",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-PAINT"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Fill then clear map",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-FILL",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-FILL-CLEAR"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Inspect masks and deterministic hashes",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-MAP",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-MASKS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-THEME",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-TERRAIN-THEME"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-RECOLOR",
+        "UC-TERRAIN-RESET-THEME"
+      ],
+      "preconditions": [
+        "Terrain and character exist"
+      ],
+      "completion": "Terrain matches project mood without changing character semantics",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Reset terrain theme from project",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-RESET",
+          "navigationId": "NAV-TERRAIN",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-THEME-DERIVE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Edit terrain colors and correct invalid input",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-COLOR",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-THEME-EDIT"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Compare character state and hash",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-STATUS",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-THEME-ISOLATE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-RETURN",
+      "status": "implemented",
+      "host": "web",
+      "scenarioIds": [
+        "SC-TERRAIN-RETURN"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-SAVE",
+        "UC-TERRAIN-REOPEN",
+        "UC-TERRAIN-RECOVER",
+        "UC-TERRAIN-WORK-OFFLINE"
+      ],
+      "preconditions": [
+        "Browser project contains terrain"
+      ],
+      "completion": "Terrain persists, conflicts safely, and remains usable offline",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Edit and wait for autosave",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-STATUS",
+          "navigationId": "NAV-TERRAIN",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-AUTOSAVE"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Reload project",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-MAP",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-REOPEN"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Resolve stale-tab conflict",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-TERRAIN-BACKUP",
+          "navigationId": "NAV-TERRAIN-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-CONFLICT"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Restart offline and continue",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-MAP",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-OFFLINE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-EXPORT",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-TERRAIN-EXPORT"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-EXPORT-GENERIC",
+        "UC-TERRAIN-EXPORT-GODOT",
+        "UC-TERRAIN-SEE-READINESS"
+      ],
+      "preconditions": [
+        "Terrain document exists"
+      ],
+      "completion": "Generic and Godot terrain packages are complete and credited",
+      "steps": [
+        {
+          "id": "S0",
+          "action": "Open terrain export",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-EXPORT-NAV",
+          "navigationId": "NAV-TERRAIN-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-EXPORT-NAV"
+          ]
+        },
+        {
+          "id": "S1",
+          "action": "Export generic terrain package",
+          "viewId": "VIEW-TERRAIN-EXPORT",
+          "uiId": "UI-TERRAIN-EXPORT-GENERIC",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-GENERIC"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Export Godot terrain package",
+          "viewId": "VIEW-TERRAIN-EXPORT",
+          "uiId": "UI-TERRAIN-EXPORT-GODOT",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-GODOT"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Inspect terrain credits",
+          "viewId": "VIEW-TERRAIN-EXPORT",
+          "uiId": "UI-TERRAIN-CREDITS",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-CREDITS"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Attempt export with invalid color",
+          "viewId": "VIEW-TERRAIN-EXPORT",
+          "uiId": "UI-TERRAIN-EXPORT-GENERIC",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-EXPORT-BLOCK"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-DESKTOP",
+      "status": "implemented",
+      "host": "desktop",
+      "scenarioIds": [
+        "SC-TERRAIN-DESKTOP"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-SAVE",
+        "UC-TERRAIN-REOPEN",
+        "UC-TERRAIN-EXPORT-DIRECT"
+      ],
+      "preconditions": [
+        "Packaged Electron host is open"
+      ],
+      "completion": "Terrain project and outputs use secure native locations",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open terrain project",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-TERRAIN-BACKUP",
+          "navigationId": "NAV-TERRAIN-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-DESKTOP-OPEN"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Save terrain project",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-TERRAIN-BACKUP",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-DESKTOP-SAVE"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Write terrain outputs",
+          "viewId": "VIEW-TERRAIN-EXPORT",
+          "uiId": "UI-TERRAIN-EXPORT-GODOT",
+          "navigationId": "NAV-TERRAIN-EXPORT",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-DESKTOP-EXPORT"
+          ]
+        },
+        {
+          "id": "S4",
+          "action": "Close with dirty terrain",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-STATUS",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-UNSAVED-CLOSE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-CROSS-HOST",
+      "status": "implemented",
+      "host": "cross-host",
+      "scenarioIds": [
+        "SC-TERRAIN-CROSS-HOST"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-TRANSFER",
+        "UC-TERRAIN-REOPEN"
+      ],
+      "preconditions": [
+        "Terrain project exists on one host"
+      ],
+      "completion": "Terrain round trips with exact semantic and output parity",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Export archive-v3 project",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-TERRAIN-BACKUP",
+          "navigationId": "NAV-TERRAIN-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-ARCHIVE-V3"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Open on other host",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-MAP",
+          "navigationId": "NAV-TERRAIN",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-CROSS-OPEN"
+          ]
+        },
+        {
+          "id": "S3",
+          "action": "Re-export and return",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-TERRAIN-BACKUP",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-CROSS-RETURN"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TF-TERRAIN-COMPATIBILITY",
+      "status": "implemented",
+      "host": "shared",
+      "scenarioIds": [
+        "SC-TERRAIN-COMPATIBILITY"
+      ],
+      "capabilityIds": [
+        "UC-TERRAIN-REOPEN",
+        "UC-TERRAIN-RECOVER"
+      ],
+      "preconditions": [
+        "Baseline character fixtures and old reader exist"
+      ],
+      "completion": "Terrain is fail-closed for old hosts and invisible to character-only outputs",
+      "steps": [
+        {
+          "id": "S1",
+          "action": "Open archive-v3 with old reader",
+          "viewId": "VIEW-STORAGE",
+          "uiId": "UI-TERRAIN-BACKUP",
+          "navigationId": "NAV-TERRAIN-STORAGE",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-OLD-READER"
+          ]
+        },
+        {
+          "id": "S2",
+          "action": "Run all retained regressions",
+          "viewId": "VIEW-TERRAIN",
+          "uiId": "UI-TERRAIN-STATUS",
+          "navigationId": "NAV-TERRAIN",
+          "expectedBehaviorIds": [
+            "EB-TERRAIN-BASELINE"
+          ]
+        }
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "OUT-UPD003-TERRAIN-PACKS",
+      "status": "excluded",
+      "expectation": "Install or author external terrain packs",
+      "reason": "UPD-003 must prove the second producer before generalizing pack profile and authoring contracts",
+      "consequence": "Four built-in CC0 procedural materials only",
+      "disposition": "Future update after terrain runtime evidence"
+    },
+    {
+      "id": "OUT-UPD003-TRANSITIONS",
+      "status": "excluded",
+      "expectation": "Blend arbitrary pairs of materials in one map",
+      "reason": "Transition systems require pair-specific art and corner semantics beyond one cardinal material",
+      "consequence": "One active material per terrain document",
+      "disposition": "Next terrain expansion from real pair fixtures"
+    },
+    {
+      "id": "OUT-UPD003-WANG47",
+      "status": "excluded",
+      "expectation": "Generate 47-tile blob, quarter-tile, or Wang sets",
+      "reason": "Sixteen cardinal masks are the smallest complete autotile contract and map directly to Godot peering bits",
+      "consequence": "Diagonal-only adjacency is not represented",
+      "disposition": "Versioned terrain profile after measured need"
+    },
+    {
+      "id": "OUT-UPD003-ANIMATED-WATER",
+      "status": "excluded",
+      "expectation": "Animate water, foam, waterfalls, or terrain FX",
+      "reason": "Animated terrain introduces timing and multi-frame atlas contracts independent of static autotiling",
+      "consequence": "Water is not one of the first four materials",
+      "disposition": "Future animated terrain update"
+    },
+    {
+      "id": "OUT-UPD003-DECORATORS",
+      "status": "excluded",
+      "expectation": "Scatter flowers, pebbles, cracks, foliage, or variation layers",
+      "reason": "Decorator density and overlap are a second generation system",
+      "consequence": "Tiles use deterministic material texture only",
+      "disposition": "Terrain variation update"
+    },
+    {
+      "id": "OUT-UPD003-ARBITRARY-MAP",
+      "status": "excluded",
+      "expectation": "Choose arbitrary map dimensions or import a tilemap",
+      "reason": "A fixed test map proves masks and persistence without becoming a level editor",
+      "consequence": "Preview map is fixed at 12x8 and is not exported as a game level",
+      "disposition": "Scene/composition stage"
+    },
+    {
+      "id": "OUT-UPD003-SCENES",
+      "status": "excluded",
+      "expectation": "Place characters, structures, and terrain together in an exportable scene",
+      "reason": "One terrain producer does not yet justify a scene graph",
+      "consequence": "Character and terrain share project/theme but export independently",
+      "disposition": "After structures/props producer"
+    },
+    {
+      "id": "OUT-UPD003-STRUCTURES",
+      "status": "excluded",
+      "expectation": "Generate structures, buildings, props, or vegetation objects",
+      "reason": "Distinct perspective, footprint, anchor, and layer contracts require a separate producer update",
+      "consequence": "Terrain is ground-only",
+      "disposition": "Next producer after terrain evidence"
+    },
+    {
+      "id": "OUT-UPD003-LIGHTING-MAPS",
+      "status": "excluded",
+      "expectation": "Generate normal, specular, emissive, or height maps",
+      "reason": "Material maps depend on manual editing and engine-lighting evidence",
+      "consequence": "Diffuse terrain only",
+      "disposition": "Phase 6 material-map update"
+    },
+    {
+      "id": "OUT-UPD003-GLOBAL-TOKENS",
+      "status": "excluded",
+      "expectation": "Replace character tokens with a universal project token vocabulary",
+      "reason": "Changing the verified six-token schema would alter baseline project bytes before a third producer proves shared semantics",
+      "consequence": "Terrain has a strict local four-color palette derived from project theme",
+      "disposition": "Revisit after structures producer"
+    },
+    {
+      "id": "OUT-UPD003-NEW-ENGINE",
+      "status": "excluded",
+      "expectation": "Add Unity, RPG Maker, GameMaker, or another engine adapter",
+      "reason": "Engine target selection and downstream fixtures are independent of terrain generation",
+      "consequence": "Generic and Godot remain supported",
+      "disposition": "Separate engine-adapter update"
+    },
+    {
+      "id": "OUT-UPD003-PIXEL-EDITOR",
+      "status": "excluded",
+      "expectation": "Draw or edit terrain pixels manually",
+      "reason": "This increment generates deterministic tiles and does not replace an art editor",
+      "consequence": "Users control material and palette, not individual pixels",
+      "disposition": "Phase 6 manual editor"
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP-UPD003-SPEC",
+      "status": "implemented",
+      "dependsOn": [],
+      "traceIds": [
+        "CP-TERRAIN-CREATE",
+        "CP-TERRAIN-PROJECT",
+        "CP-TERRAIN-DELIVERY"
+      ],
+      "gate": "Complete product, UX, engineering, quality, threat, exclusion, review, approval, and lock artifacts validate"
+    },
+    {
+      "id": "WP-UPD003-CONTRACTS",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD003-SPEC"
+      ],
+      "traceIds": [
+        "IA-TERRAIN-DOCUMENT",
+        "IA-TERRAIN-MATERIAL",
+        "IA-TERRAIN-TILESET",
+        "IA-TERRAIN-MAP"
+      ],
+      "gate": "Strict terrain schema, cardinal masks, deterministic renderer, and baseline hash fixtures pass"
+    },
+    {
+      "id": "WP-UPD003-PERSISTENCE",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD003-CONTRACTS"
+      ],
+      "traceIds": [
+        "TF-TERRAIN-RETURN",
+        "EB-TERRAIN-AUTOSAVE",
+        "EB-TERRAIN-CONFLICT"
+      ],
+      "gate": "Optional terrain graph persists transactionally through IndexedDB and Electron project writes with snapshots/conflicts"
+    },
+    {
+      "id": "WP-UPD003-ARCHIVE",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD003-CONTRACTS"
+      ],
+      "traceIds": [
+        "TF-TERRAIN-CROSS-HOST",
+        "TF-TERRAIN-COMPATIBILITY"
+      ],
+      "gate": "Archive-v3, old-reader failure, character-only byte compatibility, and cross-host round trip pass"
+    },
+    {
+      "id": "WP-UPD003-EXPORT",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD003-CONTRACTS"
+      ],
+      "traceIds": [
+        "TF-TERRAIN-EXPORT",
+        "IA-TERRAIN-EXPORT",
+        "IA-TERRAIN-PROVENANCE"
+      ],
+      "gate": "Generic and Godot terrain artifacts are deterministic, complete, credited, and downstream-inspected"
+    },
+    {
+      "id": "WP-UPD003-UX",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD003-PERSISTENCE",
+        "WP-UPD003-EXPORT"
+      ],
+      "traceIds": [
+        "TF-TERRAIN-FIRST",
+        "TF-TERRAIN-PAINT",
+        "TF-TERRAIN-THEME",
+        "TF-TERRAIN-DESKTOP"
+      ],
+      "gate": "All terrain controls, states, recovery, keyboard, reflow, offline, and desktop workflows pass actual UI"
+    },
+    {
+      "id": "WP-UPD003-REGRESSION",
+      "status": "implemented",
+      "dependsOn": [
+        "WP-UPD003-ARCHIVE",
+        "WP-UPD003-UX"
+      ],
+      "traceIds": [
+        "EB-TERRAIN-BASELINE",
+        "CP-TERRAIN-DELIVERY"
+      ],
+      "gate": "All affected MVP, UPD-001, and UPD-002 tests pass with zero severity 0-2 issues and exact character hashes"
+    }
+  ],
+  "runs": [
+    {
+      "id": "RUN-UPD003-001",
+      "status": "verified",
+      "completedAt": "2026-07-21T19:05:00.000Z",
+      "sourceRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935 plus recorded UPD-003 working-tree implementation",
+      "environment": {
+        "web": "Playwright 1.61.1 Chromium against a test-owned Vite production preview at 1440x900, 640x450, and 320x800 with reduced motion and service-worker-controlled offline restart",
+        "desktop": "Packaged Electron 40.10.6 Windows x64 portable build on Windows 10.0.26220 with isolated userData, context isolation, sandbox, and frozen 18-method preload bridge",
+        "crossHost": "Actual production web UI to packaged Electron UI to production web UI using deterministic archive format 3",
+        "godot": "Godot 4.7.1 stable official a13da4feb headless import and TileSet semantic validation",
+        "quality": "Vitest 4.1.10 strict schema, 64 material-mask pixel oracle, PNG, export, IndexedDB v4, archive v3, old-reader, rollback, and performance fixtures",
+        "pagesSimulation": "Exact /the-sprite-project/ service-worker scope with online install, controlled restart, offline reopen, local project, and export"
+      },
+      "flowIds": [
+        "TF-TERRAIN-FIRST",
+        "TF-TERRAIN-PAINT",
+        "TF-TERRAIN-THEME",
+        "TF-TERRAIN-RETURN",
+        "TF-TERRAIN-EXPORT",
+        "TF-TERRAIN-DESKTOP",
+        "TF-TERRAIN-CROSS-HOST",
+        "TF-TERRAIN-COMPATIBILITY"
+      ],
+      "expectedBehaviorIds": [
+        "EB-TERRAIN-CREATE",
+        "EB-TERRAIN-DEFAULT",
+        "EB-TERRAIN-REMOVE",
+        "EB-TERRAIN-MATERIAL",
+        "EB-TERRAIN-PAINT",
+        "EB-TERRAIN-FILL-CLEAR",
+        "EB-TERRAIN-MASKS",
+        "EB-TERRAIN-THEME-DERIVE",
+        "EB-TERRAIN-THEME-EDIT",
+        "EB-TERRAIN-THEME-ISOLATE",
+        "EB-TERRAIN-AUTOSAVE",
+        "EB-TERRAIN-REOPEN",
+        "EB-TERRAIN-CONFLICT",
+        "EB-TERRAIN-OFFLINE",
+        "EB-TERRAIN-GENERIC",
+        "EB-TERRAIN-GODOT",
+        "EB-TERRAIN-CREDITS",
+        "EB-TERRAIN-EXPORT-BLOCK",
+        "EB-TERRAIN-EXPORT-NAV",
+        "EB-TERRAIN-DESKTOP-OPEN",
+        "EB-TERRAIN-DESKTOP-SAVE",
+        "EB-TERRAIN-DESKTOP-EXPORT",
+        "EB-TERRAIN-UNSAVED-CLOSE",
+        "EB-TERRAIN-ARCHIVE-V3",
+        "EB-TERRAIN-CROSS-OPEN",
+        "EB-TERRAIN-CROSS-RETURN",
+        "EB-TERRAIN-OLD-READER",
+        "EB-TERRAIN-BASELINE"
+      ],
+      "evidence": [
+        "unit-results.json",
+        "playwright-results.json",
+        "report/index.html",
+        "artifacts/*",
+        "electron-results.json",
+        "electron-report/index.html",
+        "electron-artifacts/*",
+        "cross-host-results.json",
+        "cross-host-report/index.html",
+        "cross-host-artifacts/*",
+        "regression-web-results.json",
+        "regression-upd002-results.json",
+        "regression-electron-results.json",
+        "pages-local-results.json",
+        "performance-summary.json",
+        "rollback-results.json",
+        "dependency-audit.json",
+        "product/release/the-sprite-project-0.1.0-windows-x64-portable.zip",
+        "product/release/the-sprite-project-0.1.0-windows-x64-portable.zip.sha256"
+      ],
+      "release": {
+        "version": "0.1.0",
+        "artifact": "the-sprite-project-0.1.0-windows-x64-portable.zip",
+        "sha256": "053f038aadeb85ec7ff81f53f62f0370b8481f593e6c9aab37cbb210d044a55a"
+      },
+      "results": {
+        "unitContractQuality": {
+          "expected": 80,
+          "unexpected": 0,
+          "snapshotOracles": 1
+        },
+        "dedicatedUpd003Web": {
+          "expected": 5,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "dedicatedUpd003Electron": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "dedicatedUpd003CrossHost": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "retainedMvpUpd001Web": {
+          "expected": 23,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "retainedUpd002WebCrossHost": {
+          "expected": 9,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "retainedElectron": {
+          "expected": 7,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "pagesSubpathSimulation": {
+          "expected": 1,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "materialMaskPixelFixtures": {
+          "expected": 64,
+          "unexpected": 0
+        },
+        "godotDownstream": "passed",
+        "performance": "passed",
+        "rollback": "passed",
+        "runtimeDependencyVulnerabilities": 0,
+        "severityZeroToTwoIssues": 0,
+        "undeclaredAnomalies": 0
+      },
+      "anomalies": [],
+      "unverifiedReleaseGates": [
+        "Actual GitHub Pages publication, deployed smoke/offline run, and deployed rollback/withdrawal rehearsal",
+        "Independent clean-machine Windows launch, unsigned SmartScreen observation, and executable rollback"
+      ]
+    }
+  ],
+  "issues": [],
+  "decisions": [
+    {
+      "id": "DEC-UPD003-BOUNDARY",
+      "status": "specified",
+      "decisionState": "locked",
+      "decision": "UPD-003 adds one built-in static terrain producer before structures, scenes, or expanded terrain packs. Its fixed 12x8 occupancy map is a bounded verification surface for edges, corners, holes, accessibility, persistence, and performance, not a game-level format.",
+      "reversible": true,
+      "evidence": "Phase 5 roadmap, MVP OUT-TERRAIN disposition, UPD-002 completion, and direct user authorization on 2026-07-21"
+    },
+    {
+      "id": "DEC-UPD003-CARDINAL",
+      "status": "specified",
+      "decisionState": "locked",
+      "decision": "The first terrain profile is a complete sixteen-tile cardinal N=1 E=2 S=4 W=8 mask set at 32px per tile.",
+      "reversible": false,
+      "evidence": "Smallest complete autotile behavior and direct Godot terrain peering-bit mapping"
+    },
+    {
+      "id": "DEC-UPD003-GRAPH",
+      "status": "specified",
+      "decisionState": "locked",
+      "decision": "Terrain is an optional strict TerrainDocumentV1 in ProjectGraphV2; project.json remains schema version 2 and character recipes remain unchanged.",
+      "reversible": false,
+      "evidence": "Preserves baseline project fields and lets repositories save one atomic graph"
+    },
+    {
+      "id": "DEC-UPD003-ARCHIVE",
+      "status": "specified",
+      "decisionState": "locked",
+      "decision": "Terrain projects use .spriteproject archive format 3 with terrain.json; character-only projects continue writing existing format 1 or 2 bytes.",
+      "reversible": false,
+      "evidence": "Strict older readers must fail before mutation rather than silently drop an unknown producer"
+    },
+    {
+      "id": "DEC-UPD003-PALETTE",
+      "status": "specified",
+      "decisionState": "locked",
+      "decision": "Terrain uses four local color roles derived from the active project theme with local overrides; global six-token character schema is unchanged.",
+      "reversible": true,
+      "evidence": "Avoids baseline byte/hash drift until another producer proves shared token semantics"
+    },
+    {
+      "id": "DEC-UPD003-BUILTIN",
+      "status": "specified",
+      "decisionState": "locked",
+      "decision": "Grass, dirt, sand, and stone are deterministic procedural CC0 materials shipped in code; terrain pack install/authoring is excluded.",
+      "reversible": true,
+      "evidence": "Proves producer workflow and shared project/export contracts without reopening .spritepack humanoid profile"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import { creditsFor } from './project'
 import { packLockForPack } from './pack-locks'
 import { packByLock, PACKS } from './packs'
 import { runtimePackFromInstalled } from './pack-runtime'
-import { archiveManifestSchema, archiveManifestV2Schema, packLockDocumentSchema, parseProjectGraphV2, parseProjectV2, recipeV1Schema } from './schemas'
+import { archiveManifestSchema, archiveManifestV2Schema, archiveManifestV3Schema, packLockDocumentSchema, parseProjectGraphV2, parseProjectV2, parseTerrainDocumentV1, recipeV1Schema } from './schemas'
 import { sha256Hex } from './sha256'
 import { readSpritePack, type ReadSpritePackResult } from './spritepack'
 import type { ContentPack, ProjectGraphV2, SpriteProject } from './types'
@@ -29,9 +29,10 @@ export interface ArchiveManifestEntry {
 }
 
 export interface ArchiveManifest {
-  archiveFormatVersion: 1 | 2
+  archiveFormatVersion: 1 | 2 | 3
   projectSchemaVersion: 2
   packLockVersion: 1
+  terrainSchemaVersion?: 1
   projectId: string
   createdWith: string
   embeddedPacks?: EmbeddedPackManifestEntry[]
@@ -181,6 +182,7 @@ async function payloadEntries(graphValue: ProjectGraphV2, embeddedRuntimePacks: 
     'packs.lock.json': canonicalJsonBytes({ packLockVersion: 1, packs: graph.project.packLocks }),
   }
   for (const recipeId of graph.project.recipeIds) entries[`recipes/${recipeId}.json`] = canonicalJsonBytes(graph.recipes[recipeId])
+  if (graph.terrain) entries['terrain.json'] = canonicalJsonBytes(graph.terrain)
   const lock = graph.project.packLocks.find(item => item.packId === projection.packId)
   const resolvedPack = lock ? packByLock(lock) ?? embeddedRuntimePacks.find(pack => pack.id === lock.packId && pack.version === lock.version && pack.packDocumentSha256 === lock.sha256) ?? null : null
   if (!resolvedPack) throw archiveError('missing-pack', `Exact pack ${projection.packId} is unavailable for archive credits.`)
@@ -253,15 +255,17 @@ export async function writeProjectArchive(graphValue: ProjectGraphV2, createdWit
     manifestEntries.push({ path, mediaType: mediaTypeFor(path), size: payload[path].length, sha256: await sha256Hex(payload[path]) })
   }
   const manifest: ArchiveManifest = {
-    archiveFormatVersion: embeddedRecords.length ? 2 : 1,
+    archiveFormatVersion: graph.terrain ? 3 : embeddedRecords.length ? 2 : 1,
     projectSchemaVersion: 2,
     packLockVersion: 1,
+    ...(graph.terrain ? { terrainSchemaVersion: 1 as const } : {}),
     projectId: graph.project.id,
     createdWith,
     ...(embeddedRecords.length ? { embeddedPacks: embeddedRecords } : {}),
     entries: manifestEntries,
   }
-  if (manifest.archiveFormatVersion === 2) archiveManifestV2Schema.parse(manifest)
+  if (manifest.archiveFormatVersion === 3) archiveManifestV3Schema.parse(manifest)
+  else if (manifest.archiveFormatVersion === 2) archiveManifestV2Schema.parse(manifest)
   else archiveManifestSchema.parse(manifest)
 
   const zipEntries: Record<string, [Uint8Array, { level: 6; mtime: Date }]> = {
@@ -289,15 +293,15 @@ export async function readProjectArchive(bytes: Uint8Array): Promise<ReadArchive
     throw archiveError('archive-invalid', 'Archive manifest is not valid UTF-8 JSON.')
   }
   const archiveFormatVersion = typeof manifestValue === 'object' && manifestValue && 'archiveFormatVersion' in manifestValue ? (manifestValue as { archiveFormatVersion: unknown }).archiveFormatVersion : null
-  if (archiveFormatVersion !== 1 && archiveFormatVersion !== 2) {
+  if (archiveFormatVersion !== 1 && archiveFormatVersion !== 2 && archiveFormatVersion !== 3) {
     throw archiveError('unsupported-version', 'Archive format version is unsupported.')
   }
 
   let manifest: ArchiveManifest
   try {
-    manifest = (archiveFormatVersion === 2 ? archiveManifestV2Schema : archiveManifestSchema).parse(manifestValue) as ArchiveManifest
+    manifest = (archiveFormatVersion === 3 ? archiveManifestV3Schema : archiveFormatVersion === 2 ? archiveManifestV2Schema : archiveManifestSchema).parse(manifestValue) as ArchiveManifest
   } catch {
-    throw archiveError('archive-invalid', 'Archive manifest violates the format version 1 schema.')
+    throw archiveError('archive-invalid', `Archive manifest violates the format version ${archiveFormatVersion} schema.`)
   }
   const listed = new Set(manifest.entries.map(entry => entry.path))
   const actual = Object.keys(entries).filter(path => path !== MANIFEST_PATH)
@@ -331,10 +335,11 @@ export async function readProjectArchive(bytes: Uint8Array): Promise<ReadArchive
       if (!entries[path]) throw archiveError('archive-invalid', `Recipe entry is missing: ${path}.`)
       return [recipeId, recipeV1Schema.parse(decodeJson(path))]
     }))
-    const graph = parseProjectGraphV2({ project, recipes })
+    const terrain = manifest.archiveFormatVersion === 3 ? parseTerrainDocumentV1(decodeJson('terrain.json')) : null
+    const graph = parseProjectGraphV2({ project, recipes, terrain })
     if (manifest.projectId !== project.id) throw archiveError('archive-invalid', 'Manifest project ID disagrees with project.json.')
     const embeddedPacks: ReadSpritePackResult[] = []
-    if (manifest.archiveFormatVersion === 2) {
+    if (manifest.archiveFormatVersion === 2 || manifest.archiveFormatVersion === 3) {
       const embeddedRecords = manifest.embeddedPacks ?? []
       if (new Set(embeddedRecords.map(record => record.path)).size !== embeddedRecords.length || new Set(embeddedRecords.map(record => `${record.packId}@${record.version}`)).size !== embeddedRecords.length) throw archiveError('archive-invalid', 'Embedded package records must be unique by path and pack version.')
       for (const record of manifest.embeddedPacks ?? []) {

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "approvalId": "APPROVAL-UPD-003-LOCK-001",
+  "kind": "specification-lock-and-change-control",
+  "lockId": "LOCK-UPD-003-001",
+  "reviewId": "REVIEW-UPD-003-001",
+  "ownerRole": "product owner",
+  "approvedAt": "2026-07-21",
+  "sourceType": "direct-user-request",
+  "sourceReference": "User instruction: What's the next set of stuff we should be adding to the MVP scope? Detail it out properly as per the guideline here and update it in the spec and implement it completely.",
+  "statement": "Authorize selection of the roadmap's next coherent MVP increment, approve the bounded Terrain Environment Producer contract after repository-grounded review, and authorize complete implementation through the product update pipeline.",
+  "lockedDecisionIds": [
+    "DEC-UPD003-BOUNDARY",
+    "DEC-UPD003-CARDINAL",
+    "DEC-UPD003-GRAPH",
+    "DEC-UPD003-ARCHIVE",
+    "DEC-UPD003-PALETTE",
+    "DEC-UPD003-BUILTIN"
+  ],
+  "approvedDecisionIds": [
+    "DEC-UPD003-BOUNDARY",
+    "DEC-UPD003-CARDINAL",
+    "DEC-UPD003-GRAPH",
+    "DEC-UPD003-ARCHIVE",
+    "DEC-UPD003-PALETTE",
+    "DEC-UPD003-BUILTIN"
+  ],
+  "approvedChangeIds": []
+}

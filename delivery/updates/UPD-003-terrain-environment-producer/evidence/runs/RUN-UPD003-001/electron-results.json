@@ -1,0 +1,139 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.upd003.electron.config.ts"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.upd003.electron.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests-electron",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/delivery/updates/UPD-003-terrain-environment-producer/evidence/runs/RUN-UPD003-001/electron-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests-electron",
+        "testIgnore": [],
+        "testMatch": [
+          "upd003-terrain-host.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../delivery/updates/UPD-003-terrain-environment-producer/evidence/runs/RUN-UPD003-001/electron-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../delivery/updates/UPD-003-terrain-environment-producer/evidence/runs/RUN-UPD003-001/electron-report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "upd003-terrain-host.spec.ts",
+      "file": "upd003-terrain-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-TERRAIN-DESKTOP saves, fingerprints, exports, and archives terrain through the frozen bridge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4411,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T18:59:23.888Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "performance.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJob3N0IjogImVsZWN0cm9uIiwKICAidGhyZXNob2xkcyI6IHsKICAgICJwOTVNcyI6IDUwLAogICAgIm1heExvbmdUYXNrTXMiOiAxMDAKICB9LAogICJvYnNlcnZlZCI6IHsKICAgICJwYWludFA5NU1zIjogOC42MDAwMDAwMDE0OTAxMTYsCiAgICAiYXRsYXNQOTVNcyI6IDguNSwKICAgICJtYXhMb25nVGFza01zIjogMCwKICAgICJzYW1wbGVzIjogMTAwCiAgfQp9"
+                    },
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0aXRsZSI6ICJUZXJyYWluIERlc2t0b3AgLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJicmlkZ2VLZXlzIjogWwogICAgImNob29zZUV4cG9ydERpcmVjdG9yeSIsCiAgICAiY2hvb3NlUGFja0ZpbGUiLAogICAgImNob29zZVByb2plY3RGaWxlIiwKICAgICJjaG9vc2VQcm9qZWN0Rm9sZGVyIiwKICAgICJmb3JnZXRSZWNlbnRQcm9qZWN0IiwKICAgICJnZXRIb3N0SW5mbyIsCiAgICAiaW5zcGVjdEFyY2hpdmUiLAogICAgImluc3RhbGxQYWNrIiwKICAgICJsaXN0SW5zdGFsbGVkUGFja3MiLAogICAgImxpc3RSZWNlbnRQcm9qZWN0cyIsCiAgICAib3BlblJlY2VudFByb2plY3QiLAogICAgInJlYWRQYWNrIiwKICAgICJyZWFkUHJvamVjdCIsCiAgICAicmVtb3ZlUGFjayIsCiAgICAic2F2ZVByb2plY3QiLAogICAgIndyaXRlQXJjaGl2ZSIsCiAgICAid3JpdGVFeHBvcnQiLAogICAgIndyaXRlUGFjayIKICBdLAogICJicmlkZ2VGcm96ZW4iOiB0cnVlLAogICJub2RlUHJvY2Vzc1R5cGUiOiAidW5kZWZpbmVkIiwKICAibm9kZVJlcXVpcmVUeXBlIjogInVuZGVmaW5lZCIsCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgInRlcnJhaW5IYXNoIjogIjBmMmVjNTdkIiwKICAiYm9keVRleHQiOiAiVGhlIFNwcml0ZSBQcm9qZWN0XG4vXG5UZXJyYWluIERlc2t0b3BcblBvcnRhYmxlIMK3IDAuMS4wXG5QUk9KRUNUIFdPUktTUEFDRVxuVGVycmFpbiBEZXNrdG9wXG5VbnNhdmVkIGNoYW5nZXNcbk5ldyBwcm9qZWN0XG5TYXZlIHByb2plY3RcblByb2plY3RcbkNvbXBvc2VcblRoZW1lXG5UZXJyYWluXG5QcmV2aWV3XG5TdG9yYWdlXG5QYWNrc1xuRXhwb3J0XG5cblNFQ09ORCBQUk9EVUNFUlxuXG5Qcm9qZWN0IHRlcnJhaW5cblJlbW92ZSB0ZXJyYWluXG5PcGVuIHRlcnJhaW4gZXhwb3J0XG5CdWlsdC1pbiBtYXRlcmlhbFxuR3Jhc3NcblNvZnQgZ3JvdW5kIGNvdmVyIHdpdGggY29vbCBlYXJ0aGVuIGJvcmRlcnMuXG5EaXJ0XG5QYWNrZWQgZWFydGggd2l0aCBzcGFyc2UgZ3JhbnVsYXIgZGV0YWlsLlxuU2FuZFxuTGlnaHQgZ3JhbnVsYXIgdGVycmFpbiB3aXRoIHdhcm0gZWRnZXMuXG5TdG9uZVxuRGVuc2UgbWluZXJhbCBncm91bmQgd2l0aCByZXN0cmFpbmVkIHRleHR1cmUuXG5cbkxPQ0FMIENPTE9SU1xuXG5UZXJyYWluIHBhbGV0dGVcblJlc2V0IHRlcnJhaW4gdGhlbWVcblN1cmZhY2VcblByaW1hcnkgaW50ZXJpb3IgZmlsbC5cbkRldGFpbFxuU3BhcnNlIHByb2NlZHVyYWwgdGV4dHVyZSBtYXJrcy5cbkVkZ2VcblRvcCBhbmQgbGVmdCBvcGVuIGJvcmRlcnMuXG5TaGFkb3dcbkJvdHRvbSBhbmQgcmlnaHQgb3BlbiBib3JkZXJzLlxuUGFpbnRcbkVyYXNlXG5GaWxsIG1hcFxuQ2xlYXIgbWFwXG5cblZFUklGSUNBVElPTiBDQU5WQVNcblxuMTIgw5cgOCBwcmV2aWV3IG1hcFxuUGFpbnQgbW9kZVxuXG5FWFBPUlQgU09VUkNFXG5cbkdlbmVyYXRlZCBhdXRvdGlsZSBhdGxhc1xuMTI4IMOXIDEyOFxuMFxubm9uZVxuMVxuTlxuMlxuRVxuM1xuTkVcbjRcblNcbjVcbk5TXG42XG5FU1xuN1xuTkVTXG44XG5XXG45XG5OV1xuMTBcbkVXXG4xMVxuTkVXXG4xMlxuU1dcbjEzXG5OU1dcbjE0XG5FU1dcbjE1XG5ORVNXXG5cbkF0bGFzICMwZjJlYzU3ZFxuXG5URVJSQUlOIFNUQVRVU1xuXG5SZWFkeVxuXG5HcmFzcyDCtyAxNiBtYXNrcyDCtyBjb21wbGV0ZSBDQzAgcHJvdmVuYW5jZVxuXG5MSVZFIENIQVJBQ1RFUlxuXG5IZXJvXG5SZWFkeVxuV0FMS1xuU09VVEhcbjRYXG4jRTI0QzMwMDVcbk9wZW4gcHJldmlld1xuRXhwb3J0XG5TdXJmYWNlIHRlcnJhaW4gY29sb3IgdXBkYXRlZC4iCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "64af72f7cfd31b373afc-71479a26f4bb39f5b736",
+          "file": "upd003-terrain-host.spec.ts",
+          "line": 53,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-21T18:59:23.355Z",
+    "duration": 5110.237,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

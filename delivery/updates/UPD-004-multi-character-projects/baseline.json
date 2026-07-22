@@ -1,0 +1,24 @@
+{
+  "updateId": "UPD-004",
+  "baseline": {
+    "name": "Implemented Terrain Environment Producer",
+    "gitRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935",
+    "evidenceRunId": "RUN-UPD003-001",
+    "traceabilityModel": "delivery/updates/UPD-003-terrain-environment-producer/traceability.json",
+    "status": "implemented",
+    "recordCount": 120,
+    "verifiedFlowCount": 8,
+    "verifiedBehaviorCount": 28
+  },
+  "policy": {
+    "immutable": true,
+    "inheritVerifiedStatus": false,
+    "changedRecordsRequireNewEvidence": true,
+    "affectedRetainedFlowsRequireRegression": true
+  },
+  "retainedProductClaims": ["CP-TERRAIN-CREATE", "CP-TERRAIN-PROJECT", "CP-TERRAIN-DELIVERY"],
+  "retainedArchitectureDecisions": ["LOCK-UPD-001-002", "LOCK-UPD-002-001", "LOCK-UPD-003-001"],
+  "entryCondition": "The product owner directly requested multiple separately saved characters within one project and complete execution through the product-update pipeline on 2026-07-22.",
+  "entryConditionState": "authorized-by-product-owner",
+  "note": "UPD-004 activates the multiplicity already reserved by recipeIds and separate recipe records. It retains character recipe v1, project schema v2, archive v1/v2/v3, terrain v1, pack formats, and the 18-method Electron bridge."
+}

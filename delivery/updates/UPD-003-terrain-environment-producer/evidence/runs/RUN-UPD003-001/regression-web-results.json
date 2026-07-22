@@ -1,0 +1,1018 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Projects\\Work\\the-sprite-project\\product\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/mvp-flows.spec.ts",
+      "tests/upd001-web-flows.spec.ts",
+      "--config",
+      "playwright.config.ts",
+      "--reporter=json",
+      "--output=test-results-upd003-regression-web-recorded"
+    ],
+    "configFile": "E:\\Projects\\Work\\the-sprite-project\\product\\playwright.config.ts",
+    "rootDir": "E:/Projects/Work/the-sprite-project/product/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Projects/Work/the-sprite-project/product/test-results-upd003-regression-web-recorded",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "E:/Projects/Work/the-sprite-project/product/tests",
+        "testIgnore": [
+          "upd002-pages-subpath.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run build && npm run preview -- --host 127.0.0.1 --port 4174",
+      "url": "http://127.0.0.1:4174",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "mvp-flows.spec.ts",
+      "file": "mvp-flows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-FIRST-PROJECT creates and cancels through the actual dialog",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 548,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:13.277Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiRmllbGQgTm90ZXMiLAogICAgIkhlcm8iCiAgXSwKICAiY29udHJvbHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiTmV3IHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTYXZlIHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlJlbmFtZSBwcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ29tcG9zZSBjaGFyYWN0ZXIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJSZXN0b3JlIHNhZmUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIk9wZW4gcHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiQ2hvb3NlIHByb2plY3QgYmFja3VwIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0KICBdLAogICJjYW52YXMiOiBbCiAgICB7CiAgICAgICJsYWJlbCI6ICJIZXJvLCB3YWxrLCBmYWNpbmcgc291dGgiLAogICAgICAiaGFzaCI6ICI0MTBhMTQ1NSIsCiAgICAgICJmcmFtZSI6ICIwIgogICAgfQogIF0sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-2da6e65f52a91efc2eea",
+          "file": "mvp-flows.spec.ts",
+          "line": 103,
+          "column": 1
+        },
+        {
+          "title": "TF-COMPOSE changes pack, slot, and visible pixels",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 540,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:13.930Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiQ29tcG9zZSIsCiAgICAiTGVhbiBidWlsZCIsCiAgICAiSGVybyIKICBdLAogICJjb250cm9scyI6IFsKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJOZXcgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlNhdmUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogInNlbGVjdCIsCiAgICAgICJuYW1lIjogIldheWZhcmVyIMK3IDEuMC4wSGFyYm9yIFdhdGNoIMK3IDEuMC4wIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiYm9keSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogImhhaXIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJoZWFkd2VhciIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogInRvcnNvIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAibGVncyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogImZlZXQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ2xlYXIgcmVxdWlyZWQgc2xvdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIk9wZW4gcHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiQ2hvb3NlIHByb2plY3QgYmFja3VwIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0KICBdLAogICJjYW52YXMiOiBbCiAgICB7CiAgICAgICJsYWJlbCI6ICJIZXJvLCB3YWxrLCBmYWNpbmcgc291dGgiLAogICAgICAiaGFzaCI6ICIxNzExMGZkNSIsCiAgICAgICJmcmFtZSI6ICIwIgogICAgfQogIF0sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-1fd1fd3c647cc6111cee",
+          "file": "mvp-flows.spec.ts",
+          "line": 121,
+          "column": 1
+        },
+        {
+          "title": "TF-EDIT-COMPOSITION clears, replaces, and inspects provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 658,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:14.476Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiQ29tcG9zZSIsCiAgICAiVHJhdmVsZXIgaG9vZCIsCiAgICAiSGVybyIKICBdLAogICJjb250cm9scyI6IFsKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJOZXcgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlNhdmUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogInNlbGVjdCIsCiAgICAgICJuYW1lIjogIldheWZhcmVyIMK3IDEuMC4wSGFyYm9yIFdhdGNoIMK3IDEuMC4wIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiYm9keSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogImhhaXIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJoZWFkd2VhciIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogInRvcnNvIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAibGVncyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogImZlZXQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ2xlYXIgb3B0aW9uYWwgc2xvdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIk9wZW4gcHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiQ2hvb3NlIHByb2plY3QgYmFja3VwIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0KICBdLAogICJjYW52YXMiOiBbCiAgICB7CiAgICAgICJsYWJlbCI6ICJIZXJvLCB3YWxrLCBmYWNpbmcgc291dGgiLAogICAgICAiaGFzaCI6ICI3MWQzN2UzNSIsCiAgICAgICJmcmFtZSI6ICIxIgogICAgfQogIF0sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-7bc03c630fda3764394d",
+          "file": "mvp-flows.spec.ts",
+          "line": 133,
+          "column": 1
+        },
+        {
+          "title": "TF-THEME applies, validates, overrides, and resets semantic tokens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 731,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:15.142Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiVGhlbWUiLAogICAgIkhlcm8iCiAgXSwKICAiY29udHJvbHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiTmV3IHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTYXZlIHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ29tcG9zZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlRoZW1lIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGVycmFpbiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTdG9yYWdlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUGFja3MiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIlNraW4gaGV4IGNvbG9yIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJSZXNldCBTa2luIG92ZXJyaWRlIiwKICAgICAgImRpc2FibGVkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkhhaXIgaGV4IGNvbG9yIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJSZXNldCBIYWlyIG92ZXJyaWRlIiwKICAgICAgImRpc2FibGVkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIlByaW1hcnkgY2xvdGggaGV4IGNvbG9yIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJSZXNldCBQcmltYXJ5IGNsb3RoIG92ZXJyaWRlIiwKICAgICAgImRpc2FibGVkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIlNlY29uZGFyeSBjbG90aCBoZXggY29sb3IiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlJlc2V0IFNlY29uZGFyeSBjbG90aCBvdmVycmlkZSIsCiAgICAgICJkaXNhYmxlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICJMZWF0aGVyIGhleCBjb2xvciIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUmVzZXQgTGVhdGhlciBvdmVycmlkZSIsCiAgICAgICJkaXNhYmxlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICJNZXRhbCBoZXggY29sb3IiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlJlc2V0IE1ldGFsIG92ZXJyaWRlIiwKICAgICAgImRpc2FibGVkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiZmFkNmQwYzUiLAogICAgICAiZnJhbWUiOiAiMSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-757f107800c8f39c1c7a",
+          "file": "mvp-flows.spec.ts",
+          "line": 147,
+          "column": 1
+        },
+        {
+          "title": "TF-PREVIEW controls animation, direction, pause, speed, and zoom",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1088,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:15.879Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiUHJldmlldyIsCiAgICAiQW5pbWF0aW9uIiwKICAgICJEaXJlY3Rpb24iLAogICAgIkhlcm8iCiAgXSwKICAiY29udHJvbHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiTmV3IHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTYXZlIHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ29tcG9zZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlRoZW1lIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGVycmFpbiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTdG9yYWdlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUGFja3MiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICIiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQbGF5IGFuaW1hdGlvbiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiUGxheWJhY2sgc3BlZWQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIlByZXZpZXcgem9vbSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIk9wZW4gcHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImlucHV0IiwKICAgICAgIm5hbWUiOiAiQ2hvb3NlIHByb2plY3QgYmFja3VwIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0KICBdLAogICJjYW52YXMiOiBbCiAgICB7CiAgICAgICJsYWJlbCI6ICJIZXJvLCB3YWxrLCBmYWNpbmcgd2VzdCIsCiAgICAgICJoYXNoIjogIjQ0MmRmNDQ1IiwKICAgICAgImZyYW1lIjogIjEiCiAgICB9CiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10KfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-ae56ed75b732814f3998",
+          "file": "mvp-flows.spec.ts",
+          "line": 167,
+          "column": 1
+        },
+        {
+          "title": "TF-SAVE-REOPEN restores the exact recipe and supports rename",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9708,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:16.976Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIlJlbmFtZWQgRmllbGQgLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJoZWFkaW5ncyI6IFsKICAgICJSZW5hbWVkIEZpZWxkIiwKICAgICJIZXJvIgogIF0sCiAgImNvbnRyb2xzIjogWwogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIk5ldyBwcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiU2F2ZSBwcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ29tcG9zZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlRoZW1lIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGVycmFpbiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTdG9yYWdlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUGFja3MiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJSZW5hbWUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkNvbXBvc2UgY2hhcmFjdGVyIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUmVzdG9yZSBzYWZlIHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiMjE5ODZhMDUiLAogICAgICAiZnJhbWUiOiAiMSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-21f1aa36229696d4567a",
+          "file": "mvp-flows.spec.ts",
+          "line": 189,
+          "column": 1
+        },
+        {
+          "title": "TF-EXPORT-GENERIC downloads and validates the portable contract",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 736,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:26.689Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkdlbmVyaWMgSGVybyAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgInZpZXdwb3J0IjogWwogICAgMTQ0MCwKICAgIDkwMAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgImhlYWRpbmdzIjogWwogICAgIkV4cG9ydCIsCiAgICAiUmVhZHkiLAogICAgIkdlbmVyaWMgcGFja2FnZSIsCiAgICAiR29kb3QgNCBwYWNrYWdlIiwKICAgICJDcmVkaXRzIHByZXZpZXciLAogICAgIkhlcm8iCiAgXSwKICAiY29udHJvbHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiTmV3IHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTYXZlIHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIGdlbmVyaWMgcGFja2FnZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIEdvZG90IHBhY2thZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiNDEwYTE0NTUiLAogICAgICAiZnJhbWUiOiAiMiIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-dbaf7387cd4d45ae073b",
+          "file": "mvp-flows.spec.ts",
+          "line": 210,
+          "column": 1
+        },
+        {
+          "title": "TF-EXPORT-GODOT downloads matching Godot 4 resources",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 607,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:27.431Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkdvZG90IEhlcm8gLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJoZWFkaW5ncyI6IFsKICAgICJFeHBvcnQiLAogICAgIlJlYWR5IiwKICAgICJHZW5lcmljIHBhY2thZ2UiLAogICAgIkdvZG90IDQgcGFja2FnZSIsCiAgICAiQ3JlZGl0cyBwcmV2aWV3IiwKICAgICJIZXJvIgogIF0sCiAgImNvbnRyb2xzIjogWwogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIk5ldyBwcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiU2F2ZSBwcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQcm9qZWN0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiQ29tcG9zZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlRoZW1lIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGVycmFpbiIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTdG9yYWdlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUGFja3MiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJEb3dubG9hZCBnZW5lcmljIHBhY2thZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJEb3dubG9hZCBHb2RvdCBwYWNrYWdlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiT3BlbiBwcmV2aWV3IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiRXhwb3J0IiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiaW5wdXQiLAogICAgICAibmFtZSI6ICJDaG9vc2UgcHJvamVjdCBiYWNrdXAiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfQogIF0sCiAgImNhbnZhcyI6IFsKICAgIHsKICAgICAgImxhYmVsIjogIkhlcm8sIHdhbGssIGZhY2luZyBzb3V0aCIsCiAgICAgICJoYXNoIjogImUyNGMzMDA1IiwKICAgICAgImZyYW1lIjogIjEiCiAgICB9CiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10KfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-7d4cbd6bcaf37b12c21d",
+          "file": "mvp-flows.spec.ts",
+          "line": 227,
+          "column": 1
+        },
+        {
+          "title": "TF-INSPECT-CREDITS tracks only currently selected sources",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 622,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:28.044Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiRXhwb3J0IiwKICAgICJSZWFkeSIsCiAgICAiR2VuZXJpYyBwYWNrYWdlIiwKICAgICJHb2RvdCA0IHBhY2thZ2UiLAogICAgIkNyZWRpdHMgcHJldmlldyIsCiAgICAiSGVybyIKICBdLAogICJjb250cm9scyI6IFsKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJOZXcgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlNhdmUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIGdlbmVyaWMgcGFja2FnZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIEdvZG90IHBhY2thZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiODY1ZjliYTUiLAogICAgICAiZnJhbWUiOiAiMSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-3924798b278665830fe9",
+          "file": "mvp-flows.spec.ts",
+          "line": 244,
+          "column": 1
+        },
+        {
+          "title": "TF-RECOVER blocks incomplete export and restores safe defaults",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 706,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:28.674Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpZWxkIE5vdGVzIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiRXhwb3J0IiwKICAgICJSZWFkeSIsCiAgICAiR2VuZXJpYyBwYWNrYWdlIiwKICAgICJHb2RvdCA0IHBhY2thZ2UiLAogICAgIkNyZWRpdHMgcHJldmlldyIsCiAgICAiSGVybyIKICBdLAogICJjb250cm9scyI6IFsKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJOZXcgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlNhdmUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIGdlbmVyaWMgcGFja2FnZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIEdvZG90IHBhY2thZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiZTI0YzMwMDUiLAogICAgICAiZnJhbWUiOiAiMSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-768037ba4ee76812c0b2",
+          "file": "mvp-flows.spec.ts",
+          "line": 258,
+          "column": 1
+        },
+        {
+          "title": "TF-SECOND-PACK uses the same workflow and export contract",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 663,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:29.389Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkhhcmJvciBIZXJvIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiaGVhZGluZ3MiOiBbCiAgICAiRXhwb3J0IiwKICAgICJSZWFkeSIsCiAgICAiR2VuZXJpYyBwYWNrYWdlIiwKICAgICJHb2RvdCA0IHBhY2thZ2UiLAogICAgIkNyZWRpdHMgcHJldmlldyIsCiAgICAiSGVybyIKICBdLAogICJjb250cm9scyI6IFsKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJOZXcgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlNhdmUgcHJvamVjdCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIGdlbmVyaWMgcGFja2FnZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIEdvZG90IHBhY2thZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiNmFiZDc5NTUiLAogICAgICAiZnJhbWUiOiAiMSIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-752399277839e445f8b9",
+          "file": "mvp-flows.spec.ts",
+          "line": 273,
+          "column": 1
+        },
+        {
+          "title": "TF-KEYBOARD-JOURNEY completes the core route without pointer interaction",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 525,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:30.057Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIktleWJvYXJkIEhlcm8gLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJ2aWV3cG9ydCI6IFsKICAgIDM5MCwKICAgIDg0NAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgImhlYWRpbmdzIjogWwogICAgIkV4cG9ydCIsCiAgICAiUmVhZHkiLAogICAgIkdlbmVyaWMgcGFja2FnZSIsCiAgICAiR29kb3QgNCBwYWNrYWdlIiwKICAgICJDcmVkaXRzIHByZXZpZXciLAogICAgIkhlcm8iCiAgXSwKICAiY29udHJvbHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiTmV3IHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJTYXZlIHByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlByb2plY3QiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJDb21wb3NlIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiVGhlbWUiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJUZXJyYWluIiwKICAgICAgImRpc2FibGVkIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYnV0dG9uIiwKICAgICAgIm5hbWUiOiAiUHJldmlldyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIlN0b3JhZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJQYWNrcyIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkV4cG9ydCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIGdlbmVyaWMgcGFja2FnZSIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAidGFnIjogImJ1dHRvbiIsCiAgICAgICJuYW1lIjogIkRvd25sb2FkIEdvZG90IHBhY2thZ2UiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJPcGVuIHByZXZpZXciLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJidXR0b24iLAogICAgICAibmFtZSI6ICJFeHBvcnQiLAogICAgICAiZGlzYWJsZWQiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJpbnB1dCIsCiAgICAgICJuYW1lIjogIkNob29zZSBwcm9qZWN0IGJhY2t1cCIsCiAgICAgICJkaXNhYmxlZCI6IGZhbHNlCiAgICB9CiAgXSwKICAiY2FudmFzIjogWwogICAgewogICAgICAibGFiZWwiOiAiSGVybywgd2FsaywgZmFjaW5nIHNvdXRoIiwKICAgICAgImhhc2giOiAiNDEwYTE0NTUiLAogICAgICAiZnJhbWUiOiAiMCIKICAgIH0KICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c80fb8190a00ccb7254d-07bec7364e4c596264a2",
+          "file": "mvp-flows.spec.ts",
+          "line": 290,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "upd001-web-flows.spec.ts",
+      "file": "upd001-web-flows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TF-WEB-PROJECT-LIBRARY and TF-WEB-AUTOSAVE-REOPEN persist multiple projects",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1781,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:30.618Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkFscGhhIFByb2plY3QgLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJib2R5VGV4dCI6ICJUaGUgU3ByaXRlIFByb2plY3RcbkJyb3dzZXIgY2hhcmFjdGVyIHdvcmtzcGFjZVxuU2F2ZWQgbG9jYWxseVxuTmV3IHByb2plY3RcblNhdmUgcHJvamVjdFxuUHJvamVjdFxuQ29tcG9zZVxuVGhlbWVcblRlcnJhaW5cblByZXZpZXdcblN0b3JhZ2VcblBhY2tzXG5FeHBvcnRcblxuTE9DQUwgV09SS1NQQUNFXG5cbkFscGhhIFByb2plY3RcblJlbmFtZSBwcm9qZWN0XG5DSEFSQUNURVJcbkhlcm9cbkNPTlRFTlQgUEFDS1xuV2F5ZmFyZXIgMS4wLjBcblRIRU1FXG5IZWFydGhcbk9VVFBVVFxuUmVhZHlcbkNvbXBsZXRlIHJlY2lwZVxuSWRsZSBhbmQgd2FsayBhcmUgY292ZXJlZCBpbiBmb3VyIGRpcmVjdGlvbnMuXG5Db21wb3NlIGNoYXJhY3RlclxuUmVzdG9yZSBzYWZlIHByb2plY3RcblxuTElWRSBDSEFSQUNURVJcblxuSGVyb1xuUmVhZHlcbldBTEtcblNPVVRIXG40WFxuIzE3MTEwRkQ1XG5PcGVuIHByZXZpZXdcbkV4cG9ydFxuQWxwaGEgUHJvamVjdCBvcGVuZWQgYXQgcmV2aXNpb24gMS4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbCiAgICAiMTcxMTBmZDUiCiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-74a6c9ece4b07f6b5168",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 50,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-BACKUP-RESTORE clears storage and restores a verified archive",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 856,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:32.406Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkJhY2t1cCBIZXJvIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAiYm9keVRleHQiOiAiVGhlIFNwcml0ZSBQcm9qZWN0XG5Ccm93c2VyIGNoYXJhY3RlciB3b3Jrc3BhY2VcblNhdmVkIGxvY2FsbHlcbk5ldyBwcm9qZWN0XG5TYXZlIHByb2plY3RcblByb2plY3RcbkNvbXBvc2VcblRoZW1lXG5UZXJyYWluXG5QcmV2aWV3XG5TdG9yYWdlXG5QYWNrc1xuRXhwb3J0XG5cbkxPQ0FMIERBVEEgQ1VTVE9EWVxuXG5TdG9yYWdlXG5PbmxpbmVcbkJyb3dzZXIgd29ya3NwYWNlIMK3IEluZGV4ZWREQiDCtyByZXZpc2lvbiAwXG5IZWFsdGh5OiAwLjUgTWlCIG9mIDEwMjQwLjUgTWlCIHVzZWQuIFBlcnNpc3RlbnQgc3RvcmFnZTogYmVzdCBlZmZvcnQuXG5SZWFkeSBvZmZsaW5lOiBldmVyeSBleGFjdCBwYWNrIGxvY2sgaXMgYnVuZGxlZC4gTm8gY2xvdWQgYmFja3VwIGlzIGFjdGl2ZS5cbkRvd25sb2FkIHByb2plY3QgYmFja3VwXG5JbXBvcnQgcHJvamVjdCBiYWNrdXBcblxuSU5ERVhFRERCXG5cblByb2plY3RzXG4xIGxvY2FsXG5CYWNrdXAgSGVyb1xuUmV2aXNpb24gMCDCtyBmNzgzMTVhYy0zZjk5LTQxYWUtOTAwMS0xMGFlZTc1MDhhZjJcbk9wZW5cblxuUkVDT1ZFUllcblxuU25hcHNob3RzXG4wIGF2YWlsYWJsZVxuXG5SZWNvdmVyeSBwb2ludHMgYXBwZWFyIGFmdGVyIHRoZSBmaXJzdCByZXBsYWNlbWVudCBzYXZlLlxuXG5DbGVhciBicm93c2VyIHdvcmtzcGFjZVxuUmVtb3ZlcyBwcm9qZWN0cywgc25hcHNob3RzLCBwYWNrcywgbWlncmF0aW9uIHJlY29yZHMsIGFuZCBwcmVmZXJlbmNlcyBmcm9tIHRoaXMgYnJvd3NlciBvbmx5LlxuQ2xlYXIgYWxsIGxvY2FsIGRhdGFcblxuTElWRSBDSEFSQUNURVJcblxuSGVyb1xuUmVhZHlcbldBTEtcblNPVVRIXG40WFxuIzQxMEExNDU1XG5PcGVuIHByZXZpZXdcbkV4cG9ydFxuQmFja3VwIEhlcm8gaW1wb3J0ZWQgZnJvbSBmYmUwOGFmOS1kM2FkLTQwNzQtOGM2ZC00MTQzYmRhNzg3MDkuIiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiY2FudmFzSGFzaGVzIjogWwogICAgIjQxMGExNDU1IgogIF0sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdLAogICJjcm9zc09yaWdpblJlcXVlc3RzIjogW10KfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-a2439e2cc453608905bf",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-SNAPSHOT-RESTORE restores a selected recovery point",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 808,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:33.268Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIlNuYXBzaG90IEhlcm8gLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJib2R5VGV4dCI6ICJUaGUgU3ByaXRlIFByb2plY3RcbkJyb3dzZXIgY2hhcmFjdGVyIHdvcmtzcGFjZVxuU2F2ZWQgbG9jYWxseVxuTmV3IHByb2plY3RcblNhdmUgcHJvamVjdFxuUHJvamVjdFxuQ29tcG9zZVxuVGhlbWVcblRlcnJhaW5cblByZXZpZXdcblN0b3JhZ2VcblBhY2tzXG5FeHBvcnRcblxuTE9DQUwgV09SS1NQQUNFXG5cblNuYXBzaG90IEhlcm9cblJlbmFtZSBwcm9qZWN0XG5DSEFSQUNURVJcbkhlcm9cbkNPTlRFTlQgUEFDS1xuV2F5ZmFyZXIgMS4wLjBcblRIRU1FXG5IZWFydGhcbk9VVFBVVFxuUmVhZHlcbkNvbXBsZXRlIHJlY2lwZVxuSWRsZSBhbmQgd2FsayBhcmUgY292ZXJlZCBpbiBmb3VyIGRpcmVjdGlvbnMuXG5Db21wb3NlIGNoYXJhY3RlclxuUmVzdG9yZSBzYWZlIHByb2plY3RcblxuTElWRSBDSEFSQUNURVJcblxuSGVyb1xuUmVhZHlcbldBTEtcblNPVVRIXG40WFxuIzQxMEExNDU1XG5PcGVuIHByZXZpZXdcbkV4cG9ydFxuUmV2aXNpb24gMCByZXN0b3JlZCB3aXRoIGEgcHJlLXJlc3RvcmUgY2hlY2twb2ludC4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbCiAgICAiNDEwYTE0NTUiCiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-f973439b05e8be40a9ea",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 95,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-SAVE-CONFLICT writes nothing stale and can save a copy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 883,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:34.083Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkZpcnN0IFRhYiAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuQnJvd3NlciBjaGFyYWN0ZXIgd29ya3NwYWNlXG5TYXZlZCBsb2NhbGx5XG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTCBXT1JLU1BBQ0VcblxuRmlyc3QgVGFiXG5SZW5hbWUgcHJvamVjdFxuQ0hBUkFDVEVSXG5IZXJvXG5DT05URU5UIFBBQ0tcbldheWZhcmVyIDEuMC4wXG5USEVNRVxuSGVhcnRoXG5PVVRQVVRcblJlYWR5XG5Db21wbGV0ZSByZWNpcGVcbklkbGUgYW5kIHdhbGsgYXJlIGNvdmVyZWQgaW4gZm91ciBkaXJlY3Rpb25zLlxuQ29tcG9zZSBjaGFyYWN0ZXJcblJlc3RvcmUgc2FmZSBwcm9qZWN0XG5cbkxJVkUgQ0hBUkFDVEVSXG5cbkhlcm9cblJlYWR5XG5XQUxLXG5TT1VUSFxuNFhcbiM4N0VDNzRGNVxuT3BlbiBwcmV2aWV3XG5FeHBvcnRcblNhdmVkIHJldmlzaW9uIDEuIiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiY2FudmFzSGFzaGVzIjogWwogICAgIjg3ZWM3NGY1IgogIF0sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdLAogICJjcm9zc09yaWdpblJlcXVlc3RzIjogW10KfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-59aa4fb7546f9caac525",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 115,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-LEGACY-MIGRATION migrates once and preserves semantic output",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 356,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:34.972Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkxlZ2FjeSBIZXJvIC0gVGhlIFNwcml0ZSBQcm9qZWN0IiwKICAiYm9keVRleHQiOiAiVGhlIFNwcml0ZSBQcm9qZWN0XG5Ccm93c2VyIGNoYXJhY3RlciB3b3Jrc3BhY2VcblNhdmVkIGxvY2FsbHlcbk5ldyBwcm9qZWN0XG5TYXZlIHByb2plY3RcblByb2plY3RcbkNvbXBvc2VcblRoZW1lXG5UZXJyYWluXG5QcmV2aWV3XG5TdG9yYWdlXG5QYWNrc1xuRXhwb3J0XG5cbkxPQ0FMIFdPUktTUEFDRVxuXG5MZWdhY3kgSGVyb1xuUmVuYW1lIHByb2plY3RcbkNIQVJBQ1RFUlxuSGVyb1xuQ09OVEVOVCBQQUNLXG5XYXlmYXJlciAxLjAuMFxuVEhFTUVcbkhlYXJ0aFxuT1VUUFVUXG5SZWFkeVxuQ29tcGxldGUgcmVjaXBlXG5JZGxlIGFuZCB3YWxrIGFyZSBjb3ZlcmVkIGluIGZvdXIgZGlyZWN0aW9ucy5cbkNvbXBvc2UgY2hhcmFjdGVyXG5SZXN0b3JlIHNhZmUgcHJvamVjdFxuXG5MSVZFIENIQVJBQ1RFUlxuXG5IZXJvXG5SZWFkeVxuV0FMS1xuU09VVEhcbjRYXG4jNDEwQTE0NTVcbk9wZW4gcHJldmlld1xuRXhwb3J0XG5MZWdhY3kgSGVybyByZXN0b3JlZCBmcm9tIGxvY2FsIHdvcmtzcGFjZS4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbCiAgICAiNDEwYTE0NTUiCiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-4ef17e540caeb95b1932",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 142,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-OFFLINE reloads the installed shell and local project without network",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 609,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:35.334Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIk9mZmxpbmUgSGVybyAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuQnJvd3NlciBjaGFyYWN0ZXIgd29ya3NwYWNlXG5TYXZlZCBsb2NhbGx5XG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5ERUxJVkVSWVxuXG5FeHBvcnRcblxuRVhQT1JUIFJFQURJTkVTU1xuXG5SZWFkeVxuXG5XYXlmYXJlciByZWNpcGUgaGFzIGNvbXBsZXRlIGZyYW1lcyBhbmQgcHJvdmVuYW5jZS5cblxuR2VuZXJpYyBwYWNrYWdlXG5cblBORyBzcHJpdGVzaGVldCwgYW5pbWF0aW9uIEpTT04sIGJ1aWxkIG1hbmlmZXN0LCBhbmQgZXhhY3QgY3JlZGl0cy5cblxuNjQgw5cgNjQgZnJhbWVzXG5JZGxlIGFuZCB3YWxrIMK3IGZvdXIgZGlyZWN0aW9uc1xuUG9ydGFibGUgSlNPTiBjb250cmFjdFxuRG93bmxvYWQgZ2VuZXJpYyBwYWNrYWdlXG5Hb2RvdCA0IHBhY2thZ2VcblxuR2VuZXJpYyBmaWxlcyBwbHVzIGEgcmVhZHktdG8tbG9hZCBTcHJpdGVGcmFtZXMgdGV4dCByZXNvdXJjZS5cblxuTmFtZWQgYW5pbWF0aW9uIGN5Y2xlc1xuQXRsYXMgcmVnaW9ucyBkZWZpbmVkXG5ObyBtYW51YWwgc2xpY2luZ1xuRG93bmxvYWQgR29kb3QgcGFja2FnZVxuXG5DVVJSRU5UIFJFQ0lQRVxuXG5DcmVkaXRzIHByZXZpZXdcbjUgc2VsZWN0ZWQgbGF5ZXJzXG5XYXlmYXJlciBPcmlnaW5hbCBEZW1vbnN0cmF0aW9uIFBhY2tcblRoZSBTcHJpdGUgUHJvamVjdCDCtyBDQzAtMS4wXG5TdGFuZGFyZCBidWlsZCwgVHJhaWwgY3JvcCwgRmllbGQgdHVuaWMsIFRyYXZlbCB0cm91c2VycywgVHJhaWwgYm9vdHNcblxub2ZmbGluZS1oZXJvLWdlbmVyaWMuemlwIGRvd25sb2FkZWQuIFJlbmRlciAjOWU3NjM0MDUuXG5cbkxJVkUgQ0hBUkFDVEVSXG5cbkhlcm9cblJlYWR5XG5XQUxLXG5TT1VUSFxuNFhcbiM0MTBBMTQ1NVxuT3BlbiBwcmV2aWV3XG5FeHBvcnRcbkdlbmVyaWMgcGFja2FnZSBkb3dubG9hZGVkLiIsCiAgInZpZXdwb3J0IjogWwogICAgMTQ0MCwKICAgIDkwMAogIF0sCiAgIm92ZXJmbG93IjogZmFsc2UsCiAgImNhbnZhc0hhc2hlcyI6IFsKICAgICI0MTBhMTQ1NSIKICBdLAogICJjb25zb2xlRXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXSwKICAiZmFpbGVkUmVxdWVzdHMiOiBbXSwKICAiY3Jvc3NPcmlnaW5SZXF1ZXN0cyI6IFtdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-0c9cee04d224a6f2b69b",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 155,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-LEGACY-MIGRATION exposes Retry, recovery download, and continue on failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 394,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:35.950Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIlRoZSBTcHJpdGUgUHJvamVjdCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuQnJvd3NlciBjaGFyYWN0ZXIgd29ya3NwYWNlXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTC1GSVJTVCBDSEFSQUNURVIgU1RVRElPXG5cbk5vIHByb2plY3Qgb3BlblxuXG5DcmVhdGUgYSBwcm9qZWN0IHRvIGJlZ2luIHdpdGggYSBjb21wbGV0ZSBhbmltYXRlZCBzdGFydGVyIGNoYXJhY3Rlci5cblxuSW1wb3J0IHByb2plY3QgYmFja3VwXG5OZXcgcHJvamVjdFxuQ29udGludWluZyB3aXRob3V0IG9wZW5pbmcgdGhlIGxlZ2FjeSBwcm9qZWN0LiBTb3VyY2UgcmVjb3ZlcnkgYnl0ZXMgcmVtYWluIHVuY2hhbmdlZC4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-f5525f0a640917da68d9",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 174,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-PROJECT-LIBRARY requires the exact name before deleting a project",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 539,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:36.349Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIlRoZSBTcHJpdGUgUHJvamVjdCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuQnJvd3NlciBjaGFyYWN0ZXIgd29ya3NwYWNlXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTC1GSVJTVCBDSEFSQUNURVIgU1RVRElPXG5cbk5vIHByb2plY3Qgb3BlblxuXG5DcmVhdGUgYSBwcm9qZWN0IHRvIGJlZ2luIHdpdGggYSBjb21wbGV0ZSBhbmltYXRlZCBzdGFydGVyIGNoYXJhY3Rlci5cblxuSW1wb3J0IHByb2plY3QgYmFja3VwXG5OZXcgcHJvamVjdFxuRGVsZXRlIE1lIGRlbGV0ZWQgZnJvbSB0aGlzIGJyb3dzZXIuIiwKICAidmlld3BvcnQiOiBbCiAgICAxNDQwLAogICAgOTAwCiAgXSwKICAib3ZlcmZsb3ciOiBmYWxzZSwKICAiY2FudmFzSGFzaGVzIjogW10sCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJmYWlsZWRSZXF1ZXN0cyI6IFtdLAogICJjcm9zc09yaWdpblJlcXVlc3RzIjogW10KfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-d3f65fa69210a4eec0b7",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 191,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-STORAGE-PRESSURE previews safe cleanup and keeps backup available",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 500,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:36.893Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIlF1b3RhIEhlcm8gLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJib2R5VGV4dCI6ICJUaGUgU3ByaXRlIFByb2plY3RcbkJyb3dzZXIgY2hhcmFjdGVyIHdvcmtzcGFjZVxuU2F2ZWQgbG9jYWxseVxuTmV3IHByb2plY3RcblNhdmUgcHJvamVjdFxuUHJvamVjdFxuQ29tcG9zZVxuVGhlbWVcblRlcnJhaW5cblByZXZpZXdcblN0b3JhZ2VcblBhY2tzXG5FeHBvcnRcblxuTE9DQUwgREFUQSBDVVNUT0RZXG5cblN0b3JhZ2Vcbk9ubGluZVxuQnJvd3NlciB3b3Jrc3BhY2UgwrcgSW5kZXhlZERCIMK3IHJldmlzaW9uIDBcbkNyaXRpY2FsOiAwLjAgTWlCIG9mIDAuMCBNaUIgdXNlZC4gUGVyc2lzdGVudCBzdG9yYWdlOiBiZXN0IGVmZm9ydC5cblJlYWR5IG9mZmxpbmU6IGV2ZXJ5IGV4YWN0IHBhY2sgbG9jayBpcyBidW5kbGVkLiBObyBjbG91ZCBiYWNrdXAgaXMgYWN0aXZlLlxuRG93bmxvYWQgcHJvamVjdCBiYWNrdXBcbkltcG9ydCBwcm9qZWN0IGJhY2t1cFxuQ2xlYXIgZGlzcG9zYWJsZSBkYXRhXG5cbklOREVYRUREQlxuXG5Qcm9qZWN0c1xuMSBsb2NhbFxuUXVvdGEgSGVyb1xuUmV2aXNpb24gMCDCtyA5ZjFkM2Q2MS1kNWUzLTRiMmQtYTZiYy05NGRkNTY0MTUzM2Vcbk9wZW5cblxuUkVDT1ZFUllcblxuU25hcHNob3RzXG4wIGF2YWlsYWJsZVxuXG5SZWNvdmVyeSBwb2ludHMgYXBwZWFyIGFmdGVyIHRoZSBmaXJzdCByZXBsYWNlbWVudCBzYXZlLlxuXG5DbGVhciBicm93c2VyIHdvcmtzcGFjZVxuUmVtb3ZlcyBwcm9qZWN0cywgc25hcHNob3RzLCBwYWNrcywgbWlncmF0aW9uIHJlY29yZHMsIGFuZCBwcmVmZXJlbmNlcyBmcm9tIHRoaXMgYnJvd3NlciBvbmx5LlxuQ2xlYXIgYWxsIGxvY2FsIGRhdGFcblxuTElWRSBDSEFSQUNURVJcblxuSGVyb1xuUmVhZHlcbldBTEtcblNPVVRIXG40WFxuIzQxMEExNDU1XG5PcGVuIHByZXZpZXdcbkV4cG9ydFxuUXVvdGEgSGVybyBjcmVhdGVkIHdpdGggYSBjb21wbGV0ZSBXYXlmYXJlciBzdGFydGVyIGNoYXJhY3Rlci5cblxuQUNUSU9OIFJFUVVJUkVEXG5cbkNsZWFyIGRpc3Bvc2FibGUgZGF0YT9cblxuVGhpcyB3aWxsIHJlbW92ZSAwIHVucmVmZXJlbmNlZCBvZmZpY2lhbCBwYWNrIGJsb2JzIGFuZCAwIHVucHJvdGVjdGVkIHNuYXBzaG90cy4gQ3VycmVudCBwcm9qZWN0cywgcmVmZXJlbmNlZCBwYWNrcywgdXNlciBpbXBvcnRzLCBtaWdyYXRpb24gcmVjb3ZlcnksIGFuZCBvbmUgbGFzdC1rbm93bi1nb29kIHNuYXBzaG90IHBlciBwcm9qZWN0IHJlbWFpbi5cblxuQ2xlYXIgZGlzcG9zYWJsZSBkYXRhXG5DYW5jZWwiLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbCiAgICAiNDEwYTE0NTUiCiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-f86f4477ad177bbcd4c1",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 206,
+          "column": 1
+        },
+        {
+          "title": "TF-WEB-BACKUP-RESTORE inspects and resolves an existing-ID import conflict",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 747,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:37.399Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkNvbmZsaWN0IEltcG9ydCAoaW1wb3J0ZWQgY29weSkgLSBUaGUgU3ByaXRlIFByb2plY3QiLAogICJib2R5VGV4dCI6ICJUaGUgU3ByaXRlIFByb2plY3RcbkJyb3dzZXIgY2hhcmFjdGVyIHdvcmtzcGFjZVxuU2F2ZWQgbG9jYWxseVxuTmV3IHByb2plY3RcblNhdmUgcHJvamVjdFxuUHJvamVjdFxuQ29tcG9zZVxuVGhlbWVcblRlcnJhaW5cblByZXZpZXdcblN0b3JhZ2VcblBhY2tzXG5FeHBvcnRcblxuTE9DQUwgREFUQSBDVVNUT0RZXG5cblN0b3JhZ2Vcbk9ubGluZVxuQnJvd3NlciB3b3Jrc3BhY2UgwrcgSW5kZXhlZERCIMK3IHJldmlzaW9uIDBcbkhlYWx0aHk6IDAuNSBNaUIgb2YgMTAyNDAuNSBNaUIgdXNlZC4gUGVyc2lzdGVudCBzdG9yYWdlOiBiZXN0IGVmZm9ydC5cblJlYWR5IG9mZmxpbmU6IGV2ZXJ5IGV4YWN0IHBhY2sgbG9jayBpcyBidW5kbGVkLiBObyBjbG91ZCBiYWNrdXAgaXMgYWN0aXZlLlxuRG93bmxvYWQgcHJvamVjdCBiYWNrdXBcbkltcG9ydCBwcm9qZWN0IGJhY2t1cFxuXG5JTkRFWEVEREJcblxuUHJvamVjdHNcbjIgbG9jYWxcbkNvbmZsaWN0IEltcG9ydCAoaW1wb3J0ZWQgY29weSlcblJldmlzaW9uIDAgwrcgNDVlOWRhMmUtNmExNi00NmYyLWE0YzQtNDEyODVkYzAyZTYyXG5PcGVuXG5Db25mbGljdCBJbXBvcnRcblJldmlzaW9uIDAgwrcgNmJiODQzN2ItZmRiMi00MDA0LTliMWYtMmNjNjYwZjBiOGIyXG5PcGVuXG5cblJFQ09WRVJZXG5cblNuYXBzaG90c1xuMCBhdmFpbGFibGVcblxuUmVjb3ZlcnkgcG9pbnRzIGFwcGVhciBhZnRlciB0aGUgZmlyc3QgcmVwbGFjZW1lbnQgc2F2ZS5cblxuQ2xlYXIgYnJvd3NlciB3b3Jrc3BhY2VcblJlbW92ZXMgcHJvamVjdHMsIHNuYXBzaG90cywgcGFja3MsIG1pZ3JhdGlvbiByZWNvcmRzLCBhbmQgcHJlZmVyZW5jZXMgZnJvbSB0aGlzIGJyb3dzZXIgb25seS5cbkNsZWFyIGFsbCBsb2NhbCBkYXRhXG5cbkxJVkUgQ0hBUkFDVEVSXG5cbkhlcm9cblJlYWR5XG5XQUxLXG5TT1VUSFxuNFhcbiM0MTBBMTQ1NVxuT3BlbiBwcmV2aWV3XG5FeHBvcnRcbkNvbmZsaWN0IEltcG9ydCAoaW1wb3J0ZWQgY29weSkgaW1wb3J0ZWQgd2l0aG91dCBjaGFuZ2luZyB0aGUgZXhpc3RpbmcgcHJvamVjdC4iLAogICJ2aWV3cG9ydCI6IFsKICAgIDE0NDAsCiAgICA5MDAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbCiAgICAiNDEwYTE0NTUiCiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-2d568c4559dce0f8354e",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 223,
+          "column": 1
+        },
+        {
+          "title": "QS-006 keeps recovery controls keyboard-operable at constrained 200%-equivalent reflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 468,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-21T19:02:38.152Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "capture.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJ1cmwiOiAiaHR0cDovLzEyNy4wLjAuMTo0MTc0LyIsCiAgInRpdGxlIjogIkFjY2Vzc2libGUgSGVybyAtIFRoZSBTcHJpdGUgUHJvamVjdCIsCiAgImJvZHlUZXh0IjogIlRoZSBTcHJpdGUgUHJvamVjdFxuQnJvd3NlciBjaGFyYWN0ZXIgd29ya3NwYWNlXG5OZXcgcHJvamVjdFxuU2F2ZSBwcm9qZWN0XG5Qcm9qZWN0XG5Db21wb3NlXG5UaGVtZVxuVGVycmFpblxuUHJldmlld1xuU3RvcmFnZVxuUGFja3NcbkV4cG9ydFxuXG5MT0NBTCBEQVRBIENVU1RPRFlcblxuU3RvcmFnZVxuT25saW5lXG5Ccm93c2VyIHdvcmtzcGFjZSDCtyBJbmRleGVkREIgwrcgcmV2aXNpb24gMFxuSGVhbHRoeTogMC41IE1pQiBvZiAxMDI0MC41IE1pQiB1c2VkLiBQZXJzaXN0ZW50IHN0b3JhZ2U6IGJlc3QgZWZmb3J0LlxuUmVhZHkgb2ZmbGluZTogZXZlcnkgZXhhY3QgcGFjayBsb2NrIGlzIGJ1bmRsZWQuIE5vIGNsb3VkIGJhY2t1cCBpcyBhY3RpdmUuXG5Eb3dubG9hZCBwcm9qZWN0IGJhY2t1cFxuSW1wb3J0IHByb2plY3QgYmFja3VwXG5cbklOREVYRUREQlxuXG5Qcm9qZWN0c1xuMSBsb2NhbFxuQWNjZXNzaWJsZSBIZXJvXG5SZXZpc2lvbiAwIMK3IGI4MDZmNmViLWM1NDQtNDNkNC05NzkxLWJjZmFlNDBhNDBmOFxuT3BlblxuXG5SRUNPVkVSWVxuXG5TbmFwc2hvdHNcbjAgYXZhaWxhYmxlXG5cblJlY292ZXJ5IHBvaW50cyBhcHBlYXIgYWZ0ZXIgdGhlIGZpcnN0IHJlcGxhY2VtZW50IHNhdmUuXG5cbkNsZWFyIGJyb3dzZXIgd29ya3NwYWNlXG5SZW1vdmVzIHByb2plY3RzLCBzbmFwc2hvdHMsIHBhY2tzLCBtaWdyYXRpb24gcmVjb3JkcywgYW5kIHByZWZlcmVuY2VzIGZyb20gdGhpcyBicm93c2VyIG9ubHkuXG5DbGVhciBhbGwgbG9jYWwgZGF0YVxuXG5MSVZFIENIQVJBQ1RFUlxuXG5IZXJvXG5SZWFkeVxuV0FMS1xuU09VVEhcbjRYXG4jNDEwQTE0NTVcbk9wZW4gcHJldmlld1xuRXhwb3J0XG5BY2Nlc3NpYmxlIEhlcm8gY3JlYXRlZCB3aXRoIGEgY29tcGxldGUgV2F5ZmFyZXIgc3RhcnRlciBjaGFyYWN0ZXIuIiwKICAidmlld3BvcnQiOiBbCiAgICA2NDAsCiAgICA0NTAKICBdLAogICJvdmVyZmxvdyI6IGZhbHNlLAogICJjYW52YXNIYXNoZXMiOiBbCiAgICAiNDEwYTE0NTUiCiAgXSwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJwYWdlRXJyb3JzIjogW10sCiAgImZhaWxlZFJlcXVlc3RzIjogW10sCiAgImNyb3NzT3JpZ2luUmVxdWVzdHMiOiBbXQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ecabca2a16e42413b591-79eb3ae66be3c19f4504",
+          "file": "upd001-web-flows.spec.ts",
+          "line": 244,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-21T19:02:05.882Z",
+    "duration": 33336.202,
+    "expected": 23,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "runId": "RUN-UPD004-001",
+  "status": "verified-local",
+  "completedAt": "2026-07-22T08:50:00.000Z",
+  "sourceRevision": "24bcd44efc0d41a83b85674f1570bbd1bca12935 plus recorded UPD-003 and UPD-004 working-tree implementations",
+  "environment": {
+    "web": "Playwright 1.61.1 Chromium production preview at 1440x900 and 320x800 with controlled service-worker offline restart",
+    "desktop": "Packaged Electron 40.10.6 Windows x64 portable build on Windows 10.0.26220 with frozen 18-method bridge",
+    "crossHost": "Production web UI to packaged Electron UI to production web UI using deterministic .spriteproject archive",
+    "quality": "Vitest 4.1.10 strict schema, CRUD/isolation, IndexedDB, archive, old-reader, terrain, pack, rollback, and performance fixtures",
+    "pagesSimulation": "Exact /the-sprite-project/ service-worker scope"
+  },
+  "results": {
+    "unitContractQuality": { "expected": 87, "unexpected": 0, "snapshotOracles": 1 },
+    "dedicatedUpd004Web": { "expected": 4, "unexpected": 0, "flaky": 0 },
+    "dedicatedUpd004Electron": { "expected": 1, "unexpected": 0, "flaky": 0 },
+    "dedicatedUpd004CrossHost": { "expected": 1, "unexpected": 0, "flaky": 0 },
+    "retainedWeb": { "expected": 37, "unexpected": 0, "flaky": 0 },
+    "retainedElectron": { "expected": 8, "unexpected": 0, "flaky": 0 },
+    "retainedCrossHost": { "expected": 1, "unexpected": 0, "flaky": 0 },
+    "pagesSubpathSimulation": { "expected": 1, "unexpected": 0, "flaky": 0 },
+    "performance": "passed",
+    "rollback": "passed",
+    "runtimeDependencyVulnerabilities": 0,
+    "severityZeroToTwoIssues": 0,
+    "undeclaredAnomalies": 0
+  },
+  "release": {
+    "version": "0.1.0",
+    "artifact": "the-sprite-project-0.1.0-windows-x64-portable.zip",
+    "sha256": "b622616eb087e77717335df376de48fd51e6bf5fb5b2237365fc1987fe6e3e5a"
+  },
+  "evidence": [
+    "unit-results.json",
+    "playwright-results.json",
+    "report/index.html",
+    "artifacts/*",
+    "electron-results.json",
+    "electron-report/index.html",
+    "electron-artifacts/*",
+    "cross-host-results.json",
+    "cross-host-report/index.html",
+    "cross-host-artifacts/*",
+    "regression-web-results.json",
+    "regression-electron-results.json",
+    "regression-cross-host-results.json",
+    "pages-results.json",
+    "performance-summary.json",
+    "rollback-results.json",
+    "dependency-audit.json",
+    "product/release/the-sprite-project-0.1.0-windows-x64-portable.zip"
+  ],
+  "anomalies": [],
+  "unverifiedReleaseGates": [
+    "Actual GitHub Pages publication, deployed smoke/offline run, and deployed rollback/withdrawal rehearsal",
+    "Independent clean-machine Windows launch, unsigned SmartScreen observation, and executable rollback"
+  ]
+}

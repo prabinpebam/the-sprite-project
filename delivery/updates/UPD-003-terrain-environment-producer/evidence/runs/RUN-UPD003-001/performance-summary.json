@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "runId": "RUN-UPD003-001",
+  "samplesPerHost": 100,
+  "thresholds": {
+    "paintP95Ms": 50,
+    "atlasP95Ms": 50,
+    "maxLongTaskMs": 100,
+    "packageBuildMs": 2000
+  },
+  "chromium": {
+    "paintP95Ms": 34.1,
+    "atlasP95Ms": 34.4,
+    "maxLongTaskMs": 0,
+    "result": "passed",
+    "source": "playwright-results.json performance.json attachment"
+  },
+  "electron": {
+    "paintP95Ms": 8.6,
+    "atlasP95Ms": 8.5,
+    "maxLongTaskMs": 0,
+    "result": "passed",
+    "source": "electron-results.json performance.json attachment"
+  },
+  "packageBuild": {
+    "genericBelowThreshold": true,
+    "godotBelowThreshold": true,
+    "result": "passed",
+    "source": "unit-results.json UPD-003 quality gates"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "runId": "RUN-UPD004-001",
+  "thresholds": { "switchP95Ms": 50, "saveReopenMs": 2000, "maxLongTaskMs": 100 },
+  "chromium": { "switchP95Ms": 34.3, "saveReopenMs": 143.4, "maxLongTaskMs": 0, "samples": 100, "result": "passed", "source": "playwright-results.json performance.json attachment" },
+  "electron": { "switchP95Ms": 12.1, "samples": 100, "result": "passed", "source": "electron-results.json performance.json attachment" }
+}
